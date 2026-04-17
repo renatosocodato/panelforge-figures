@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "panelforge-figures"
+version = "0.1.0a0"
+description = "Modality-first publication-grade figure system for systems biology and computational biophysics."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "Renato Socodato", email = "renato.socodato@gmail.com" }]
+keywords = [
+    "scientific-visualization",
+    "systems-biology",
+    "biophysics",
+    "matplotlib",
+    "publication-figures",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.11",
+    "matplotlib>=3.7",
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+    "pyarrow>=14",
+    "click>=8.1",
+    "ruamel.yaml>=0.18",
+]
+
+[project.optional-dependencies]
+seaborn = ["seaborn>=0.13"]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.4",
+    "seaborn>=0.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/renatosocodato/panelforge-figures"
+Repository = "https://github.com/renatosocodato/panelforge-figures"
+Issues = "https://github.com/renatosocodato/panelforge-figures/issues"
+
+[project.scripts]
+figures = "panelforge_figures.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+panelforge_figures = [
+    "templates/*.yaml",
+    "templates/*.toml",
+    "templates/*.yml",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:pkg_resources.*",
+    "ignore::DeprecationWarning:matplotlib.*",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]

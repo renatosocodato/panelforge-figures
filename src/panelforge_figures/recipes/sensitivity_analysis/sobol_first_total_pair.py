@@ -99,20 +99,37 @@ def render(contract: SobolIndicesInput, ax=None, **_):
             ax.plot([lo, lo], [y - 0.07, y + 0.07], color="#333333", lw=1.0)
             ax.plot([hi, hi], [y - 0.07, y + 0.07], color="#333333", lw=1.0)
 
-    # Value labels right of each ST bar.
-    for y, v_st in zip(ypos, st):
-        ax.text(v_st + max(st.max() * 0.02, 0.01), y + bar_h / 2,
-                rf"$S_T$={smart_fmt(v_st)}", va="center", ha="left",
-                fontsize=6.8, color="#222222", fontweight="bold")
-    for y, v_s1 in zip(ypos, s1):
-        ax.text(v_s1 + max(s1.max() * 0.02, 0.01), y - bar_h / 2,
-                rf"$S_1$={smart_fmt(v_s1)}", va="center", ha="left",
-                fontsize=6.4, color="#555555")
+    # Value labels — always right-anchored past the LONGER whisker extent
+    # on each row so the two labels never crowd each other or the whiskers.
+    # Include CI width in the "end" so the label clears any whisker cap too.
+    label_end = []
+    for i in range(len(ypos)):
+        lo_s1 = s1_ci[i][1] if s1_ci is not None else s1[i]
+        lo_st = st_ci[i][1] if st_ci is not None else st[i]
+        label_end.append(max(lo_s1, lo_st))
+    label_end = np.array(label_end, float)
+    gap = max(st.max() * 0.025, 0.012)
+
+    for y, v_s1, v_st, xe in zip(ypos, s1, st, label_end):
+        # Small white bbox so the whisker can't strikethrough.
+        ax.text(xe + gap, y + bar_h / 2,
+                rf"$S_T$={smart_fmt(v_st)}",
+                va="center", ha="left",
+                fontsize=6.8, color="#222222", fontweight="bold",
+                bbox=dict(boxstyle="round,pad=0.08", fc="white",
+                          ec="none", alpha=0.95), zorder=6)
+        ax.text(xe + gap, y - bar_h / 2,
+                rf"$S_1$={smart_fmt(v_s1)}",
+                va="center", ha="left",
+                fontsize=6.4, color="#555555",
+                bbox=dict(boxstyle="round,pad=0.08", fc="white",
+                          ec="none", alpha=0.95), zorder=6)
 
     ax.set_yticks(ypos)
     ax.set_yticklabels(names, fontsize=7.6)
     ax.invert_yaxis()
-    xmax = max(st.max(), s1.max()) * 1.25
+    # Extra headroom for the paired S_T / S_1 labels on the right.
+    xmax = max(st.max(), s1.max()) * 1.35
     ax.set_xlim(0, xmax)
     ax.set_xlabel("Sobol index")
     ax.set_title(

@@ -26,7 +26,7 @@ class InteractionMatrixInput(RecipeContract):
 
 def _demo() -> InteractionMatrixInput:
     rng = np.random.default_rng(37)
-    names = ["k_on", "k_off", "V_max", "Km", "D", "α", "β"]
+    names = ["k_on", "k_off", "V_max", "Km", "D", r"$\alpha$", r"$\beta$"]
     n = len(names)
     M = np.abs(rng.normal(0.01, 0.015, (n, n)))
     M = (M + M.T) / 2

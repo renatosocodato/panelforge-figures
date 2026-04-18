@@ -112,9 +112,9 @@ def render(contract: MorrisEEInput, ax=None, **_):
     # down (-0.14) so it clears the tick labels and x-axis title cleanly.
     fig = ax.figure
     fig.text(
-        0.5, -0.14,
-        f"Top driver: {names[order[0]]} (μ*={smart_fmt(mu[order[0]])}, "
-        f"σ={smart_fmt(sig[order[0]])})",
+        0.5, -0.22,
+        rf"Top driver: {names[order[0]]} ($\mu^*$={smart_fmt(mu[order[0]])}, "
+        rf"$\sigma$={smart_fmt(sig[order[0]])})",
         ha="center", va="top", fontsize=7.0,
         bbox=dict(boxstyle="round,pad=0.28", fc="white",
                   ec=AESTHETIC.annotation_style.callout_accent, lw=0.6),
@@ -127,6 +127,6 @@ def render(contract: MorrisEEInput, ax=None, **_):
     ax.set_xlim(0, x_hi)
     ax.set_ylim(0, y_hi)
     # μ* = σ inline label placed at the end of the diagonal (inside the box).
-    ax.text(m * 0.97, m * 0.90, "μ* = σ", color="#666666",
+    ax.text(m * 0.97, m * 0.90, r"$\mu^*\,=\,\sigma$", color="#666666",
             fontsize=6.4, ha="right", va="top", rotation=36)
     return ax

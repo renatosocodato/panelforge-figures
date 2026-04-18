@@ -120,22 +120,25 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     )
     ax.legend(fontsize=6.8, frameon=False, loc="upper left", ncol=1)
 
-    # Halo-labeled dominant loading per PC — shortened to just "PC1" etc.,
-    # since the parameter name is already on the x-axis tick.
+    # Small halo'd "+/−" tag above/below each PC's dominant loading so
+    # the reader can immediately spot the most influential parameter for
+    # each principal direction. The labels are compact and the bars are
+    # narrow enough that they can't collide with adjacent PC bars.
     for j in range(k):
         i_max = int(np.argmax(np.abs(loadings[:, j])))
-        y_lab = loadings[i_max, j] + (0.02 if loadings[i_max, j] > 0 else -0.02)
+        y_val = loadings[i_max, j]
+        x_pos = xpos[i_max] + (j - (k - 1) / 2) * width
         add_halo_label(
             ax,
-            xpos[i_max] + (j - (k - 1) / 2) * width,
-            y_lab,
+            x_pos,
+            y_val + (0.03 if y_val > 0 else -0.03),
             f"PC{j+1}",
-            fontsize=6.2,
+            fontsize=5.8,
             fontweight="bold",
             color="#222222",
             halo_width=2.2,
             ha="center",
-            va="bottom" if loadings[i_max, j] > 0 else "top",
+            va="bottom" if y_val > 0 else "top",
         )
 
     # Effective-dim callout — figure-space, below x-axis, in figure text so

@@ -96,9 +96,11 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
 
     ax.axhline(0.80, color="#D32F2F", lw=0.9, ls="--", zorder=2)
     ax.axhline(0.05, color="#888888", lw=0.6, ls=":", zorder=1)
-    add_halo_label(ax, n_lo + 2, 0.82, "80% power target",
-                   color="#D32F2F", fontsize=7.0, ha="left", va="bottom",
-                   halo_width=2.6, fontweight="bold")
+    # Target label placed to the RIGHT of the axis at y=0.80 so it never
+    # competes with the N@80% dots/labels on the left half.
+    ax.text(n_hi * 0.995, 0.80, "80% power",
+            color="#D32F2F", fontsize=6.8, ha="right", va="bottom",
+            fontweight="bold")
 
     if contract.n_planned is not None:
         ax.axvline(contract.n_planned, color="#333333", lw=0.8, ls="--")
@@ -127,11 +129,15 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
             _ = callout_box
 
     ax.set_xlim(n_lo, n_hi)
-    ax.set_ylim(-0.02, 1.05)
+    ax.set_ylim(-0.02, 1.06)
     ax.set_xlabel("Sample size per group")
     ax.set_ylabel(r"Power (1 − $\beta$)")
     ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=4)
-    # Legend inside upper-left where curves are already flat or off-axis.
-    ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.70),
-              fontsize=6.8, frameon=False, ncol=1, handlelength=1.6)
+    # Legend lower-right: the large-N region is where d=0.20 is still
+    # climbing (power < 0.5) AND all higher-d curves are already saturated
+    # at 1 — there is genuine empty space to anchor in.
+    ax.legend(loc="lower right", bbox_to_anchor=(0.99, 0.03),
+              fontsize=6.8, frameon=True, framealpha=0.92,
+              edgecolor="#BBBBBB", ncol=2, handlelength=1.6,
+              columnspacing=0.8, borderpad=0.4)
     return ax

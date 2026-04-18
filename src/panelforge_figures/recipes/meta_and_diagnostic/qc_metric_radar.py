@@ -111,7 +111,7 @@ def render(contract: QCMetricRadarInput, ax=None, **_):
     # Summary strip just below the title — μ per sample in matching colors.
     # Placed in figure space so it never collides with the radar spokes.
     fig = ax.figure
-    parts = [f"{name}: μ={smart_fmt(mu)}" for name, _, mu in sample_means]
+    parts = [rf"{name}: $\mu$={smart_fmt(mu)}" for name, _, mu in sample_means]
     summary = "   ".join(parts)
     fig.text(0.5, 0.93, summary, ha="center", va="top",
              fontsize=6.6, color="#333333")

@@ -43,7 +43,7 @@ def regenerate_gallery(out_root: str | Path = "docs/gallery") -> list[Path]:
             plt.close(fig)
             continue
         fig.savefig(out, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white",
-                    pad_inches=0.18)
+                    pad_inches=0.28)
         plt.close(fig)
         paths.append(out)
     return paths
@@ -79,7 +79,7 @@ def diff_gallery(
             continue
         tmp = Path(".pf_gallery_tmp.png")
         fig.savefig(tmp, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white",
-                    pad_inches=0.18)
+                    pad_inches=0.28)
         plt.close(fig)
         fresh = _load_image(tmp)
         tmp.unlink(missing_ok=True)

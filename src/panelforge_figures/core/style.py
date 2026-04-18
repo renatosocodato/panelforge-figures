@@ -77,6 +77,15 @@ def _rc_defaults() -> dict[str, Any]:
         "ps.fonttype": 42,
         "svg.fonttype": "none",
         "pdf.use14corefonts": False,
+        # Math text — use the sans-serif STIX set so $S_T$, $\\Pi_3$, Greek
+        # letters, etc. visually match the Helvetica body text. `regular`
+        # makes plain math characters inherit the regular font family
+        # (Helvetica) rather than switching to an italic math font.
+        "mathtext.fontset": "stixsans",
+        "mathtext.default": "regular",
+        "mathtext.rm": "sans",
+        "mathtext.it": "sans:italic",
+        "mathtext.bf": "sans:bold",
     }
 
 

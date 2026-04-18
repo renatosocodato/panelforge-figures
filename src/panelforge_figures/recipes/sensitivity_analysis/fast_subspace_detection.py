@@ -68,24 +68,6 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     evecs = evecs[:, ::-1]
     lam_frac = evals / max(evals.sum(), 1e-12)
 
-    # ── Inset: scree ──────────────────────────────────────────────
-    # Top-right corner, compact; sized to avoid colliding with the legend
-    # which now sits just below the title.
-    inset = ax.inset_axes([0.68, 0.58, 0.28, 0.28])
-    xi = np.arange(1, len(evals) + 1)
-    inset.bar(xi, lam_frac, color="#1565C0", alpha=0.9,
-              edgecolor="white", linewidth=0.4)
-    inset.plot(xi, np.cumsum(lam_frac), color="#D32F2F",
-               marker="o", ms=2.5, lw=1.0)
-    inset.set_xticks(xi)
-    inset.set_xticklabels([str(i) for i in xi], fontsize=5.0)
-    inset.set_yticks([0, 0.5, 1])
-    inset.set_yticklabels(["0", ".5", "1"], fontsize=5.0)
-    inset.tick_params(axis="both", labelsize=5.0)
-    inset.set_title("scree", fontsize=6.4, pad=2)
-    inset.set_ylim(0, 1.05)
-    inset.set_xlim(0.5, len(xi) + 0.5)
-
     # ── Main axis: loadings for top_k eigenvectors ────────────────
     k = max(2, min(contract.top_k, evecs.shape[1]))
     loadings = evecs[:, :k]
@@ -112,12 +94,35 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     ax.set_xticklabels(names, rotation=35, ha="right", fontsize=7.0)
     ax.set_ylabel("eigenvector loading")
     ax.axhline(0, color="#555555", lw=0.6)
-    # Explicit ylim with headroom so value labels above/below the tallest
-    # bars (added further down) are not clipped.
-    y_lo = float(loadings.min())
-    y_hi = float(loadings.max())
-    y_pad = 0.09 * max(y_hi - y_lo, 0.2)
-    ax.set_ylim(y_lo - y_pad, y_hi + y_pad)
+
+    # ── Explicit ylim designed to give the scree INSET a clean home
+    # in the upper-right corner without touching any bar.
+    #
+    # Carve out the right-hand x-region occupied by the inset
+    # (x_frac > 0.72) and measure the tallest bar in that region. We
+    # need the bar's y-fraction ≤ ~0.65 so the inset at y_frac ≥ 0.70
+    # sits clear above it. We solve for y_hi that achieves this:
+    #     (top_bar - y_lo) / (y_hi - y_lo) <= 0.65
+    # where y_lo is also padded on the negative side.
+    y_lo_raw = float(loadings.min())
+    y_hi_raw = float(loadings.max())
+    y_pad = 0.09 * max(y_hi_raw - y_lo_raw, 0.2)
+    y_lo = y_lo_raw - y_pad
+    # Scan the x-region under the inset (right ~28% of the axis) for
+    # the tallest bar; add headroom so that bar's top is at y_frac ≤ 0.64.
+    xmin_data, xmax_data = -0.5, len(names) - 0.5
+    inset_x_lo_data = xmin_data + 0.72 * (xmax_data - xmin_data)
+    top_under_inset = 0.0
+    for j_pc in range(k):
+        for ii, nm in enumerate(names):
+            bx = xpos[ii] + (j_pc - (k - 1) / 2) * width
+            if bx >= inset_x_lo_data - width:          # bar overlaps inset x-range
+                top_under_inset = max(top_under_inset, float(loadings[ii, j_pc]))
+    # We want (top_under_inset - y_lo) / (y_hi - y_lo) <= 0.64.
+    needed_span = (top_under_inset - y_lo) / 0.64
+    y_hi = max(y_hi_raw + y_pad, y_lo + needed_span)
+    ax.set_ylim(y_lo, y_hi)
+
     ax.set_title(
         f"Active subspace — top {k} PCs explain "
         f"{lam_frac[:k].sum()*100:.0f}% of output variance",
@@ -128,6 +133,22 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     ax.legend(fontsize=6.8, frameon=False,
               loc="upper left", bbox_to_anchor=(0.01, 0.99),
               ncol=1, handlelength=1.6)
+
+    # ── Inset: scree — upper-right corner, clear of every bar ─────
+    inset = ax.inset_axes([0.72, 0.70, 0.26, 0.26])
+    xi = np.arange(1, len(evals) + 1)
+    inset.bar(xi, lam_frac, color="#1565C0", alpha=0.9,
+              edgecolor="white", linewidth=0.4)
+    inset.plot(xi, np.cumsum(lam_frac), color="#D32F2F",
+               marker="o", ms=2.5, lw=1.0)
+    inset.set_xticks(xi)
+    inset.set_xticklabels([str(i) for i in xi], fontsize=5.0)
+    inset.set_yticks([0, 0.5, 1])
+    inset.set_yticklabels(["0", ".5", "1"], fontsize=5.0)
+    inset.tick_params(axis="both", labelsize=5.0)
+    inset.set_title("scree", fontsize=6.4, pad=2)
+    inset.set_ylim(0, 1.05)
+    inset.set_xlim(0.5, len(xi) + 0.5)
 
     # "Top driver per PC" summary — one text artist per PC so every
     # dominant parameter is independently legible and readers can parse

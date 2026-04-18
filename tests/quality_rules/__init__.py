@@ -15,6 +15,9 @@ from .meta import (
     assert_ladder_ok,
     assert_radar_ok,
 )
+from .omics import (
+    assert_volcano_ok,
+)
 from .rhogtpase import (
     assert_bifurcation_ok,
     assert_phase_portrait_ok,
@@ -50,6 +53,8 @@ RULES: dict[str, Callable] = {
     # RhoGTPase dynamics.
     "phase_portrait": assert_phase_portrait_ok,
     "bifurcation": assert_bifurcation_ok,
+    # Omics.
+    "volcano": assert_volcano_ok,
     # Shared across modalities.
     "heatmap": assert_heatmap_ok,
     "ridge_by_group": assert_ridge_by_group_ok,

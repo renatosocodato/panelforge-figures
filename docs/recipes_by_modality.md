@@ -1,77 +1,50 @@
 # Recipes by modality
 
-Auto-describable via `figures catalog --by modality`. Below is the v0.1.0-beta2
-snapshot (11 modalities, 80 recipes).
+v0.1.0-beta3 snapshot: 15 modalities, 107 recipes.
 
-## `grant_and_conceptual` (6)
+## v0.1.0-alpha (3 modalities, 18 recipes)
 
-Executive summaries, Gantts, work-package flows, hypothesis diagrams,
-team matrices, conceptual triptychs.
+- **grant_and_conceptual** (6): executive summaries, Gantts, WP flows,
+  hypothesis diagrams, team matrices, conceptual triptychs.
+- **meta_and_diagnostic** (4): power curves, sample-size ladders,
+  missing-data patterns, QC radars.
+- **sensitivity_analysis** (8): Sobol / Morris / parameter scan / Pi-group
+  collapse / interaction matrix / convergence / active subspace.
 
-## `meta_and_diagnostic` (4)
+## v0.1.0-beta1 (4 modalities, 31 recipes)
 
-Pre-analysis diagnostics — power curves, sample-size ladders,
-missing-data patterns, QC radars.
+- **mixed_effects_models** (9).
+- **dose_response_pharmacology** (5).
+- **biophysics_scaling** (5).
+- **rhogtpase_dynamics** (12).
 
-## `sensitivity_analysis` (8)
+## v0.1.0-beta2 (4 modalities, 31 recipes)
 
-Sobol / Morris, parameter scans, dimensionless Pi-group collapses,
-interaction matrices, convergence diagnostics, active-subspace detection.
+- **gillespie_stochastic** (7).
+- **redox_imaging** (8).
+- **fret_biosensors** (10).
+- **calcium_signaling** (6).
 
-## `mixed_effects_models` (9)
+## v0.1.0-beta3 (4 modalities, 27 recipes) · new
 
-Forests, caterpillars, marginal ribbons, emmeans contrasts, posterior
-predictive checks, ICC variance decomposition, residual diagnostics,
-random slopes, posterior-density ridges.
+- **omics_differential** (10): volcanos, MA plot, GSEA running-enrichment,
+  ORA dotplot, UpSet set comparisons, differential rank ladder, pathway-flux
+  bubble, effect-size vs significance, multi-contrast volcano grid,
+  annotated cluster heatmap.
+- **single_cell_embeddings** (7): UMAP categorical + continuous, pseudotime
+  trajectory with arrow, expression dotplot by cluster, PCA biplot with
+  loadings, 2D diffusion map, neighborhood composition stacked bars.
+- **network_and_pathway** (5): regulatory hive, chord diagram, Sankey-like
+  flux, module eigengene heatmap, centrality degree distribution.
+- **diffusion_and_tracking** (5): MSD by condition with α fit, step-size
+  distribution by condition, angle autocorrelation decay, confinement
+  radius map, track persistence histogram.
 
-## `dose_response_pharmacology` (5)
+## Pending for v0.1.0 (5 modalities, 30 recipes)
 
-Hill fits with bootstrap CI, IC50 forests, Schild regression,
-isobolograms, combination heatmaps.
-
-## `biophysics_scaling` (5)
-
-Log-log scaling with slope boxes, master-curve collapses, force-length,
-power-law tails, buckling critical force.
-
-## `rhogtpase_dynamics` (12)
-
-Phase portraits (tristable / bistable / oscillator), 1D + 2D potential
-landscapes, saddle-node / Hopf / pitchfork bifurcations, nullclines,
-QSS reduction, timescale separation, basins of attraction.
-
-## `gillespie_stochastic` (7) · new in v0.1.0-beta2
-
-Trajectory fans with FPT markers, log-scale dwell-time violins,
-waiting-time ECDFs with exponential/gamma fits, rate vs control
-parameter curves, state-occupancy rasters, ensemble mean-variance
-tubes, noise power spectra.
-
-## `redox_imaging` (8) · new in v0.1.0-beta2
-
-Bistability hysteresis loops, single-cell ratio distributions,
-paracrine coupling-length maps, bimodality-coefficient grids, ratio
-trajectories with phase annotations, redox-state transition diagrams,
-multiplicative-noise diagnostics, drift-diffusion decompositions.
-
-## `fret_biosensors` (10) · new in v0.1.0-beta2
-
-Ratio heatmaps over imaging fields, hierarchical-CI ratio timecourses,
-stimulus-response fans, donor/acceptor dual-channel views, sensor
-calibration curves, FRET Hill dose-responses, single-cell ratio
-trajectories, ratio distributions by condition, FRET signal-to-noise
-maps, ROI ratio summary grids.
-
-## `calcium_signaling` (6) · new in v0.1.0-beta2
-
-Event rasters with population rate, GCaMP trace stacks, event-frequency
-comparisons, calcium-wavefront propagation maps, spike-triggered
-averages, cell-cell synchronization matrices.
-
-## Pending for v0.1.0 (9 modalities, 57 recipes)
-
-Next sessions in order:
-`omics_differential` → `single_cell_embeddings` → `network_and_pathway`
-→ `diffusion_and_tracking` → `spatial_statistics` → `clinical_cohort` →
-`cryoem_and_structure` → `intravital_imaging` →
-`actin_microtubule_morphometry`.
+Session 5:
+- **spatial_statistics** (4)
+- **clinical_cohort** (3)
+- **cryoem_and_structure** (3)
+- **intravital_imaging** (8)
+- **actin_microtubule_morphometry** (12)

@@ -6,6 +6,40 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [0.1.0b3] — 2026-04-19
+
+Session 4 batch — 4 new modalities, 27 new recipes, **107 total**.
+
+### Added
+
+- Modality `omics_differential` (10): volcano_labeled_repelled,
+  ma_plot_with_lowess, annotated_cluster_heatmap, gsea_running_enrichment,
+  ora_dotplot_by_ontology, upset_set_comparisons, differential_rank_ladder,
+  pathway_flux_bubble, effect_size_vs_significance,
+  multi_contrast_volcano_grid.
+- Modality `single_cell_embeddings` (7): umap_categorical_with_density_contours,
+  umap_continuous_expression, trajectory_pseudotime_arrow,
+  expression_dotplot_by_cluster, pca_biplot_with_loadings,
+  diffusion_map_2d, neighborhood_composition_stacked.
+- Modality `network_and_pathway` (5): regulatory_network_hive,
+  interaction_chord_diagram, pathway_flux_sankey_like,
+  module_eigengene_heatmap, centrality_degree_distribution.
+- Modality `diffusion_and_tracking` (5): msd_by_condition,
+  step_size_distribution, angle_correlation_decay,
+  confinement_radius_map, track_persistence_hist.
+- Quality rule for the new `volcano` family: ≥10 scatter points + ≥1
+  threshold line.
+- 27 new gallery PNGs under docs/gallery/ (107 total).
+
+### Progress toward v0.1.0
+
+| | v0.1.0b2 | **v0.1.0b3** | v0.1.0 target |
+|---|---|---|---|
+| Modalities | 11 | **15** | 20 |
+| Recipes | 80 | **107** | 137 |
+| Tests | 361 | **469** | ≥400 ✓ |
+
+
 ## [0.1.0b2] — 2026-04-18
 
 Session 3 batch — 4 new modalities, 31 new recipes, **80 total**.

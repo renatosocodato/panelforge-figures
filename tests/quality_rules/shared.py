@@ -53,6 +53,40 @@ def assert_timecourse_hierarchical_ci_ok(fig, entry):
     )
 
 
+def assert_split_violin_ok(fig, entry):
+    """split_violin — ≥2 violin bodies + ≥1 median marker (scatter).
+
+    matplotlib ≥3.11 returns `FillBetweenPolyCollection` from `ax.violinplot`
+    (older versions returned plain `PolyCollection`). Both count as a body.
+    """
+    n_violin_fills = 0
+    n_scatter = 0
+    for a in fig.axes:
+        for c in a.collections:
+            name = type(c).__name__
+            if name in _FILL_TYPES:
+                n_violin_fills += 1
+            elif name == "PathCollection":
+                n_scatter += 1
+    assert n_violin_fills >= 2, (
+        f"{entry.full_name}: split_violin needs ≥2 violin bodies "
+        f"(got {n_violin_fills})."
+    )
+    assert n_scatter >= 1, (
+        f"{entry.full_name}: split_violin needs ≥1 median marker "
+        f"(got {n_scatter})."
+    )
+
+
+def assert_hysteresis_loop_ok(fig, entry):
+    """hysteresis_loop — ≥2 paths (forward + reverse) and a closed-loop gap."""
+    n_lines = sum(len(a.get_lines()) for a in fig.axes)
+    assert n_lines >= 2, (
+        f"{entry.full_name}: hysteresis needs ≥2 curves (forward + reverse); "
+        f"got {n_lines}."
+    )
+
+
 def assert_coef_forest_ok(fig, entry):
     """coef_forest — ≥3 estimate markers + ≥1 reference/CI line artist."""
     n_scatter_pts = 0

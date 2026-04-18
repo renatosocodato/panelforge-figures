@@ -6,16 +6,16 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-`v0.1.0-beta1` — 7 of 20 modalities landed, 49 of 137 recipes. Full
+`v0.1.0-beta2` — 11 of 20 modalities landed, 80 of 137 recipes. Full
 roster tracked toward `v0.1.0`.
 
-| | v0.1.0-alpha | **v0.1.0-beta1** | v0.1.0 target |
-|---|---|---|---|
-| Modalities | 3 | **7** | 20 |
-| Recipes | 18 | **49** | 137 |
-| Gallery PNGs | 18 | **49** | 137 |
-| Themes | 12 | **12** | 12 |
-| Tests | 113 | **237** | ≥400 |
+| | v0.1.0a0 | v0.1.0b1 | **v0.1.0b2** | v0.1.0 target |
+|---|---|---|---|---|
+| Modalities | 3 | 7 | **11** | 20 |
+| Recipes | 18 | 49 | **80** | 137 |
+| Gallery PNGs | 18 | 49 | **80** | 137 |
+| Themes | 12 | 12 | **12** | 12 |
+| Tests | 113 | 237 | **361** | ≥400 |
 
 ## Install
 

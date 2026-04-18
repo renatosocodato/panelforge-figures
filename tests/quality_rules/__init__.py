@@ -27,7 +27,9 @@ from .sensitivity import (
 from .shared import (
     assert_coef_forest_ok,
     assert_heatmap_ok,
+    assert_hysteresis_loop_ok,
     assert_ridge_by_group_ok,
+    assert_split_violin_ok,
     assert_timecourse_hierarchical_ci_ok,
 )
 
@@ -53,4 +55,6 @@ RULES: dict[str, Callable] = {
     "ridge_by_group": assert_ridge_by_group_ok,
     "timecourse_hierarchical_ci": assert_timecourse_hierarchical_ci_ok,
     "coef_forest": assert_coef_forest_ok,
+    "split_violin": assert_split_violin_ok,
+    "hysteresis_loop": assert_hysteresis_loop_ok,
 }

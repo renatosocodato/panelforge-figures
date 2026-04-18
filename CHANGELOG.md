@@ -6,6 +6,44 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [0.1.0b2] — 2026-04-18
+
+Session 3 batch — 4 new modalities, 31 new recipes, **80 total**.
+
+### Added
+
+- Modality `gillespie_stochastic` (7): trajectory_fan_with_fpt,
+  dwell_time_log_violin, waiting_time_ecdf_fitted, rate_vs_control_parameter,
+  state_occupancy_raster, ensemble_mean_variance_tube, noise_power_spectrum.
+- Modality `redox_imaging` (8): bistability_hysteresis_loop,
+  single_cell_ratio_distribution, paracrine_coupling_length_map,
+  bimodality_coefficient_grid, ratio_trajectory_with_phase_annotation,
+  redox_state_transition_diagram, multiplicative_noise_diagnostic,
+  drift_diffusion_decomposition.
+- Modality `fret_biosensors` (10): ratio_heatmap_over_field,
+  ratio_timecourse_hierarchical_ci, stimulus_response_fan,
+  donor_acceptor_dual_channel, sensor_calibration_curve,
+  dose_response_hill_fret, single_cell_ratio_trajectories,
+  ratio_distribution_by_condition, fret_signal_to_noise_map,
+  roi_ratio_summary_grid.
+- Modality `calcium_signaling` (6): event_raster_with_rate, gcamp_trace_stack,
+  event_frequency_by_condition, calcium_propagation_wavefront,
+  spike_triggered_average, synchronization_matrix.
+- Quality rules for 2 new families: `split_violin`, `hysteresis_loop`.
+  Broadened the split_violin rule's fill-detection to accept matplotlib ≥
+  3.11's `FillBetweenPolyCollection` (now the default return type from
+  `ax.violinplot`).
+- 31 new gallery PNGs under docs/gallery/ (80 total).
+
+### Progress toward v0.1.0
+
+| | v0.1.0b1 | **v0.1.0b2** | v0.1.0 target |
+|---|---|---|---|
+| Modalities | 7 | **11** | 20 |
+| Recipes | 49 | **80** | 137 |
+| Tests | 237 | **361** | ≥400 |
+
+
 ## [0.1.0b1] — 2026-04-18
 
 Session 2 batch — 4 new modalities, 31 new recipes, 49 total.

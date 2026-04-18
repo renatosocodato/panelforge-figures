@@ -89,7 +89,7 @@ def render(contract: QCMetricRadarInput, ax=None, **_):
         ax.plot(theta_closed, t_closed, color="#C62828", lw=1.0, ls="--", zorder=2)
         add_halo_label(
             ax, theta[0], float(t[0]), "threshold",
-            color="#C62828", fontsize=6.4, fontweight="bold",
+            color="#C62828", fontsize=6.4,
             halo_width=2.2, ha="left", va="bottom",
         )
 
@@ -99,14 +99,14 @@ def render(contract: QCMetricRadarInput, ax=None, **_):
         v = np.array(vals, dtype=float)
         v_closed = np.concatenate([v, v[:1]])
         color = palette[i]
-        ax.plot(theta_closed, v_closed, color=color, lw=1.8, label=sample, zorder=3)
+        ax.plot(theta_closed, v_closed, color=color, lw=1.1, label=sample, zorder=3)
         ax.fill(theta_closed, v_closed, color=color, alpha=0.12, zorder=2)
         for tv, vv in zip(theta, v):
             ax.scatter([tv], [vv], color=color, s=22, edgecolor="white",
                        linewidth=0.8, zorder=4)
         sample_means.append((sample, color, float(v.mean())))
 
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=14)
+    ax.set_title(contract.title, fontsize=9.0, pad=14)
 
     # Summary strip just below the title — μ per sample in matching colors.
     # Placed in figure space so it never collides with the radar spokes.

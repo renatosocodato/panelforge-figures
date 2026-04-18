@@ -75,7 +75,7 @@ def render(contract: PiGroupCollapseInput, ax=None, **_):
     if contract.fit_line and xs.size > 6:
         xg, mean, lo, hi = bootstrap_ci(np.log(xs + 1e-9), ys, fit="linear", n_resamples=250)
         ax.fill_between(np.exp(xg), lo, hi, color="#999999", alpha=0.18, zorder=2)
-        ax.plot(np.exp(xg), mean, color="#333333", lw=1.6, zorder=4)
+        ax.plot(np.exp(xg), mean, color="#333333", lw=1.0, zorder=4)
         r2 = _r2(np.log(xs + 1e-9), ys)
         add_halo_label(
             ax,
@@ -84,13 +84,12 @@ def render(contract: PiGroupCollapseInput, ax=None, **_):
             f"R² = {smart_fmt(r2)}",
             color="#333333",
             fontsize=7.4,
-            fontweight="bold",
             halo_width=2.6,
         )
     ax.set_xscale("log")
     ax.set_xlabel(contract.pi_label)
     ax.set_ylabel(contract.output_label)
-    ax.set_title("Master-curve collapse", fontsize=9.0, fontweight="bold")
+    ax.set_title("Master-curve collapse", fontsize=9.0)
     ax.legend(fontsize=7.0, frameon=False, ncol=2, loc="lower right")
     ax.grid(axis="both", color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

@@ -75,18 +75,25 @@ def render(contract: InteractionMatrixInput, ax=None, **_):
     ax.set_yticks(range(n))
     ax.set_yticklabels(names, fontsize=7.0)
 
-    # Halo'd labels for interactions above the threshold.
+    # Interaction value labels above the threshold. Over dark cells
+    # (v > v_hi/2) render in white; otherwise light-background labels
+    # are dark with a thin white bbox for crispness.
+    v_hi = max(M.max(), 1e-9)
     annotated = []
     for i in range(n):
         for j in range(i):
             v = M[i, j]
             if v >= contract.annotate_threshold:
                 annotated.append((i, j, v))
-                add_halo_label(
-                    ax, j, i, smart_fmt(v),
-                    fontsize=6.6, fontweight="bold", color="#111111",
-                    halo_width=2.2,
-                )
+                if v > v_hi * 0.5:
+                    ax.text(j, i, smart_fmt(v), ha="center", va="center",
+                            fontsize=6.6, color="white")
+                else:
+                    ax.text(j, i, smart_fmt(v), ha="center", va="center",
+                            fontsize=6.6, color="#111111",
+                            bbox=dict(boxstyle="round,pad=0.12",
+                                      fc="white", ec="none", alpha=0.88))
+    _ = add_halo_label
 
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label("S₂ (interaction)", fontsize=6.8)
@@ -95,7 +102,6 @@ def render(contract: InteractionMatrixInput, ax=None, **_):
     ax.set_title(
         f"Pairwise interactions — {contract.output_label}",
         fontsize=8.6,
-        fontweight="bold",
     )
 
     # Top-3 strongest pairs — placed below axis in figure space so it never

@@ -90,7 +90,7 @@ def render(contract: SampleSizeLadderInput, ax=None, **_):
                 linewidth=0.8, zorder=2)
         # Right-of-bar n= label, with a small gap scaled to axis width.
         ax.text(n + xmax_hint * 0.012, y, f"n={n}", va="center", ha="left",
-                fontsize=7.0, color=color, fontweight="bold")
+                fontsize=7.0, color=color)
     ytick_labels = [f"d = {smart_fmt(d)}  ·  {lbl}"
                     for d, lbl in zip(ds, labels)]
 
@@ -101,7 +101,7 @@ def render(contract: SampleSizeLadderInput, ax=None, **_):
         add_halo_label(
             ax, contract.budget_n, -0.9,
             f"budget n={contract.budget_n}",
-            color="#D32F2F", fontsize=7.0, fontweight="bold",
+            color="#D32F2F", fontsize=7.0,
             halo_width=2.6, ha="center", va="bottom",
         )
         ax.add_patch(mpatches.Rectangle(
@@ -120,7 +120,7 @@ def render(contract: SampleSizeLadderInput, ax=None, **_):
     xmax = xmax_hint
     ax.set_xlim(0, xmax)
     ax.set_xlabel("Required n per group")
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=4)
+    ax.set_title(contract.title, fontsize=9.0, pad=4)
     ax.grid(axis="x", color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

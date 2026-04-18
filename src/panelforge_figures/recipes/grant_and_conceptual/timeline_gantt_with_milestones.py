@@ -103,7 +103,6 @@ def render(contract: GanttInput, ax=None, **_):
             y,
             t.wp,
             fontsize=6.6,
-            fontweight="bold",
             color="white",
             halo_color=wp_colors[t.wp],
             halo_width=2.0,
@@ -124,7 +123,7 @@ def render(contract: GanttInput, ax=None, **_):
         # Short callout — just the Mn token above the marker.
         short = ms.name.split(" ")[0] if ms.name else ""
         add_halo_label(ax, ms.at, -1.9, short, fontsize=6.8, color=ms_color,
-                       fontweight="bold", ha="center", va="bottom",
+                       ha="center", va="bottom",
                        halo_width=2.4)
 
     # WP legend AND milestone legend sit below the x-axis on separate lines.

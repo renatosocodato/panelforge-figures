@@ -123,10 +123,10 @@ def render(contract: ConceptualTriptychInput, ax=None, **_):
         # Label strip (top ~10% of the panel).
         ax.text(x0 + panel_w / 2, 88, panel.label,
                 ha="center", va="top", color="white",
-                fontsize=7.0, fontweight="bold", alpha=0.8)
+                fontsize=7.0, alpha=0.8)
         ax.text(x0 + panel_w / 2, 76, _wrap(panel.headline, headline_wrap),
                 ha="center", va="top", color="white",
-                fontsize=7.6, fontweight="bold")
+                fontsize=7.6)
         # Details — three bullets, wrapped per line.
         for i, d in enumerate(panel.details[:3]):
             wrapped = _wrap(d, detail_wrap).replace("\n", "\n  ")
@@ -144,13 +144,13 @@ def render(contract: ConceptualTriptychInput, ax=None, **_):
             "",
             xy=(x1, 50),
             xytext=(x0, 50),
-            arrowprops=dict(arrowstyle="-|>", color="#555555", lw=1.4,
+            arrowprops=dict(arrowstyle="-|>", color="#555555", lw=1.0,
                             shrinkA=2, shrinkB=2),
             zorder=3,
         )
         ax.text((x0 + x1) / 2, 56, label,
                 ha="center", va="bottom", color="#333333",
-                fontsize=6.8, fontweight="bold",
+                fontsize=6.8,
                 bbox=dict(boxstyle="round,pad=0.15", fc="white",
                           ec="none", alpha=0.92))
     return ax

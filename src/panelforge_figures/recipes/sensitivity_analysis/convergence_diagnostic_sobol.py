@@ -96,14 +96,14 @@ def render(contract: SobolConvergenceInput, ax=None, **_):
             if last_range < contract.tolerance:
                 add_halo_label(
                     ax, ns[-1] * 1.03, trajs[i, -1],
-                    "OK", color="#2E7D32", fontsize=7.4, fontweight="bold",
+                    "OK", color="#2E7D32", fontsize=7.4,
                     halo_width=2.6, ha="left", va="center",
                 )
 
     ax.set_xscale("log")
     ax.set_xlabel("samples used (N)")
     ax.set_ylabel(r"$S_T$ estimate")
-    ax.set_title("Sobol-index convergence", fontsize=9.0, fontweight="bold", pad=4)
+    ax.set_title("Sobol-index convergence", fontsize=9.0, pad=4)
     # Legend outside the axis (right side) so it can't collide with traces.
     ax.legend(fontsize=6.8, loc="center left", bbox_to_anchor=(1.02, 0.5),
               frameon=False, handlelength=1.6)

@@ -28,11 +28,17 @@ def test_smart_fmt_nan_and_none():
     assert smart_fmt(float("nan")) == "nan"
 
 
-def test_halo_label_sets_path_effects():
+def test_halo_label_returns_plain_text_no_stroke():
+    """add_halo_label was historically a stroked label; post-crispness
+    pass it renders plain text (no path effects, no bbox, no stroke)
+    regardless of the historical `halo_width` kwarg.
+    """
     fig, ax = plt.subplots()
     t = add_halo_label(ax, 0.5, 0.5, "hello", halo_width=3.0)
-    effects = t.get_path_effects()
-    assert len(effects) >= 2, "halo_label should install ≥2 path effects"
+    assert t.get_text() == "hello"
+    # No path effects (no stroke), and no bbox applied.
+    assert not t.get_path_effects()
+    assert t.get_bbox_patch() is None
     plt.close(fig)
 
 

@@ -75,7 +75,7 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
             X, Y, Z,
             levels=[contract.threshold],
             colors="#D32F2F",
-            linewidths=2.0,
+            linewidths=1.2,
         )
         try:
             # Attach a halo'd label near the first contour segment.
@@ -90,7 +90,6 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
                     f"z = {smart_fmt(contract.threshold)}",
                     color="#D32F2F",
                     fontsize=7.0,
-                    fontweight="bold",
                     halo_width=2.6,
                 )
         except (AttributeError, IndexError):
@@ -110,7 +109,6 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
         f"max = {smart_fmt(float(Z.max()))}",
         color=palette[1],
         fontsize=7.0,
-        fontweight="bold",
         halo_width=2.6,
         ha="left",
         va="bottom",
@@ -123,7 +121,7 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
     ax.set_xlabel(contract.x_name)
     ax.set_ylabel(contract.y_name)
     ax.set_title(f"{contract.output_label} across ({contract.x_name}, {contract.y_name})",
-                 fontsize=8.4, fontweight="bold")
+                 fontsize=8.4)
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.042, pad=0.04)
     cbar.set_label(contract.output_label, fontsize=6.8)
     cbar.ax.tick_params(labelsize=6.6)

@@ -91,15 +91,14 @@ def render(contract: ExecutiveSummaryInput, ax=None, **_):
         boxstyle="round,pad=0.01,rounding_size=0.02",
         facecolor=accent, alpha=0.93, edgecolor="white", linewidth=1.4,
     ))
-    add_halo_label(
-        ax, 22, 66, contract.headline_value,
-        fontsize=26, fontweight="bold", color="white",
-        halo_color=accent, halo_width=1.5,
-    )
+    ax.text(22, 66, contract.headline_value,
+            ha="center", va="center",
+            fontsize=28, color="white")
+    _ = add_halo_label  # keep import contract
     ax.text(22, 40, contract.headline_label, ha="center", va="center",
-            color="white", fontsize=8.4, fontweight="bold")
+            color="white", fontsize=8.4)
     ax.text(22, 14, "HEADLINE", ha="center", va="center",
-            color="white", alpha=0.7, fontsize=7.0, fontweight="bold")
+            color="white", alpha=0.7, fontsize=7.0)
 
     # ── RIGHT TOP: payoff bullets (upper 55%). ───────────────────────
     n_bullets = min(len(contract.payoffs), 3)
@@ -110,7 +109,7 @@ def render(contract: ExecutiveSummaryInput, ax=None, **_):
     else:
         ys = np.linspace(bullet_band_y1 - 4, bullet_band_y0 + 2, n_bullets).tolist()
     ax.text(46, 96, "KEY PAYOFFS", ha="left", va="top",
-            color=accent, fontsize=6.8, fontweight="bold", alpha=0.85)
+            color=accent, fontsize=6.8, alpha=0.85)
     for i, text in enumerate(contract.payoffs[:n_bullets]):
         y = ys[i]
         ax.add_patch(mpatches.Circle((49, y), 1.5, color=accent, zorder=3))
@@ -128,8 +127,8 @@ def render(contract: ExecutiveSummaryInput, ax=None, **_):
         x_px = 48 + (xs - xs.min()) / x_span * 48
         y_px = 12 + (ys_data - ys_data.min()) / y_span * 26
         ax.text(46, 50, "CUMULATIVE IMPACT",
-                color=accent, fontsize=6.8, fontweight="bold", alpha=0.85)
-        ax.plot(x_px, y_px, color=accent, lw=2.0, marker="o", ms=4.4,
+                color=accent, fontsize=6.8, alpha=0.85)
+        ax.plot(x_px, y_px, color=accent, lw=1.3, marker="o", ms=4.4,
                 markerfacecolor="white", markeredgecolor=accent,
                 markeredgewidth=1.2, zorder=4)
         for xi, lab in [(x_px[0], int(xs[0])), (x_px[-1], int(xs[-1]))]:
@@ -137,6 +136,6 @@ def render(contract: ExecutiveSummaryInput, ax=None, **_):
                     fontsize=6.6, color="#666666")
         ax.text(x_px[-1], y_px[-1] + 3, f"{int(ys_data[-1])}",
                 ha="center", va="bottom",
-                fontsize=7.2, color=accent, fontweight="bold")
+                fontsize=7.2, color=accent)
 
     return ax

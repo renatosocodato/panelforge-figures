@@ -94,7 +94,7 @@ def render(contract: HypothesisDiagramInput, ax=None, **_):
 
     # ── Evidence band (top 30%) ───────────────────────────────
     ax.text(2, 97, "EVIDENCE", ha="left", va="top",
-            fontsize=7.6, fontweight="bold", color=ev_color)
+            fontsize=7.6, color=ev_color)
     n_ev = min(len(contract.evidence), 3)
     for i in range(n_ev):
         w = 100 / 3 - 2
@@ -114,10 +114,10 @@ def render(contract: HypothesisDiagramInput, ax=None, **_):
         facecolor=claim_c, edgecolor="white", linewidth=1.6, alpha=0.95,
     ))
     ax.text(50, 60, "HYPOTHESIS", ha="center", va="center",
-            fontsize=7.0, fontweight="bold", color="white", alpha=0.75)
+            fontsize=7.0, color="white", alpha=0.75)
     ax.text(50, 50, _wrap(contract.claim, 64),
             ha="center", va="center", fontsize=7.6,
-            fontweight="bold", color="white")
+            color="white")
     if contract.mechanism:
         ax.text(50, 40, f"via {contract.mechanism}",
                 ha="center", va="center", fontsize=6.4,
@@ -133,7 +133,7 @@ def render(contract: HypothesisDiagramInput, ax=None, **_):
 
     # ── Predictions band (bottom 30%) ─────────────────────────
     ax.text(2, 32, "PREDICTIONS", ha="left", va="top",
-            fontsize=7.6, fontweight="bold", color=pr_color)
+            fontsize=7.6, color=pr_color)
     n_pr = min(len(contract.predictions), 3)
     for i in range(n_pr):
         w = 100 / 3 - 2

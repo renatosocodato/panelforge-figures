@@ -116,7 +116,6 @@ def render(contract: FastSubspaceInput, ax=None, **_):
         f"Active subspace — top {k} PCs explain "
         f"{lam_frac[:k].sum()*100:.0f}% of output variance",
         fontsize=8.4,
-        fontweight="bold",
     )
     ax.legend(fontsize=6.8, frameon=False, loc="upper left", ncol=1)
 
@@ -134,7 +133,6 @@ def render(contract: FastSubspaceInput, ax=None, **_):
             y_val + (0.03 if y_val > 0 else -0.03),
             f"PC{j+1}",
             fontsize=5.8,
-            fontweight="bold",
             color="#222222",
             halo_width=2.2,
             ha="center",

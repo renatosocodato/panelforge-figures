@@ -73,10 +73,10 @@ def render(contract: TeamExpertiseInput, ax=None, **_):
                 continue
             color = "white" if v >= 2 else "#222222"
             ax.text(j, i, f"{int(round(v))}", ha="center", va="center",
-                    fontsize=7.0, color=color, fontweight="bold")
+                    fontsize=7.0, color=color)
     # No explicit margin totals — they crowd the axes at small sizes.
     # Reviewers read coverage directly from the cmap; the bar summarizes totals.
-    ax.set_title("Team × competency coverage", fontsize=8.6, fontweight="bold", pad=4)
+    ax.set_title("Team × competency coverage", fontsize=8.6, pad=4)
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.036, pad=0.03)
     cbar.set_label("coverage (0–3)", fontsize=6.8)
     cbar.ax.tick_params(labelsize=6.6)

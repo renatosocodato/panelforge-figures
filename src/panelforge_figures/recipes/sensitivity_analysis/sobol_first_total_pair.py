@@ -115,7 +115,7 @@ def render(contract: SobolIndicesInput, ax=None, **_):
         ax.text(xe + gap, y + bar_h / 2,
                 rf"$S_T$={smart_fmt(v_st)}",
                 va="center", ha="left",
-                fontsize=6.8, color="#222222", fontweight="bold",
+                fontsize=6.8, color="#222222",
                 bbox=dict(boxstyle="round,pad=0.08", fc="white",
                           ec="none", alpha=0.95), zorder=6)
         ax.text(xe + gap, y - bar_h / 2,
@@ -135,7 +135,6 @@ def render(contract: SobolIndicesInput, ax=None, **_):
     ax.set_title(
         f"Global sensitivity — {contract.output_label}",
         fontsize=9.0,
-        fontweight="bold",
     )
 
     # Top-drivers callout — below the x-axis in figure coords, never over any bar.

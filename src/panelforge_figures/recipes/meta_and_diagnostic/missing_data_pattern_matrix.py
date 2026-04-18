@@ -95,9 +95,9 @@ def render(contract: MissingPatternInput, ax=None, **_):
     # Right margin: row counts per pattern.
     for i, c in enumerate(counts):
         ax.text(n_vars + 0.3, -i + 0.45, f"{int(c)}", va="center", ha="left",
-                fontsize=7.2, color="#333333", fontweight="bold")
+                fontsize=7.2, color="#333333")
     ax.text(n_vars + 0.3, 1.5, "N rows", va="center", ha="left",
-            fontsize=6.8, color="#555555", fontweight="bold")
+            fontsize=6.8, color="#555555")
 
     # Bottom margin: missingness fraction per variable.
     miss_frac = contract.variable_missing_frac
@@ -105,9 +105,9 @@ def render(contract: MissingPatternInput, ax=None, **_):
         for j, f in enumerate(miss_frac):
             ax.text(j + 0.45, -n_pat + 0.2, smart_fmt(f),
                     ha="center", va="top", fontsize=6.8,
-                    color="#B71C1C" if f > 0.25 else "#333333", fontweight="bold")
+                    color="#B71C1C" if f > 0.25 else "#333333")
         ax.text(-0.3, -n_pat + 0.2, "missing\nfrac", ha="right", va="top",
-                fontsize=6.8, color="#555555", fontweight="bold")
+                fontsize=6.8, color="#555555")
 
     # Axis decoration.
     ax.set_xticks(np.arange(n_vars) + 0.45)
@@ -115,7 +115,7 @@ def render(contract: MissingPatternInput, ax=None, **_):
     ax.set_yticks([])
     ax.set_xlim(-0.4, n_vars + 1.6)
     ax.set_ylim(-n_pat - 0.6, 2.3)
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold")
+    ax.set_title(contract.title, fontsize=9.0)
     for s in ("left", "bottom"):
         ax.spines[s].set_visible(False)
     return ax

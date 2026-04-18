@@ -104,11 +104,11 @@ def render(contract: WorkPackageFlowInput, ax=None, **_):
         # ID at the top strip.
         ax.text(x + w / 2, y + h - 0.035, wp.id,
                 ha="center", va="top", color="white",
-                fontsize=8.2, fontweight="bold")
+                fontsize=8.2)
         # Title below ID — one compact line.
         ax.text(x + w / 2, y + h - 0.085, wp.title,
                 ha="center", va="top", color="white",
-                fontsize=6.6, fontweight="bold", alpha=0.92)
+                fontsize=6.6, alpha=0.92)
         # Bullets — keep max 2 visible to avoid overflow at small sizes.
         for i, b in enumerate(wp.bullets[:2]):
             ax.text(x + 0.012, y + h - 0.12 - 0.050 * (i + 1),
@@ -140,7 +140,7 @@ def render(contract: WorkPackageFlowInput, ax=None, **_):
         if e.label:
             ax.text((sx + dx) / 2, (sy + dy) / 2 + 0.02,
                     e.label, ha="center", va="center",
-                    color="#333333", fontsize=6.6, fontweight="bold",
+                    color="#333333", fontsize=6.6,
                     bbox=dict(boxstyle="round,pad=0.12", fc="white",
                               ec="none", alpha=0.92),
                     zorder=2)

@@ -94,7 +94,7 @@ def render(contract: MorrisEEInput, ax=None, **_):
         add_halo_label(
             ax, mu[idx] + nudge_x, sig[idx] + nudge_y,
             names[idx], color="#222222",
-            fontsize=7.2, fontweight="bold", halo_width=2.6,
+            fontsize=7.2, halo_width=2.6,
             ha="left", va="center",
         )
 
@@ -123,7 +123,7 @@ def render(contract: MorrisEEInput, ax=None, **_):
     _ = callout_box
     ax.set_xlabel(r"$\mu^*$ (mean |elementary effect|)", fontsize=7.8)
     ax.set_ylabel(r"$\sigma$ (std elementary effect)", fontsize=7.8)
-    ax.set_title("Morris screening", fontsize=9.0, fontweight="bold", pad=4)
+    ax.set_title("Morris screening", fontsize=9.0, pad=4)
     ax.set_xlim(0, x_hi)
     ax.set_ylim(0, y_hi)
     # μ* = σ inline label placed at the end of the diagonal (inside the box).

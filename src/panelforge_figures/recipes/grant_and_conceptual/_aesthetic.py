@@ -22,7 +22,7 @@ AESTHETIC = ModalityAesthetic(
     annotation_style=AnnotationStyle(
         halo_width=3.0,
         label_fontsize=8.2,
-        label_fontweight="bold",
+        label_fontweight="normal",
         callout_pad=0.32,
         callout_accent="#333333",
     ),

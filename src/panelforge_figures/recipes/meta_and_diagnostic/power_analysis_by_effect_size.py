@@ -78,7 +78,7 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
     for i, d in enumerate(contract.effect_sizes):
         pw = np.array([_power_t_two_sample(d, int(n), contract.alpha) for n in ns])
         color = palette[i]
-        ax.plot(ns, pw, color=color, lw=1.6, label=f"d = {smart_fmt(d)}")
+        ax.plot(ns, pw, color=color, lw=1.0, label=f"d = {smart_fmt(d)}")
         # N@80%: first crossing. Alternate label y offsets so they don't
         # collide when multiple effect sizes cross 80% near the same N.
         above = pw >= 0.80
@@ -89,7 +89,7 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
                        linewidth=1.0, zorder=5)
             y_off = 0.84 + 0.04 * i        # stagger per-d
             add_halo_label(ax, n80, y_off, f"n={n80}",
-                           color=color, fontsize=6.4, fontweight="bold",
+                           color=color, fontsize=6.4,
                            halo_width=2.2, va="bottom", ha="center")
         else:
             y80_n_by_d[d] = None
@@ -99,15 +99,14 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
     # Target label placed to the RIGHT of the axis at y=0.80 so it never
     # competes with the N@80% dots/labels on the left half.
     ax.text(n_hi * 0.995, 0.80, "80% power",
-            color="#D32F2F", fontsize=6.8, ha="right", va="bottom",
-            fontweight="bold")
+            color="#D32F2F", fontsize=6.8, ha="right", va="bottom")
 
     if contract.n_planned is not None:
         ax.axvline(contract.n_planned, color="#333333", lw=0.8, ls="--")
         add_halo_label(ax, contract.n_planned, 0.50,
                        f"planned n={contract.n_planned}",
                        color="#333333", fontsize=6.8, ha="left", va="center",
-                       halo_width=2.4, fontweight="bold")
+                       halo_width=2.4)
 
     # Callout: critical d given n_planned — placed bottom-right (below the
     # convex part of the power curves, so it does not overlap any trace).
@@ -132,7 +131,7 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
     ax.set_ylim(-0.02, 1.06)
     ax.set_xlabel("Sample size per group")
     ax.set_ylabel(r"Power (1 − $\beta$)")
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=4)
+    ax.set_title(contract.title, fontsize=9.0, pad=4)
     # Legend lower-right: the large-N region is where d=0.20 is still
     # climbing (power < 0.5) AND all higher-d curves are already saturated
     # at 1 — there is genuine empty space to anchor in.

@@ -13,7 +13,6 @@ from __future__ import annotations
 import math
 from collections.abc import Iterable, Sequence
 
-import matplotlib.patheffects as pe
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -40,20 +39,25 @@ def add_halo_label(
     text: str,
     *,
     color: str = "#111111",
-    fontsize: float = 8.5,
+    fontsize: float = 8.0,
     fontweight: str = "normal",
     halo_color: str = "white",
-    halo_width: float = 2.8,
+    halo_width: float = 0.0,
     ha: str = "center",
     va: str = "center",
     zorder: float = 10,
     **kwargs,
 ):
-    """Text with a white halo stroke — readable over colored backgrounds.
+    """Place a plain text annotation. No stroke, no background by default.
 
-    Returns the Text artist so recipes can apply further transforms.
+    The name (and the `halo_color`/`halo_width` kwargs) are kept for API
+    compatibility with older recipes. They are now ignored — the function
+    produces a plain `ax.text` artist. Callers that truly need a readable
+    label over a busy background should add their own bbox via
+    `ax.text(..., bbox=dict(fc='white', ec='none', alpha=0.9))`.
     """
-    t = ax.text(
+    del halo_color, halo_width  # Kept for API compatibility, intentionally unused.
+    return ax.text(
         x,
         y,
         text,
@@ -65,10 +69,6 @@ def add_halo_label(
         zorder=zorder,
         **kwargs,
     )
-    t.set_path_effects(
-        [pe.withStroke(linewidth=halo_width, foreground=halo_color), pe.Normal()]
-    )
-    return t
 
 
 def callout_box(
@@ -166,7 +166,6 @@ def colored_bracket(
         rotation=90,
         color=color,
         fontsize=fontsize,
-        fontweight="bold",
     )
 
 
@@ -328,8 +327,7 @@ def fixed_point_marker(
     else:  # saddle
         ax.scatter([x], [y], s=size, facecolor="#888888", edgecolor="black", linewidth=1.4, zorder=6)
     if label is not None:
-        add_halo_label(ax, x, y, label, fontsize=7.8, fontweight="bold", va="bottom",
-                       ha="left")
+        add_halo_label(ax, x, y, label, fontsize=7.6, va="bottom", ha="left")
 
 
 def saddle_node_star(ax, x: float, y: float, *, color: str = "#D32F2F"):
@@ -348,7 +346,6 @@ def shaded_regime(ax, x0: float, x1: float, color: str = "#FFEBEE", alpha: float
             va="top",
             fontsize=7.2,
             color="#555555",
-            fontweight="bold",
         )
 
 
@@ -393,7 +390,7 @@ def add_scale_bar(
         solid_capstyle="butt",
     )
     ax.text(x0, y0 + 0.025, label, transform=ax.transAxes,
-            color=color, fontsize=7.0, fontweight="bold")
+            color=color, fontsize=7.0)
 
 
 def close_figure(fig):

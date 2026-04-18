@@ -82,7 +82,7 @@ def render(contract: PiGroupRankInput, ax=None, **_):
         ax.barh(yi + bar_h / 2, an, height=bar_h, color="#9E9E9E",
                 alpha=0.85, edgecolor="white", linewidth=0.6)
         ax.text(rr + 0.015, yi - bar_h / 2, f"R²={smart_fmt(rr)}",
-                va="center", ha="left", fontsize=6.8, color=color, fontweight="bold")
+                va="center", ha="left", fontsize=6.8, color=color)
         ax.text(an + 0.015, yi + bar_h / 2, f"AIC={int(ar)}",
                 va="center", ha="left", fontsize=6.8, color="#555555")
 
@@ -91,7 +91,7 @@ def render(contract: PiGroupRankInput, ax=None, **_):
     ax.invert_yaxis()
     ax.set_xlim(0, 1.25)
     ax.set_xlabel("R² / normalized AIC (higher is better)")
-    ax.set_title("Pi-group formulations ranked", fontsize=9.0, fontweight="bold")
+    ax.set_title("Pi-group formulations ranked", fontsize=9.0)
     ax.axvline(0.9, color="#D32F2F", ls="--", lw=0.8)
 
     if contract.winner_label is not None:

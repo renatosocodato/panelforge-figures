@@ -92,7 +92,7 @@ def render(contract: BucklingInput, ax=None, **_):
             label=f"observed (slope {smart_fmt(float(slope))})")
     ax.text(0.02, 0.05,
             f"observed slope = {smart_fmt(float(slope))}\n"
-            f"EI = {smart_fmt(E * inertia * 1e24)} × 10⁻²⁴ N·m²",
+            rf"EI = {smart_fmt(E * inertia * 1e24)} $\times$ 10$^{{-24}}$ N m$^2$",
             transform=ax.transAxes, ha="left", va="bottom",
             fontsize=6.8, color="#333333",
             bbox=dict(boxstyle="round,pad=0.22", fc="white",

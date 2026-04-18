@@ -31,7 +31,7 @@ def _demo() -> LogLogScalingInput:
     y = 2.1 * x ** 1.5 * np.exp(rng.normal(0, 0.12, x.size))
     return LogLogScalingInput(
         x=x.tolist(), y=y.tolist(),
-        x_label="length (μm)", y_label="stiffness (pN·μm⁻¹)",
+        x_label=r"length (μm)", y_label=r"stiffness (pN μm$^{-1}$)",
         reference_slope=1.5,
     )
 

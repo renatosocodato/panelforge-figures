@@ -1,0 +1,8 @@
+# Optional per-manuscript theme override file. Not loaded automatically —
+# referenced from figures.manifest.yaml's `theme:` field if you want to
+# use a nonstandard theme name, or simply set the theme there directly.
+# This template exists so manuscript repos can keep theme decisions
+# reviewed alongside the manifest.
+
+theme = "pnas"
+palette = "journal_neutral"

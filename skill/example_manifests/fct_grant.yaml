@@ -1,0 +1,56 @@
+# Example manifest for an FCT grant application (Portuguese national funding).
+# Uses fct_grant theme (compact labels) and mechanism_class palette.
+
+version: 1
+theme: fct_grant
+palette: mechanism_class
+catalog_fingerprint: "sha256:<stamp_via_figures_catalog>"
+
+figures:
+  - id: fig_1_summary
+    size: single
+    suptitle: "Executive summary"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.executive_summary_tile
+        data:
+          adapter: passthrough
+          source:
+            headline_value: "3.2×"
+            headline_label: "acceleration of discovery cycle"
+            payoffs:
+              - "Reproducible figures from declarative manifest"
+              - "Modality-first recipes map 1:1 to claims"
+              - "Translational biomarker pipeline"
+            category_bars:
+              "Manuscripts": 5
+              "Pipelines": 9
+              "Datasets": 14
+            impact_xy: [[2026, 2027, 2028, 2029], [2, 6, 14, 28]]
+            color_key: cytoskeletal
+
+  - id: fig_2_gantt
+    size: double
+    suptitle: "Timeline and milestones"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.timeline_gantt_with_milestones
+        data:
+          source: "grant/gantt.yaml"
+          adapter: passthrough       # the manifest authors keep the Gantt inline
+          # or write a tiny local adapter that loads grant/gantt.yaml
+
+  - id: fig_3_flow
+    size: double_sq
+    suptitle: "Work package structure"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.work_package_flow
+        data:
+          source: "grant/wps.yaml"
+          adapter: passthrough
+
+export:
+  formats: [pdf, png]
+  outdir: figures/outputs
+  dpi: 600

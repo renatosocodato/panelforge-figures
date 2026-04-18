@@ -1,0 +1,43 @@
+# Example manifest for a Horizon Europe grant application.
+# Uses horizon theme + conceptual triptych + hypothesis diagram + WP flow.
+
+version: 1
+theme: horizon
+palette: mechanism_class
+catalog_fingerprint: "sha256:<stamp_via_figures_catalog>"
+
+figures:
+  - id: fig_1_triptych
+    size: double
+    suptitle: "Figure 1 · Problem → Approach → Payoff"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.conceptual_triptych
+        data:
+          source: "grant/triptych.yaml"
+          adapter: passthrough
+
+  - id: fig_2_hypothesis
+    size: double_sq
+    suptitle: "Figure 2 · Central hypothesis and testable predictions"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.hypothesis_diagram
+        data:
+          source: "grant/hypothesis.yaml"
+          adapter: passthrough
+
+  - id: fig_3_team
+    size: single_sq
+    suptitle: "Figure 3 · Team × competency coverage"
+    panels:
+      - id: A
+        recipe: grant_and_conceptual.team_expertise_matrix
+        data:
+          source: "grant/team.csv"
+          adapter: tabular
+
+export:
+  formats: [pdf, png]
+  outdir: figures/outputs
+  dpi: 600

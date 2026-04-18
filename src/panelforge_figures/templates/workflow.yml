@@ -1,0 +1,33 @@
+name: figures
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install panelforge-figures
+        run: pip install git+https://github.com/renatosocodato/panelforge-figures.git
+      - name: Install local figure deps
+        run: |
+          if [ -f figures/requirements.txt ]; then
+            pip install -r figures/requirements.txt
+          fi
+      - name: Validate manifest
+        run: figures validate figures.manifest.yaml
+      - name: Render figures
+        run: figures render figures.manifest.yaml
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: figures
+          path: figures/outputs/

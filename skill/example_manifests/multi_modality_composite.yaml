@@ -1,0 +1,43 @@
+# Example: composite manuscript figure drawing from multiple modalities.
+# Top row: sensitivity analysis. Bottom row: meta-diagnostics.
+# Useful for methods-heavy papers that need to show "we checked everything".
+
+version: 1
+theme: cell
+palette: journal_neutral
+catalog_fingerprint: "sha256:<stamp_via_figures_catalog>"
+
+figures:
+  - id: fig_methods_audit
+    size: double_sq
+    suptitle: "Figure S1 · Methodological audit"
+    subtitle: "Sensitivity + diagnostics"
+    panels:
+      - id: A
+        recipe: sensitivity_analysis.sobol_first_total_pair
+        data:
+          source: "analysis/sobol/indices.parquet"
+          adapter: tabular
+      - id: B
+        recipe: sensitivity_analysis.parameter_scan_2d_contour
+        data:
+          source: "analysis/sensitivity/scan_k_on_Km.npz"
+          adapter: numpy_npz
+      - id: C
+        recipe: meta_and_diagnostic.power_analysis_by_effect_size
+        data:
+          adapter: passthrough
+          source:
+            effect_sizes: [0.2, 0.5, 0.8]
+            n_range: [4, 200]
+            n_planned: 60
+      - id: D
+        recipe: meta_and_diagnostic.qc_metric_radar
+        data:
+          source: "analysis/qc/metrics.csv"
+          adapter: tabular
+
+export:
+  formats: [pdf, png, svg]
+  outdir: figures/outputs
+  dpi: 600

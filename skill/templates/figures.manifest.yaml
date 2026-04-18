@@ -1,0 +1,28 @@
+# panelforge-figures manifest — written by the skill at bootstrap.
+# This file is the one-and-only contract between the agentic skill and
+# the deterministic `figures` CLI. Re-renders are agent-free:
+#
+#     figures render figures.manifest.yaml
+#
+# Edit by hand or re-run the skill's resurvey mode.
+
+version: 1
+theme: default
+palette: journal_neutral
+catalog_fingerprint: "sha256:<stamped_at_bootstrap>"
+
+figures:
+  # - id: fig_1
+  #   size: single
+  #   suptitle: "…"
+  #   panels:
+  #     - id: A
+  #       recipe: <modality>.<recipe>
+  #       data:
+  #         source: "path/to/data"
+  #         adapter: tabular
+
+export:
+  formats: [pdf, png]
+  outdir: figures/outputs
+  dpi: 600

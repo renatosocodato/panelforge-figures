@@ -1,0 +1,11 @@
+version: 1
+theme: default
+palette: journal_neutral
+catalog_fingerprint: "sha256:<stamped_at_bootstrap>"
+
+figures: []
+
+export:
+  formats: [pdf, png]
+  outdir: figures/outputs
+  dpi: 600

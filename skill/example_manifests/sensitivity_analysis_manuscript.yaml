@@ -1,0 +1,48 @@
+# Example manifest for a sensitivity-analysis manuscript.
+# Figures: (1) primary Sobol indices + convergence, (2) interactions + subspace.
+# Data sources are placeholder paths — replace with your actual files.
+
+version: 1
+theme: pnas
+palette: okabe_ito
+catalog_fingerprint: "sha256:<stamp_via_figures_catalog>"
+
+figures:
+  - id: fig_1_sensitivity
+    size: double
+    suptitle: "Figure 1 · Parameter sensitivity"
+    subtitle: "First- and total-order Sobol indices; convergence"
+    panels:
+      - id: A
+        recipe: sensitivity_analysis.sobol_first_total_pair
+        data:
+          source: "analysis/sobol/indices.parquet"
+          adapter: tabular
+          columns: {param: parameter_names, s1: S1, st: ST, s1_conf: S1_ci, st_conf: ST_ci}
+        options:
+          output_label: "steady-state target"
+      - id: B
+        recipe: sensitivity_analysis.convergence_diagnostic_sobol
+        data:
+          source: "analysis/sobol/convergence_trace.parquet"
+          adapter: tabular
+
+  - id: fig_2_interactions
+    size: double
+    suptitle: "Figure 2 · Interactions and active subspace"
+    panels:
+      - id: A
+        recipe: sensitivity_analysis.interaction_matrix_sobol
+        data:
+          source: "analysis/sobol/S2_pairs.parquet"
+          adapter: tabular
+      - id: B
+        recipe: sensitivity_analysis.fast_subspace_detection
+        data:
+          source: "analysis/sobol/sensitivity_matrix.parquet"
+          adapter: tabular
+
+export:
+  formats: [pdf, png, svg]
+  outdir: figures/outputs
+  dpi: 600

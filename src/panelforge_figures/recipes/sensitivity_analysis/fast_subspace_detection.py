@@ -112,32 +112,43 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     ax.set_xticklabels(names, rotation=35, ha="right", fontsize=7.0)
     ax.set_ylabel("eigenvector loading")
     ax.axhline(0, color="#555555", lw=0.6)
+    # Explicit ylim with headroom so value labels above/below the tallest
+    # bars (added further down) are not clipped.
+    y_lo = float(loadings.min())
+    y_hi = float(loadings.max())
+    y_pad = 0.09 * max(y_hi - y_lo, 0.2)
+    ax.set_ylim(y_lo - y_pad, y_hi + y_pad)
     ax.set_title(
         f"Active subspace — top {k} PCs explain "
         f"{lam_frac[:k].sum()*100:.0f}% of output variance",
         fontsize=8.4,
     )
-    ax.legend(fontsize=6.8, frameon=False, loc="upper left", ncol=1)
+    # Legend anchored upper-left — the inset sits upper-right and does
+    # not compete here.
+    ax.legend(fontsize=6.8, frameon=False,
+              loc="upper left", bbox_to_anchor=(0.01, 0.99),
+              ncol=1, handlelength=1.6)
 
-    # Small halo'd "+/−" tag above/below each PC's dominant loading so
-    # the reader can immediately spot the most influential parameter for
-    # each principal direction. The labels are compact and the bars are
-    # narrow enough that they can't collide with adjacent PC bars.
+    # "Top driver per PC" summary — one text artist per PC so every
+    # dominant parameter is independently legible and readers can parse
+    # them separately. Placed in the clear lower-left area in axes coords,
+    # immune to any inset coordinate collision.
+    y_anchor = 0.32
     for j in range(k):
         i_max = int(np.argmax(np.abs(loadings[:, j])))
-        y_val = loadings[i_max, j]
-        x_pos = xpos[i_max] + (j - (k - 1) / 2) * width
-        add_halo_label(
-            ax,
-            x_pos,
-            y_val + (0.03 if y_val > 0 else -0.03),
-            f"PC{j+1}",
-            fontsize=5.8,
-            color="#222222",
-            halo_width=2.2,
-            ha="center",
-            va="bottom" if y_val > 0 else "top",
+        row = f"PC{j+1}: {names[i_max]} ({smart_fmt(float(loadings[i_max, j]))})"
+        ax.text(
+            0.015, y_anchor - j * 0.07,
+            row,
+            transform=ax.transAxes,
+            fontsize=6.6,
+            color="#333333",
+            ha="left", va="top",
+            bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                      ec="#BBBBBB", lw=0.5, alpha=0.92),
+            zorder=5,
         )
+    _ = add_halo_label  # kept imported for API contract
 
     # Effective-dim callout — figure-space, below x-axis, in figure text so
     # it never collides with tick labels or the inset.

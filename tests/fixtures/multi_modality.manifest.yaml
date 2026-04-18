@@ -1,0 +1,28 @@
+version: 1
+theme: pnas
+palette: journal_neutral
+figures:
+  - id: demo_composite
+    size: double
+    suptitle: "Demo · composite"
+    subtitle: "sensitivity + meta-diagnostics"
+    panels:
+      - id: A
+        recipe: sensitivity_analysis.sobol_first_total_pair
+        data:
+          adapter: passthrough
+          source:
+            parameter_names: [alpha, beta, gamma]
+            S1: [0.3, 0.1, 0.05]
+            ST: [0.42, 0.18, 0.09]
+      - id: B
+        recipe: meta_and_diagnostic.power_analysis_by_effect_size
+        data:
+          adapter: passthrough
+          source:
+            effect_sizes: [0.2, 0.5, 0.8]
+            n_range: [4, 200]
+            n_planned: 30
+export:
+  formats: [png]
+  outdir: figures/outputs

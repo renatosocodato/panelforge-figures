@@ -13,8 +13,6 @@ one text artist per region plus one bar/line — not geometric invariants.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import matplotlib.patches as mpatches
 import numpy as np
 from pydantic import Field

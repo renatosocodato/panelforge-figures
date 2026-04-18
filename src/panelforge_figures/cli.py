@@ -14,7 +14,6 @@ from .adapters import list_adapters
 from .core.contract import (
     ensure_all_imported,
     get_recipe,
-    list_modalities,
     list_recipes,
     modality_description,
     registry_counts,

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import matplotlib.patches as mpatches
-import numpy as np
 from pydantic import Field
 
 from ...core import (

@@ -67,8 +67,8 @@ def render(contract: MorrisEEInput, ax=None, **_):
     order = np.argsort(-magnitude)
 
     # Scatter colored by overall magnitude; size proportional to mu*.
-    import matplotlib.cm as mcm
-    cmap = mcm.get_cmap(AESTHETIC.continuous_cmap)
+    import matplotlib as mpl
+    cmap = mpl.colormaps[AESTHETIC.continuous_cmap]
     sc = ax.scatter(
         mu,
         sig,

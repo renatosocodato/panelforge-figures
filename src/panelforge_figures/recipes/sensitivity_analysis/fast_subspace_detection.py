@@ -43,7 +43,7 @@ def _demo() -> FastSubspaceInput:
 _META = RecipeMetadata(
     name="fast_subspace_detection",
     modality="sensitivity_analysis",
-    family=RecipeFamily.contour,
+    family=RecipeFamily.sobol_bar,
     answers_question="Is the output variance driven by a low-dimensional subspace of parameters (active subspace)?",
     required_fields=("parameter_names", "sensitivity_matrix"),
     optional_fields=("top_k",),
@@ -88,8 +88,8 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     # Bar per parameter, grouped by PC.
     width = 0.8 / k
     xpos = np.arange(len(names))
-    import matplotlib.cm as mcm
-    cmap = mcm.get_cmap(AESTHETIC.continuous_cmap)
+    import matplotlib as mpl
+    cmap = mpl.colormaps[AESTHETIC.continuous_cmap]
     for j in range(k):
         color = cmap(0.2 + 0.7 * j / max(k - 1, 1))
         ax.bar(

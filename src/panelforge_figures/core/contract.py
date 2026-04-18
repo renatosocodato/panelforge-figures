@@ -15,16 +15,17 @@ from __future__ import annotations
 
 import importlib
 import logging
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Callable
+from collections.abc import Callable
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import Any
 
 from pydantic import BaseModel
 
 log = logging.getLogger(__name__)
 
 
-class RecipeFamily(str, Enum):
+class RecipeFamily(StrEnum):
     """Family tags drive the quality-gate rules in tests/quality_rules/."""
 
     split_violin = "split_violin"

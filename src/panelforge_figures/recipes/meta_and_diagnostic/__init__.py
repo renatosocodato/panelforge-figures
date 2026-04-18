@@ -4,8 +4,8 @@ This modality lives upstream of the other 19: before anyone plots their
 results, these figures report whether the data can support a conclusion at all.
 """
 
-from ._aesthetic import AESTHETIC
 from ...core.contract import register_modality
+from ._aesthetic import AESTHETIC
 
 register_modality(
     name="meta_and_diagnostic",

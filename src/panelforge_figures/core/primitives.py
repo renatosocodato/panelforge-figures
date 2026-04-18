@@ -11,12 +11,11 @@ stars, regime shading).
 from __future__ import annotations
 
 import math
-from typing import Iterable, Sequence
+from collections.abc import Iterable, Sequence
 
 import matplotlib.patheffects as pe
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 # ──────────────────────────── text primitives ────────────────────────────
 

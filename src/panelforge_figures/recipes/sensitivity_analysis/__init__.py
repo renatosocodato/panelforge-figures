@@ -4,8 +4,8 @@ Used whenever a model (ODE, PDE, ABM, statistical, mechanistic) has more than
 ~3 parameters and the question is which ones matter for which output.
 """
 
-from ._aesthetic import AESTHETIC
 from ...core.contract import register_modality
+from ._aesthetic import AESTHETIC
 
 register_modality(
     name="sensitivity_analysis",

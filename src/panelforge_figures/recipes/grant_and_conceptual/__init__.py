@@ -5,8 +5,8 @@ typography, semantic color coding (mechanism_class or journal_neutral
 palettes), and generous white space over data density.
 """
 
-from ._aesthetic import AESTHETIC
 from ...core.contract import register_modality
+from ._aesthetic import AESTHETIC
 
 register_modality(
     name="grant_and_conceptual",

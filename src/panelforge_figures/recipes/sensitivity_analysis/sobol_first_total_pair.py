@@ -10,7 +10,6 @@ from ...core import (
     RecipeFamily,
     RecipeMetadata,
     callout_box,
-    get_palette,
     register_recipe,
     smart_fmt,
 )
@@ -64,7 +63,7 @@ def render(contract: SobolIndicesInput, ax=None, **_):
         import matplotlib.pyplot as plt
         _, ax = plt.subplots(figsize=(5.2, 3.6))
     AESTHETIC.apply_to_ax(ax)
-    import matplotlib.cm as mcm
+    import matplotlib as mpl
 
     s1 = np.array(contract.S1, dtype=float)
     st = np.array(contract.ST, dtype=float)
@@ -76,7 +75,7 @@ def render(contract: SobolIndicesInput, ax=None, **_):
     s1_ci = [contract.S1_ci[i] for i in order] if contract.S1_ci else None
     st_ci = [contract.ST_ci[i] for i in order] if contract.ST_ci else None
 
-    cmap = mcm.get_cmap(AESTHETIC.continuous_cmap)
+    cmap = mpl.colormaps[AESTHETIC.continuous_cmap]
     ypos = np.arange(len(names))
     bar_h = 0.36
 

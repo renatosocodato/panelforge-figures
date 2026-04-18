@@ -1,0 +1,19 @@
+version: 1
+theme: default
+palette: okabe_ito
+figures:
+  - id: demo_single
+    size: single
+    suptitle: "Demo · Sobol sensitivity"
+    panels:
+      - id: A
+        recipe: sensitivity_analysis.sobol_first_total_pair
+        data:
+          adapter: passthrough
+          source:
+            parameter_names: [k_on, k_off, V_max, Km]
+            S1: [0.4, 0.1, 0.2, 0.08]
+            ST: [0.52, 0.15, 0.28, 0.22]
+export:
+  formats: [png]
+  outdir: figures/outputs

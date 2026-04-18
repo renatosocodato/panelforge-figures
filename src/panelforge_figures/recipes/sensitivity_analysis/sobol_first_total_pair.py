@@ -121,19 +121,20 @@ def render(contract: SobolIndicesInput, ax=None, **_):
         fontweight="bold",
     )
 
-    # Top-drivers callout — inside lower-right, after ensuring xmax has headroom.
+    # Top-drivers callout — below the x-axis in figure coords, never over any bar.
     share_top3 = st[:3].sum() / max(st.sum(), 1e-9)
-    callout_box(
-        ax,
-        0.98,
-        0.02,
-        f"Top 3 drivers ({', '.join(names[:3])})\n"
+    fig = ax.figure
+    fig.text(
+        0.5, -0.16,
+        f"Top 3 drivers ({', '.join(names[:3])}) "
         f"account for {share_top3*100:.0f}% of total variance.",
-        accent=AESTHETIC.annotation_style.callout_accent,
+        ha="center", va="top", fontsize=7.0,
+        bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                  ec=AESTHETIC.annotation_style.callout_accent, lw=0.6),
         transform=ax.transAxes,
-        ha="right",
-        va="bottom",
     )
+    # Silence: callout_box remains imported for other code paths in this module.
+    _ = callout_box
     ax.grid(axis="x", color="#DDDDDD", lw=0.4)
     ax.set_axisbelow(True)
     return ax

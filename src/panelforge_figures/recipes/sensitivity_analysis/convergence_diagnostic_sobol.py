@@ -103,8 +103,10 @@ def render(contract: SobolConvergenceInput, ax=None, **_):
     ax.set_xscale("log")
     ax.set_xlabel("samples used (N)")
     ax.set_ylabel(r"$S_T$ estimate")
-    ax.set_title("Sobol-index convergence", fontsize=9.0, fontweight="bold")
-    ax.legend(fontsize=7.0, loc="upper right", frameon=False, ncol=2)
+    ax.set_title("Sobol-index convergence", fontsize=9.0, fontweight="bold", pad=4)
+    # Legend outside the axis (right side) so it can't collide with traces.
+    ax.legend(fontsize=6.8, loc="center left", bbox_to_anchor=(1.02, 0.5),
+              frameon=False, handlelength=1.6)
     ax.grid(axis="y", color="#DDDDDD", lw=0.4)
     ax.set_axisbelow(True)
 
@@ -113,12 +115,17 @@ def render(contract: SobolConvergenceInput, ax=None, **_):
         for i in range(trajs.shape[0])
         if trajs[i, -3:].max() - trajs[i, -3:].min() < contract.tolerance
     )
-    callout_box(
-        ax,
-        0.02,
-        0.97,
-        f"{converged}/{trajs.shape[0]} parameters converged (|range| < {smart_fmt(contract.tolerance)})",
-        accent="#2E7D32" if converged == trajs.shape[0] else "#D32F2F",
+    # Summary in figure space below the x-axis, never on top of curves.
+    fig = ax.figure
+    fig.text(
+        0.5, -0.16,
+        f"{converged}/{trajs.shape[0]} parameters converged "
+        f"(|range| < {smart_fmt(contract.tolerance)})",
+        ha="center", va="top", fontsize=7.0,
+        bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                  ec="#2E7D32" if converged == trajs.shape[0] else "#D32F2F",
+                  lw=0.6),
         transform=ax.transAxes,
     )
+    _ = callout_box
     return ax

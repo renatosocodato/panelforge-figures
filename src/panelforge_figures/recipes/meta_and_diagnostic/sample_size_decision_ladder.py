@@ -78,44 +78,49 @@ def render(contract: SampleSizeLadderInput, ax=None, **_):
     labels = contract.effect_labels or [smart_fmt(d) for d in ds]
     ns = [_required_n(d, contract.power, contract.alpha) for d in ds]
 
-    # Bar per tier — colored by tractability.
+    # Bar per tier — colored by tractability. Use ytick labels so matplotlib
+    # budgets room for the d-tier text automatically (avoids overlap at small
+    # axis widths).
     ypos = np.arange(len(ds))
+    xmax_hint = max(max(ns) * 1.18, (contract.budget_n or 0) * 1.2)
     for y, d, lbl, n in zip(ypos, ds, labels, ns):
         tractable = contract.budget_n is None or n <= contract.budget_n
         color = palette[0] if tractable else "#C62828"
         ax.barh(y, n, height=0.6, color=color, alpha=0.85, edgecolor="white",
                 linewidth=0.8, zorder=2)
-        ax.text(n + 4, y, f"n={n}", va="center", fontsize=7.2,
-                color=color, fontweight="bold")
-        ax.text(-4, y, f"d = {smart_fmt(d)} · {lbl}", va="center",
-                ha="right", fontsize=7.2, color="#333333")
+        # Right-of-bar n= label, with a small gap scaled to axis width.
+        ax.text(n + xmax_hint * 0.012, y, f"n={n}", va="center", ha="left",
+                fontsize=7.0, color=color, fontweight="bold")
+    ytick_labels = [f"d = {smart_fmt(d)}  ·  {lbl}"
+                    for d, lbl in zip(ds, labels)]
 
     # Budget line + shaded "reach" regions.
     if contract.budget_n is not None:
         ax.axvline(contract.budget_n, color="#D32F2F", lw=1.2, ls="--", zorder=3)
+        # Place budget label at the very top of the axis so it never crosses bars.
         add_halo_label(
-            ax, contract.budget_n, len(ds) - 0.3,
+            ax, contract.budget_n, -0.9,
             f"budget n={contract.budget_n}",
             color="#D32F2F", fontsize=7.0, fontweight="bold",
-            halo_width=2.6, ha="left", va="top",
+            halo_width=2.6, ha="center", va="bottom",
         )
         ax.add_patch(mpatches.Rectangle(
             (0, -0.5), contract.budget_n, len(ds),
             facecolor="#E8F5E9", alpha=0.35, zorder=0,
         ))
-        xmax = max(max(ns) * 1.15, contract.budget_n * 1.15)
         ax.add_patch(mpatches.Rectangle(
-            (contract.budget_n, -0.5), xmax - contract.budget_n, len(ds),
+            (contract.budget_n, -0.5), xmax_hint - contract.budget_n, len(ds),
             facecolor="#FFEBEE", alpha=0.35, zorder=0,
         ))
 
     ax.set_yticks(ypos)
-    ax.set_yticklabels([])
+    ax.set_yticklabels(ytick_labels, fontsize=7.0)
     ax.invert_yaxis()
-    xmax = max(max(ns) * 1.15, contract.budget_n * 1.15 if contract.budget_n else max(ns) * 1.15)
+    ax.set_ylim(len(ds) - 0.5, -1.6)
+    xmax = xmax_hint
     ax.set_xlim(0, xmax)
     ax.set_xlabel("Required n per group")
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold")
+    ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=4)
     ax.grid(axis="x", color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

@@ -98,28 +98,35 @@ def render(contract: MorrisEEInput, ax=None, **_):
             ha="left", va="center",
         )
 
-    # μ* = σ reference line.
-    m = max(mu.max(), sig.max())
+    # μ* = σ reference line — draw only inside the data box.
+    x_hi = mu.max() * 1.12
+    y_hi = sig.max() * 1.15
+    m = min(x_hi, y_hi)
     ax.plot([0, m], [0, m], color="#AAAAAA", ls="--", lw=0.8, zorder=1)
-    ax.text(m * 0.95, m * 0.90, "μ* = σ", color="#555555", fontsize=6.6, ha="right", va="top")
 
     cbar = ax.figure.colorbar(sc, ax=ax, fraction=0.04, pad=0.04)
-    cbar.set_label("||(μ*, σ)||", fontsize=6.8)
-    cbar.ax.tick_params(labelsize=6.6)
+    cbar.set_label("magnitude", fontsize=6.6)
+    cbar.ax.tick_params(labelsize=6.2)
 
-    callout_box(
-        ax,
-        0.02,
-        0.96,
+    # Top-driver summary — below x-axis in figure coords, pushed further
+    # down (-0.14) so it clears the tick labels and x-axis title cleanly.
+    fig = ax.figure
+    fig.text(
+        0.5, -0.14,
         f"Top driver: {names[order[0]]} (μ*={smart_fmt(mu[order[0]])}, "
         f"σ={smart_fmt(sig[order[0]])})",
-        accent=AESTHETIC.annotation_style.callout_accent,
+        ha="center", va="top", fontsize=7.0,
+        bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                  ec=AESTHETIC.annotation_style.callout_accent, lw=0.6),
         transform=ax.transAxes,
     )
-    ax.set_xlabel(r"$\mu^*$ (mean |elementary effect|)")
-    ax.set_ylabel(r"$\sigma$ (std elementary effect)")
-    ax.set_title(f"Morris screening — {contract.output_label}",
-                 fontsize=9.0, fontweight="bold")
-    ax.set_xlim(0, mu.max() * 1.10)
-    ax.set_ylim(0, sig.max() * 1.12)
+    _ = callout_box
+    ax.set_xlabel(r"$\mu^*$ (mean |elementary effect|)", fontsize=7.8)
+    ax.set_ylabel(r"$\sigma$ (std elementary effect)", fontsize=7.8)
+    ax.set_title("Morris screening", fontsize=9.0, fontweight="bold", pad=4)
+    ax.set_xlim(0, x_hi)
+    ax.set_ylim(0, y_hi)
+    # μ* = σ inline label placed at the end of the diagonal (inside the box).
+    ax.text(m * 0.97, m * 0.90, "μ* = σ", color="#666666",
+            fontsize=6.4, ha="right", va="top", rotation=36)
     return ax

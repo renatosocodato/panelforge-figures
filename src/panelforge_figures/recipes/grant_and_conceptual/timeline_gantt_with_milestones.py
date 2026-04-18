@@ -116,30 +116,43 @@ def render(contract: GanttInput, ax=None, **_):
     xmax = max(t.end for t in tasks)
     ax.set_xlim(-0.5, xmax + 1.0)
     ax.set_xlabel(contract.x_label)
-    # Milestone diamonds with halo'd labels alternating above/below the row.
+    # Milestone diamonds — just the markers, label them in a legend below the axis.
     ms_color = "#D32F2F"
-    for k, ms in enumerate(contract.milestones):
-        ax.scatter([ms.at], [-1.2], marker="D", s=70, color=ms_color,
-                   edgecolor="white", linewidth=1.1, zorder=5, clip_on=False)
-        # Alternate labels slightly above/below to reduce collisions.
-        y_lab = -1.9 if k % 2 == 0 else -2.5
-        add_halo_label(ax, ms.at, y_lab, ms.name, fontsize=6.6, color=ms_color,
+    for ms in contract.milestones:
+        ax.scatter([ms.at], [-1.0], marker="D", s=55, color=ms_color,
+                   edgecolor="white", linewidth=1.0, zorder=5, clip_on=False)
+        # Short callout — just the Mn token above the marker.
+        short = ms.name.split(" ")[0] if ms.name else ""
+        add_halo_label(ax, ms.at, -1.9, short, fontsize=6.8, color=ms_color,
                        fontweight="bold", ha="center", va="bottom",
                        halo_width=2.4)
 
-    # WP legend as a compact row below the x-axis.
-    legend_y = len(tasks) + 1.2
-    legend_x0 = 0.0
-    step = max(xmax / max(len(wp_colors), 1), 3.5)
-    for i, (wp, c) in enumerate(sorted(wp_colors.items())):
-        x0 = legend_x0 + i * step
-        ax.add_patch(mpatches.Rectangle((x0, legend_y), 0.9, 0.36, facecolor=c,
-                                         edgecolor="none", clip_on=False))
-        ax.text(x0 + 1.1, legend_y + 0.18, wp, ha="left", va="center",
-                fontsize=6.8, color="#333333", clip_on=False)
+    # WP legend AND milestone legend sit below the x-axis on separate lines.
+    # Use mpatches.Patch proxies in a real Legend so matplotlib handles spacing.
+    from matplotlib.lines import Line2D
+    wp_proxies = [
+        mpatches.Patch(facecolor=wp_colors[wp], edgecolor="none", label=wp)
+        for wp in sorted(wp_colors)
+    ]
+    ms_proxies = [
+        Line2D([0], [0], marker="D", color="none", markerfacecolor=ms_color,
+               markeredgecolor="white", markersize=7,
+               label=" · ".join(m.name for m in contract.milestones[:4]))
+    ] if contract.milestones else []
+    leg = ax.legend(
+        handles=wp_proxies + ms_proxies,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.24),
+        ncol=min(len(wp_proxies) + len(ms_proxies), 5),
+        frameon=False,
+        fontsize=6.6,
+        handlelength=1.6,
+        columnspacing=1.0,
+    )
+    leg.set_in_layout(False)
 
     ax.grid(axis="x", which="major", color="#DDDDDD", linewidth=0.5, alpha=0.7, zorder=0)
     ax.set_axisbelow(True)
-    ax.set_ylim(len(tasks) + 2.0, -3.2)
-    ax.margins(x=0)
+    ax.set_ylim(len(tasks) + 0.4, -2.8)
+    ax.margins(x=0.01)
     return ax

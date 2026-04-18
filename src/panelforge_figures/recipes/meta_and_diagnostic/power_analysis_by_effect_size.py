@@ -79,16 +79,18 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
         pw = np.array([_power_t_two_sample(d, int(n), contract.alpha) for n in ns])
         color = palette[i]
         ax.plot(ns, pw, color=color, lw=1.6, label=f"d = {smart_fmt(d)}")
-        # N@80%: first crossing.
+        # N@80%: first crossing. Alternate label y offsets so they don't
+        # collide when multiple effect sizes cross 80% near the same N.
         above = pw >= 0.80
         if above.any():
             n80 = int(ns[np.argmax(above)])
             y80_n_by_d[d] = n80
             ax.scatter([n80], [0.80], color=color, s=30, edgecolor="white",
                        linewidth=1.0, zorder=5)
-            add_halo_label(ax, n80, 0.80, f"n={n80}",
-                           color=color, fontsize=6.8, fontweight="bold",
-                           halo_width=2.4, va="bottom", ha="left")
+            y_off = 0.84 + 0.04 * i        # stagger per-d
+            add_halo_label(ax, n80, y_off, f"n={n80}",
+                           color=color, fontsize=6.4, fontweight="bold",
+                           halo_width=2.2, va="bottom", ha="center")
         else:
             y80_n_by_d[d] = None
 
@@ -100,31 +102,36 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
 
     if contract.n_planned is not None:
         ax.axvline(contract.n_planned, color="#333333", lw=0.8, ls="--")
-        add_halo_label(ax, contract.n_planned, 0.05,
+        add_halo_label(ax, contract.n_planned, 0.50,
                        f"planned n={contract.n_planned}",
-                       color="#333333", fontsize=6.8, ha="left", va="bottom",
+                       color="#333333", fontsize=6.8, ha="left", va="center",
                        halo_width=2.4, fontweight="bold")
 
-    # Callout: critical d given n_planned.
+    # Callout: critical d given n_planned — placed bottom-right (below the
+    # convex part of the power curves, so it does not overlap any trace).
     if contract.n_planned is not None:
         ds_grid = np.linspace(0.1, 2.0, 120)
         pws = np.array([_power_t_two_sample(d, contract.n_planned, contract.alpha) for d in ds_grid])
         ok = pws >= 0.80
         if ok.any():
             crit_d = float(ds_grid[np.argmax(ok)])
-            callout_box(
-                ax,
-                0.03,
-                0.96,
-                f"At n={contract.n_planned}, we detect d ≥ {smart_fmt(crit_d)} at 80% power.",
-                accent="#333333",
+            fig = ax.figure
+            fig.text(
+                0.5, -0.16,
+                f"At n={contract.n_planned}: detect d ≥ {smart_fmt(crit_d)} at 80% power",
+                ha="center", va="top", fontsize=7.0,
+                bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                          ec="#333333", lw=0.6),
                 transform=ax.transAxes,
             )
+            _ = callout_box
 
     ax.set_xlim(n_lo, n_hi)
-    ax.set_ylim(-0.02, 1.02)
+    ax.set_ylim(-0.02, 1.05)
     ax.set_xlabel("Sample size per group")
     ax.set_ylabel(r"Power (1 − $\beta$)")
-    ax.set_title(contract.title, fontsize=9.0, fontweight="bold")
-    ax.legend(loc="lower right", fontsize=6.8, frameon=False, ncol=2)
+    ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=4)
+    # Legend inside upper-left where curves are already flat or off-axis.
+    ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.70),
+              fontsize=6.8, frameon=False, ncol=1, handlelength=1.6)
     return ax

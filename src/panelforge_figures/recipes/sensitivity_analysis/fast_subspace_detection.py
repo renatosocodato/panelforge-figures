@@ -69,17 +69,22 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     lam_frac = evals / max(evals.sum(), 1e-12)
 
     # ── Inset: scree ──────────────────────────────────────────────
-    inset = ax.inset_axes([0.62, 0.62, 0.32, 0.32])
+    # Top-right corner, compact; sized to avoid colliding with the legend
+    # which now sits just below the title.
+    inset = ax.inset_axes([0.68, 0.58, 0.28, 0.28])
     xi = np.arange(1, len(evals) + 1)
-    inset.bar(xi, lam_frac, color="#1565C0", alpha=0.9, edgecolor="white", linewidth=0.4)
-    inset.plot(xi, np.cumsum(lam_frac), color="#D32F2F", marker="o", ms=3, lw=1.1)
+    inset.bar(xi, lam_frac, color="#1565C0", alpha=0.9,
+              edgecolor="white", linewidth=0.4)
+    inset.plot(xi, np.cumsum(lam_frac), color="#D32F2F",
+               marker="o", ms=2.5, lw=1.0)
     inset.set_xticks(xi)
-    inset.set_xticklabels([str(i) for i in xi], fontsize=5.4)
+    inset.set_xticklabels([str(i) for i in xi], fontsize=5.0)
     inset.set_yticks([0, 0.5, 1])
-    inset.set_yticklabels(["0", ".5", "1"], fontsize=5.2)
-    inset.tick_params(axis="both", labelsize=5.2)
-    inset.set_title("scree", fontsize=6.6, pad=2)
+    inset.set_yticklabels(["0", ".5", "1"], fontsize=5.0)
+    inset.tick_params(axis="both", labelsize=5.0)
+    inset.set_title("scree", fontsize=6.4, pad=2)
     inset.set_ylim(0, 1.05)
+    inset.set_xlim(0.5, len(xi) + 0.5)
 
     # ── Main axis: loadings for top_k eigenvectors ────────────────
     k = max(2, min(contract.top_k, evecs.shape[1]))
@@ -115,28 +120,34 @@ def render(contract: FastSubspaceInput, ax=None, **_):
     )
     ax.legend(fontsize=6.8, frameon=False, loc="upper left", ncol=1)
 
-    # Halo-labeled dominant loading per PC.
+    # Halo-labeled dominant loading per PC — shortened to just "PC1" etc.,
+    # since the parameter name is already on the x-axis tick.
     for j in range(k):
         i_max = int(np.argmax(np.abs(loadings[:, j])))
+        y_lab = loadings[i_max, j] + (0.02 if loadings[i_max, j] > 0 else -0.02)
         add_halo_label(
             ax,
             xpos[i_max] + (j - (k - 1) / 2) * width,
-            loadings[i_max, j] * 1.08,
-            f"PC{j+1}:{names[i_max]}",
-            fontsize=6.4,
+            y_lab,
+            f"PC{j+1}",
+            fontsize=6.2,
             fontweight="bold",
             color="#222222",
-            halo_width=2.4,
+            halo_width=2.2,
             ha="center",
             va="bottom" if loadings[i_max, j] > 0 else "top",
         )
 
-    callout_box(
-        ax,
-        0.02,
-        0.03,
-        f"Effective dim. ≈ {smart_fmt(1.0 / (lam_frac**2).sum())}",
-        accent=AESTHETIC.annotation_style.callout_accent,
+    # Effective-dim callout — figure-space, below x-axis, in figure text so
+    # it never collides with tick labels or the inset.
+    fig = ax.figure
+    fig.text(
+        0.5, -0.24,
+        f"Effective dimensionality ≈ {smart_fmt(1.0 / (lam_frac**2).sum())}",
+        ha="center", va="top", fontsize=7.0,
+        bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                  ec=AESTHETIC.annotation_style.callout_accent, lw=0.6),
         transform=ax.transAxes,
     )
+    _ = callout_box
     return ax

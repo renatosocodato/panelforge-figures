@@ -10,7 +10,6 @@ from ...core import (
     RecipeFamily,
     RecipeMetadata,
     register_recipe,
-    smart_fmt,
 )
 from ._aesthetic import AESTHETIC
 
@@ -70,22 +69,15 @@ def render(contract: TeamExpertiseInput, ax=None, **_):
     ax.set_yticklabels(contract.members, fontsize=7.2)
     if contract.show_values:
         for (i, j), v in np.ndenumerate(M):
-            if v == 0:
+            if v < 1.0:  # suppress very faint cells to cut visual noise
                 continue
             color = "white" if v >= 2 else "#222222"
-            ax.text(j, i, smart_fmt(v), ha="center", va="center",
-                    fontsize=6.6, color=color, fontweight="bold")
-    # Column and row totals (printed at margins).
-    col_totals = M.sum(axis=0)
-    for j, c in enumerate(col_totals):
-        ax.text(j, -0.7, smart_fmt(c), ha="center", va="center",
-                fontsize=6.6, color="#555555", fontweight="bold")
-    row_totals = M.sum(axis=1)
-    for i, r in enumerate(row_totals):
-        ax.text(M.shape[1] - 0.5 + 0.6, i, smart_fmt(r), ha="left", va="center",
-                fontsize=6.6, color="#555555", fontweight="bold")
-    ax.set_title("Team × Competency coverage", fontsize=8.4, fontweight="bold")
-    cbar = ax.figure.colorbar(im, ax=ax, fraction=0.032, pad=0.06)
+            ax.text(j, i, f"{int(round(v))}", ha="center", va="center",
+                    fontsize=7.0, color=color, fontweight="bold")
+    # No explicit margin totals — they crowd the axes at small sizes.
+    # Reviewers read coverage directly from the cmap; the bar summarizes totals.
+    ax.set_title("Team × competency coverage", fontsize=8.6, fontweight="bold", pad=4)
+    cbar = ax.figure.colorbar(im, ax=ax, fraction=0.036, pad=0.03)
     cbar.set_label("coverage (0–3)", fontsize=6.8)
     cbar.ax.tick_params(labelsize=6.6)
     return ax

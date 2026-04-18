@@ -94,24 +94,32 @@ def render(contract: QCMetricRadarInput, ax=None, **_):
         )
 
     # Per-sample polygons.
+    sample_means: list[tuple[str, str, float]] = []
     for i, (sample, vals) in enumerate(contract.sample_values.items()):
         v = np.array(vals, dtype=float)
         v_closed = np.concatenate([v, v[:1]])
         color = palette[i]
         ax.plot(theta_closed, v_closed, color=color, lw=1.8, label=sample, zorder=3)
         ax.fill(theta_closed, v_closed, color=color, alpha=0.12, zorder=2)
-        # Per-metric halo'd values.
-        for k, (tv, vv) in enumerate(zip(theta, v)):
+        for tv, vv in zip(theta, v):
             ax.scatter([tv], [vv], color=color, s=22, edgecolor="white",
                        linewidth=0.8, zorder=4)
-        # Overall summary (mean).
-        add_halo_label(
-            ax, theta[i % n_m], 1.08,
-            f"{sample}: μ={smart_fmt(v.mean())}",
-            color=color, fontsize=6.4, fontweight="bold", halo_width=2.2,
-        )
+        sample_means.append((sample, color, float(v.mean())))
 
     ax.set_title(contract.title, fontsize=9.0, fontweight="bold", pad=14)
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.18),
-              fontsize=6.6, ncol=min(len(contract.sample_values), 3), frameon=False)
+
+    # Summary strip just below the title — μ per sample in matching colors.
+    # Placed in figure space so it never collides with the radar spokes.
+    fig = ax.figure
+    parts = [f"{name}: μ={smart_fmt(mu)}" for name, _, mu in sample_means]
+    summary = "   ".join(parts)
+    fig.text(0.5, 0.93, summary, ha="center", va="top",
+             fontsize=6.6, color="#333333")
+
+    # Legend below the plot — pushed well clear of the bottom spoke label.
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16),
+              fontsize=6.6, ncol=min(len(contract.sample_values), 3),
+              frameon=False, handlelength=1.6)
+    # Silence: add_halo_label is kept imported for API consistency.
+    _ = add_halo_label
     return ax

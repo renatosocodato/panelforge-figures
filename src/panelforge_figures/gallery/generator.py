@@ -18,8 +18,8 @@ from ..core.contract import ensure_all_imported, list_recipes
 
 log = logging.getLogger(__name__)
 
-GALLERY_DPI: int = 200
-GALLERY_SIZE_IN: tuple[float, float] = (2.5, 2.5)
+GALLERY_DPI: int = 180
+GALLERY_SIZE_IN: tuple[float, float] = (4.2, 3.2)
 
 
 def regenerate_gallery(out_root: str | Path = "docs/gallery") -> list[Path]:
@@ -42,8 +42,8 @@ def regenerate_gallery(out_root: str | Path = "docs/gallery") -> list[Path]:
             log.exception("gallery render failed for %s.%s", modality, name)
             plt.close(fig)
             continue
-        fig.tight_layout(pad=0.4)
-        fig.savefig(out, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white")
+        fig.savefig(out, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white",
+                    pad_inches=0.18)
         plt.close(fig)
         paths.append(out)
     return paths
@@ -77,9 +77,9 @@ def diff_gallery(
             plt.close(fig)
             diffs.append((entry.full_name, 1.0))
             continue
-        fig.tight_layout(pad=0.4)
         tmp = Path(".pf_gallery_tmp.png")
-        fig.savefig(tmp, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white")
+        fig.savefig(tmp, dpi=GALLERY_DPI, bbox_inches="tight", facecolor="white",
+                    pad_inches=0.18)
         plt.close(fig)
         fresh = _load_image(tmp)
         tmp.unlink(missing_ok=True)

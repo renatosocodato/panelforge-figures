@@ -98,18 +98,21 @@ def render(contract: InteractionMatrixInput, ax=None, **_):
         fontweight="bold",
     )
 
-    # Callout: top-3 strongest pairs.
+    # Top-3 strongest pairs — placed below axis in figure space so it never
+    # covers the lower-triangular heatmap.
     annotated.sort(key=lambda t: -t[2])
     top = annotated[:3]
     text = "Top pairs: " + ", ".join(
         f"{names[i]}×{names[j]}={smart_fmt(v)}" for i, j, v in top
     ) if top else "No interaction above threshold."
-    callout_box(
-        ax,
-        0.03,
-        0.03,
+    fig = ax.figure
+    fig.text(
+        0.5, -0.16,
         text,
-        accent=AESTHETIC.annotation_style.callout_accent,
+        ha="center", va="top", fontsize=7.0,
+        bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                  ec=AESTHETIC.annotation_style.callout_accent, lw=0.6),
         transform=ax.transAxes,
     )
+    _ = callout_box
     return ax

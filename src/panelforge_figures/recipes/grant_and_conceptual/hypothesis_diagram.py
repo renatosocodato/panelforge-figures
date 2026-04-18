@@ -1,6 +1,14 @@
-"""Hypothesis diagram — central claim with supporting evidence + predictions."""
+"""Hypothesis diagram — central claim band with evidence (left) and predictions (right).
+
+Redesigned as a single horizontal band with two small flanking cards so
+the text lines up cleanly at small render sizes. The claim sits in a wide
+band across the middle; evidence and predictions are compact 1-sentence
+cards stacked outside.
+"""
 
 from __future__ import annotations
+
+import textwrap
 
 import matplotlib.patches as mpatches
 from pydantic import Field
@@ -18,8 +26,8 @@ from ._aesthetic import AESTHETIC
 
 class HypothesisDiagramInput(RecipeContract):
     claim: str = Field(..., description="Central hypothesis in one sentence.")
-    evidence: list[str] = Field(default_factory=list, min_length=0, max_length=5)
-    predictions: list[str] = Field(default_factory=list, min_length=0, max_length=5)
+    evidence: list[str] = Field(default_factory=list, min_length=0, max_length=3)
+    predictions: list[str] = Field(default_factory=list, min_length=0, max_length=3)
     mechanism: str | None = None
     claim_color_key: str = "signaling"
 
@@ -27,20 +35,20 @@ class HypothesisDiagramInput(RecipeContract):
 def _demo() -> HypothesisDiagramInput:
     return HypothesisDiagramInput(
         claim=(
-            "RhoA activity in microglia forms a tristable landscape whose "
-            "GATE well is sex-dimorphic and pharmacologically collapsible."
+            "RhoA in microglia forms a tristable landscape whose GATE well "
+            "is sex-dimorphic and pharmacologically collapsible."
         ),
         evidence=[
-            "FRET bistability in live microglia (N=27 mice)",
-            "Bimodal process-velocity CV (female > male at baseline)",
-            "ROCK inhibition abolishes GATE in acute slices",
+            "FRET bistability in live microglia",
+            "Bimodal process-velocity CV",
+            "ROCKi collapses GATE",
         ],
         predictions=[
-            "SRCi shifts basal population TRAP to HOME within 20 min",
-            "LPS flips males into GATE at ~90 min post-challenge",
-            "Paracrine H2O2 broadens bimodality in space",
+            "SRCi shifts TRAP to HOME in 20 min",
+            "LPS flips males into GATE at ~90 min",
+            "Paracrine H2O2 broadens bimodality",
         ],
-        mechanism="RhoA / Rac1 antagonism driving actin protrusion topology",
+        mechanism="RhoA / Rac1 antagonism via actin topology",
         claim_color_key="cytoskeletal",
     )
 
@@ -60,10 +68,10 @@ _META = RecipeMetadata(
 
 @register_recipe(metadata=_META, contract=HypothesisDiagramInput, demo_contract=_demo)
 def render(contract: HypothesisDiagramInput, ax=None, **_):
-    """Central claim bubble, flanked by evidence (left) and predictions (right)."""
+    """Stacked-band layout: evidence (top) → hypothesis (middle) → predictions (bottom)."""
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(6.4, 3.8))
+        _, ax = plt.subplots(figsize=(5.8, 3.4))
     AESTHETIC.apply_to_ax(ax)
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
@@ -77,60 +85,70 @@ def render(contract: HypothesisDiagramInput, ax=None, **_):
         if contract.claim_color_key in palette.semantic
         else palette[0]
     )
-
-    # Central claim bubble.
-    claim_box = mpatches.FancyBboxPatch(
-        (25, 38),
-        50,
-        28,
-        boxstyle="round,pad=0.02,rounding_size=0.04",
-        facecolor=claim_c,
-        edgecolor="white",
-        linewidth=2.0,
-        alpha=0.95,
-    )
-    ax.add_patch(claim_box)
-    ax.text(50, 58, "HYPOTHESIS", ha="center", va="top",
-            color="white", fontsize=7.5, fontweight="bold", alpha=0.7,
-            transform=ax.transData)
-    ax.text(50, 52, contract.claim, ha="center", va="center",
-            color="white", fontsize=8.2, wrap=True, fontweight="bold")
-    if contract.mechanism:
-        add_halo_label(ax, 50, 32, f"via {contract.mechanism}",
-                       color=claim_c, fontsize=7.2, fontweight="bold",
-                       halo_width=2.6)
-
-    # Evidence (left column).
     ev_color = "#37474F"
-    ax.text(3, 82, "EVIDENCE", ha="left", va="bottom",
-            fontsize=7.8, color=ev_color, fontweight="bold")
-    for i, e in enumerate(contract.evidence[:5]):
-        y = 74 - i * 11
+    pr_color = "#D84315"
+
+    # Wrap helper — ~24 chars per card width, ~60 chars for the central band.
+    def _wrap(s: str, width: int) -> str:
+        return "\n".join(textwrap.wrap(s, width=width)) or s
+
+    # ── Evidence band (top 30%) ───────────────────────────────
+    ax.text(2, 97, "EVIDENCE", ha="left", va="top",
+            fontsize=7.6, fontweight="bold", color=ev_color)
+    n_ev = min(len(contract.evidence), 3)
+    for i in range(n_ev):
+        w = 100 / 3 - 2
+        x0 = 2 + i * (w + 1.5)
         ax.add_patch(mpatches.FancyBboxPatch(
-            (2, y - 3.6), 22, 7.8,
-            boxstyle="round,pad=0.02,rounding_size=0.04",
+            (x0, 69), w, 18,
+            boxstyle="round,pad=0.012,rounding_size=0.02",
             facecolor="white", edgecolor=ev_color, linewidth=0.8,
         ))
-        ax.text(13, y, e, ha="center", va="center", fontsize=6.6, color="#222222")
-        ax.annotate("", xy=(26, 52), xytext=(24.2, y),
-                    arrowprops=dict(arrowstyle="-|>", color=ev_color, lw=0.9,
-                                    shrinkA=0, shrinkB=0,
-                                    connectionstyle="arc3,rad=-0.2"))
+        ax.text(x0 + w / 2, 78, _wrap(contract.evidence[i], 24),
+                ha="center", va="center", fontsize=6.4, color="#222222")
 
-    # Predictions (right column).
-    pr_color = "#D84315"
-    ax.text(97, 82, "PREDICTIONS", ha="right", va="bottom",
-            fontsize=7.8, color=pr_color, fontweight="bold")
-    for i, p in enumerate(contract.predictions[:5]):
-        y = 74 - i * 11
+    # ── Central claim band (middle 30%) ───────────────────────
+    ax.add_patch(mpatches.FancyBboxPatch(
+        (2, 36), 96, 28,
+        boxstyle="round,pad=0.012,rounding_size=0.02",
+        facecolor=claim_c, edgecolor="white", linewidth=1.6, alpha=0.95,
+    ))
+    ax.text(50, 60, "HYPOTHESIS", ha="center", va="center",
+            fontsize=7.0, fontweight="bold", color="white", alpha=0.75)
+    ax.text(50, 50, _wrap(contract.claim, 64),
+            ha="center", va="center", fontsize=7.6,
+            fontweight="bold", color="white")
+    if contract.mechanism:
+        ax.text(50, 40, f"via {contract.mechanism}",
+                ha="center", va="center", fontsize=6.4,
+                color="white", alpha=0.85, style="italic")
+
+    # Connectors from evidence band to claim.
+    for i in range(n_ev):
+        w = 100 / 3 - 2
+        x_mid = 2 + i * (w + 1.5) + w / 2
+        ax.annotate("", xy=(x_mid, 64), xytext=(x_mid, 69),
+                    arrowprops=dict(arrowstyle="-|>", color=ev_color,
+                                    lw=0.9, shrinkA=0, shrinkB=0))
+
+    # ── Predictions band (bottom 30%) ─────────────────────────
+    ax.text(2, 32, "PREDICTIONS", ha="left", va="top",
+            fontsize=7.6, fontweight="bold", color=pr_color)
+    n_pr = min(len(contract.predictions), 3)
+    for i in range(n_pr):
+        w = 100 / 3 - 2
+        x0 = 2 + i * (w + 1.5)
         ax.add_patch(mpatches.FancyBboxPatch(
-            (76, y - 3.6), 22, 7.8,
-            boxstyle="round,pad=0.02,rounding_size=0.04",
+            (x0, 3), w, 18,
+            boxstyle="round,pad=0.012,rounding_size=0.02",
             facecolor="white", edgecolor=pr_color, linewidth=0.8,
         ))
-        ax.text(87, y, p, ha="center", va="center", fontsize=6.6, color="#222222")
-        ax.annotate("", xy=(75.8, y), xytext=(74, 52),
-                    arrowprops=dict(arrowstyle="-|>", color=pr_color, lw=0.9,
-                                    shrinkA=0, shrinkB=0,
-                                    connectionstyle="arc3,rad=0.2"))
+        ax.text(x0 + w / 2, 12, _wrap(contract.predictions[i], 24),
+                ha="center", va="center", fontsize=6.4, color="#222222")
+        x_mid = x0 + w / 2
+        ax.annotate("", xy=(x_mid, 21), xytext=(x_mid, 36),
+                    arrowprops=dict(arrowstyle="<|-", color=pr_color,
+                                    lw=0.9, shrinkA=0, shrinkB=0))
+    # Unused: add_halo_label — kept imported for API consistency.
+    _ = add_halo_label
     return ax

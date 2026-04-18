@@ -4,9 +4,16 @@ from __future__ import annotations
 
 
 def _text_artists(fig):
+    """Count text artists across all axes AND figure-level text.
+
+    Many recipes place numeric callouts and summaries via `fig.text(...)`
+    so they land below the axis in figure space (avoids collisions with
+    data). Those still count as annotations for the quality gate.
+    """
     out = []
     for a in fig.axes:
         out.extend(a.texts)
+    out.extend(fig.texts)
     return out
 
 

@@ -32,8 +32,8 @@ jobs:
       - name: Catalog sanity
         run: |
           figures catalog --json > /tmp/catalog.json
-          python -c "import json, sys; d=json.load(open('/tmp/catalog.json')); n=sum(len(m['recipes']) for m in d['modalities']); print(f'recipes={n}'); assert n >= 18, f'expected >=18, got {n}'"
+          python -c "import json, sys; d=json.load(open('/tmp/catalog.json')); n=sum(len(m['recipes']) for m in d['modalities']); print(f'recipes={n}'); assert n >= 49, f'expected >=49, got {n}'"
       - name: Gallery regeneration
         run: |
           figures gallery regenerate
-          python -c "from pathlib import Path; pngs=list(Path('docs/gallery').rglob('*.png')); print(f'gallery_pngs={len(pngs)}'); assert len(pngs) >= 18, len(pngs)"
+          python -c "from pathlib import Path; pngs=list(Path('docs/gallery').rglob('*.png')); print(f'gallery_pngs={len(pngs)}'); assert len(pngs) >= 49, len(pngs)"

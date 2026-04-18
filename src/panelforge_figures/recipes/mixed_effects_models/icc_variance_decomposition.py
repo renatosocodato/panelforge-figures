@@ -32,7 +32,7 @@ def _demo() -> ICCInput:
 _META = RecipeMetadata(
     name="icc_variance_decomposition",
     modality="mixed_effects_models",
-    family=RecipeFamily.coef_forest,
+    family=RecipeFamily.matrix,
     answers_question="What fraction of the outcome variance lives at each hierarchical level?",
     required_fields=("levels", "variance"),
     optional_fields=("model_name", "title"),

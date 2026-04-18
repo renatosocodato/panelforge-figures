@@ -6,6 +6,44 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [0.1.0b1] — 2026-04-18
+
+Session 2 batch — 4 new modalities, 31 new recipes, 49 total.
+
+### Added
+
+- Modality `mixed_effects_models` (9): sex_x_genotype_interaction_forest,
+  random_effects_caterpillar, marginal_effects_ribbon, emmeans_contrast_grid,
+  posterior_predictive_check, icc_variance_decomposition,
+  mixed_model_residual_diagnostic, random_slopes_per_cluster,
+  bayes_posterior_density_by_term.
+- Modality `dose_response_pharmacology` (5): hill_fit_with_ci,
+  ic50_forest_across_compounds, schild_regression, isobologram_combination,
+  drug_combo_heatmap.
+- Modality `biophysics_scaling` (5): log_log_scaling_with_slope_box,
+  master_curve_collapse, force_length_characteristic,
+  power_law_tail_diagnostic, buckling_critical_force_plot.
+- Modality `rhogtpase_dynamics` (12): phase_portrait_tristable,
+  phase_portrait_bistable, phase_portrait_oscillator, potential_landscape_1d,
+  potential_landscape_2d_heatmap, bifurcation_saddle_node, bifurcation_hopf,
+  bifurcation_pitchfork, nullcline_intersection_annotated,
+  quasi_steady_state_reduction, timescale_separation_diagnostic,
+  basin_of_attraction_map.
+- Quality rules for 6 new families (phase_portrait, bifurcation, heatmap,
+  ridge_by_group, timecourse_hierarchical_ci, coef_forest). Extended the
+  "filled-polygon" rule to accept both `PolyCollection` and
+  matplotlib ≥3.9's new `FillBetweenPolyCollection`.
+- 31 new gallery PNGs under docs/gallery/.
+
+### Progress toward v0.1.0
+
+| | v0.1.0a0 | **v0.1.0b1** | v0.1.0 target |
+|---|---|---|---|
+| Modalities | 3 | **7** | 20 |
+| Recipes | 18 | **49** | 137 |
+| Tests | 113 | **237** | ≥400 |
+
+
 ## [0.1.0a0] — 2026-04-17
 
 Initial alpha — scaffold, core, 3 of 20 modalities.

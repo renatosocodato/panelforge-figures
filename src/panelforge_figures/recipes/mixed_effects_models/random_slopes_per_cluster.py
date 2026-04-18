@@ -49,7 +49,7 @@ def _demo() -> RandomSlopesInput:
 _META = RecipeMetadata(
     name="random_slopes_per_cluster",
     modality="mixed_effects_models",
-    family=RecipeFamily.timecourse_hierarchical_ci,
+    family=RecipeFamily.diagnostic_curve,
     answers_question="How much do individual clusters (animals, subjects) differ in their slope on the predictor?",
     required_fields=("x", "cluster_lines"),
     optional_fields=("population_mean", "x_label", "y_label", "title"),

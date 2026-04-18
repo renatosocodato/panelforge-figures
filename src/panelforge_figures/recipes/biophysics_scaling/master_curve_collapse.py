@@ -82,6 +82,24 @@ def render(contract: MasterCurveInput, ax=None, **_):
                    edgecolor="white", linewidth=0.5, label=label,
                    zorder=3)
 
+    # Master curve: log-binned geometric mean across all conditions.
+    pooled_x = np.concatenate([
+        np.array(d["x"]) / contract.x_scale[lbl]
+        for lbl, d in contract.conditions.items()
+    ])
+    pooled_y = np.concatenate([
+        np.array(d["y"]) / contract.y_scale[lbl]
+        for lbl, d in contract.conditions.items()
+    ])
+    xg = np.logspace(np.log10(pooled_x.min()), np.log10(pooled_x.max()), 28)
+    centers = 0.5 * (xg[:-1] + xg[1:])
+    mean_curve = []
+    for lo, hi in zip(xg[:-1], xg[1:]):
+        mask = (pooled_x >= lo) & (pooled_x < hi)
+        mean_curve.append(np.nanmean(pooled_y[mask]) if mask.any() else np.nan)
+    ax.plot(centers, mean_curve, color="#111111", lw=1.2, zorder=5,
+            label="master curve")
+
     # Quality metric: compute per-x variance across conditions after rescaling.
     # Small inter-condition scatter = successful collapse.
     x_pooled = np.sort(

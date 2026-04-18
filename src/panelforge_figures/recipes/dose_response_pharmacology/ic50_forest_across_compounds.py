@@ -105,17 +105,20 @@ def render(contract: IC50ForestInput, ax=None, **_):
                 va="center", ha="left",
                 fontsize=6.6, color="#222222")
 
-    # Mechanism legend (compact).
-    mechs = {r.mechanism for r in rows}
-    legend_text = "   ".join(
-        f"● {m}" for m in sorted(mechs)
-    )
-    ax.text(0.01, 0.99, legend_text,
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.4, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.20", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=5)
+    # Mechanism legend (compact, marker-based for Helvetica-safe glyphs).
+    from matplotlib.lines import Line2D
+    mechs = sorted({r.mechanism for r in rows})
+    proxies = [
+        Line2D([0], [0], marker="o", color="none",
+               markerfacecolor=(palette.pick(m) if m in palette.semantic else palette[0]),
+               markeredgecolor="white", markersize=6,
+               label=m)
+        for m in mechs
+    ]
+    ax.legend(handles=proxies, loc="upper left",
+              fontsize=6.4, frameon=True, framealpha=0.92,
+              edgecolor="#BBBBBB", borderpad=0.4, handlelength=1.0,
+              ncol=min(len(mechs), 2))
     ax.grid(axis="x", which="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

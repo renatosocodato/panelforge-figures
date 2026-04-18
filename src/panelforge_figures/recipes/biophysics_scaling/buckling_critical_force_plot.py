@@ -30,9 +30,9 @@ def _demo() -> BucklingInput:
     # F_c (pN) = π²EI / L². I = π r⁴ / 4. Convert to μm for L.
     E = 2e9
     r = 12.5e-9
-    I = np.pi * r ** 4 / 4
+    inertia = np.pi * r ** 4 / 4
     L = L_um * 1e-6
-    F_th = np.pi ** 2 * E * I / L ** 2 * 1e12   # convert N → pN
+    F_th = np.pi ** 2 * E * inertia / L ** 2 * 1e12   # convert N → pN
     noise = rng.lognormal(0, 0.12, len(L_um))
     F_meas = F_th * noise
     return BucklingInput(
@@ -71,9 +71,9 @@ def render(contract: BucklingInput, ax=None, **_):
     # Theoretical Euler.
     E = contract.youngs_modulus
     r = contract.radius
-    I = np.pi * r ** 4 / 4
+    inertia = np.pi * r ** 4 / 4
     L_m = L_um * 1e-6
-    F_th = np.pi ** 2 * E * I / L_m ** 2 * 1e12
+    F_th = np.pi ** 2 * E * inertia / L_m ** 2 * 1e12
 
     ax.plot(L_um, F_th, color="#333333", lw=1.1, ls="--", zorder=3,
             label=r"Euler: $F_c = \pi^2 E I / L^2$")
@@ -85,9 +85,14 @@ def render(contract: BucklingInput, ax=None, **_):
     lx = np.log(L_um)
     ly = np.log(F)
     slope, intercept = np.polyfit(lx, ly, 1)
+    # Overlay observed best-fit line for visual comparison.
+    xfit = np.linspace(L_um.min(), L_um.max(), 80)
+    yfit = np.exp(intercept) * xfit ** slope
+    ax.plot(xfit, yfit, color=accent, lw=1.0, zorder=3,
+            label=f"observed (slope {smart_fmt(float(slope))})")
     ax.text(0.02, 0.05,
             f"observed slope = {smart_fmt(float(slope))}\n"
-            f"EI = {smart_fmt(E * I * 1e24)} × 10⁻²⁴ N·m²",
+            f"EI = {smart_fmt(E * inertia * 1e24)} × 10⁻²⁴ N·m²",
             transform=ax.transAxes, ha="left", va="bottom",
             fontsize=6.8, color="#333333",
             bbox=dict(boxstyle="round,pad=0.22", fc="white",

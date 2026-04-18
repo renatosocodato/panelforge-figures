@@ -6,15 +6,16 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-`v0.1.0-alpha` — scaffold + core + 3 of 20 modalities landed. Full 137-recipe
+`v0.1.0-beta1` — 7 of 20 modalities landed, 49 of 137 recipes. Full
 roster tracked toward `v0.1.0`.
 
-| | v0.1.0-alpha | v0.1.0 target |
-|---|---|---|
-| Modalities | 3 | 20 |
-| Recipes | 18 | 137 |
-| Gallery PNGs | 18 | 137 |
-| Themes | 12 | 12 |
+| | v0.1.0-alpha | **v0.1.0-beta1** | v0.1.0 target |
+|---|---|---|---|
+| Modalities | 3 | **7** | 20 |
+| Recipes | 18 | **49** | 137 |
+| Gallery PNGs | 18 | **49** | 137 |
+| Themes | 12 | **12** | 12 |
+| Tests | 113 | **237** | ≥400 |
 
 ## Install
 

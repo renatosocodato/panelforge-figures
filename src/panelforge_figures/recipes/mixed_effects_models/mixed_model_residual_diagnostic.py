@@ -76,7 +76,13 @@ def render(contract: ResidualDiagInput, ax=None, **_):
     slope, intercept = np.polyfit(osm, osr, 1)
     x_lim = np.array([osm.min(), osm.max()])
     ax_qq.plot(x_lim, slope * x_lim + intercept,
-               color="#333333", lw=0.8, ls="--", zorder=2)
+               color="#333333", lw=0.8, ls="--", zorder=2,
+               label="reference")
+    # Horizontal y=0 line for extra visual line (diagnostic context).
+    ax_qq.axhline(0, color="#BBBBBB", lw=0.4, ls=":", zorder=1,
+                  label="zero")
+    ax_qq.legend(fontsize=6.2, frameon=False, loc="upper left",
+                 handlelength=1.6)
     ax_qq.set_xlabel("theoretical quantile")
     ax_qq.set_ylabel("residual quantile")
     ax_qq.set_title("QQ plot", fontsize=8.4, pad=3)

@@ -96,12 +96,12 @@ def render(contract: ForestInput, ax=None, **_):
     ax.axvline(0, color="#888888", lw=0.7, ls="--", zorder=1)
 
     # CI error bars + estimate markers.
-    for y, e, l, h, inter in zip(ypos, est, lo, hi, is_inter):
+    for y, e, ci_lo, ci_hi, inter in zip(ypos, est, lo, hi, is_inter):
         color = interaction_color if inter else term_color
         lw = 1.3 if inter else 1.0
-        ax.plot([l, h], [y, y], color=color, lw=lw, zorder=3)
+        ax.plot([ci_lo, ci_hi], [y, y], color=color, lw=lw, zorder=3)
         # Caps on CI ends.
-        for x_end in (l, h):
+        for x_end in (ci_lo, ci_hi):
             ax.plot([x_end, x_end], [y - 0.15, y + 0.15],
                     color=color, lw=lw, zorder=3)
         ax.scatter([e], [y], s=30 if not inter else 48,
@@ -130,14 +130,20 @@ def render(contract: ForestInput, ax=None, **_):
             ax.axhspan(y - 0.40, y + 0.40, color=interaction_color,
                        alpha=0.06, zorder=0)
 
-    # Legend hint (interaction vs fixed).
-    ax.text(0.99, 0.99,
-            "■ interaction  ■ main effect",
-            transform=ax.transAxes, ha="right", va="top",
-            fontsize=6.4, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.22", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=5)
+    # Legend hint (interaction vs fixed) via matplotlib proxy handles so
+    # the marker shapes render in Helvetica without glyph issues.
+    from matplotlib.lines import Line2D
+    proxies = [
+        Line2D([0], [0], marker="s", color="none",
+               markerfacecolor=interaction_color, markersize=6,
+               label="interaction"),
+        Line2D([0], [0], marker="s", color="none",
+               markerfacecolor=term_color, markersize=6,
+               label="main effect"),
+    ]
+    ax.legend(handles=proxies, loc="upper right",
+              fontsize=6.4, frameon=True, framealpha=0.92,
+              edgecolor="#BBBBBB", borderpad=0.4, handlelength=1.0)
     ax.grid(axis="x", color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

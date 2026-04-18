@@ -103,11 +103,11 @@ def render(contract: SobolIndicesInput, ax=None, **_):
     # Value labels right of each ST bar.
     for y, v_st in zip(ypos, st):
         ax.text(v_st + max(st.max() * 0.02, 0.01), y + bar_h / 2,
-                f"Sₜ={smart_fmt(v_st)}", va="center", ha="left",
+                rf"$S_T$={smart_fmt(v_st)}", va="center", ha="left",
                 fontsize=6.8, color="#222222", fontweight="bold")
     for y, v_s1 in zip(ypos, s1):
         ax.text(v_s1 + max(s1.max() * 0.02, 0.01), y - bar_h / 2,
-                f"S₁={smart_fmt(v_s1)}", va="center", ha="left",
+                rf"$S_1$={smart_fmt(v_s1)}", va="center", ha="left",
                 fontsize=6.4, color="#555555")
 
     ax.set_yticks(ypos)
@@ -122,16 +122,18 @@ def render(contract: SobolIndicesInput, ax=None, **_):
         fontweight="bold",
     )
 
-    # Top-drivers callout.
+    # Top-drivers callout — inside lower-right, after ensuring xmax has headroom.
     share_top3 = st[:3].sum() / max(st.sum(), 1e-9)
     callout_box(
         ax,
+        0.98,
         0.02,
-        0.05,
-        f"Top 3 drivers ({', '.join(names[:3])}) account for "
-        f"{share_top3*100:.0f}% of total variance.",
+        f"Top 3 drivers ({', '.join(names[:3])})\n"
+        f"account for {share_top3*100:.0f}% of total variance.",
         accent=AESTHETIC.annotation_style.callout_accent,
         transform=ax.transAxes,
+        ha="right",
+        va="bottom",
     )
     ax.grid(axis="x", color="#DDDDDD", lw=0.4)
     ax.set_axisbelow(True)

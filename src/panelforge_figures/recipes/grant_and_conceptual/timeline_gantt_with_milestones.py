@@ -117,21 +117,30 @@ def render(contract: GanttInput, ax=None, **_):
     xmax = max(t.end for t in tasks)
     ax.set_xlim(-0.5, xmax + 1.0)
     ax.set_xlabel(contract.x_label)
-    # Milestone diamonds with halo'd labels above.
+    # Milestone diamonds with halo'd labels alternating above/below the row.
     ms_color = "#D32F2F"
-    for ms in contract.milestones:
-        ax.scatter([ms.at], [-0.9], marker="D", s=80, color=ms_color,
-                   edgecolor="white", linewidth=1.2, zorder=5, clip_on=False)
-        add_halo_label(ax, ms.at, -1.7, ms.name, fontsize=7.0, color=ms_color,
-                       fontweight="bold", ha="center", va="bottom")
-    # WP legend (compact, inside the axis).
+    for k, ms in enumerate(contract.milestones):
+        ax.scatter([ms.at], [-1.2], marker="D", s=70, color=ms_color,
+                   edgecolor="white", linewidth=1.1, zorder=5, clip_on=False)
+        # Alternate labels slightly above/below to reduce collisions.
+        y_lab = -1.9 if k % 2 == 0 else -2.5
+        add_halo_label(ax, ms.at, y_lab, ms.name, fontsize=6.6, color=ms_color,
+                       fontweight="bold", ha="center", va="bottom",
+                       halo_width=2.4)
+
+    # WP legend as a compact row below the x-axis.
+    legend_y = len(tasks) + 1.2
+    legend_x0 = 0.0
+    step = max(xmax / max(len(wp_colors), 1), 3.5)
     for i, (wp, c) in enumerate(sorted(wp_colors.items())):
-        ax.add_patch(mpatches.Rectangle((xmax - 6 + i * 1.8, len(tasks) + 0.3),
-                                         1.2, 0.5, facecolor=c, edgecolor="none"))
-        ax.text(xmax - 6 + i * 1.8 + 1.4, len(tasks) + 0.55, wp,
-                ha="left", va="center", fontsize=6.8, color="#333333")
+        x0 = legend_x0 + i * step
+        ax.add_patch(mpatches.Rectangle((x0, legend_y), 0.9, 0.36, facecolor=c,
+                                         edgecolor="none", clip_on=False))
+        ax.text(x0 + 1.1, legend_y + 0.18, wp, ha="left", va="center",
+                fontsize=6.8, color="#333333", clip_on=False)
+
     ax.grid(axis="x", which="major", color="#DDDDDD", linewidth=0.5, alpha=0.7, zorder=0)
     ax.set_axisbelow(True)
-    ax.set_ylim(len(tasks) + 1.5, -2.8)
+    ax.set_ylim(len(tasks) + 2.0, -3.2)
     ax.margins(x=0)
     return ax

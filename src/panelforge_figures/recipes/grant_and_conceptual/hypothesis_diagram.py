@@ -32,15 +32,15 @@ def _demo() -> HypothesisDiagramInput:
         ),
         evidence=[
             "FRET bistability in live microglia (N=27 mice)",
-            "Bimodal process-velocity CV (♀>♂ at baseline)",
+            "Bimodal process-velocity CV (female > male at baseline)",
             "ROCK inhibition abolishes GATE in acute slices",
         ],
         predictions=[
-            "SRCi shifts basal population TRAP→HOME within 20 min",
-            "LPS flips ♂ into GATE at ~90 min post-challenge",
+            "SRCi shifts basal population TRAP to HOME within 20 min",
+            "LPS flips males into GATE at ~90 min post-challenge",
             "Paracrine H2O2 broadens bimodality in space",
         ],
-        mechanism="RhoA / Rac1 antagonism → actin protrusion topology",
+        mechanism="RhoA / Rac1 antagonism driving actin protrusion topology",
         claim_color_key="cytoskeletal",
     )
 

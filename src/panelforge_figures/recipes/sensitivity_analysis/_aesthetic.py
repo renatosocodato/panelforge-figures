@@ -26,7 +26,7 @@ AESTHETIC = ModalityAesthetic(
     ),
     inset_convention=None,
     required_scale_bars=False,
-    label_vocabulary={"S1": "S₁", "ST": "Sₜ", "mu_star": "μ*"},
+    label_vocabulary={"S1": r"$S_1$", "ST": r"$S_T$", "mu_star": r"$\mu^*$"},
     color_anchor=None,
     spine_color="#333333",
 )

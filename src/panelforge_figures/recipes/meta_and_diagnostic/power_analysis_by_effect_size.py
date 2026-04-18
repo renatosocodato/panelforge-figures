@@ -103,10 +103,12 @@ def render(contract: PowerAnalysisInput, ax=None, **_):
 
     if contract.n_planned is not None:
         ax.axvline(contract.n_planned, color="#333333", lw=0.8, ls="--")
-        add_halo_label(ax, contract.n_planned, 0.50,
-                       f"planned n={contract.n_planned}",
-                       color="#333333", fontsize=6.8, ha="left", va="center",
-                       halo_width=2.4)
+        ax.text(contract.n_planned, 0.50,
+                f"planned n={contract.n_planned}",
+                color="#333333", fontsize=6.8, ha="left", va="center",
+                bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                          ec="none", alpha=0.88),
+                zorder=6)
 
     # Callout: critical d given n_planned — placed bottom-right (below the
     # convex part of the power curves, so it does not overlap any trace).

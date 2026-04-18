@@ -78,19 +78,19 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
             linewidths=1.2,
         )
         try:
-            # Attach a halo'd label near the first contour segment.
             paths = thresh_cs.collections[0].get_paths()
             if paths:
                 verts = paths[0].vertices
                 midx, midy = verts[len(verts) // 2]
-                add_halo_label(
-                    ax,
-                    midx,
-                    midy,
+                ax.text(
+                    midx, midy,
                     f"z = {smart_fmt(contract.threshold)}",
                     color="#D32F2F",
                     fontsize=7.0,
-                    halo_width=2.6,
+                    ha="center", va="center",
+                    bbox=dict(boxstyle="round,pad=0.16", fc="white",
+                              ec="none", alpha=0.88),
+                    zorder=7,
                 )
         except (AttributeError, IndexError):
             pass
@@ -102,17 +102,19 @@ def render(contract: ParameterScan2DInput, ax=None, **_):
     palette = get_palette(AESTHETIC.primary_palette)
     ax.scatter([x_max], [y_max], s=80, color=palette[1], edgecolor="white",
                linewidth=1.2, zorder=6, marker="*")
-    add_halo_label(
-        ax,
+    ax.text(
         x_max,
         y_max,
         f"max = {smart_fmt(float(Z.max()))}",
         color=palette[1],
         fontsize=7.0,
-        halo_width=2.6,
         ha="left",
         va="bottom",
+        bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                  ec="none", alpha=0.88),
+        zorder=7,
     )
+    _ = add_halo_label  # kept imported for API contract
 
     if contract.log_x:
         ax.set_xscale("log")

@@ -10,6 +10,16 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Mixed-effects model catch-up (v1.1.0-s04 additions)
+
+- **What does the raw outcome look like under sex × genotype, with β + CI?** → [`mixed_effects_models.sex_stratified_raincloud_with_coef_box`](gallery/mixed_effects_models/sex_stratified_raincloud_with_coef_box.png)
+- **Per cluster, how do random intercept and slope covary?** → [`mixed_effects_models.random_intercepts_vs_slopes_scatter`](gallery/mixed_effects_models/random_intercepts_vs_slopes_scatter.png)
+- **Among competing mixed-model specifications, which has lowest AIC / BIC?** → [`mixed_effects_models.model_comparison_aic_bic_ladder`](gallery/mixed_effects_models/model_comparison_aic_bic_ladder.png)
+- **What is the posterior distribution of each contrast (Δ) with HDI?** → [`mixed_effects_models.posterior_contrast_density`](gallery/mixed_effects_models/posterior_contrast_density.png)
+- **For a given predictor, what is the partial-residual pattern?** → [`mixed_effects_models.partial_residuals_vs_predictor`](gallery/mixed_effects_models/partial_residuals_vs_predictor.png)
+- **What are response-scale emmeans per group with pairwise brackets?** → [`mixed_effects_models.group_level_emmeans_with_pairwise`](gallery/mixed_effects_models/group_level_emmeans_with_pairwise.png)
+- **How is variance split into fixed vs random vs residual?** → [`mixed_effects_models.fixed_vs_random_effect_partition`](gallery/mixed_effects_models/fixed_vs_random_effect_partition.png)
+
 ## Diagnostics / is the data usable?
 
 - **How much power buys what effect size?** → [`meta_and_diagnostic.power_analysis_by_effect_size`](gallery/meta_and_diagnostic/power_analysis_by_effect_size.png)

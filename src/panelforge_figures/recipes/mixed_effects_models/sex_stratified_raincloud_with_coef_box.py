@@ -128,9 +128,9 @@ def render(contract: RaincloudCoefInput, ax=None, **_):
         ax.scatter(i + jitter, vals, s=5.5, color=color,
                    alpha=0.70, edgecolor="white", linewidth=0.2, zorder=2)
 
-        # N below the category.
-        ax.text(i, ax.get_ylim()[0], f"n={vals.size}",
-                ha="center", va="top", fontsize=6.4, color="#555555",
+        # N below the xtick label — axes-fraction y for consistency across iters.
+        ax.text(i, -0.12, f"n={vals.size}",
+                ha="center", va="top", fontsize=6.2, color="#555555",
                 transform=ax.get_xaxis_transform())
 
     ax.set_xticks(positions)

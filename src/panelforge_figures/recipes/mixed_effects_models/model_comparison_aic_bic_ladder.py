@@ -113,8 +113,7 @@ def render(contract: ModelComparisonInput, ax=None, **_):
                 edgecolor="white", linewidth=0.8, zorder=2)
         # BIC paired dot (offset slightly on y).
         ax.scatter([db], [yi], s=26, marker="D", color="#111111",
-                   edgecolor="white", linewidth=0.6, zorder=4,
-                   label="ΔBIC" if yi == y[0] else None)
+                   edgecolor="white", linewidth=0.6, zorder=4)
         # Right-of-bar label.
         ax.text(max(da, db) + xmax * 0.015, yi,
                 f"ΔAIC={smart_fmt(da)}  ΔBIC={smart_fmt(db)}",
@@ -136,12 +135,10 @@ def render(contract: ModelComparisonInput, ax=None, **_):
     ax.set_xlim(0, xmax)
     ax.set_ylim(-0.8, len(rows) - 0.4)
     ax.set_title(
-        f"{contract.title}  ·  best: {rows[0].name.split('~')[0].strip() or 'M1'} "
-        f"(AIC={smart_fmt(best)})",
+        f"{contract.title}  ·  best AIC={smart_fmt(best)}   · "
+        f"bar = ΔAIC, diamond = ΔBIC",
         fontsize=9.0, pad=4,
     )
-    ax.legend(fontsize=6.6, frameon=False, loc="lower right",
-              handlelength=1.2)
     ax.grid(axis="x", color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

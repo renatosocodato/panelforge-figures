@@ -90,7 +90,7 @@ _META = RecipeMetadata(
 def render(contract: VariancePartitionInput, ax=None, **_):
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(5.6, 3.4))
+        _, ax = plt.subplots(figsize=(6.4, 3.8))
     AESTHETIC.apply_to_ax(ax)
     palette = get_palette(AESTHETIC.primary_palette)
 
@@ -146,7 +146,8 @@ def render(contract: VariancePartitionInput, ax=None, **_):
                     linewidth=0.4, alpha=0.55,
                     hatch=hatches[i % len(hatches)], zorder=2,
                 ))
-                if frac > 0.04:
+                # Only label sub-term if wide enough to fit without clashing.
+                if frac >= 0.11:
                     ax.text(sub_left + frac / 2, sub_y + sub_h / 2,
                             term, ha="center", va="center",
                             fontsize=5.8, color="#111111", zorder=3)
@@ -172,14 +173,6 @@ def render(contract: VariancePartitionInput, ax=None, **_):
     for s in ("left",):
         ax.spines[s].set_visible(False)
 
-    # Legend proxies (top-level only; term-level uses hatches inline).
-    from matplotlib.patches import Patch
-    proxies = [
-        Patch(facecolor=fixed_color, edgecolor="white", label="fixed (R²m)"),
-        Patch(facecolor=random_color, edgecolor="white", label="random"),
-        Patch(facecolor=residual_color, edgecolor="white", label="residual"),
-    ]
-    ax.legend(handles=proxies, fontsize=6.6, frameon=False,
-              loc="lower right", handlelength=1.4, ncols=3,
-              bbox_to_anchor=(1.0, -0.18))
+    # Legend redundant — each bar segment is labelled inline. Hatch strip
+    # below each bar tags the per-term fixed-effect contributions.
     return ax

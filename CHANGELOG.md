@@ -6,6 +6,91 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s04] — 2026-04-19
+
+Fourth session of the v1.1 hydration plan. Hydrates the
+`mixed_effects_models` modality from 9 to 16 recipes. This is the
+cross-cutting modality used in *every* manuscript — the 7 catch-up
+recipes close four long-standing grammar gaps: raw data under the
+forest, per-cluster (intercept, slope) covariation, model selection
+(AIC / BIC), Bayesian contrast densities, plus the
+partial-residuals / response-scale-emmeans / fixed-vs-random-variance
+trio reviewers explicitly request.
+
+### Added
+
+- `mixed_effects_models.sex_stratified_raincloud_with_coef_box` —
+  raw-data raincloud per sex × genotype (half-violin + inline
+  5/25/50/75/95 box + rain jitter) with an upper-right coefficient
+  callout (β, 95 % CI, p) tied to the mixed-model interaction term.
+- `mixed_effects_models.random_intercepts_vs_slopes_scatter` — per-cluster
+  joint (intercept, slope) scatter with 95 % shrinkage ellipse, OLS
+  fit line, quadrant colouring from `sex_x_genotype`, and a Pearson
+  r annotation. Captures the `cor(int, slope)` term that 1-D
+  caterpillar + slopes panels hide.
+- `mixed_effects_models.model_comparison_aic_bic_ladder` — competing
+  model specs sorted by AIC, paired with BIC diamonds, ΔAIC bars
+  and a Burnham-Anderson evidence strip (Δ=2/4/7). Best-fit row
+  highlighted; per-row ΔAIC/ΔBIC callouts.
+- `mixed_effects_models.posterior_contrast_density` — stacked
+  Δ-posterior densities per contrast with 95 % HDI bars, median
+  markers, split fill at zero (sign emphasis) and P(Δ>0) callouts.
+  Distinct from `bayes_posterior_density_by_term` (absolute term
+  posteriors, no Δ).
+- `mixed_effects_models.partial_residuals_vs_predictor` — partial
+  residuals (eᵢⱼ + β̂·xᵢⱼ) scattered per group with tricube-kernel
+  LOESS smoothers and the fitted β̂·x reference line. Built-in
+  lightweight LOESS — no new dependency.
+- `mixed_effects_models.group_level_emmeans_with_pairwise` —
+  response-scale emmeans per group with CI caps, Bonferroni-adjusted
+  pairwise brackets stacked by arc length (*** / ** / *), and ns
+  brackets on adjacent pairs. Distinct from `emmeans_contrast_grid`
+  which shows the Δ between groups.
+- `mixed_effects_models.fixed_vs_random_effect_partition` —
+  Nakagawa-Schielzeth variance partition (marginal R² / conditional R²
+  share / residual) as stacked horizontal bars per model, with a
+  per-term hatched sub-strip under the fixed stripe. Distinct from
+  `icc_variance_decomposition` which partitions the random-effect
+  side only.
+
+### Infrastructure
+
+- No changes to `core/` — all 7 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (raincloud-with-coef-box,
+  Burnham-Anderson ΔAIC evidence strip, stacked Δ-posteriors with
+  split-zero fills, Nakagawa-Schielzeth variance partition) live
+  inline within their recipes.
+- Liberation Sans-safe labels throughout — no subscript / proportional
+  glyphs in any saved figure.
+- Style-drift ratchet holds.
+
+### Visual-QA polish (three panels)
+
+- `sex_stratified_raincloud_with_coef_box`: moved per-stratum `n=`
+  labels to a fixed axes-fraction y so they align with the xtick
+  labels instead of drifting below the plot as later categories
+  expanded the ylim.
+- `model_comparison_aic_bic_ladder`: replaced the in-plot legend
+  (which landed inside the lowest bar) with a title-bar key —
+  "bar = ΔAIC, diamond = ΔBIC".
+- `fixed_vs_random_effect_partition`: removed the redundant
+  fixed/random/residual legend (bars are labelled inline) and
+  bumped the per-term label threshold from 0.07 to 0.11 so crowded
+  terms render as hatched colour strips without overlapping text.
+
+### Progress
+
+| | v1.1.0-s03b | **v1.1.0-s04** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 180 | **187** |
+| `mixed_effects_models` | 9 | **16** |
+| Tests | 951 | **986** |
+
+
 ## [1.1.0-s03b] — 2026-04-19
 
 Catch-up session for `actin_microtubule_morphometry` — lands the 11

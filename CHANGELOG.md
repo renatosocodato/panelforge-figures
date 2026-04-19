@@ -6,6 +6,43 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-04-19
+
+Session 5 — the full roadmap lands. 5 new modalities, 30 new recipes,
+bringing the total to **137 recipes across 20 modalities** (the v0.1.0
+target). Status moved from beta to first stable release.
+
+### Added
+
+- Modality `spatial_statistics` (6): ripley_l_function,
+  pair_correlation_function, nearest_neighbor_distance_distribution,
+  voronoi_territory_map, kernel_density_heatmap, moran_i_by_lag.
+- Modality `clinical_cohort` (6): kaplan_meier_by_stratum,
+  cox_forest_hazard_ratios, consort_flow_diagram,
+  baseline_table_visualization, subgroup_forest_plot,
+  outcome_by_quartile.
+- Modality `cryoem_and_structure` (6): fsc_resolution_curve,
+  angular_distribution_hist, local_resolution_surface,
+  particle_2d_class_montage, ramachandran_plot, bfactor_vs_residue.
+- Modality `intravital_imaging` (6): cell_track_trajectory_field,
+  two_photon_depth_projection, vessel_diameter_kymograph,
+  cell_shape_descriptors_by_state, migration_rose_diagram,
+  time_to_homing_survival.
+- Modality `actin_microtubule_morphometry` (6):
+  filament_orientation_histogram, branch_point_density_map,
+  persistence_length_fit, protrusion_length_velocity_joint,
+  cortical_thickness_by_region, skeleton_overlay_kymograph.
+- 30 new gallery PNGs under docs/gallery/ (137 total).
+
+### Progress
+
+| | v0.1.0b3 | **v0.1.0** | target |
+|---|---|---|---|
+| Modalities | 15 | **20** | 20 ✓ |
+| Recipes | 107 | **137** | 137 ✓ |
+| Tests | 586 | **736** | ≥400 ✓ |
+
+
 ## [0.1.0b3] — 2026-04-19
 
 Session 4 batch — 4 new modalities, 27 new recipes, **107 total**.

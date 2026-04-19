@@ -6,16 +6,15 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-`v0.1.0-beta3` — 15 of 20 modalities landed, 107 of 137 recipes. Full
-roster tracked toward `v0.1.0`.
+`v0.1.0` — all 20 modalities and 137 recipes landed. First stable release.
 
-| | v0.1.0a0 | v0.1.0b1 | v0.1.0b2 | **v0.1.0b3** | v0.1.0 target |
+| | v0.1.0a0 | v0.1.0b1 | v0.1.0b2 | v0.1.0b3 | **v0.1.0** |
 |---|---|---|---|---|---|
-| Modalities | 3 | 7 | 11 | **15** | 20 |
-| Recipes | 18 | 49 | 80 | **107** | 137 |
-| Gallery PNGs | 18 | 49 | 80 | **107** | 137 |
-| Themes | 12 | 12 | 12 | **12** | 12 |
-| Tests | 113 | 237 | 361 | **469** | ≥400 ✓ |
+| Modalities | 3 | 7 | 11 | 15 | **20** ✓ |
+| Recipes | 18 | 49 | 80 | 107 | **137** ✓ |
+| Gallery PNGs | 18 | 49 | 80 | 107 | **137** ✓ |
+| Themes | 12 | 12 | 12 | 12 | **12** |
+| Tests | 113 | 237 | 361 | 469 | **736** |
 
 ## Install
 
@@ -91,15 +90,16 @@ See `docs/` for:
 
 ## Roadmap
 
-See `CHANGELOG.md`. Modality order (remaining 17 modalities land
-incrementally):
+See `CHANGELOG.md`. All 20 modalities from the initial roster landed
+by v0.1.0:
 
-`mixed_effects_models` → `dose_response_pharmacology` → `biophysics_scaling` →
-`rhogtpase_dynamics` → `gillespie_stochastic` → `redox_imaging` →
-`fret_biosensors` → `calcium_signaling` → `omics_differential` →
-`single_cell_embeddings` → `network_and_pathway` → `diffusion_and_tracking` →
-`spatial_statistics` → `clinical_cohort` → `cryoem_and_structure` →
-`intravital_imaging` → `actin_microtubule_morphometry`.
+`grant_and_conceptual`, `meta_and_diagnostic`, `sensitivity_analysis`,
+`mixed_effects_models`, `dose_response_pharmacology`, `biophysics_scaling`,
+`rhogtpase_dynamics`, `gillespie_stochastic`, `redox_imaging`,
+`fret_biosensors`, `calcium_signaling`, `omics_differential`,
+`single_cell_embeddings`, `network_and_pathway`, `diffusion_and_tracking`,
+`spatial_statistics`, `clinical_cohort`, `cryoem_and_structure`,
+`intravital_imaging`, `actin_microtubule_morphometry`.
 
 ## License
 

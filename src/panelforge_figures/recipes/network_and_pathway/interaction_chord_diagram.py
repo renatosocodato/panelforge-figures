@@ -79,12 +79,14 @@ def render(contract: ChordInput, ax=None, **_):
                             r_in * np.sin(theta[::-1])]),
             color=colors[gi], alpha=0.88, zorder=4,
         )
-        # Label.
+        # Label — horizontal, placed outside the ring with side-aware alignment.
         mid = 0.5 * (theta_lo + theta_hi)
-        ax.text(1.14 * np.cos(mid), 1.14 * np.sin(mid),
+        cx, cy = np.cos(mid), np.sin(mid)
+        ha = "left" if cx > 0.08 else ("right" if cx < -0.08 else "center")
+        va = "bottom" if cy > 0.08 else ("top" if cy < -0.08 else "center")
+        ax.text(1.18 * cx, 1.18 * cy,
                 contract.group_names[gi],
-                ha="center", va="center",
-                rotation=np.degrees(mid) - (180 if np.cos(mid) < 0 else 0),
+                ha=ha, va=va,
                 fontsize=6.6, color=colors[gi])
 
     # Chord paths (straight lines with arc3 curvature).
@@ -114,8 +116,8 @@ def render(contract: ChordInput, ax=None, **_):
                 zorder=2,
             )
 
-    ax.set_xlim(-1.35, 1.35)
-    ax.set_ylim(-1.35, 1.35)
+    ax.set_xlim(-1.45, 1.45)
+    ax.set_ylim(-1.45, 1.45)
     ax.set_xticks([])
     ax.set_yticks([])
     for s in ("left", "bottom"):
@@ -123,10 +125,11 @@ def render(contract: ChordInput, ax=None, **_):
     ax.set_aspect("equal")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
 
-    ax.text(0.0, -1.3,
-            f"total interactions = {int(M.sum())}   "
-            f"max pair = {smart_fmt(float(M.max()))}",
-            ha="center", va="center", fontsize=6.4, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92))
+    ax.figure.text(
+        0.5, 0.005,
+        f"total interactions = {int(M.sum())}   "
+        f"max pair = {smart_fmt(float(M.max()))}",
+        ha="center", va="bottom",
+        fontsize=6.2, color="#444444",
+    )
     return ax

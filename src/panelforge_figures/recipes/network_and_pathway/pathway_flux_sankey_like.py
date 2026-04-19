@@ -136,10 +136,10 @@ def render(contract: SankeyFluxInput, ax=None, **_):
             ax.add_patch(patch)
 
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.text(0.5, 0.02,
-            f"total flow = {smart_fmt(float(total))}",
-            transform=ax.transAxes, ha="center", va="bottom",
-            fontsize=6.2, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.16", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92))
+    ax.figure.text(
+        0.5, 0.005,
+        f"total flow = {smart_fmt(float(total))}",
+        ha="center", va="bottom",
+        fontsize=6.2, color="#444444",
+    )
     return ax

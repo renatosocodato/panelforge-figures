@@ -88,16 +88,17 @@ def render(contract: DiffRankLadderInput, ax=None, **_):
     # Right-of-bar numeric labels.
     xmax = max(float(fc[up_idx].max()), 0.5)
     xmin = min(float(fc[dn_idx].min()), -0.5)
-    ax.set_xlim(xmin * 1.35, xmax * 1.35)
+    span = xmax - xmin
+    ax.set_xlim(xmin - 0.40 * span, xmax + 0.40 * span)
 
     for yi, i in zip(y_up, up_idx):
-        ax.text(fc[i] + 0.02 * (xmax - xmin), yi,
-                f"{smart_fmt(fc[i])}   p={smart_fmt(p[i])}",
-                va="center", ha="left", fontsize=6.2, color="#222222")
+        ax.text(fc[i] + 0.015 * span, yi,
+                f"{smart_fmt(fc[i])}  p={smart_fmt(p[i])}",
+                va="center", ha="left", fontsize=5.8, color="#222222")
     for yi, i in zip(y_dn, dn_idx):
-        ax.text(fc[i] - 0.02 * (xmax - xmin), yi,
-                f"{smart_fmt(fc[i])}   p={smart_fmt(p[i])}",
-                va="center", ha="right", fontsize=6.2, color="#222222")
+        ax.text(fc[i] - 0.015 * span, yi,
+                f"{smart_fmt(fc[i])}  p={smart_fmt(p[i])}",
+                va="center", ha="right", fontsize=5.8, color="#222222")
 
     ax.set_yticks(list(y_up) + list(y_dn))
     ax.set_yticklabels(

@@ -131,20 +131,17 @@ def render(contract: VolcanoInput, ax=None, **_):
 
     ax.set_xlabel(r"$\log_2$ fold-change")
     ax.set_ylabel(r"$-\log_{10}$ p$_{adj}$")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.6, frameon=False, loc="upper right",
-              handlelength=1.4)
-
-    # Summary.
-    ax.text(0.01, 0.99,
-            f"N = {len(fc)}   up = {int(up.sum())}   down = {int(down.sum())}\n"
-            f"|log2FC| > {smart_fmt(contract.log2fc_threshold)}, "
-            f"p$_{{adj}}$ < {smart_fmt(contract.padj_threshold)}",
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.4, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=7)
+    ax.set_title(
+        f"{contract.title}  ·  N={len(fc)},  "
+        f"|log2FC|>{smart_fmt(contract.log2fc_threshold)},  "
+        f"p$_{{adj}}$<{smart_fmt(contract.padj_threshold)}",
+        fontsize=8.4, pad=4,
+    )
+    ax.legend(fontsize=6.6, frameon=True, facecolor="white",
+              edgecolor="#CCCCCC", framealpha=0.92,
+              loc="upper center", bbox_to_anchor=(0.5, 0.99),
+              ncol=3, handlelength=1.2, handletextpad=0.4,
+              columnspacing=1.6)
     ax.grid(axis="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

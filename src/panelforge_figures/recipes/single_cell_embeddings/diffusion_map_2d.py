@@ -64,11 +64,17 @@ def render(contract: DiffusionMapInput, ax=None, **_):
     sc = ax.scatter(x, y, s=8, c=t, cmap=AESTHETIC.continuous_cmap,
                     alpha=alpha, edgecolor="none", zorder=3)
 
-    # Smooth manifold curve.
+    # Smooth manifold curve via binned median along pseudotime.
     order = np.argsort(t)
     xs = x[order]
     ys = y[order]
-    ax.plot(xs[::20], ys[::20], color="#222222", lw=1.0,
+    n_bins = 30
+    bin_idx = np.linspace(0, len(xs), n_bins + 1).astype(int)
+    mx = np.array([np.median(xs[bin_idx[i]:bin_idx[i + 1]])
+                   for i in range(n_bins) if bin_idx[i + 1] > bin_idx[i]])
+    my = np.array([np.median(ys[bin_idx[i]:bin_idx[i + 1]])
+                   for i in range(n_bins) if bin_idx[i + 1] > bin_idx[i]])
+    ax.plot(mx, my, color="#222222", lw=1.1,
             alpha=0.9, zorder=4, label="pseudotime order")
 
     # Endpoints.
@@ -90,13 +96,12 @@ def render(contract: DiffusionMapInput, ax=None, **_):
     cbar.set_label("pseudotime", fontsize=6.4)
     cbar.ax.tick_params(labelsize=6.0)
 
-    ax.text(0.01, 0.02,
-            f"N cells = {len(t)}   manifold span "
-            f"[{smart_fmt(float(xs[0]))},{smart_fmt(float(ys[0]))}] to "
-            f"[{smart_fmt(float(xs[-1]))},{smart_fmt(float(ys[-1]))}]",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.0, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.14", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=7)
+    ax.figure.text(
+        0.5, 0.005,
+        f"N cells = {len(t)}   manifold span "
+        f"[{smart_fmt(float(xs[0]))},{smart_fmt(float(ys[0]))}] to "
+        f"[{smart_fmt(float(xs[-1]))},{smart_fmt(float(ys[-1]))}]",
+        ha="center", va="bottom",
+        fontsize=6.0, color="#444444",
+    )
     return ax

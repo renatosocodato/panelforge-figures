@@ -89,7 +89,11 @@ def render(contract: ExpressionDotplotInput, ax=None, **_):
     ax.set_yticks(range(G))
     ax.set_yticklabels(contract.genes, fontsize=6.6)
     ax.invert_yaxis()
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
+    ax.set_title(
+        f"{contract.title}  ·  {G} genes × {C} clusters,  "
+        f"max mean = {smart_fmt(float(mean_expr.max()))}",
+        fontsize=8.4, pad=4,
+    )
 
     cbar = ax.figure.colorbar(sc, ax=ax, fraction=0.03, pad=0.04)
     cbar.set_label("mean expr", fontsize=6.6)
@@ -104,20 +108,10 @@ def render(contract: ExpressionDotplotInput, ax=None, **_):
                markersize=np.sqrt(v * 110), label=f"{int(100 * v)}%")
         for v in size_vals
     ]
-    ax.legend(handles=proxies, loc="lower right",
+    ax.legend(handles=proxies,
+              loc="center left", bbox_to_anchor=(1.18, 0.5),
               fontsize=6.2, frameon=False, handlelength=1.0,
-              title="% cells", title_fontsize=6.4,
-              bbox_to_anchor=(1.0, -0.20),
-              ncol=len(size_vals))
-
-    ax.text(0.01, -0.12,
-            f"N genes = {G}   N clusters = {C}   "
-            f"max mean = {smart_fmt(float(mean_expr.max()))}",
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.2, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.16", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
+              title="% cells", title_fontsize=6.4)
 
     ax.grid(axis="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

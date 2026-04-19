@@ -77,11 +77,17 @@ def render(contract: ModuleEigengeneInput, ax=None, **_):
     ax.set_xticks(range(len(contract.sample_names)))
     ax.set_xticklabels(contract.sample_names, rotation=60, ha="right",
                        fontsize=5.6)
+    ax.tick_params(axis="x", pad=14)
     ax.set_yticks(range(len(contract.module_names)))
     ax.set_yticklabels(contract.module_names, fontsize=6.6)
-    ax.set_title(contract.title, fontsize=9.0, pad=14)
+    ax.set_title(
+        f"{contract.title}  ·  {len(contract.module_names)} modules × "
+        f"{len(contract.sample_names)} samples,  "
+        f"max |z| = {smart_fmt(float(np.abs(M).max()))}",
+        fontsize=8.4, pad=14,
+    )
 
-    # Condition strip above x-axis if available.
+    # Condition strip tucked between axis and rotated sample labels.
     if contract.sample_conditions:
         from matplotlib.patches import Patch
         unique = list(dict.fromkeys(contract.sample_conditions))
@@ -89,10 +95,10 @@ def render(contract: ModuleEigengeneInput, ax=None, **_):
                            for i, c in enumerate(unique)}
         for j, c in enumerate(contract.sample_conditions):
             ax.annotate(
-                "", xy=(j, -0.06), xytext=(j, -0.02),
+                "", xy=(j, -0.045), xytext=(j, -0.005),
                 xycoords=("data", "axes fraction"),
                 textcoords=("data", "axes fraction"),
-                arrowprops=dict(arrowstyle="-", lw=4.5,
+                arrowprops=dict(arrowstyle="-", lw=3.5,
                                 color=condition_color[c]),
             )
         proxies = [Patch(facecolor=condition_color[c], edgecolor="none", label=c)
@@ -105,14 +111,4 @@ def render(contract: ModuleEigengeneInput, ax=None, **_):
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.03, pad=0.04)
     cbar.set_label("eigengene (z)", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.2)
-
-    ax.text(0.01, -0.16,
-            f"N modules = {len(contract.module_names)}   "
-            f"N samples = {len(contract.sample_names)}   "
-            f"max |z| = {smart_fmt(float(np.abs(M).max()))}",
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.2, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
     return ax

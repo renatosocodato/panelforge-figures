@@ -105,18 +105,21 @@ def render(contract: PathwayBubbleInput, ax=None, **_):
     cbar.set_label("activity", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.2)
 
-    # Size legend.
+    # Size legend — rescaled so preview markers don't dwarf the axis footer.
     from matplotlib.lines import Line2D
     size_vals = [int(n.min()), int(np.median(n)), int(n.max())]
     proxies = [
         Line2D([0], [0], marker="o", color="none",
                markerfacecolor="#888888", markeredgecolor="white",
-               markersize=np.sqrt(v * 8), label=f"n={v}")
+               markersize=max(3.0, 0.55 * np.sqrt(v * 8)),
+               label=f"n={v}")
         for v in size_vals
     ]
-    ax.legend(handles=proxies, loc="lower right",
+    ax.legend(handles=proxies,
+              loc="upper center", bbox_to_anchor=(0.5, -0.20),
               fontsize=6.2, frameon=False, handlelength=1.0,
-              title="genes", title_fontsize=6.4)
+              ncol=len(size_vals), columnspacing=2.4,
+              title="genes in pathway", title_fontsize=6.4)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

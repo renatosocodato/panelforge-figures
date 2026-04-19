@@ -66,8 +66,8 @@ def render(contract: MultiVolcanoInput, ax=None, **_):
     nrows = (n_panels + ncols - 1) // ncols
 
     if ax is None:
-        fig = plt.figure(figsize=(5.4, 3.4))
-        gs = fig.add_gridspec(nrows, ncols, hspace=0.35, wspace=0.28)
+        fig = plt.figure(figsize=(5.4, 3.8))
+        gs = fig.add_gridspec(nrows, ncols, hspace=0.60, wspace=0.32)
         axes = [fig.add_subplot(gs[r, c])
                 for r in range(nrows) for c in range(ncols)
                 if r * ncols + c < n_panels]
@@ -75,7 +75,7 @@ def render(contract: MultiVolcanoInput, ax=None, **_):
         fig = ax.figure
         pos = ax.get_subplotspec()
         ax.remove()
-        sub = pos.subgridspec(nrows, ncols, hspace=0.35, wspace=0.28)
+        sub = pos.subgridspec(nrows, ncols, hspace=0.60, wspace=0.32)
         axes = [fig.add_subplot(sub[r, c])
                 for r in range(nrows) for c in range(ncols)
                 if r * ncols + c < n_panels]
@@ -109,7 +109,7 @@ def render(contract: MultiVolcanoInput, ax=None, **_):
         ai.axvline(-contract.log2fc_threshold, color="#888888",
                    lw=0.4, ls="--", zorder=1)
         ai.set_title(
-            f"{name}  ((up){int(up.sum())} (down){int(dn.sum())})",
+            f"{name}  (up={int(up.sum())}, down={int(dn.sum())})",
             fontsize=7.0, pad=2,
         )
         ai.set_xlabel(r"$\log_2$FC", fontsize=6.4)

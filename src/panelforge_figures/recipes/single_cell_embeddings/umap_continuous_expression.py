@@ -82,12 +82,11 @@ def render(contract: UMAPContinuousInput, ax=None, **_):
     cbar.set_label(f"{contract.gene_name} expression", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.2)
 
-    ax.text(0.01, 0.02,
-            f"N = {len(e)}   max expr = {smart_fmt(float(e.max()))}\n"
-            f"% cells > 0: {100 * (e > 0).mean():.0f}%",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.4, color="#444444",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
+    ax.figure.text(
+        0.5, 0.005,
+        f"N = {len(e)}   max expr = {smart_fmt(float(e.max()))}   "
+        f"% cells > 0: {100 * (e > 0).mean():.0f}%",
+        ha="center", va="bottom",
+        fontsize=6.2, color="#444444",
+    )
     return ax

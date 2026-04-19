@@ -6,9 +6,11 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-`v0.1.0` — all 20 modalities and 137 recipes landed. First stable release.
+`v1.0.0` — first stable release. All 20 modalities and 137 recipes
+landed, with a CI-enforced typography + figure-integrity contract
+and 736 passing tests.
 
-| | v0.1.0a0 | v0.1.0b1 | v0.1.0b2 | v0.1.0b3 | **v0.1.0** |
+| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | **v1.0.0** |
 |---|---|---|---|---|---|
 | Modalities | 3 | 7 | 11 | 15 | **20** ✓ |
 | Recipes | 18 | 49 | 80 | 107 | **137** ✓ |

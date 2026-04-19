@@ -6,6 +6,29 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-04-19
+
+**First stable release.** Promotes the 20-modality / 137-recipe
+milestone previously tracked as `0.1.0` to a proper `v1.0.0`, in line
+with the shipped reality:
+
+- Stable public API — `figures` CLI, modality/recipe registry, manifest
+  schema, Claude Code skill bootstrap. All have consumers.
+- CI-enforced contract — cross-modality figure-integrity QA, typography
+  stack, empty-data guard, style-drift ratchet.
+- 736 tests pass on Python 3.11 and 3.12. Ruff clean.
+- 4 pre-releases consumed (`0.1.0-alpha`, `-beta1`, `-beta2`, `-beta3`).
+
+No code changed between `0.1.0` (which was not tagged) and `1.0.0`.
+This entry formally renames the stable release; the `0.1.0` content is
+the `1.0.0` content. `pyproject.toml` classifier moves from Beta to
+Production/Stable to match the new version.
+
+Going forward, SemVer is honored strictly: breaking changes require a
+major bump. The v1.1 hydration plan (see
+`docs/hydration_coordinator.md`) is a pure additive expansion — no
+breaking changes — and lands under `v1.1.0-s01` through `v1.1.0-s20`.
+
 ## [0.1.0] — 2026-04-19
 
 Session 5 — the full roadmap lands. 5 new modalities, 30 new recipes,

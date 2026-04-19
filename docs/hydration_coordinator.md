@@ -13,13 +13,12 @@ recipes across 20 modalities, all tests green. v1.1 expands this to
 modalities, 10-15 for forward-looking ones — **without touching core
 architecture**.
 
-> **Note (captured 2026-04-19):** at the moment this plan was saved,
-> the repo was at `v0.1.0`, not `v1.0.0`. The plan's version labels
-> (`v1.1.0-s01` etc.) are forward-looking. Before kicking off Session
-> 01, decide whether to (a) retag the current stable release as
-> `v1.0.0` first, or (b) rename `v1.1` → `v0.2` throughout the briefs.
-> This decision only affects tag names, not the plan's content or
-> invariants.
+> **Version labels are literal.** When this plan was saved, the repo
+> was briefly labelled `v0.1.0`. On 2026-04-19 that stable release was
+> promoted to `v1.0.0` in line with the shipped reality (stable public
+> API, CI-enforced contract, consumers). All version labels in this
+> plan (`v1.1.0-s01` through `v1.1.0-s20`, final `v1.1.0`) are the
+> real tag names to use.
 
 ## Non-negotiables for v1.1
 

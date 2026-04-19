@@ -6,6 +6,58 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s02] — 2026-04-19
+
+Second session of the v1.1 hydration plan. Hydrates the
+`fret_biosensors` modality from 10 to 18 recipes.
+
+### Added
+
+- `fret_biosensors.donor_acceptor_scatter_linearity` — sensor-linearity
+  validation scatter with OLS fit, 95% CI band, y=x reference, and
+  slope / R² / intercept callout.
+- `fret_biosensors.fret_efficiency_vs_distance` — measured
+  (distance, efficiency) with SEM bars overlaid on the theoretical
+  `E = 1/(1 + (r/R_0)^6)` curve with fitted R_0 vertical line + halo label.
+- `fret_biosensors.paired_pre_post_stimulus` — per-cell connecting
+  lines between pre and post FRET ratios (colour-coded by direction),
+  mean ± SEM markers, Wilcoxon bracket and stars.
+- `fret_biosensors.biosensor_dose_response_matrix` — 2-D `RdBu_r`
+  heatmap of dose × time Δ-ratio with iso-contours at 0.1 / 0.2 / 0.3
+  and peak-response marker.
+- `fret_biosensors.kymograph_ratio_edge_to_center` — 1-D spatial ×
+  temporal kymograph along the cell radius, anchored at the
+  FRET-neutral ratio 1.0, with optional inward-propagating wavefront
+  overlay.
+- `fret_biosensors.ratio_map_with_segmentation_overlay` — ratio
+  heatmap with white cell-outline polygons and centroid labels;
+  mandatory 10 µm scale bar.
+- `fret_biosensors.windowed_roi_ratio_trajectory` — N per-window
+  ratio traces colour-coded by arc-length position
+  (viridis edge → interior), with position colorbar and a
+  windows-schematic inset.
+- `fret_biosensors.fret_vs_scalar_activity_regression` — FRET-vs-
+  orthogonal-scalar regression with per-condition colour, OLS +
+  95 % prediction band, Pearson r / p callout.
+
+### Infrastructure
+
+- No changes to `core/` — all eight recipes use new per-recipe
+  Pydantic contracts local to their own `.py` file.
+- No new dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet holds (≤ 20 distinct fontsize + linewidth literals).
+
+### Progress
+
+| | v1.1.0-s01 | **v1.1.0-s02** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 143 | **151** |
+| `fret_biosensors` | 10 | **18** |
+| Tests | 766 | **806** |
+
+
 ## [1.1.0-s01] — 2026-04-19
 
 First session of the v1.1 hydration plan (see

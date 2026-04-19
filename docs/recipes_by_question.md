@@ -36,6 +36,17 @@ figure that shows <X>" without naming a modality.
 - **Team × competency coverage** → [`grant_and_conceptual.team_expertise_matrix`](gallery/grant_and_conceptual/team_expertise_matrix.png)
 - **Problem → approach → payoff narrative** → [`grant_and_conceptual.conceptual_triptych`](gallery/grant_and_conceptual/conceptual_triptych.png)
 
+## FRET biosensors (v1.1.0-s02 additions)
+
+- **Does the donor/acceptor pair behave linearly?** → [`fret_biosensors.donor_acceptor_scatter_linearity`](gallery/fret_biosensors/donor_acceptor_scatter_linearity.png)
+- **What is the fitted Förster radius R₀?** → [`fret_biosensors.fret_efficiency_vs_distance`](gallery/fret_biosensors/fret_efficiency_vs_distance.png)
+- **Does each cell's ratio change pre-to-post stimulus?** → [`fret_biosensors.paired_pre_post_stimulus`](gallery/fret_biosensors/paired_pre_post_stimulus.png)
+- **How does the ratio change jointly vs dose and time?** → [`fret_biosensors.biosensor_dose_response_matrix`](gallery/fret_biosensors/biosensor_dose_response_matrix.png)
+- **How does the ratio propagate from cell edge to centre?** → [`fret_biosensors.kymograph_ratio_edge_to_center`](gallery/fret_biosensors/kymograph_ratio_edge_to_center.png)
+- **Which cell contributes which ratio region in the field?** → [`fret_biosensors.ratio_map_with_segmentation_overlay`](gallery/fret_biosensors/ratio_map_with_segmentation_overlay.png)
+- **How does the ratio evolve per sub-cellular window?** → [`fret_biosensors.windowed_roi_ratio_trajectory`](gallery/fret_biosensors/windowed_roi_ratio_trajectory.png)
+- **Does FRET correlate with an orthogonal activity readout?** → [`fret_biosensors.fret_vs_scalar_activity_regression`](gallery/fret_biosensors/fret_vs_scalar_activity_regression.png)
+
 ## Dynamical systems / landscapes (v1.1.0-s01 additions)
 
 - **How do sample trajectories relax onto the attractor landscape?** → [`rhogtpase_dynamics.phase_portrait_with_trajectories`](gallery/rhogtpase_dynamics/phase_portrait_with_trajectories.png)

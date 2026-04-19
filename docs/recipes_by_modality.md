@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 180 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11).
+v1.1 in progress: 187 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,25 @@ v1.1 in progress: 180 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s04 — mixed_effects_models hydration (+7, in progress)
+
+Expands mixed_effects_models from 9 to 16 recipes:
+
+- **sex_stratified_raincloud_with_coef_box** — raw-data raincloud per
+  sex × genotype with inline mixed-model β + CI + p callout.
+- **random_intercepts_vs_slopes_scatter** — joint (intercept, slope) per
+  cluster with 95 % shrinkage ellipse, OLS fit and r annotation.
+- **model_comparison_aic_bic_ladder** — Burnham-Anderson ΔAIC ladder
+  with paired BIC dots and the Δ=2/4/7 evidence strip.
+- **posterior_contrast_density** — stacked Δ-posteriors per contrast
+  with HDI, split fill at zero, P(Δ>0).
+- **partial_residuals_vs_predictor** — partial residuals per predictor
+  with LOESS per group and β̂·x fitted overlay.
+- **group_level_emmeans_with_pairwise** — response-scale emmeans per
+  group with Bonferroni-adjusted pairwise significance brackets.
+- **fixed_vs_random_effect_partition** — Nakagawa-Schielzeth marginal /
+  conditional / residual R² stacked bars with per-term hatch strip.
 
 ## v1.1.0-s03b — actin_microtubule_morphometry catch-up (+11, in progress)
 

@@ -395,3 +395,42 @@ def add_scale_bar(
 
 def close_figure(fig):
     plt.close(fig)
+
+
+# ─────────────────────────── empty-data guard ─────────────────────────────
+
+def empty_data_guard(
+    ax,
+    n_points: int,
+    *,
+    message: str = "no data",
+    min_points: int = 1,
+) -> bool:
+    """Short-circuit an axis when an upstream input is empty.
+
+    Recipes that accept variable-length collections (genes, cells, draws,
+    conditions) can call this at the top of ``render`` to avoid a crash
+    on degenerate inputs and still leave a visually intelligible panel.
+
+    Returns True when the axis was handled (caller should bail out of the
+    rest of its rendering) and False otherwise. A single muted message is
+    drawn in the centre of the axis, spines and ticks are hidden so the
+    placeholder reads as "intentionally empty" rather than "broken".
+
+    >>> if empty_data_guard(ax, len(values)):
+    ...     return ax
+    """
+    if n_points >= min_points:
+        return False
+
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for side in ("top", "right", "left", "bottom"):
+        ax.spines[side].set_visible(False)
+    ax.text(
+        0.5, 0.5, message,
+        transform=ax.transAxes,
+        ha="center", va="center",
+        fontsize=8.0, color="#999999", style="italic",
+    )
+    return True

@@ -1,4 +1,4 @@
-"""Core layer — style, palette, primitives, layout, export, contracts."""
+"""Core layer — style, palette, primitives, layout, export, contracts, QA."""
 
 from .aesthetic_base import AnnotationStyle, InsetConvention, ModalityAesthetic
 from .contract import RecipeContract, RecipeFamily, RecipeMetadata, register_recipe
@@ -11,6 +11,7 @@ from .primitives import (
     callout_box,
     colored_bracket,
     density_alpha,
+    empty_data_guard,
     fixed_point_marker,
     right_of_ci_label,
     saddle_node_star,
@@ -18,11 +19,27 @@ from .primitives import (
     smart_fmt,
     violin_with_ring_markers,
 )
-from .style import PF_FONT_STACK, apply_base_style, current_theme
+from .qa import (
+    FigureIntegrityIssue,
+    FigureIntegrityReport,
+    check_figure_integrity,
+)
+from .style import (
+    PF_FONT_SIZES,
+    PF_FONT_STACK,
+    PF_LINE_WIDTHS,
+    apply_base_style,
+    current_theme,
+    is_approved_font_family,
+)
 
 __all__ = [
     "FIGSIZE_PRESETS",
+    "FigureIntegrityIssue",
+    "FigureIntegrityReport",
+    "PF_FONT_SIZES",
     "PF_FONT_STACK",
+    "PF_LINE_WIDTHS",
     "AnnotationStyle",
     "InsetConvention",
     "ModalityAesthetic",
@@ -34,12 +51,15 @@ __all__ = [
     "apply_base_style",
     "bootstrap_ci",
     "callout_box",
+    "check_figure_integrity",
     "colored_bracket",
     "current_theme",
     "density_alpha",
+    "empty_data_guard",
     "export_figure",
     "fixed_point_marker",
     "get_palette",
+    "is_approved_font_family",
     "list_palettes",
     "make_figure",
     "make_panel_grid",

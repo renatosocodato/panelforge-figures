@@ -1,9 +1,16 @@
-"""Base typography, spine, tick, and export rcParams — applied once per session."""
+"""Base typography, spine, tick, and export rcParams — applied once per session.
+
+This module is the single source of truth for the cross-modality visual
+contract: the Helvetica-first font stack, the approved font-size and
+line-width scales that every recipe should honor, and the rcParams that
+enforce them globally.
+"""
 
 from __future__ import annotations
 
 import logging
 from contextlib import contextmanager
+from dataclasses import dataclass
 from typing import Any
 
 import matplotlib as mpl
@@ -24,6 +31,45 @@ PF_SPINE_COLOR = "#333333"
 PF_TEXT_COLOR = "#111111"
 PF_MUTED_COLOR = "#666666"
 PF_GRID_ALPHA = 0.0  # no grid by default
+
+
+@dataclass(frozen=True)
+class _FontSizes:
+    """Discrete font-size scale in points. Recipes should pull from here
+    rather than sprinkling free-form floats.
+
+    The scale is intentionally small: 7 named tiers span the range used
+    by every gallery panel, from tick labels up to figure-level titles.
+    """
+
+    tiny: float = 5.8          # inline tags, per-group N labels
+    callout: float = 6.4       # in-axes stat callouts, significance pills
+    tick: float = 7.5          # matches rcParams x/ytick.labelsize
+    legend: float = 7.5        # matches rcParams legend.fontsize
+    axis_label: float = 8.5    # matches rcParams axes.labelsize
+    panel_title: float = 9.5   # matches rcParams axes.titlesize
+    fig_title: float = 12.0    # matches rcParams figure.titlesize
+
+
+@dataclass(frozen=True)
+class _LineWidths:
+    """Line-width scale used across every plotted element."""
+
+    hairline: float = 0.4      # grid, faint reference markers
+    thin: float = 0.7          # spines, tick marks, threshold lines
+    regular: float = 1.1       # data curves, fits, CI outlines
+    heavy: float = 1.6         # emphasis curves (population means, fits)
+
+
+PF_FONT_SIZES = _FontSizes()
+PF_LINE_WIDTHS = _LineWidths()
+
+# Range used by the QA checker to flag recipes whose text is too tiny to read
+# or absurdly large (usually a units bug where points got confused with px).
+# The upper bound is generous because grant-summary tiles and section
+# headlines intentionally run up to ~30 pt.
+PF_MIN_FONTSIZE_PT: float = 5.0
+PF_MAX_FONTSIZE_PT: float = 32.0
 
 _CURRENT_THEME: str = "default"
 
@@ -120,3 +166,21 @@ def temporary_style(overrides: dict[str, Any]):
 
 def close_all_figures() -> None:
     plt.close("all")
+
+
+def is_approved_font_family(family: str | list[str] | tuple[str, ...]) -> bool:
+    """True if the matplotlib font spec resolves to the panelforge stack.
+
+    Accepts the string ``'sans-serif'`` (which defers to rcParams and
+    therefore picks up the stack), or any explicit name that is a member
+    of :data:`PF_FONT_STACK`. Tuples/lists are OK if their first element
+    passes the same test — matplotlib uses the first item as the primary
+    family.
+    """
+    if isinstance(family, str):
+        if family == "sans-serif":
+            return True
+        return family in PF_FONT_STACK
+    if isinstance(family, (list, tuple)) and family:
+        return is_approved_font_family(family[0])
+    return False

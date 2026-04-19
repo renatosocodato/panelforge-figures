@@ -151,16 +151,12 @@ def render(contract: CorrelationFDRInput, ax=None, **_):
     cbar.set_label("Pearson r", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.2)
 
-    # Significance legend below.
-    ax.figure.text(
-        0.5, 0.01,
-        "FDR-adjusted:  *** q < 0.001   ** q < 0.01   * q < 0.05",
-        ha="center", va="bottom", fontsize=6.2, color="#444444",
-    )
-
+    # Fold the FDR significance legend into the title — a figure-level
+    # footer at y=0.01 collided with the rotated x-tick labels.
     ax.set_title(
         f"{contract.title}  ·  "
-        f"{len(coloc_names)} × {len(shape_names)} correlations",
-        fontsize=8.6, pad=4,
+        f"{len(coloc_names)} × {len(shape_names)} correlations  ·  "
+        "FDR-adjusted: *** q < 0.001, ** q < 0.01, * q < 0.05",
+        fontsize=7.8, pad=4,
     )
     return ax

@@ -136,18 +136,18 @@ def render(contract: ShapeScatterMatrixInput, ax=None, **_):
                     ai.scatter(xi[m], yi[m], s=5, color=color, alpha=0.55,
                                edgecolor="none", zorder=3)
 
-    # Legend-proxy via figure text.
+    # Fold the per-condition legend into the suptitle — a figure-level
+    # footer at y=0.005 collided with the outer x-tick labels of the
+    # bottom SPLOM row.
     legend_parts = [
-        f"{name}  (n={int((cond == name).sum()) if cond is not None else yi.size})"
+        f"{name} (n={int((cond == name).sum()) if cond is not None else yi.size})"
         for name in uniques
     ]
-    fig.text(0.5, 0.005, "  ·  ".join(legend_parts),
-             ha="center", va="bottom", fontsize=6.2, color="#333333")
-
     fig.suptitle(
         f"{contract.title}  ·  {k} descriptors,  "
-        f"N = {len(contract.descriptors[names[0]])}",
-        fontsize=9.0, y=0.995,
+        f"N = {len(contract.descriptors[names[0]])}  ·  "
+        f"{'  ·  '.join(legend_parts)}",
+        fontsize=8.4, y=0.995,
     )
     _ = smart_fmt
     return axes[0][0]

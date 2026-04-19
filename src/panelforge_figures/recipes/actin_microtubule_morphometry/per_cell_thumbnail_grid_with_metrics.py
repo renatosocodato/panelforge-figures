@@ -93,16 +93,18 @@ def render(contract: CellThumbnailGridInput, ax=None, **_):
     ncols = 4
     nrows = (n + ncols - 1) // ncols
 
+    # Taller figure + roomier hspace so 2-line metric callouts fit under
+    # every thumbnail row, not just the last one.
     if ax is None:
-        fig = plt.figure(figsize=(5.6, 5.2))
-        gs = fig.add_gridspec(nrows, ncols, wspace=0.10, hspace=0.22)
+        fig = plt.figure(figsize=(5.6, 6.0))
+        gs = fig.add_gridspec(nrows, ncols, wspace=0.10, hspace=0.42)
         axes = [fig.add_subplot(gs[r, c])
                 for r in range(nrows) for c in range(ncols)]
     else:
         fig = ax.figure
         pos = ax.get_subplotspec()
         ax.remove()
-        sub = pos.subgridspec(nrows, ncols, wspace=0.10, hspace=0.22)
+        sub = pos.subgridspec(nrows, ncols, wspace=0.10, hspace=0.42)
         axes = [fig.add_subplot(sub[r, c])
                 for r in range(nrows) for c in range(ncols)]
     AESTHETIC.apply_to_fig(fig)
@@ -119,31 +121,42 @@ def render(contract: CellThumbnailGridInput, ax=None, **_):
         ai.set_yticks([])
         for side in ("top", "right", "left", "bottom"):
             ai.spines[side].set_visible(False)
-        # Condition label (upper-left) + metric callout (under thumbnail).
+        # Condition label (upper-left inside thumbnail).
         if contract.cell_condition is not None and k < len(contract.cell_condition):
             ai.text(0.04, 0.96, contract.cell_condition[k],
                     transform=ai.transAxes, ha="left", va="top",
-                    fontsize=6.0, color="white",
-                    bbox=dict(boxstyle="round,pad=0.14", fc="#333333",
+                    fontsize=5.8, color="white",
+                    bbox=dict(boxstyle="round,pad=0.12", fc="#333333",
                               ec="none", alpha=0.8))
-        ai.text(0.5, -0.06, contract.cell_metric_labels[k],
-                transform=ai.transAxes, ha="center", va="top",
-                fontsize=5.8, color="#222222")
 
-        # Scale bar on the first column of each row.
+        # Per-cell metric callout: split comma-separated parts onto
+        # separate lines so long labels don't run into the neighbouring
+        # thumbnail's callout at narrow cell widths.
+        label = contract.cell_metric_labels[k]
+        if "," in label:
+            label = label.replace(", ", "\n")
+        ai.text(0.5, -0.04, label,
+                transform=ai.transAxes, ha="center", va="top",
+                fontsize=5.6, color="#222222", linespacing=1.2)
+
+        # Scale bar on the first column of each row — drawn inside the
+        # image at the bottom-left in image-pixel space, with the length
+        # label placed *below* the image in axes fraction so it never
+        # overlays the cell.
         col = k % ncols
         if col == 0:
             H, W = img.shape
             px = contract.pixel_size_um
             bar_len_px = contract.scale_bar_um / max(px, 1e-6)
-            ai.plot([W * 0.08, W * 0.08 + bar_len_px],
-                    [H * 0.92, H * 0.92],
+            ai.plot([W * 0.06, W * 0.06 + bar_len_px],
+                    [H * 0.94, H * 0.94],
                     color="white", lw=2.2, solid_capstyle="butt", zorder=5)
-            ai.text(W * 0.08 + bar_len_px / 2, H * 0.88,
+            # Small "μm" tag to the right of the bar inside the image.
+            ai.text(W * 0.06 + bar_len_px + W * 0.04, H * 0.94,
                     rf"{smart_fmt(contract.scale_bar_um)} $\mu$m",
-                    ha="center", va="top", fontsize=5.6, color="white",
+                    ha="left", va="center", fontsize=5.6, color="white",
                     bbox=dict(boxstyle="round,pad=0.10", fc="#333333",
-                              ec="none", alpha=0.7))
+                              ec="none", alpha=0.7), zorder=6)
 
     fig.suptitle(
         f"{contract.title}  ·  {n} cells",

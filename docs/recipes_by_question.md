@@ -36,6 +36,20 @@ figure that shows <X>" without naming a modality.
 - **Team × competency coverage** → [`grant_and_conceptual.team_expertise_matrix`](gallery/grant_and_conceptual/team_expertise_matrix.png)
 - **Problem → approach → payoff narrative** → [`grant_and_conceptual.conceptual_triptych`](gallery/grant_and_conceptual/conceptual_triptych.png)
 
+## Cytoskeleton morphometry catch-up (v1.1.0-s03b additions)
+
+- **How does total process length distribute by sex × genotype?** → [`actin_microtubule_morphometry.process_length_distribution_by_sex`](gallery/actin_microtubule_morphometry/process_length_distribution_by_sex.png)
+- **Does CV of velocity show a sex × genotype interaction?** → [`actin_microtubule_morphometry.sex_stratified_cvvelocity`](gallery/actin_microtubule_morphometry/sex_stratified_cvvelocity.png)
+- **How do 6-8 topology complexity metrics compare across conditions?** → [`actin_microtubule_morphometry.skeleton_complexity_radar`](gallery/actin_microtubule_morphometry/skeleton_complexity_radar.png)
+- **How does the branching hierarchy (depth 0-4) split by condition?** → [`actin_microtubule_morphometry.branching_topology_sunburst`](gallery/actin_microtubule_morphometry/branching_topology_sunburst.png)
+- **What is the distribution of per-segment persistence length with CI?** → [`actin_microtubule_morphometry.persistence_length_by_segment`](gallery/actin_microtubule_morphometry/persistence_length_by_segment.png)
+- **Where do actin orientations align with MT density peaks?** → [`actin_microtubule_morphometry.actin_microtubule_crosstalk_quiver`](gallery/actin_microtubule_morphometry/actin_microtubule_crosstalk_quiver.png)
+- **Where along the edge are protrusions vs retractions over time?** → [`actin_microtubule_morphometry.protrusion_retraction_kymograph`](gallery/actin_microtubule_morphometry/protrusion_retraction_kymograph.png)
+- **Where do cells point their cytoskeletal polarity vectors in a field?** → [`actin_microtubule_morphometry.cytoskeleton_polarity_vectorfield`](gallery/actin_microtubule_morphometry/cytoskeleton_polarity_vectorfield.png)
+- **What do Airyscan raw + segmentation pairs look like side-by-side?** → [`actin_microtubule_morphometry.airyscan_segmentation_mosaic`](gallery/actin_microtubule_morphometry/airyscan_segmentation_mosaic.png)
+- **How do conditions cluster in linear PCA of shape descriptors?** → [`actin_microtubule_morphometry.shape_pca_morphospace`](gallery/actin_microtubule_morphometry/shape_pca_morphospace.png)
+- **How do M1 / M2 / Pearson / Manders / ICQ coefficients compare by condition?** → [`actin_microtubule_morphometry.colocalization_coefficient_matrix`](gallery/actin_microtubule_morphometry/colocalization_coefficient_matrix.png)
+
 ## Cytoskeleton morphometry (v1.1.0-s03 additions)
 
 - **How does per-cell branch count shift across conditions?** → [`actin_microtubule_morphometry.branch_point_count_raincloud`](gallery/actin_microtubule_morphometry/branch_point_count_raincloud.png)

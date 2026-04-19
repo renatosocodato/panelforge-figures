@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 169 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18).
+v1.1 in progress: 180 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,24 @@ v1.1 in progress: 169 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s03b — actin_microtubule_morphometry catch-up (+11, in progress)
+
+Catch-up for the 11 recipes the plan's idealised v1.0 spec assumed
+existed (surfaced by Path 2 reconciliation in s03). Brings the
+modality from 24 to 35 recipes (5 over the 30-roster target; user
+approved):
+
+- **Sub-family A** (+2): `process_length_distribution_by_sex`,
+  `sex_stratified_cvvelocity`.
+- **Sub-family B** (+3): `skeleton_complexity_radar`,
+  `branching_topology_sunburst`, `persistence_length_by_segment`.
+- **Sub-family C** (+3): `actin_microtubule_crosstalk_quiver`,
+  `protrusion_retraction_kymograph`,
+  `cytoskeleton_polarity_vectorfield`.
+- **Sub-family D** (+1): `airyscan_segmentation_mosaic`.
+- **Sub-family E** (+1): `shape_pca_morphospace`.
+- **Sub-family F** (+1): `colocalization_coefficient_matrix`.
 
 ## v1.1.0-s03 — actin_microtubule_morphometry hydration (+18, in progress)
 

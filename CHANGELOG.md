@@ -6,6 +6,76 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s03b] — 2026-04-19
+
+Catch-up session for `actin_microtubule_morphometry` — lands the 11
+recipes the plan's idealised v1.0 spec assumed existed but were
+absent from real v1.0 (surfaced by the Path 2 reconciliation in s03).
+Brings the modality from 24 to 35 recipes. The 5-recipe overshoot
+past the 30-roster target comes from 4 actual-v1.0 recipes not in the
+user's original roster + `persistence_length_by_segment` overlapping
+`persistence_length_fit`. User approved "land all 11".
+
+### Added
+
+- `actin_microtubule_morphometry.process_length_distribution_by_sex` —
+  total per-cell process length by sex × genotype, split violin with
+  per-group medians and Ns using the `sex_x_genotype` palette.
+- `actin_microtubule_morphometry.sex_stratified_cvvelocity` — CV of
+  instantaneous velocity per cell by sex × genotype with
+  sex × genotype interaction bracket + p-value.
+- `actin_microtubule_morphometry.skeleton_complexity_radar` —
+  per-condition polar polygon over 6-8 normalised topology metrics
+  with threshold reference polygon.
+- `actin_microtubule_morphometry.branching_topology_sunburst` —
+  nested-ring donut of branching-depth hierarchy by condition.
+- `actin_microtubule_morphometry.persistence_length_by_segment` —
+  per-segment Lp forest with bootstrap 95% CI, grand-mean reference.
+- `actin_microtubule_morphometry.actin_microtubule_crosstalk_quiver`
+  — MT density pcolormesh with actin-direction quiver overlay.
+- `actin_microtubule_morphometry.protrusion_retraction_kymograph` —
+  signed edge-velocity kymograph (arc × time) RdBu_r anchored at 0
+  with v=0 iso-contour and time-averaged strip inset.
+- `actin_microtubule_morphometry.cytoskeleton_polarity_vectorfield` —
+  multi-cell field with per-cell centroid + polarity arrows,
+  per-condition mean resultant length R.
+- `actin_microtubule_morphometry.airyscan_segmentation_mosaic` —
+  2-column (raw / segmentation) grid per cell with mandatory scale
+  bars on the raw panel.
+- `actin_microtubule_morphometry.shape_pca_morphospace` — PCA scatter
+  with per-condition convex hulls and biplot loading arrows;
+  paired story with `shape_umap_by_condition`.
+- `actin_microtubule_morphometry.colocalization_coefficient_matrix` —
+  condition × coefficient heatmap with mean ± SEM annotations.
+
+### Infrastructure
+
+- No changes to `core/` — all 11 recipes use new per-recipe Pydantic
+  contracts.
+- No new dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New visual grammars (sunburst,
+  biplot arrows, quiver-on-pcolormesh, multi-cell polarity field)
+  live inline within their recipes.
+- Style-drift ratchet holds.
+
+### Visual-QA polish (two panels)
+
+- `branching_topology_sunburst`: widened depth-legend swatch gaps
+  + fontsize so the d=0…d=4 labels no longer run together.
+- `cytoskeleton_polarity_vectorfield`: moved R-summary pill from
+  lower-left to upper-left so it clears the bottom-left scale bar.
+
+### Progress
+
+| | v1.1.0-s03 | **v1.1.0-s03b** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 169 | **180** |
+| `actin_microtubule_morphometry` | 24 | **35** |
+| Tests | 896 | **951** |
+
+
 ## [1.1.0-s03] — 2026-04-19
 
 Third session of the v1.1 hydration plan. Hydrates the

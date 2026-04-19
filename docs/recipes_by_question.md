@@ -36,6 +36,27 @@ figure that shows <X>" without naming a modality.
 - **Team × competency coverage** → [`grant_and_conceptual.team_expertise_matrix`](gallery/grant_and_conceptual/team_expertise_matrix.png)
 - **Problem → approach → payoff narrative** → [`grant_and_conceptual.conceptual_triptych`](gallery/grant_and_conceptual/conceptual_triptych.png)
 
+## Cytoskeleton morphometry (v1.1.0-s03 additions)
+
+- **How does per-cell branch count shift across conditions?** → [`actin_microtubule_morphometry.branch_point_count_raincloud`](gallery/actin_microtubule_morphometry/branch_point_count_raincloud.png)
+- **How do primary vs higher-order terminal-tip counts distribute?** → [`actin_microtubule_morphometry.process_end_count_violin`](gallery/actin_microtubule_morphometry/process_end_count_violin.png)
+- **How does soma area distribute per condition?** → [`actin_microtubule_morphometry.cell_body_area_distribution`](gallery/actin_microtubule_morphometry/cell_body_area_distribution.png)
+- **Where do cells sit in the (sphericity, elongation) plane?** → [`actin_microtubule_morphometry.sphericity_vs_elongation_scatter`](gallery/actin_microtubule_morphometry/sphericity_vs_elongation_scatter.png)
+- **What is the distribution of mother-daughter branch angles?** → [`actin_microtubule_morphometry.branch_angle_distribution`](gallery/actin_microtubule_morphometry/branch_angle_distribution.png)
+- **What is the linear/branched/looped simplex partition per condition?** → [`actin_microtubule_morphometry.topology_ternary_simplex`](gallery/actin_microtubule_morphometry/topology_ternary_simplex.png)
+- **How far along a perimeter does edge velocity stay correlated?** → [`actin_microtubule_morphometry.edge_velocity_spatial_correlation`](gallery/actin_microtubule_morphometry/edge_velocity_spatial_correlation.png)
+- **Do mitochondria align with the cytoskeletal axis?** → [`actin_microtubule_morphometry.mitochondrial_axis_alignment`](gallery/actin_microtubule_morphometry/mitochondrial_axis_alignment.png)
+- **What do individual cells look like alongside their metrics?** → [`actin_microtubule_morphometry.per_cell_thumbnail_grid_with_metrics`](gallery/actin_microtubule_morphometry/per_cell_thumbnail_grid_with_metrics.png)
+- **What are the min / median / max exemplars per condition?** → [`actin_microtubule_morphometry.exemplar_extremes_panel`](gallery/actin_microtubule_morphometry/exemplar_extremes_panel.png)
+- **What is the average cell shape per condition?** → [`actin_microtubule_morphometry.condition_average_cell_composite`](gallery/actin_microtubule_morphometry/condition_average_cell_composite.png)
+- **How do conditions cluster in non-linear shape space?** → [`actin_microtubule_morphometry.shape_umap_by_condition`](gallery/actin_microtubule_morphometry/shape_umap_by_condition.png)
+- **How do condition centroids move through shape space over time?** → [`actin_microtubule_morphometry.morphospace_trajectory_by_time`](gallery/actin_microtubule_morphometry/morphospace_trajectory_by_time.png)
+- **How do 5-6 shape descriptors pairwise co-vary?** → [`actin_microtubule_morphometry.shape_descriptor_scatter_matrix`](gallery/actin_microtubule_morphometry/shape_descriptor_scatter_matrix.png)
+- **What is the local actin-to-MT intensity ratio?** → [`actin_microtubule_morphometry.actin_mt_ratio_spatial_map`](gallery/actin_microtubule_morphometry/actin_mt_ratio_spatial_map.png)
+- **How do channel intensities vary radially from centroid?** → [`actin_microtubule_morphometry.intensity_radial_profile`](gallery/actin_microtubule_morphometry/intensity_radial_profile.png)
+- **Is a marker enriched at tips relative to shafts?** → [`actin_microtubule_morphometry.tip_enrichment_vs_shaft_scatter`](gallery/actin_microtubule_morphometry/tip_enrichment_vs_shaft_scatter.png)
+- **Do colocalization metrics correlate with shape metrics (FDR-corrected)?** → [`actin_microtubule_morphometry.colocalization_vs_morphology_correlation`](gallery/actin_microtubule_morphometry/colocalization_vs_morphology_correlation.png)
+
 ## FRET biosensors (v1.1.0-s02 additions)
 
 - **Does the donor/acceptor pair behave linearly?** → [`fret_biosensors.donor_acceptor_scatter_linearity`](gallery/fret_biosensors/donor_acceptor_scatter_linearity.png)

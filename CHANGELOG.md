@@ -6,6 +6,118 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s03] — 2026-04-19
+
+Third session of the v1.1 hydration plan. Hydrates the
+`actin_microtubule_morphometry` modality from 6 to 24 recipes (Path 2
+— the 9+ "catch-up" v1.0 recipes the idealised plan assumed existed
+are deferred to session s03b). Organised into six functional
+sub-families.
+
+### Added
+
+**Sub-family A — per-cell morphometric distributions (+4):**
+
+- `actin_microtubule_morphometry.branch_point_count_raincloud` —
+  per-cell branch-point count raincloud with animal-level ring markers.
+- `actin_microtubule_morphometry.process_end_count_violin` — split
+  violin by primary / higher-order end type per condition.
+- `actin_microtubule_morphometry.cell_body_area_distribution` — soma
+  area violin with median callouts and N per condition.
+- `actin_microtubule_morphometry.sphericity_vs_elongation_scatter` —
+  hero shape-plane scatter with marginal densities, per-condition
+  convex hulls, OLS fit.
+
+**Sub-family B — skeleton / network topology (+2):**
+
+- `actin_microtubule_morphometry.branch_angle_distribution` — stacked
+  KDE ridges by condition with Arp2/3 70° reference.
+- `actin_microtubule_morphometry.topology_ternary_simplex` —
+  (linear, branched, looped) barycentric scatter with per-condition
+  convex hulls.
+
+**Sub-family C — spatial / kinematic (+2):**
+
+- `actin_microtubule_morphometry.edge_velocity_spatial_correlation` —
+  C(s) along perimeter with exponential decay-length fit.
+- `actin_microtubule_morphometry.mitochondrial_axis_alignment` —
+  polar rose of Δ-angle vs filament axis with order-parameter S.
+
+**Sub-family D — thumbnails / mosaics (+3):**
+
+- `actin_microtubule_morphometry.per_cell_thumbnail_grid_with_metrics`
+  — 4×4 grid of segmented cells with 2-line metric callouts and
+  first-column scale bars.
+- `actin_microtubule_morphometry.exemplar_extremes_panel` —
+  (condition × min / median / max) tile grid with metric annotations.
+- `actin_microtubule_morphometry.condition_average_cell_composite` —
+  per-condition shape hulls overlaid on a 2-D hist2d variability
+  cloud.
+
+**Sub-family E — dimensionality reduction (+3):**
+
+- `actin_microtubule_morphometry.shape_umap_by_condition` — scatter
+  with per-condition KDE density contours.
+- `actin_microtubule_morphometry.morphospace_trajectory_by_time` —
+  per-condition centroid paths with arrowheads and net-displacement
+  callouts.
+- `actin_microtubule_morphometry.shape_descriptor_scatter_matrix` —
+  full SPLOM with histogram diagonals and per-condition colouring.
+
+**Sub-family F — colocalization / intensity (+4):**
+
+- `actin_microtubule_morphometry.actin_mt_ratio_spatial_map` — 2-D
+  `RdBu_r` anchored at 1.0 with cell outline and scale bar.
+- `actin_microtubule_morphometry.intensity_radial_profile` — per-
+  channel mean ± SEM vs radius with peak callout.
+- `actin_microtubule_morphometry.tip_enrichment_vs_shaft_scatter` —
+  tip vs shaft scatter with y=x reference, Pearson r, Wilcoxon p.
+- `actin_microtubule_morphometry.colocalization_vs_morphology_correlation`
+  — correlation heatmap with BH-FDR significance stars.
+
+### Infrastructure
+
+- No changes to `core/` — all 18 recipes use new per-recipe Pydantic
+  contracts local to their `.py` file.
+- `_aesthetic.py` unchanged. Four new visual grammars (ternary simplex,
+  thumbnail grid, UMAP density contours, radial profile) live inline
+  within their recipes so `AESTHETIC` stays stable.
+- No new dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet holds: snapped `fontsize=5.4` → `5.6` and
+  `lw=1.6` → `1.5` to avoid new distinct values.
+
+### Visual-QA polish (three panels)
+
+- `per_cell_thumbnail_grid_with_metrics`: 2-line metric callouts,
+  scale bars repositioned cleanly, taller figure + wider row spacing
+  so all rows show the full annotation.
+- `colocalization_vs_morphology_correlation`: FDR legend folded into
+  title (was a figure footer colliding with rotated x-ticks).
+- `shape_descriptor_scatter_matrix`: per-condition legend folded into
+  suptitle (was a figure footer colliding with outer x-ticks).
+
+### Deferred to session s03b
+
+Nine+ "catch-up" recipes the plan's idealised v1.0 spec assumed
+existed will land as a follow-up session between s03 and s04:
+`process_length_distribution_by_sex`, `sex_stratified_cvvelocity`,
+`skeleton_complexity_radar`, `branching_topology_sunburst`,
+`persistence_length_by_segment`, `actin_microtubule_crosstalk_quiver`,
+`protrusion_retraction_kymograph`, `cytoskeleton_polarity_vectorfield`,
+`airyscan_segmentation_mosaic`, `shape_pca_morphospace`,
+`colocalization_coefficient_matrix`.
+
+### Progress
+
+| | v1.1.0-s02 | **v1.1.0-s03** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 151 | **169** |
+| `actin_microtubule_morphometry` | 6 | **24** |
+| Tests | 806 | **896** |
+
+
 ## [1.1.0-s02] — 2026-04-19
 
 Second session of the v1.1 hydration plan. Hydrates the

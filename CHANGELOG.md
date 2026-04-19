@@ -6,6 +6,53 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s01] — 2026-04-19
+
+First session of the v1.1 hydration plan (see
+`docs/hydration_coordinator.md`). Hydrates the `rhogtpase_dynamics`
+modality from 12 to 18 recipes.
+
+### Added
+
+- `rhogtpase_dynamics.phase_portrait_with_trajectories` — streamplot
+  backdrop + time-colored integrated trajectories from multiple ICs,
+  stability-coded fixed points.
+- `rhogtpase_dynamics.codim2_bifurcation_map` — two-parameter (µ, ν)
+  plane with saddle-node / Hopf / pitchfork curves and codim-2 points
+  (cusp, Bogdanov-Takens); shaded regime regions.
+- `rhogtpase_dynamics.potential_landscape_waddington_3d` — isometric
+  3-D Waddington surface with gradient-descent sample trajectories
+  sliding into wells; 2-D legend inset clarifies the start-ball /
+  descent-path convention.
+- `rhogtpase_dynamics.excitability_threshold_diagram` —
+  FitzHugh-Nagumo in the excitable regime with rest point, threshold
+  curve, and paired sub/super-threshold trajectories.
+- `rhogtpase_dynamics.slow_manifold_projection` — geometric collapse
+  of fast trajectories onto the slow manifold in phase space (the
+  geometric counterpart to `quasi_steady_state_reduction`'s
+  time-series comparison).
+- `rhogtpase_dynamics.poincare_first_return_map` — 1-D discrete
+  return map on a Poincaré section with identity diagonal, cobweb
+  iteration, and slope-at-FP diagnostic.
+
+### Infrastructure
+
+- No changes to `core/` — all six recipes use new per-recipe Pydantic
+  contracts local to their own `.py` file.
+- No new dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet holds at ≤ 20 distinct linewidths.
+
+### Progress
+
+| | v1.0.0 | **v1.1.0-s01** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 137 | **143** |
+| rhogtpase_dynamics | 12 | **18** |
+| Tests | 736 | **766** |
+
+
 ## [1.0.0] — 2026-04-19
 
 **First stable release.** Promotes the 20-modality / 137-recipe

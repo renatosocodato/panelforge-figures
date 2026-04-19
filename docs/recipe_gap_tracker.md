@@ -9,14 +9,14 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 137 | ≥320 |
-| Sessions complete | 0 | 0 | 20 |
+| Total recipes | 137 | 143 | ≥320 |
+| Sessions complete | 0 | 1 | 20 |
 
 ## Per-session status
 
 | Session | Modality | Status | PR | Merged tag | Recipes added | Aesthetic regressions | Notes |
 |---|---|---|---|---|---|---|---|
-| 01 | `rhogtpase_dynamics`        | pending | — | — | — | — | — |
+| 01 | `rhogtpase_dynamics`        | merged  | — | `v1.1.0-s01` | 6 (12→18) | none | Waddington family retagged heatmap→conceptual; lw=2.4→2.2 to hold ratchet |
 | 02 | `fret_biosensors`            | pending | — | — | — | — | — |
 | 03 | `actin_microtubule_morphometry` | pending | — | — | — | — | — |
 | 04 | `mixed_effects_models`       | pending | — | — | — | — | — |

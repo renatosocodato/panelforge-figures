@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 151 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8).
+v1.1 in progress: 169 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,28 @@ v1.1 in progress: 151 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s03 — actin_microtubule_morphometry hydration (+18, in progress)
+
+Expands actin_microtubule_morphometry from 6 to 24 recipes (Path 2),
+organised into six functional sub-families:
+
+- **Sub-family A — distributions** (+4): `branch_point_count_raincloud`,
+  `process_end_count_violin`, `cell_body_area_distribution`,
+  `sphericity_vs_elongation_scatter`.
+- **Sub-family B — topology** (+2): `branch_angle_distribution`,
+  `topology_ternary_simplex`.
+- **Sub-family C — spatial / kinematic** (+2):
+  `edge_velocity_spatial_correlation`, `mitochondrial_axis_alignment`.
+- **Sub-family D — thumbnails / mosaics** (+3):
+  `per_cell_thumbnail_grid_with_metrics`, `exemplar_extremes_panel`,
+  `condition_average_cell_composite`.
+- **Sub-family E — dim reduction** (+3): `shape_umap_by_condition`,
+  `morphospace_trajectory_by_time`, `shape_descriptor_scatter_matrix`.
+- **Sub-family F — colocalization / intensity** (+4):
+  `actin_mt_ratio_spatial_map`, `intensity_radial_profile`,
+  `tip_enrichment_vs_shaft_scatter`,
+  `colocalization_vs_morphology_correlation`.
 
 ## v1.1.0-s02 — fret_biosensors hydration (+8, in progress)
 

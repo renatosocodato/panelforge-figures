@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1.0-s01 in progress: rhogtpase_dynamics 12 → 18 (+6).
+v1.1 in progress: 151 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,27 @@ v1.1.0-s01 in progress: rhogtpase_dynamics 12 → 18 (+6).
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s02 — fret_biosensors hydration (+8, in progress)
+
+Expands fret_biosensors from 10 to 18 recipes:
+
+- **donor_acceptor_scatter_linearity** — sensor-linearity validation
+  scatter with OLS fit, 95% CI, slope / R² callout.
+- **fret_efficiency_vs_distance** — Förster-distance / physics
+  calibration with fitted R₀.
+- **paired_pre_post_stimulus** — per-cell pre/post connecting lines
+  with Wilcoxon statistics.
+- **biosensor_dose_response_matrix** — dose × time 2-D heatmap with
+  iso-contours and peak-response marker.
+- **kymograph_ratio_edge_to_center** — 1-D spatial × temporal
+  kymograph along the cell radius.
+- **ratio_map_with_segmentation_overlay** — ratio heatmap with cell
+  outlines overlaid.
+- **windowed_roi_ratio_trajectory** — per-window sub-cellular
+  trajectories colour-coded by arc-length position.
+- **fret_vs_scalar_activity_regression** — cross-method FRET-vs-
+  orthogonal-scalar regression.
 
 ## v1.1.0-s01 — rhogtpase_dynamics hydration (+6, in progress)
 

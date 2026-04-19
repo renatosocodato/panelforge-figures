@@ -10,6 +10,7 @@ from ...core import (
     RecipeFamily,
     RecipeMetadata,
     density_alpha,
+    empty_data_guard,
     get_palette,
     register_recipe,
     smart_fmt,
@@ -87,6 +88,8 @@ def render(contract: VolcanoInput, ax=None, **_):
         import matplotlib.pyplot as plt
         _, ax = plt.subplots(figsize=(4.8, 3.6))
     AESTHETIC.apply_to_ax(ax)
+    if empty_data_guard(ax, len(contract.log2fc), message="no genes"):
+        return ax
     palette = get_palette(AESTHETIC.primary_palette)
 
     fc = np.array(contract.log2fc, dtype=float)

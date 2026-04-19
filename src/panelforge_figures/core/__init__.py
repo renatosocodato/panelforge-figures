@@ -17,6 +17,7 @@ from .primitives import (
     saddle_node_star,
     shaded_regime,
     smart_fmt,
+    smart_place_callout,
     violin_with_ring_markers,
 )
 from .qa import (
@@ -70,5 +71,6 @@ __all__ = [
     "saddle_node_star",
     "shaded_regime",
     "smart_fmt",
+    "smart_place_callout",
     "violin_with_ring_markers",
 ]

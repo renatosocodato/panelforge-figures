@@ -90,7 +90,7 @@ def render(contract: MissingPatternInput, ax=None, **_):
             )
             if P[i, j] == 0:
                 ax.text(j + 0.45, -i + 0.45, "·", ha="center", va="center",
-                        color="#AAAAAA", fontsize=9)
+                        color="#AAAAAA", fontsize=9.0)
 
     # Right margin: row counts per pattern.
     for i, c in enumerate(counts):

@@ -9,6 +9,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    empty_data_guard,
     register_recipe,
     smart_fmt,
 )
@@ -66,6 +67,8 @@ def render(contract: PathwayBubbleInput, ax=None, **_):
         import matplotlib.pyplot as plt
         _, ax = plt.subplots(figsize=(5.0, 3.6))
     AESTHETIC.apply_to_ax(ax)
+    if empty_data_guard(ax, len(contract.pathways), message="no pathways"):
+        return ax
 
     act = np.array(contract.activity_score, dtype=float)
     n = np.array(contract.n_members, dtype=float)

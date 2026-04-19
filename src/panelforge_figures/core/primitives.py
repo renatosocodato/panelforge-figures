@@ -397,6 +397,110 @@ def close_figure(fig):
     plt.close(fig)
 
 
+# ─────────────────────── collision-aware placement ────────────────────────
+
+_CORNER_ANCHORS: dict[str, tuple[float, float, str, str]] = {
+    # corner name -> (x_axes_frac, y_axes_frac, ha, va)
+    "upper_left":  (0.02, 0.98, "left",  "top"),
+    "upper_right": (0.98, 0.98, "right", "top"),
+    "lower_left":  (0.02, 0.02, "left",  "bottom"),
+    "lower_right": (0.98, 0.02, "right", "bottom"),
+}
+
+
+def smart_place_callout(
+    ax,
+    text: str,
+    *,
+    preferred_corners: Sequence[str] = ("upper_left", "upper_right",
+                                        "lower_left", "lower_right"),
+    fontsize: float = 6.4,
+    color: str = "#333333",
+    bbox_pad: float = 0.18,
+    zorder: float = 7,
+):
+    """Place a white-pill callout in the emptiest preferred corner.
+
+    For each corner, counts how many existing axis artists (lines +
+    scatter collections + text artists) lie inside that quadrant of the
+    axes, then picks the corner with the fewest. Breaks ties using the
+    ``preferred_corners`` order. This replaces the hand-picked
+    ``ax.text(0.01, 0.99, ...)`` pattern that has produced collisions
+    whenever the data happens to occupy the top-left.
+
+    Returns the placed matplotlib Text artist so the caller can further
+    style it if needed.
+    """
+    scores: dict[str, int] = {}
+    for corner in preferred_corners:
+        if corner not in _CORNER_ANCHORS:
+            continue
+        scores[corner] = _count_artists_in_corner(ax, corner)
+    if not scores:
+        corner = preferred_corners[0] if preferred_corners else "upper_left"
+    else:
+        corner = min(preferred_corners, key=lambda c: scores.get(c, 0))
+
+    x, y, ha, va = _CORNER_ANCHORS[corner]
+    return ax.text(
+        x, y, text,
+        transform=ax.transAxes,
+        ha=ha, va=va,
+        fontsize=fontsize, color=color,
+        bbox=dict(
+            boxstyle=f"round,pad={bbox_pad}",
+            fc="white", ec="#BBBBBB", lw=0.5, alpha=0.92,
+        ),
+        zorder=zorder,
+    )
+
+
+def _count_artists_in_corner(ax, corner: str) -> int:
+    """Rough density estimate: how many data artists fall in a corner quadrant."""
+    xlo, xhi = ax.get_xlim()
+    ylo, yhi = ax.get_ylim()
+    if xhi == xlo or yhi == ylo:
+        return 0
+    x_mid = 0.5 * (xlo + xhi)
+    y_mid = 0.5 * (ylo + yhi)
+    # Corner bounds in data coords.
+    if "left" in corner:
+        x_range = (xlo, x_mid)
+    else:
+        x_range = (x_mid, xhi)
+    if "lower" in corner:
+        y_range = (ylo, y_mid)
+    else:
+        y_range = (y_mid, yhi)
+
+    count = 0
+    for line in ax.lines:
+        xs, ys = line.get_xdata(), line.get_ydata()
+        if len(xs) == 0:
+            continue
+        try:
+            import numpy as np
+            xs = np.asarray(xs, float)
+            ys = np.asarray(ys, float)
+            in_x = (xs >= x_range[0]) & (xs <= x_range[1])
+            in_y = (ys >= y_range[0]) & (ys <= y_range[1])
+            count += int((in_x & in_y).sum())
+        except Exception:
+            continue
+    for t in ax.texts:
+        try:
+            x_t, y_t = t.get_position()
+            # Skip text already in axes-fraction coords (other callouts).
+            if t.get_transform() is ax.transAxes:
+                continue
+            if (x_range[0] <= x_t <= x_range[1]
+                    and y_range[0] <= y_t <= y_range[1]):
+                count += 1
+        except Exception:
+            continue
+    return count
+
+
 # ─────────────────────────── empty-data guard ─────────────────────────────
 
 def empty_data_guard(

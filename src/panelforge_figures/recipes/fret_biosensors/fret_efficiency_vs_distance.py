@@ -100,18 +100,19 @@ def render(contract: FRETDistanceInput, ax=None, **_):
     ax.plot(r_fine, E_theory, color="#111111", lw=1.3, zorder=5,
             label=r"theory: $E = 1/(1+(r/R_0)^6)$")
 
-    # Vertical dashed line at R_0 with a halo'd label.
+    # Vertical dashed line at R_0 with a halo'd label placed below the
+    # E = 0.5 crossing so it doesn't sit on top of the theoretical curve.
     ax.axvline(R0, color="#D32F2F", lw=0.7, ls="--", zorder=2)
+    ax.axhline(0.5, color="#BBBBBB", lw=0.5, ls=":", zorder=1)
     ax.annotate(
         rf"$R_0$ = {smart_fmt(float(R0))} nm",
         xy=(R0, 0.5),
-        xytext=(6, 0), textcoords="offset points",
+        xytext=(8, -18), textcoords="offset points",
         fontsize=6.8, color="#D32F2F",
         bbox=dict(boxstyle="round,pad=0.18", fc="white",
                   ec="#D32F2F", lw=0.6, alpha=0.92),
         zorder=7,
     )
-    ax.axhline(0.5, color="#BBBBBB", lw=0.5, ls=":", zorder=1)
 
     ax.set_xlabel("donor-acceptor distance $r$ (nm)")
     ax.set_ylabel(r"FRET efficiency $E$")

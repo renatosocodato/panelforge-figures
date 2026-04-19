@@ -111,7 +111,10 @@ def render(contract: WindowedROIInput, ax=None, **_):
     cbar.ax.tick_params(labelsize=6.0)
 
     # Small inset schematic showing N windows tiled along a line.
-    inset = ax.inset_axes([0.06, 0.06, 0.28, 0.16])
+    # Positioned in the upper-left quadrant where traces are still near
+    # the baseline at small t — the earlier lower-left placement sat on
+    # top of the traces and the baseline guide.
+    inset = ax.inset_axes([0.06, 0.76, 0.32, 0.18])
     inset.set_xlim(0, 1)
     inset.set_ylim(0, 1)
     inset.set_xticks([])

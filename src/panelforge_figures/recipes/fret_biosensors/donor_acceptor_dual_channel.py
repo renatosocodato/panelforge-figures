@@ -54,7 +54,7 @@ def render(contract: DonorAcceptorInput, ax=None, **_):
     """Split host axis into side-by-side donor | acceptor pair."""
     import matplotlib.pyplot as plt
     if ax is None:
-        fig = plt.figure(figsize=(5.6, 2.8))
+        fig = plt.figure(figsize=(5.6, 2.2))
         gs = fig.add_gridspec(1, 2, wspace=0.12)
         ax_d = fig.add_subplot(gs[0, 0])
         ax_a = fig.add_subplot(gs[0, 1])
@@ -83,9 +83,9 @@ def render(contract: DonorAcceptorInput, ax=None, **_):
 
     extent = (0, D.shape[1] * contract.pixel_size_um,
               0, D.shape[0] * contract.pixel_size_um)
-    ax_d.imshow(D, cmap=donor_cmap, aspect="equal",
+    ax_d.imshow(D, cmap=donor_cmap, aspect="auto",
                 extent=extent, interpolation="nearest")
-    ax_a.imshow(A, cmap=acc_cmap, aspect="equal",
+    ax_a.imshow(A, cmap=acc_cmap, aspect="auto",
                 extent=extent, interpolation="nearest")
 
     for a, name in [(ax_d, "donor"), (ax_a, "acceptor")]:
@@ -107,5 +107,5 @@ def render(contract: DonorAcceptorInput, ax=None, **_):
               bbox=dict(boxstyle="round,pad=0.14", fc="#333333",
                         ec="none", alpha=0.65))
 
-    fig.suptitle(contract.title, fontsize=9.6, y=1.02)
+    fig.suptitle(contract.title, fontsize=9.6, y=0.97)
     return ax_d

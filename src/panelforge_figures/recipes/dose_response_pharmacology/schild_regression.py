@@ -73,13 +73,14 @@ def render(contract: SchildInput, ax=None, **_):
     yfit = slope * xfit + intercept
     ax.plot(xfit, yfit, color="#333333", lw=1.1, zorder=4)
 
-    # Reference slope-1 line anchored at the fit's x-intercept.
-    x0 = -intercept / max(slope, 1e-9)
+    # x-intercept of the fit; preserve slope sign so negative slopes resolve.
+    slope_safe = slope if abs(slope) > 1e-6 else np.copysign(1e-6, slope or 1.0)
+    x0 = -intercept / slope_safe
     ax.plot(xfit, -(xfit - x0),
             color="#888888", lw=0.7, ls="--", zorder=2)
 
-    # pA2 = -log[A] where log(DR-1) = 0. Solve 0 = slope*x + intercept.
-    pa2 = -(-intercept / max(slope, 1e-9))       # = x0
+    # pA2 = -log[A] where log(DR-1) = 0.
+    pa2 = -x0
 
     ax.scatter([x0], [0], s=48, color="#D32F2F",
                edgecolor="white", linewidth=1.0, zorder=5, marker="*")

@@ -84,13 +84,17 @@ def render(contract: PowerLawTailInput, ax=None, **_):
             color="#D32F2F", lw=1.2, zorder=5,
             label=rf"tail: $\alpha$ = {smart_fmt(alpha_est)}")
 
-    # Tail-start marker.
+    # Tail-start marker — label anchored in axes fraction, clear of x-ticks.
     ax.axvline(tail_v[-1], color="#888888", lw=0.7, ls="--", zorder=1)
-    ax.text(tail_v[-1], ax.get_ylim()[0] if False else 1.05 * P.min(),
-            f"tail ≥ {smart_fmt(float(tail_v[-1]))}",
-            ha="left", va="bottom", fontsize=6.4, color="#555555",
-            bbox=dict(boxstyle="round,pad=0.14", fc="white",
-                      ec="none", alpha=0.9))
+    ax.annotate(
+        f"tail $\\geq$ {smart_fmt(float(tail_v[-1]))}",
+        xy=(tail_v[-1], 0.55),
+        xycoords=("data", "axes fraction"),
+        xytext=(3, 0), textcoords="offset points",
+        ha="left", va="center", fontsize=6.4, color="#555555",
+        bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                  ec="none", alpha=0.9),
+    )
 
     ax.set_xscale("log")
     ax.set_yscale("log")

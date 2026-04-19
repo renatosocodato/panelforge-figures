@@ -77,27 +77,23 @@ def render(contract: ROISummaryInput, ax=None, **_):
     ax.set_xticklabels(contract.timepoints, rotation=30, ha="right", fontsize=6.6)
     ax.set_yticks(range(len(contract.roi_ids)))
     ax.set_yticklabels(contract.roi_ids, fontsize=6.8)
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
+    ax.set_title(
+        f"{contract.title}  ·  N ROI = {M.shape[0]},  "
+        f"median peak $\\Delta$ratio = "
+        f"{smart_fmt(float(np.median(M.max(axis=1) - M[:, 0])))}",
+        fontsize=8.4, pad=4,
+    )
 
-    # Per-ROI mean (right margin).
+    # Per-ROI mean, anchored in axes fraction just right of the heatmap so it
+    # never bleeds into the colorbar.
     means = M.mean(axis=1)
+    trans = ax.get_yaxis_transform()
     for i, m in enumerate(means):
-        ax.text(len(contract.timepoints) - 0.35, i,
-                smart_fmt(float(m)),
-                ha="left", va="center", fontsize=6.0, color="#444444")
+        ax.text(1.015, i, smart_fmt(float(m)),
+                transform=trans, ha="left", va="center",
+                fontsize=6.0, color="#444444")
 
-    cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.06)
+    cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.12)
     cbar.set_label(r"F$_\mathrm{A}$/F$_\mathrm{D}$", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.2)
-
-    # Footer summary.
-    ax.text(0.01, -0.18,
-            f"N ROI = {M.shape[0]}   "
-            f"median peak Δratio = "
-            f"{smart_fmt(float(np.median(M.max(axis=1) - M[:, 0])))}",
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.4, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=5)
     return ax

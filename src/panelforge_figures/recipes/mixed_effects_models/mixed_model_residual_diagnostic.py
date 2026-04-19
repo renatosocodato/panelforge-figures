@@ -81,7 +81,7 @@ def render(contract: ResidualDiagInput, ax=None, **_):
     # Horizontal y=0 line for extra visual line (diagnostic context).
     ax_qq.axhline(0, color="#BBBBBB", lw=0.4, ls=":", zorder=1,
                   label="zero")
-    ax_qq.legend(fontsize=6.2, frameon=False, loc="upper left",
+    ax_qq.legend(fontsize=6.2, frameon=False, loc="lower right",
                  handlelength=1.6)
     ax_qq.set_xlabel("theoretical quantile")
     ax_qq.set_ylabel("residual quantile")

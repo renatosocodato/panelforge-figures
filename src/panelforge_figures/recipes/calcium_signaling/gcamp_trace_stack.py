@@ -81,10 +81,10 @@ def render(contract: GCaMPStackInput, ax=None, **_):
         used_labels.add(color_idx)
         ax.plot(t, y, color=color, lw=0.8, zorder=3, label=label)
 
-    # Legend — compact row of the color cycle.
-    ax.legend(loc="upper right", bbox_to_anchor=(1.0, 1.08),
+    # Legend — compact row of the color cycle, tucked below the axis.
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12),
               fontsize=6.4, frameon=False, ncol=3,
-              handlelength=1.4, columnspacing=0.8)
+              handlelength=1.4, columnspacing=1.4)
 
     # Scale bar for ΔF/F (1.0 unit vertical).
     if contract.traces:

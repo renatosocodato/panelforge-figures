@@ -16,7 +16,6 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
-    add_halo_label,
     get_palette,
     register_recipe,
     smart_fmt,
@@ -97,12 +96,14 @@ def render(contract: SampleSizeLadderInput, ax=None, **_):
     # Budget line + shaded "reach" regions.
     if contract.budget_n is not None:
         ax.axvline(contract.budget_n, color="#D32F2F", lw=1.2, ls="--", zorder=3)
-        # Place budget label at the very top of the axis so it never crosses bars.
-        add_halo_label(
-            ax, contract.budget_n, -0.9,
+        # Budget label anchored in axes fraction so it never crowds bar labels.
+        ax.annotate(
             f"budget n={contract.budget_n}",
-            color="#D32F2F", fontsize=7.0,
-            halo_width=2.6, ha="center", va="bottom",
+            xy=(contract.budget_n, 1.015),
+            xycoords=("data", "axes fraction"),
+            ha="center", va="bottom", fontsize=7.0, color="#D32F2F",
+            bbox=dict(boxstyle="round,pad=0.16", fc="white",
+                      ec="none", alpha=0.92),
         )
         ax.add_patch(mpatches.Rectangle(
             (0, -0.5), contract.budget_n, len(ds),

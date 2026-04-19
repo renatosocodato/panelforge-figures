@@ -108,16 +108,13 @@ def render(contract: QCMetricRadarInput, ax=None, **_):
 
     ax.set_title(contract.title, fontsize=9.0, pad=14)
 
-    # Summary strip just below the title — μ per sample in matching colors.
-    # Placed in figure space so it never collides with the radar spokes.
-    fig = ax.figure
-    parts = [rf"{name}: $\mu$={smart_fmt(mu)}" for name, _, mu in sample_means]
-    summary = "   ".join(parts)
-    fig.text(0.5, 0.93, summary, ha="center", va="top",
-             fontsize=6.6, color="#333333")
-
-    # Legend below the plot — pushed well clear of the bottom spoke label.
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16),
+    # Legend below the plot with μ per sample inline — keeps all sample
+    # metadata in one strip clear of the radar spokes.
+    legend_labels = [f"{name}  ($\\mu$={smart_fmt(mu)})"
+                     for name, _, mu in sample_means]
+    handles, _ = ax.get_legend_handles_labels()
+    ax.legend(handles, legend_labels,
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
               fontsize=6.6, ncol=min(len(contract.sample_values), 3),
               frameon=False, handlelength=1.6)
     # Silence: add_halo_label is kept imported for API consistency.

@@ -48,11 +48,11 @@ _META = RecipeMetadata(
 def render(contract: RedoxTransitionInput, ax=None, **_):
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(5.2, 3.2))
+        _, ax = plt.subplots(figsize=(5.2, 2.2))
     AESTHETIC.apply_to_ax(ax)
     palette = get_palette(AESTHETIC.primary_palette)
     ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
+    ax.set_ylim(34, 66)
     ax.set_xticks([])
     ax.set_yticks([])
     for s in ("left", "bottom"):
@@ -63,32 +63,34 @@ def render(contract: RedoxTransitionInput, ax=None, **_):
         ("intermediate", 45, 50, palette.pick("intermediate")),
         ("oxidized", 80, 50, palette.pick("oxidized")),
     ]
-    box_w, box_h = 18, 22
+    box_w, box_h = 22, 14
     for name, cx, cy, color in states:
         ax.add_patch(mpatches.FancyBboxPatch(
             (cx - box_w / 2, cy - box_h / 2), box_w, box_h,
             boxstyle="round,pad=0.014,rounding_size=0.025",
             facecolor=color, edgecolor="white", linewidth=1.3, alpha=0.92,
         ))
-        ax.text(cx, cy + 2, name, ha="center", va="center",
-                color="white", fontsize=8.4)
+        ax.text(cx, cy + 1.8, name, ha="center", va="center",
+                color="white", fontsize=7.4)
         pct = int(100 * contract.steady_state.get(name, 0))
-        ax.text(cx, cy - 5,
+        ax.text(cx, cy - 3.5,
                 f"{pct}%",
                 ha="center", va="center",
-                color="white", fontsize=7.0, alpha=0.92)
+                color="white", fontsize=6.6, alpha=0.92)
 
-    # Arrow helper.
+    # Arrow helper — rate labels sit clear of the boxes.
     def _arrow(x_src, y_src, x_dst, y_dst, color, label, offset=3):
         ax.annotate(
             "",
             xy=(x_dst, y_dst + offset),
             xytext=(x_src, y_src + offset),
             arrowprops=dict(arrowstyle="-|>", color=color, lw=1.0,
-                            shrinkA=10, shrinkB=10),
+                            shrinkA=8, shrinkB=8),
         )
-        ax.text(0.5 * (x_src + x_dst), y_src + offset + 3.5,
-                label, ha="center", va="bottom",
+        label_y = y_src + (offset + 2.2 if offset > 0 else offset - 2.2)
+        label_va = "bottom" if offset > 0 else "top"
+        ax.text(0.5 * (x_src + x_dst), label_y,
+                label, ha="center", va=label_va,
                 fontsize=6.6, color=color,
                 bbox=dict(boxstyle="round,pad=0.14", fc="white",
                           ec="none", alpha=0.92))

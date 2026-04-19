@@ -84,11 +84,14 @@ def render(contract: IC50ForestInput, ax=None, **_):
 
     if contract.reference_line is not None:
         ax.axvline(contract.reference_line, color="#D32F2F", lw=0.8, ls="--", zorder=1)
-        ax.text(contract.reference_line, len(rows) - 0.4,
-                f"ref = {smart_fmt(contract.reference_line * 1e9)} nM",
-                ha="center", va="bottom", fontsize=6.4, color="#D32F2F",
-                bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                          ec="none", alpha=0.92))
+        ax.annotate(
+            f"ref = {smart_fmt(contract.reference_line * 1e9)} nM",
+            xy=(contract.reference_line, 0.02),
+            xycoords=("data", "axes fraction"),
+            ha="center", va="bottom", fontsize=6.4, color="#D32F2F",
+            bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                      ec="none", alpha=0.92),
+        )
 
     ax.set_xscale("log")
     ax.set_yticks(y)
@@ -115,10 +118,11 @@ def render(contract: IC50ForestInput, ax=None, **_):
                label=m)
         for m in mechs
     ]
-    ax.legend(handles=proxies, loc="upper left",
-              fontsize=6.4, frameon=True, framealpha=0.92,
-              edgecolor="#BBBBBB", borderpad=0.4, handlelength=1.0,
-              ncol=min(len(mechs), 2))
+    ax.legend(handles=proxies,
+              loc="lower center", bbox_to_anchor=(0.5, -0.30),
+              fontsize=6.4, frameon=False,
+              handlelength=1.0, ncol=len(mechs),
+              columnspacing=1.6)
     ax.grid(axis="x", which="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

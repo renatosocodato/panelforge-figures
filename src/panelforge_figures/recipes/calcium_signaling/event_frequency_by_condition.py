@@ -81,6 +81,10 @@ def render(contract: EventFreqInput, ax=None, **_):
         ax.scatter([pos], [med], s=36, facecolor="white",
                    edgecolor="black", linewidth=1.0, zorder=5)
 
+    # Extend top y so significance annotations never crowd the title.
+    ymax_data = max(float(np.max(v)) if v.size else 0.0 for v in data)
+    ax.set_ylim(top=ymax_data * 1.25)
+
     # Pairwise Mann-Whitney vs first condition.
     ref = data[0]
     for pos, vals in zip(positions[1:], data[1:]):
@@ -88,13 +92,13 @@ def render(contract: EventFreqInput, ax=None, **_):
             continue
         _, p = stats.mannwhitneyu(ref, vals)
         star = "**" if p < 1e-3 else "*" if p < 0.05 else "ns"
-        ax.text(pos, max(vals) * 1.05, f"{star}\np={smart_fmt(p)}",
+        ax.text(pos, max(vals) * 1.05, f"{star}  p={smart_fmt(p)}",
                 ha="center", va="bottom", fontsize=6.2, color="#333333")
 
     ax.set_xticks(positions)
     ax.set_xticklabels(conditions, fontsize=7.0)
     ax.set_ylabel("event rate (Hz)")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
+    ax.set_title(contract.title, fontsize=9.0, pad=8)
     ax.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
 

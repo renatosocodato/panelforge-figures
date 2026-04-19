@@ -110,13 +110,19 @@ def render(contract: SaddleNodeInput, ax=None, **_):
     ax.legend(fontsize=6.6, frameon=False, loc="upper left",
               handlelength=1.8)
 
-    # Tag the SN coordinates.
-    ax.text(contract.sn1_param, ax.get_ylim()[0] * 0.96 if ax.get_ylim()[0] < 0 else ax.get_ylim()[0],
-            f"SN₁\n{smart_fmt(contract.sn1_param)}",
-            ha="center", va="bottom", fontsize=6.2, color="#D32F2F")
-    ax.text(contract.sn2_param, ax.get_ylim()[0] * 0.96 if ax.get_ylim()[0] < 0 else ax.get_ylim()[0],
-            f"SN₂\n{smart_fmt(contract.sn2_param)}",
-            ha="center", va="bottom", fontsize=6.2, color="#D32F2F")
+    # Tag the SN coordinates — anchored in axes fraction so they never clip.
+    ax.annotate(
+        f"$SN_1$={smart_fmt(contract.sn1_param)}",
+        xy=(contract.sn1_param, 0.04),
+        xycoords=("data", "axes fraction"),
+        ha="center", va="bottom", fontsize=6.2, color="#D32F2F",
+    )
+    ax.annotate(
+        f"$SN_2$={smart_fmt(contract.sn2_param)}",
+        xy=(contract.sn2_param, 0.04),
+        xycoords=("data", "axes fraction"),
+        ha="center", va="bottom", fontsize=6.2, color="#D32F2F",
+    )
 
     ax.grid(axis="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

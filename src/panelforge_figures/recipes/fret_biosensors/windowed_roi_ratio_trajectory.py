@@ -90,13 +90,12 @@ def render(contract: WindowedROIInput, ax=None, **_):
     cmap = mpl.colormaps[AESTHETIC.continuous_cmap]
     pos_min, pos_max = float(positions.min()), float(positions.max())
     span = max(pos_max - pos_min, 1e-9)
+    # The colorbar and the inset schematic together communicate window
+    # identity — an additional per-line legend would only overlap the
+    # high-response traces in the upper-right quadrant.
     for w in range(n_win):
         frac = (positions[w] - pos_min) / span
-        ax.plot(t, M[w], color=cmap(frac), lw=1.0, alpha=0.9,
-                zorder=3,
-                label=(contract.window_labels[w]
-                       if (contract.window_labels is not None and w in (0, n_win - 1))
-                       else None))
+        ax.plot(t, M[w], color=cmap(frac), lw=1.0, alpha=0.9, zorder=3)
 
     # Reference neutral line at ratio = 1.0.
     ax.axhline(1.0, color="#888888", lw=0.5, ls=":", zorder=1)
@@ -107,7 +106,7 @@ def render(contract: WindowedROIInput, ax=None, **_):
         cmap=cmap,
     )
     cbar = ax.figure.colorbar(sm, ax=ax, fraction=0.035, pad=0.03)
-    cbar.set_label(r"window position ($\mu$m · edge → interior)",
+    cbar.set_label(r"window position ($\mu$m · edge $\to$ interior)",
                    fontsize=6.4)
     cbar.ax.tick_params(labelsize=6.0)
 
@@ -145,8 +144,14 @@ def render(contract: WindowedROIInput, ax=None, **_):
         f"peak $\\Delta$ = {smart_fmt(max_delta)}",
         fontsize=9.0, pad=4,
     )
-    ax.legend(fontsize=6.4, frameon=False, loc="upper right",
-              handlelength=1.6)
+    # Minimal legend proxy: single entry explaining the line colouring
+    # (the per-window legend would overlap the high-response traces).
+    from matplotlib.lines import Line2D
+    ax.legend(
+        handles=[Line2D([0], [0], color=cmap(0.5), lw=1.2,
+                        label=f"per-window ratio trace (N = {n_win})")],
+        fontsize=6.4, frameon=False, loc="lower right", handlelength=1.6,
+    )
     ax.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

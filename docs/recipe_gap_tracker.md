@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 151 | ≥320 |
-| Sessions complete | 0 | 2 | 20 |
+| Total recipes | 137 | 169 | ≥320 |
+| Sessions complete | 0 | 3 | 20 |
 
 ## Per-session status
 
@@ -18,7 +18,7 @@ every PR merge. Governed by
 |---|---|---|---|---|---|---|---|
 | 01 | `rhogtpase_dynamics`        | merged  | — | `v1.1.0-s01` | 6 (12→18) | none | Waddington family retagged heatmap→conceptual; lw=2.4→2.2 to hold ratchet |
 | 02 | `fret_biosensors`            | merged  | — | `v1.1.0-s02` | 8 (10→18) | none | Visual-QA polish: dose_matrix callout axes-fraction anchor; windowed_roi legend minimized |
-| 03 | `actin_microtubule_morphometry` | pending | — | — | — | — | — |
+| 03 | `actin_microtubule_morphometry` | merged  | — | `v1.1.0-s03` | 18 (6→24, Path 2) | none | 9+ catch-up recipes deferred to s03b; fontsize/lw snapped to ratchet; 3 panels polished |
 | 04 | `mixed_effects_models`       | pending | — | — | — | — | — |
 | 05 | `sensitivity_analysis`       | pending | — | — | — | — | — |
 | 06 | `redox_imaging`              | pending | — | — | — | — | — |

@@ -110,19 +110,17 @@ def render(contract: DoseTimeMatrixInput, ax=None, **_):
     peak_log_dose = float(np.log10(doses[iy]))
     ax.scatter([peak_t], [peak_log_dose], s=54, facecolor="none",
                edgecolor="black", linewidth=1.3, zorder=5, marker="o")
-    # Axes-fraction anchoring keeps the callout inside the figure regardless
-    # of where the peak lands (offset-points anchoring clipped on the right
-    # when the peak sits at max time).
-    ax.annotate(
+    # Callout anchored in axes fraction, with no leader arrow: the peak
+    # marker carries the spatial information, and a leader to an extremum
+    # in the corner of the colour field reads as a stray line.
+    ax.text(
+        0.03, 0.96,
         f"peak $\\Delta$ = {smart_fmt(float(M.max()))}\n"
         f"t = {int(peak_t)} s,  dose = {smart_fmt(float(doses[iy]) * 1e9)} nM",
-        xy=(peak_t, peak_log_dose),
-        xytext=(0.03, 0.96), textcoords="axes fraction",
-        ha="left", va="top",
+        transform=ax.transAxes, ha="left", va="top",
         fontsize=6.2, color="#111111",
         bbox=dict(boxstyle="round,pad=0.18", fc="white",
                   ec="#BBBBBB", lw=0.5, alpha=0.92),
-        arrowprops=dict(arrowstyle="-", color="#666666", lw=0.6),
         zorder=7,
     )
 

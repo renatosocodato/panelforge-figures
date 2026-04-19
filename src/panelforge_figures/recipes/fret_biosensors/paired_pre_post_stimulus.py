@@ -94,20 +94,25 @@ def render(contract: PairedPrePostInput, ax=None, **_):
     ax.scatter([x_post] * post.size, post, s=26, color=post_color,
                edgecolor="white", linewidth=0.6, zorder=4, label="post")
 
-    # Mean ± SEM markers at each condition.
+    # Mean ± SEM markers, pushed outside the scatter columns — pre marker
+    # to the LEFT of x_pre, post marker to the RIGHT of x_post — so the
+    # markers and their numeric labels never touch the per-cell dots.
     mean_pre, sem_pre = float(pre.mean()), float(pre.std(ddof=1) / np.sqrt(pre.size))
     mean_post, sem_post = float(post.mean()), float(post.std(ddof=1) / np.sqrt(post.size))
-    for x_pos, mu, se in [(x_pre, mean_pre, sem_pre),
-                          (x_post, mean_post, sem_post)]:
-        ax.errorbar([x_pos + 0.18], [mu], yerr=[se],
+    marker_offsets = [(x_pre - 0.22, mean_pre, sem_pre, "right"),
+                      (x_post + 0.22, mean_post, sem_post, "left")]
+    for x_pos, mu, se, label_side in marker_offsets:
+        ax.errorbar([x_pos], [mu], yerr=[se],
                     fmt="s", color="#111111", ecolor="#111111",
                     markersize=6, markerfacecolor="white",
                     markeredgewidth=1.1, capsize=3.0, zorder=6)
+        dx = -6 if label_side == "right" else 6
         ax.annotate(
             f"{smart_fmt(mu)}",
-            xy=(x_pos + 0.20, mu),
-            xytext=(4, 0), textcoords="offset points",
-            fontsize=6.2, color="#111111", va="center",
+            xy=(x_pos, mu),
+            xytext=(dx, 0), textcoords="offset points",
+            ha=label_side, va="center",
+            fontsize=6.2, color="#111111",
         )
 
     # Paired statistics.
@@ -137,7 +142,7 @@ def render(contract: PairedPrePostInput, ax=None, **_):
 
     ax.set_xticks([x_pre, x_post])
     ax.set_xticklabels(["pre", "post"], fontsize=8.4)
-    ax.set_xlim(-0.4, 1.7)
+    ax.set_xlim(-0.55, 1.85)
     ax.set_ylabel(r"FRET ratio  $F_A / F_D$")
     ax.set_title(
         f"{contract.title}  ·  N = {pre.size},  $\\Delta$ = {smart_fmt(mean_delta)}",

@@ -128,17 +128,22 @@ def render(contract: BranchingSunburstInput, ax=None, **_):
         ha="center", va="bottom", fontsize=6.2, color="#333333",
     )
 
-    # Depth colorbar legend — proxy horizontal strip.
+    # Depth colorbar legend — proxy horizontal strip. Wider swatch spacing
+    # so the "d=N" labels don't run together.
+    swatch_w = 0.24
+    swatch_h = 0.10
+    gap = 0.30
+    legend_x0 = -total_radius - 0.40
+    legend_y = -total_radius - 0.22
     for d in range(max_depth + 1):
+        x = legend_x0 + d * gap
         ax.add_patch(mpatches.Rectangle(
-            (-total_radius - 0.55 + d * 0.14, -total_radius - 0.15),
-            0.12, 0.06,
+            (x, legend_y), swatch_w, swatch_h,
             facecolor=depth_colors[d], edgecolor="white", linewidth=0.3,
         ))
-        ax.text(-total_radius - 0.55 + d * 0.14 + 0.06,
-                -total_radius - 0.22,
+        ax.text(x + swatch_w / 2, legend_y - 0.03,
                 f"d={d}", ha="center", va="top",
-                fontsize=5.8, color="#333333")
+                fontsize=6.2, color="#333333")
 
     ax.set_xlim(-total_radius - 0.7, total_radius + 0.7)
     ax.set_ylim(-total_radius - 0.6, total_radius + 0.45)

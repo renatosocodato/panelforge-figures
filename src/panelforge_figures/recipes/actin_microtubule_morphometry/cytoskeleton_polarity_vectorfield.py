@@ -114,7 +114,9 @@ def render(contract: PolarityVectorFieldInput, ax=None, **_):
             zorder=4, alpha=0.9,
         )
 
-    # Mean resultant length — polarity "alignment" per condition.
+    # Mean resultant length — polarity "alignment" per condition. Placed
+    # at the top of the panel so it never overlaps the bottom-left scale
+    # bar or the lower cluster of cells.
     summary_parts = []
     for name in uniques:
         m = cond == name
@@ -123,8 +125,8 @@ def render(contract: PolarityVectorFieldInput, ax=None, **_):
         R = float(np.sqrt(ux[m].mean() ** 2 + uy[m].mean() ** 2))
         summary_parts.append(f"{name}: R = {smart_fmt(R)}")
     ax.text(
-        0.02, 0.04, "  ·  ".join(summary_parts),
-        transform=ax.transAxes, ha="left", va="bottom",
+        0.02, 0.97, "  ·  ".join(summary_parts),
+        transform=ax.transAxes, ha="left", va="top",
         fontsize=6.4, color="#333333",
         bbox=dict(boxstyle="round,pad=0.18", fc="white",
                   ec="#BBBBBB", lw=0.5, alpha=0.92),

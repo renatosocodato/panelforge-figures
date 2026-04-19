@@ -1,6 +1,7 @@
 # Recipes by modality
 
-v0.1.0-beta3 snapshot: 15 modalities, 107 recipes.
+v1.0.0 stable: 20 modalities, 137 recipes.
+v1.1.0-s01 in progress: rhogtpase_dynamics 12 → 18 (+6).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -25,7 +26,7 @@ v0.1.0-beta3 snapshot: 15 modalities, 107 recipes.
 - **fret_biosensors** (10).
 - **calcium_signaling** (6).
 
-## v0.1.0-beta3 (4 modalities, 27 recipes) · new
+## v0.1.0-beta3 (4 modalities, 27 recipes)
 
 - **omics_differential** (10): volcanos, MA plot, GSEA running-enrichment,
   ORA dotplot, UpSet set comparisons, differential rank ladder, pathway-flux
@@ -40,11 +41,34 @@ v0.1.0-beta3 snapshot: 15 modalities, 107 recipes.
   distribution by condition, angle autocorrelation decay, confinement
   radius map, track persistence histogram.
 
-## Pending for v0.1.0 (5 modalities, 30 recipes)
+## v1.0.0 — Session 5 (5 modalities, 30 recipes)
 
-Session 5:
-- **spatial_statistics** (4)
-- **clinical_cohort** (3)
-- **cryoem_and_structure** (3)
-- **intravital_imaging** (8)
-- **actin_microtubule_morphometry** (12)
+- **spatial_statistics** (6): Ripley's L, pair correlation, NN distances,
+  Voronoi territories, KDE heatmap, Moran's I by lag.
+- **clinical_cohort** (6): Kaplan-Meier by stratum, Cox forest, CONSORT
+  flow, baseline characteristics, subgroup forest, outcome by quartile.
+- **cryoem_and_structure** (6): FSC curve, angular distribution, local
+  resolution, 2D class montage, Ramachandran, B-factor vs residue.
+- **intravital_imaging** (6): cell-track field, two-photon depth
+  projection, vessel-diameter kymograph, cell-shape descriptors by state,
+  migration rose, time-to-homing survival.
+- **actin_microtubule_morphometry** (6): filament orientation, branch-point
+  density, persistence-length fit, protrusion length × velocity,
+  cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s01 — rhogtpase_dynamics hydration (+6, in progress)
+
+Expands rhogtpase_dynamics from 12 to 18 recipes:
+
+- **phase_portrait_with_trajectories** — streamplot + time-colored integrated
+  trajectories from multiple ICs with stability-coded fixed points.
+- **codim2_bifurcation_map** — two-parameter (µ, ν) plane with SN/Hopf/
+  pitchfork curves and codim-2 points (cusp, BT).
+- **potential_landscape_waddington_3d** — isometric 3-D Waddington surface
+  with gradient-descent trajectories.
+- **excitability_threshold_diagram** — FitzHugh-Nagumo with threshold curve
+  and paired sub/super-threshold trajectories.
+- **slow_manifold_projection** — geometric collapse of fast trajectories
+  onto the slow manifold.
+- **poincare_first_return_map** — 1-D discrete return map with cobweb
+  iteration and slope-at-FP diagnostic.

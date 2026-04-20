@@ -143,7 +143,7 @@ def render(contract: InteractionNetworkInput, ax=None, **_):
     sm.set_array([])
     cbar = ax.figure.colorbar(sm, ax=ax, fraction=0.035, pad=0.04,
                               shrink=0.45)
-    cbar.set_label("S₂", fontsize=7.0)
+    cbar.set_label(r"$S_2$", fontsize=7.0)
     cbar.ax.tick_params(labelsize=6.4)
 
     # Top-edge callout.

@@ -114,17 +114,20 @@ def render(contract: SensByOutputInput, ax=None, **_):
                             bbox=dict(boxstyle="round,pad=0.10", fc="white",
                                       ec="none", alpha=0.85))
 
-    # Row + column driver callouts in margins.
+    # Dominant-driver markers on the cell borders so the cell value stays
+    # readable: row-max as a left-edge triangle, col-max as a top-edge dot.
     row_max_j = np.argmax(M, axis=1)
     col_max_i = np.argmax(M, axis=0)
     for i in range(n_p):
         j = int(row_max_j[i])
-        ax.scatter([j], [i], s=38, marker="s", facecolor="none",
-                   edgecolor="#111111", linewidth=1.0, zorder=4)
+        ax.scatter([j - 0.42], [i], s=22, marker=">",
+                   color="#111111", edgecolor="white", linewidth=0.4,
+                   zorder=4, clip_on=False)
     for j in range(n_q):
         i = int(col_max_i[j])
-        ax.scatter([j], [i], s=38, marker="s", facecolor="none",
-                   edgecolor="#111111", linewidth=1.0, zorder=4)
+        ax.scatter([j], [i - 0.42], s=22, marker="v",
+                   color="#111111", edgecolor="white", linewidth=0.4,
+                   zorder=4, clip_on=False)
 
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.040, pad=0.03)
     cbar.set_label(contract.index_label, fontsize=7.0)

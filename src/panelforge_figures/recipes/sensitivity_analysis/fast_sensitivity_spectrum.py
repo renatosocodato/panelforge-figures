@@ -136,13 +136,22 @@ def render(contract: FASTSpectrumInput, ax=None, **_):
         f"{n}(ω={smart_fmt(f)})" for n, f, _ in tops[:3]
     )
     ax.set_title(
-        f"{contract.title} · {contract.output_label}   · "
-        f"top: {top_line}",
-        fontsize=8.6, pad=4,
+        f"{contract.title} · {contract.output_label}",
+        fontsize=9.0, pad=4,
+    )
+    # Top-drivers pill anchored to upper-right ABOVE the plot in figure
+    # space so it never collides with the legend or spectrum peaks.
+    fig = ax.figure
+    fig.text(
+        0.5, -0.16, f"top: {top_line}",
+        ha="center", va="top", fontsize=6.8, color="#333333",
+        transform=ax.transAxes,
+        bbox=dict(boxstyle="round,pad=0.24", fc="white",
+                  ec=AESTHETIC.annotation_style.callout_accent, lw=0.5),
     )
     ax.set_xlim(0, omega.max())
     ax.set_ylim(0, max(power.max() * 1.15, 0.01))
-    ax.legend(fontsize=6.6, frameon=False, loc="upper right",
+    ax.legend(fontsize=6.6, frameon=False, loc="center right",
               handlelength=1.6)
     ax.grid(color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

@@ -128,14 +128,18 @@ def render(contract: TornadoInput, ax=None, **_):
                 ha="left" if hi > contract.baseline else "right",
                 va="center", fontsize=6.6, color=high_color, zorder=5)
 
-    # Baseline reference.
+    # Baseline reference (vertical line, label pinned to upper-left corner
+    # of the axes so it never collides with the title).
     ax.axvline(contract.baseline, color="#111111", lw=1.0, zorder=4)
-    ax.text(contract.baseline, len(rows) - 0.2,
-            f"baseline = {smart_fmt(contract.baseline)}",
-            ha="center", va="bottom", fontsize=7.0, color="#111111",
-            bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                      ec="none", alpha=0.92),
-            zorder=6)
+    ax.text(
+        0.02, 0.98,
+        f"baseline = {smart_fmt(contract.baseline)}",
+        transform=ax.transAxes, ha="left", va="top",
+        fontsize=7.0, color="#111111",
+        bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                  ec="#BBBBBB", lw=0.5, alpha=0.95),
+        zorder=6,
+    )
 
     xlo = min(xs) - 0.05 * (max(xs) - min(xs))
     xhi = max(xs) + 0.10 * (max(xs) - min(xs))

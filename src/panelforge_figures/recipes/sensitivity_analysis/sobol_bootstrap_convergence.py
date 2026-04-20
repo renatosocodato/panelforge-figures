@@ -33,7 +33,7 @@ class BootstrapConvergenceInput(RecipeContract):
     ci_lo: list[list[float]] = Field(..., description="n_params × n_samples CI lo")
     ci_hi: list[list[float]] = Field(..., description="n_params × n_samples CI hi")
     top_k: int = 3
-    title: str = "Sobol S₁ bootstrap-CI convergence"
+    title: str = r"Sobol $S_1$ bootstrap-CI convergence"
 
 
 def _demo() -> BootstrapConvergenceInput:

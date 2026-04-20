@@ -10,6 +10,16 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Sensitivity-analysis catch-up (v1.1.0-s05 additions)
+
+- **What does the FAST frequency spectrum reveal about each parameter?** → [`sensitivity_analysis.fast_sensitivity_spectrum`](gallery/sensitivity_analysis/fast_sensitivity_spectrum.png)
+- **Does the LHS sample cover the joint parameter space?** → [`sensitivity_analysis.lhs_parameter_space_coverage`](gallery/sensitivity_analysis/lhs_parameter_space_coverage.png)
+- **OAT: how does the output change under ±Δ per parameter?** → [`sensitivity_analysis.tornado_diagram`](gallery/sensitivity_analysis/tornado_diagram.png)
+- **Across multiple output quantities, how do indices redistribute?** → [`sensitivity_analysis.sensitivity_by_output_quantity`](gallery/sensitivity_analysis/sensitivity_by_output_quantity.png)
+- **How does the bootstrap 95 % CI on each S₁ shrink with N?** → [`sensitivity_analysis.sobol_bootstrap_convergence`](gallery/sensitivity_analysis/sobol_bootstrap_convergence.png)
+- **As a graph, which parameters form the strongest interaction clusters?** → [`sensitivity_analysis.interaction_network_sobol`](gallery/sensitivity_analysis/interaction_network_sobol.png)
+- **For a time-resolved output, how do Sobol indices evolve?** → [`sensitivity_analysis.sensitivity_time_evolution`](gallery/sensitivity_analysis/sensitivity_time_evolution.png)
+
 ## Mixed-effects model catch-up (v1.1.0-s04 additions)
 
 - **What does the raw outcome look like under sex × genotype, with β + CI?** → [`mixed_effects_models.sex_stratified_raincloud_with_coef_box`](gallery/mixed_effects_models/sex_stratified_raincloud_with_coef_box.png)

@@ -6,6 +6,78 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s05] — 2026-04-20
+
+Fifth session of the v1.1 hydration plan. Hydrates the
+`sensitivity_analysis` modality from 8 to 15 recipes — Sobol-dominant
+with support for the other GSA methods reviewers routinely request.
+
+### Added
+
+- `sensitivity_analysis.fast_sensitivity_spectrum` — FAST
+  frequency-domain periodogram with per-parameter fundamentals +
+  harmonics, a noise/interaction floor reference and a dominant-peak
+  callout.
+- `sensitivity_analysis.lhs_parameter_space_coverage` — Latin-
+  hypercube scatter matrix with marginal histograms and built-in
+  √Centered-L2 discrepancy diagnostic. No new dependency.
+- `sensitivity_analysis.tornado_diagram` — classic OAT ±Δ tornado
+  with high/low halves colour-coded, sorted by total width, baseline
+  reference line and pinned baseline pill.
+- `sensitivity_analysis.sensitivity_by_output_quantity` — param ×
+  output sensitivity-index heatmap with row-max right-triangle and
+  col-max down-triangle margin markers (so cell values stay
+  readable) and a dominant-driver-per-output callout.
+- `sensitivity_analysis.sobol_bootstrap_convergence` — per-parameter
+  S₁ line with shrinking bootstrap 95 % CI ribbon over N, rank-flip
+  diagnostic at the smallest stable-top-k N, and a mean-CI-width
+  footer.
+- `sensitivity_analysis.interaction_network_sobol` — circular graph
+  view of pairwise S₂ with edge width/colour coded, node size from
+  Sᵀ, S₂-colorbar legend and top-edge callout; complements the
+  existing interaction-matrix heatmap.
+- `sensitivity_analysis.sensitivity_time_evolution` — time-resolved
+  Sobol indices per parameter with CI bands, peak-time markers, and
+  a per-time-window dominant-driver callout.
+
+### Infrastructure
+
+- No changes to `core/` — all 7 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (FAST periodogram,
+  LHS pair-matrix, OAT tornado, param × output heatmap, bootstrap-CI
+  convergence ribbon, Sobol interaction graph, time-resolved
+  indices) live inline within their recipes.
+- Liberation Sans-safe labels throughout — subscripts via mathtext.
+- Style-drift ratchet held by snapping the sole new literal
+  (title fontsize 8.8 → 8.6).
+- `tests/test_contracts.py` modality-count assertion bumped 8 → 15.
+
+### Visual-QA polish (three panels)
+
+- `tornado_diagram`: moved the baseline label from a data-coord
+  annotation (which collided with the title) to an upper-left axes-
+  fraction pill so it never competes with the panel title.
+- `sensitivity_by_output_quantity`: replaced hollow-square
+  driver highlights (which obscured cell values) with small right-
+  triangle (row max) and down-triangle (col max) markers drawn on
+  the cell margins with `clip_on=False`.
+- `fast_sensitivity_spectrum`: moved the top-drivers pill from
+  inside the axes (where it wrapped into the legend) to a figure-
+  space footer below the x-axis.
+
+### Progress
+
+| | v1.1.0-s04 | **v1.1.0-s05** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 187 | **194** |
+| `sensitivity_analysis` | 8 | **15** |
+| Tests | 986 | **1021** |
+
+
 ## [1.1.0-s04] — 2026-04-19
 
 Fourth session of the v1.1 hydration plan. Hydrates the

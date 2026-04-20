@@ -46,17 +46,19 @@ def _demo() -> LangevinNoiseInput:
     n = 400
     Y = rng.uniform(0.3, 2.2, n)
     sigma_mult = 0.25
-    xi_sq = (sigma_mult ** 2) * Y ** 2 + rng.normal(0, 0.02, n)
-    xi_sq = np.clip(xi_sq, 0, None)
-    # Fit additive: mean(xi_sq) / (2 dt)
     dt = 1.0
+    # Data model: ξ² = 2·σ²·Y²·dt + noise  (true multiplicative).
+    xi_sq = 2 * (sigma_mult ** 2) * Y ** 2 * dt + rng.normal(0, 0.02, n)
+    xi_sq = np.clip(xi_sq, 0, None)
+    # Fit additive: constant 2·D_add·dt = mean(xi_sq).
     D_add = float(xi_sq.mean() / (2 * dt))
-    # Fit multiplicative: slope of xi_sq vs Y² through origin.
-    yy = Y ** 2
-    sigma_est = float(np.sqrt(max(np.sum(xi_sq * yy) / np.sum(yy ** 2), 0)))
-    # RSS → pseudo-AIC (k_add = 1, k_mult = 1, same param count; use RSS).
+    # Fit multiplicative: σ² from regression of xi_sq on 2·Y²·dt through origin.
+    kk = 2 * (Y ** 2) * dt
+    sigma_sq_est = float(max(np.sum(xi_sq * kk) / np.sum(kk * kk), 0))
+    sigma_est = float(np.sqrt(sigma_sq_est))
+    # RSS → pseudo-AIC (same parameter count, compare on RSS).
     rss_add = float(np.sum((xi_sq - 2 * D_add * dt) ** 2))
-    rss_mult = float(np.sum((xi_sq - 2 * (sigma_est * Y) ** 2 * dt) ** 2))
+    rss_mult = float(np.sum((xi_sq - 2 * sigma_sq_est * (Y ** 2) * dt) ** 2))
     aic_add = n * np.log(rss_add / n) + 2 * 1
     aic_mult = n * np.log(rss_mult / n) + 2 * 1
     return LangevinNoiseInput(

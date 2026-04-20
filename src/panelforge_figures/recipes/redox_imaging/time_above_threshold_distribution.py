@@ -88,6 +88,7 @@ def render(contract: TimeAboveThresholdInput, ax=None, **_):
     palette = get_palette(AESTHETIC.primary_palette)
 
     conditions = list(contract.durations_by_condition.keys())
+    median_bits = []
 
     for i, name in enumerate(conditions):
         vals = np.asarray(contract.durations_by_condition[name], float)
@@ -96,19 +97,17 @@ def render(contract: TimeAboveThresholdInput, ax=None, **_):
             continue
         color = palette[i % len(palette.colors)]
         xs = np.sort(vals)
-        # Complementary CDF: P(T > t)
         ccdf = 1.0 - np.arange(1, xs.size + 1) / xs.size
         ax.step(np.concatenate([[0.0], xs]),
                 np.concatenate([[1.0], ccdf]),
                 where="post", color=color, lw=1.3,
                 label=f"{name} (n={xs.size})", zorder=3)
-        # Median marker.
+        # Median dot on the P=0.5 line; numeric summary consolidated into
+        # a single figure-space footer to avoid label-on-curve collisions.
         med = float(np.median(vals))
         ax.scatter([med], [0.5], s=30, color=color,
                    edgecolor="white", linewidth=0.7, zorder=4)
-        ax.text(med, 0.5, f"  med={smart_fmt(med)}",
-                ha="left", va="center", fontsize=6.2, color=color,
-                zorder=5)
+        median_bits.append(f"{name}={smart_fmt(med)}")
 
     # 50 % reference.
     ax.axhline(0.5, color="#888888", lw=0.6, ls="--", zorder=1,
@@ -125,4 +124,15 @@ def render(contract: TimeAboveThresholdInput, ax=None, **_):
               handlelength=1.6)
     ax.grid(color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
+    # Consolidated median footer below axis — avoids in-plot label clashes.
+    if median_bits:
+        fig = ax.figure
+        fig.text(
+            0.5, -0.16,
+            "medians (min):  " + "   ·   ".join(median_bits),
+            ha="center", va="top", fontsize=6.6, color="#333333",
+            transform=ax.transAxes,
+            bbox=dict(boxstyle="round,pad=0.22", fc="white",
+                      ec=AESTHETIC.annotation_style.callout_accent, lw=0.5),
+        )
     return ax

@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 187 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7).
+v1.1 in progress: 194 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,25 @@ v1.1 in progress: 187 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s05 — sensitivity_analysis hydration (+7, in progress)
+
+Expands sensitivity_analysis from 8 to 15 recipes:
+
+- **fast_sensitivity_spectrum** — FAST frequency-domain periodogram
+  with per-parameter fundamentals + harmonics.
+- **lhs_parameter_space_coverage** — LHS scatter matrix with marginal
+  histograms and √CD² discrepancy callout.
+- **tornado_diagram** — classic OAT ±Δ tornado with high/low halves
+  sorted by magnitude.
+- **sensitivity_by_output_quantity** — param × output sensitivity-index
+  heatmap with dominant-driver margin markers.
+- **sobol_bootstrap_convergence** — per-parameter S₁ line with
+  shrinking bootstrap CI ribbon and rank-flip diagnostic.
+- **interaction_network_sobol** — circular graph view of pairwise S₂
+  with edge width/colour coded and node size from Sᵀ.
+- **sensitivity_time_evolution** — time-resolved Sobol indices per
+  parameter with CI bands and window-dominant-driver callouts.
 
 ## v1.1.0-s04 — mixed_effects_models hydration (+7, in progress)
 

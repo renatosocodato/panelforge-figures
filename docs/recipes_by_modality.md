@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 210 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9).
+v1.1 in progress: 218 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,27 @@ v1.1 in progress: 210 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s08 — gillespie_stochastic hydration (+8, in progress)
+
+Expands gillespie_stochastic from 7 to 15 recipes:
+
+- **master_equation_steady_state** — analytic P(n) vs sampled
+  histogram with KL + TV distance.
+- **tau_leaping_comparison** — exact SSA vs τ-leap with inset
+  residual and RMSE / speedup callouts.
+- **mean_first_passage_time_matrix** — pairwise MFPT heatmap with
+  fastest-pair footer.
+- **fisher_information_parameter_estimation** — K × K FIM with
+  condition number and best / worst-identified directions.
+- **burst_size_distribution** — burst-count PMF with geometric +
+  negative-binomial fits.
+- **extinction_probability_vs_parameter** — P_ext(θ) curves per
+  initial state with tipping-point markers.
+- **autocorrelation_of_trajectories** — per-state ACF with
+  exponential fits and 1/e reference.
+- **stochastic_resonance_signature** — SNR vs σ bell-curve with
+  parabolic-fit peak.
 
 ## v1.1.0-s07 — intravital_imaging hydration (+9 Path 2, in progress)
 

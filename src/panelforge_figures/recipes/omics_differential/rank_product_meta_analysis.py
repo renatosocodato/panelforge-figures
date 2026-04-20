@@ -124,30 +124,29 @@ def render(contract: RankProductInput, ax=None, **_):
                 va="center", ha="left", fontsize=6.4,
                 color="#222222", zorder=5)
 
-    # Per-study rank strip (inset below the bars via scatter).
+    # Per-study rank strip placed to the RIGHT of the bars so it never
+    # collides with gene labels on the y-axis.
     n_studies = ranks_top.shape[1]
     study_names = (contract.study_names
                    or [f"s{k}" for k in range(n_studies)])
     cmap = mpl.colormaps["viridis"]
     max_rank = max(ranks_top.max(), 1.0)
-    # Place per-study dots to the left of the bar axis (as categorical strip)
-    # in axes fraction.
-    strip_x0 = -0.20
-    strip_dx = 0.04
+    strip_x0 = 1.12      # axes-fraction x (right of bars + RP text)
+    strip_dx = 0.045
     for yi, row in zip(y, ranks_top):
         for si, rk in enumerate(row):
             color = cmap(0.1 + 0.85 * (1 - rk / max_rank))
             ax.scatter([strip_x0 + si * strip_dx], [yi],
-                       s=28, color=color, edgecolor="white",
+                       s=22, color=color, edgecolor="white",
                        linewidth=0.3, zorder=6,
                        transform=ax.get_yaxis_transform(),
                        clip_on=False)
-    # Study labels at the top of the strip.
+    # Study labels above the strip.
     for si, nm in enumerate(study_names):
         ax.text(strip_x0 + si * strip_dx, top_n - 0.4, nm,
                 transform=ax.get_yaxis_transform(),
                 ha="center", va="bottom", fontsize=5.6,
-                color="#333333", rotation=30,
+                color="#333333", rotation=35,
                 clip_on=False)
 
     ax.set_yticks(y)
@@ -155,6 +154,8 @@ def render(contract: RankProductInput, ax=None, **_):
     ax.set_xlabel("1 / rank-product  (longer bar = more consistent)")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
     ax.set_xlim(0, xbar.max() * 1.30)
+    # Reserve additional right margin so the per-study strip fits.
+    ax.figure.subplots_adjust(right=0.70)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     return ax

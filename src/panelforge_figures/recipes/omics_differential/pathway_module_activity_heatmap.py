@@ -110,41 +110,42 @@ def render(contract: ModuleActivityInput, ax=None, **_):
     ax.set_yticks(range(n_m))
     ax.set_yticklabels(modules, fontsize=6.8)
 
-    # Column annotation strip (sample groups) — top.
+    # Column annotation strip (sample groups) — drawn below the column
+    # tick labels so it never overlaps the panel title.
     if contract.sample_groups is not None:
         groups_s = contract.sample_groups
         unique_s = list(dict.fromkeys(groups_s))
-        # Palette by index for categorical groups.
         group_colors_s = ["#6FA8DC", "#E06666", "#93C47D", "#C27BA0",
                           "#FFD966"][: len(unique_s)]
         cmap_s = {g: c for g, c in zip(unique_s, group_colors_s)}
+        strip_y = n_m + 0.8
         for si, g in enumerate(groups_s):
             ax.add_patch(__import__("matplotlib").patches.Rectangle(
-                (si - 0.5, -1.2), 1.0, 0.6,
+                (si - 0.5, strip_y), 1.0, 0.5,
                 facecolor=cmap_s[g], edgecolor="white", linewidth=0.3,
                 clip_on=False, zorder=3,
             ))
-        # Label groups.
         unique_positions = {}
         for si, g in enumerate(groups_s):
             unique_positions.setdefault(g, []).append(si)
         for g, xs in unique_positions.items():
-            ax.text(np.mean(xs), -1.55, g,
+            ax.text(np.mean(xs), strip_y + 0.80, g,
                     ha="center", va="bottom",
                     fontsize=6.4, color="#333333", fontweight="bold",
                     clip_on=False)
 
-    # Row annotation strip (module groups) — right of labels.
+    # Row annotation strip (module groups) — drawn to the right of the
+    # heatmap (outside ytick labels) to avoid collisions.
     if contract.module_groups is not None:
         groups_m = contract.module_groups
         unique_m = list(dict.fromkeys(groups_m))
         group_colors_m = ["#BDBDBD", "#8E7CC3", "#FFB266",
                           "#76A5AF", "#F6B26B"][: len(unique_m)]
         cmap_m = {g: c for g, c in zip(unique_m, group_colors_m)}
-        strip_x = -0.8
+        strip_x = n_s + 0.05
         for mi, g in enumerate(groups_m):
             ax.add_patch(__import__("matplotlib").patches.Rectangle(
-                (strip_x, mi - 0.5), 0.5, 1.0,
+                (strip_x, mi - 0.5), 0.6, 1.0,
                 facecolor=cmap_m[g], edgecolor="white", linewidth=0.3,
                 clip_on=False, zorder=3,
             ))
@@ -152,10 +153,10 @@ def render(contract: ModuleActivityInput, ax=None, **_):
         for mi, g in enumerate(groups_m):
             unique_positions_m.setdefault(g, []).append(mi)
         for g, ys in unique_positions_m.items():
-            ax.text(strip_x - 0.2, np.mean(ys), g,
-                    ha="right", va="center",
+            ax.text(strip_x + 0.9, np.mean(ys), g,
+                    ha="left", va="center",
                     fontsize=6.0, color="#333333",
-                    clip_on=False, rotation=90)
+                    clip_on=False, rotation=0)
 
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.040, pad=0.03)
     cbar.set_label("activity (z)", fontsize=6.8)

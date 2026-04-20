@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 218 | ≥320 |
-| Sessions complete | 0 | 8.5 | 20 |
+| Total recipes | 137 | 224 | ≥320 |
+| Sessions complete | 0 | 9.5 | 20 |
 
 ## Per-session status
 
@@ -25,7 +25,7 @@ every PR merge. Governed by
 | 06 | `redox_imaging`              | merged  | — | `v1.1.0-s06` | 7 (8→15) | none | roGFP2 calibration + three-stat bimodality ladder + duration CCDF + 1-D paracrine kernel + Langevin model comparison + switching-rate heatmap + per-state ACF; 2 panels polished (CCDF median footer, Langevin demo convention) |
 | 07 | `intravital_imaging`         | merged  | — | `v1.1.0-s07` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 8); +9 lands 15-target in one session; seeds (depth field, event timeline, territory pre/post, surveillance forest, contact matrix, laser injury radial, RGB overlay) + 2 gap-closers (MSD by state, velocity by state); 2 panels polished (midline line removed from territory, baseline label repositioned in surveillance) |
 | 08 | `gillespie_stochastic`       | merged  | — | `v1.1.0-s08` | 8 (7→15) | none | Master-eq P(n) overlap + tau-leap method comparison + MFPT matrix + FIM matrix + burst-size PMF + extinction P_ext(θ) + trajectory ACF + stochastic-resonance SNR; 2 panels polished (tau-leap inset xlabel, extinction interpolation sign) |
-| 09 | `omics_differential`         | pending | — | — | — | — | — |
+| 09 | `omics_differential`         | merged  | — | `v1.1.0-s09` | 6 (10→16) | none | Pathway-labelled proteome volcano + replicate concordance + shrinkage diagnostic + Euler overlap + rank-product meta-analysis + module activity heatmap; 2 panels polished (rank-product strip moved right, module-heatmap annotation strips repositioned) |
 | 10 | `calcium_signaling`          | pending | — | — | — | — | — |
 | 11 | `single_cell_embeddings`     | pending | — | — | — | — | — |
 | 12 | `dose_response_pharmacology` | pending | — | — | — | — | — |

@@ -10,6 +10,17 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Gillespie-stochastic catch-up (v1.1.0-s08 additions)
+
+- **Does the sampled steady-state match the master-equation P(n)?** → [`gillespie_stochastic.master_equation_steady_state`](gallery/gillespie_stochastic/master_equation_steady_state.png)
+- **How close is τ-leaping to the exact SSA trajectory?** → [`gillespie_stochastic.tau_leaping_comparison`](gallery/gillespie_stochastic/tau_leaping_comparison.png)
+- **What is the MFPT between every pair of states?** → [`gillespie_stochastic.mean_first_passage_time_matrix`](gallery/gillespie_stochastic/mean_first_passage_time_matrix.png)
+- **Which parameters are identifiable (Fisher-information matrix)?** → [`gillespie_stochastic.fisher_information_parameter_estimation`](gallery/gillespie_stochastic/fisher_information_parameter_estimation.png)
+- **What is the burst-size PMF, and is it geometric / negative-binomial?** → [`gillespie_stochastic.burst_size_distribution`](gallery/gillespie_stochastic/burst_size_distribution.png)
+- **How does extinction probability vary with a control parameter?** → [`gillespie_stochastic.extinction_probability_vs_parameter`](gallery/gillespie_stochastic/extinction_probability_vs_parameter.png)
+- **How fast do trajectories decorrelate per state?** → [`gillespie_stochastic.autocorrelation_of_trajectories`](gallery/gillespie_stochastic/autocorrelation_of_trajectories.png)
+- **Does the SNR vs noise show a stochastic-resonance peak?** → [`gillespie_stochastic.stochastic_resonance_signature`](gallery/gillespie_stochastic/stochastic_resonance_signature.png)
+
 ## Intravital-imaging catch-up (v1.1.0-s07 additions)
 
 - **Across a field, where are cells in (x, y) and at what depth z?** → [`intravital_imaging.depth_projected_microglia_field`](gallery/intravital_imaging/depth_projected_microglia_field.png)

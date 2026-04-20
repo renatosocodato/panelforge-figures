@@ -29,7 +29,7 @@ class ShrinkageScatterInput(RecipeContract):
     shrunken_log2fc: list[float] = Field(...)
     shrinkage_method: str = "apeglm"
     shrinkage_threshold: float = Field(
-        default=0.5,
+        default=0.6,
         description="|raw - shrunken| above this counts as 'strongly shrunken'",
     )
     title: str = "Raw vs shrunken effect size"
@@ -109,12 +109,14 @@ def render(contract: ShrinkageScatterInput, ax=None, **_):
             color="#111111", lw=0.8, ls="--", zorder=4,
             label="y = x (no shrinkage)")
 
-    # Strong-shrinkage threshold markers (|Δ| > threshold).
+    # Strong-shrinkage threshold markers (|Δ| > threshold) — smaller and
+    # thinner outline so the magma shrinkage-ratio colormap remains
+    # readable under the highlight.
     delta = raw - shr
     strong = np.abs(delta) > contract.shrinkage_threshold
     if strong.any():
-        ax.scatter(raw[strong], shr[strong], s=20, facecolor="none",
-                   edgecolor="#D32F2F", linewidth=0.6, zorder=5,
+        ax.scatter(raw[strong], shr[strong], s=14, facecolor="none",
+                   edgecolor="#D32F2F", linewidth=0.5, zorder=5,
                    label=f"|Δ|>{smart_fmt(contract.shrinkage_threshold)} ({int(strong.sum())})")
 
     cbar = ax.figure.colorbar(sc, ax=ax, fraction=0.046, pad=0.04)

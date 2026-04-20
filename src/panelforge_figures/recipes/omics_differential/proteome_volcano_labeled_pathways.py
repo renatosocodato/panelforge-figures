@@ -133,19 +133,9 @@ def render(contract: ProteomeVolcanoInput, ax=None, **_):
     ax.axhline(-np.log10(contract.padj_threshold), color="#888888",
                lw=0.6, ls="--", zorder=1)
 
-    # Pathway label at the centroid of its significant hits.
-    for g, color in zip(groups, group_colors):
-        mask = sig & (pw == g)
-        if mask.sum() < 3:
-            continue
-        cx = float(np.median(fc[mask]))
-        cy = float(np.quantile(y[mask], 0.75))
-        ax.text(cx, cy, g, ha="center", va="bottom",
-                fontsize=7.0, color=color, fontweight="normal",
-                bbox=dict(boxstyle="round,pad=0.16", fc="white",
-                          ec=color, lw=0.5, alpha=0.92),
-                zorder=6)
-
+    # Pathway label at the centroid of its significant hits — place labels
+    # above the hits, and split into left- vs right-side lanes with
+    # vertical repulsion so multiple pathway labels don't stack.
     ax.set_xlabel(r"$\log_2$ fold-change")
     ax.set_ylabel(r"$-\log_{10}$ p$_{adj}$")
     ax.set_title(
@@ -153,8 +143,56 @@ def render(contract: ProteomeVolcanoInput, ax=None, **_):
         f"p$_{{adj}}$<{smart_fmt(contract.padj_threshold)}",
         fontsize=8.4, pad=4,
     )
-    ax.legend(fontsize=6.4, frameon=False, loc="upper left",
-              ncols=2, handlelength=1.2, handletextpad=0.4,
+
+    # Reserve headroom above the highest hit so labels can stack cleanly.
+    y_data_max = float(y.max()) if y.size else 1.0
+    y_top = y_data_max * 1.18 + 0.5
+    ax.set_ylim(-0.05 * y_top, y_top)
+
+    # Precompute centroids per pathway (with significant hits).
+    centroids: list[tuple[str, str, float, float]] = []
+    for g, color in zip(groups, group_colors):
+        mask = sig & (pw == g)
+        if mask.sum() < 3:
+            continue
+        cx = float(np.median(fc[mask]))
+        cy = float(np.quantile(y[mask], 0.75))
+        centroids.append((g, color, cx, cy))
+
+    # Split by side (left: cx<0, right: cx>=0), sort by |cx| so busier
+    # pathways anchor first.
+    left = sorted([c for c in centroids if c[2] < 0], key=lambda c: -abs(c[2]))
+    right = sorted([c for c in centroids if c[2] >= 0], key=lambda c: -abs(c[2]))
+
+    def _place_side(items, x_anchor_sign):
+        # Stack labels at the top of the axes on the appropriate side,
+        # stepping downward so they never overlap.
+        y_label = y_top * 0.94
+        y_step = y_top * 0.08
+        for g, color, cx, cy in items:
+            x_label = x_anchor_sign * 2.6   # data-coord anchor
+            ax.annotate(
+                g,
+                xy=(cx, cy),
+                xytext=(x_label, y_label),
+                textcoords="data",
+                ha="center", va="center",
+                fontsize=6.8, color=color,
+                bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                          ec=color, lw=0.5, alpha=0.95),
+                arrowprops=dict(arrowstyle="-", color=color,
+                                lw=0.5, alpha=0.55, shrinkA=0, shrinkB=4),
+                zorder=6,
+            )
+            y_label -= y_step
+
+    _place_side(left, -1)
+    _place_side(right, +1)
+
+    # Legend placed below the x-axis to avoid covering hits.
+    ax.legend(fontsize=6.4, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, -0.16),
+              ncols=3, handlelength=1.2, handletextpad=0.4,
               columnspacing=1.4)
     ax.grid(color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

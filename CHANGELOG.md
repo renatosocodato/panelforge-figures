@@ -6,6 +6,70 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s09] — 2026-04-20
+
+Ninth session of the v1.1 hydration plan. Hydrates the
+`omics_differential` modality from 10 to 16 recipes in direct
+support of the Targetome and general omics pipelines.
+
+### Added
+
+- `omics_differential.proteome_volcano_labeled_pathways` — pathway-
+  group coloured volcano with one centroid label per pathway group;
+  distinct from the per-gene labelled volcano.
+- `omics_differential.effect_size_replicate_concordance` — rep1 vs
+  rep2 log2FC scatter with identity line, OLS fit, 95 % LoA band
+  and bias / SD(Δ) callout.
+- `omics_differential.shrinkage_estimate_scatter` — raw vs shrunken
+  log2FC with shrinkage-ratio colormap and |Δ|>threshold highlight.
+- `omics_differential.contrast_overlap_euler` — area-proportional
+  Euler circles for 2- or 3-way contrast overlaps with region
+  counts and Jaccard callout.
+- `omics_differential.rank_product_meta_analysis` — top-N 1/RP bars
+  with permutation-FDR star markers and a right-side per-study
+  rank-colour strip.
+- `omics_differential.pathway_module_activity_heatmap` — module ×
+  sample activity heatmap with group-annotation strips for
+  modules (right) and samples (bottom).
+
+### Infrastructure
+
+- No changes to `core/` — all 6 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (pathway-coloured volcano,
+  replicate concordance with Bland-Altman band, shrinkage diagnostic,
+  area-proportional Euler, rank-product meta-analysis ladder,
+  module activity heatmap) live inline.
+- Liberation Sans-safe labels throughout — replaced the union /
+  intersection glyphs in the Euler callout with plain "union /
+  inter / Jaccard" words.
+- Style-drift ratchet held on first pass.
+
+### Visual-QA polish (two panels)
+
+- `rank_product_meta_analysis`: the per-study rank-colour strip was
+  originally drawn to the left of the gene ladder where it collided
+  with gene y-tick labels. Moved to the right side of the bars (in
+  axes-fraction coords) with a reserved right-margin via
+  `subplots_adjust(right=0.70)`.
+- `pathway_module_activity_heatmap`: sample-group strip originally
+  drawn above row-0 at `y = -1.2`, colliding with the title; moved
+  to below the x-tick labels (`y = n_m + 0.8`). Module-group strip
+  originally drawn at `x = -0.8`, colliding with module y-tick
+  labels; moved to the right of the heatmap (`x = n_s + 0.05`).
+
+### Progress
+
+| | v1.1.0-s08 | **v1.1.0-s09** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 218 | **224** |
+| `omics_differential` | 10 | **16** |
+| Tests | 1141 | **1171** |
+
+
 ## [1.1.0-s08] — 2026-04-20
 
 Eighth session of the v1.1 hydration plan. Hydrates the

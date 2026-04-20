@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 218 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8).
+v1.1 in progress: 224 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,23 @@ v1.1 in progress: 218 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s09 — omics_differential hydration (+6, in progress)
+
+Expands omics_differential from 10 to 16 recipes:
+
+- **proteome_volcano_labeled_pathways** — pathway-group coloured
+  volcano with centroid labels per pathway.
+- **effect_size_replicate_concordance** — rep1 vs rep2 log2FC with
+  identity line, OLS fit and 95% LoA band.
+- **shrinkage_estimate_scatter** — raw vs shrunken log2FC with
+  shrinkage-ratio colormap.
+- **contrast_overlap_euler** — area-proportional Euler circles
+  with region counts and Jaccard callout.
+- **rank_product_meta_analysis** — top-N 1/RP bars with
+  permutation-FDR stars and per-study rank strip.
+- **pathway_module_activity_heatmap** — module × sample activity
+  heatmap with module / sample group annotation strips.
 
 ## v1.1.0-s08 — gillespie_stochastic hydration (+8, in progress)
 

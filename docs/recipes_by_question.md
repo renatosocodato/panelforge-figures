@@ -10,6 +10,15 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Omics-differential catch-up (v1.1.0-s09 additions)
+
+- **On a proteome volcano, which pathways dominate the hits?** → [`omics_differential.proteome_volcano_labeled_pathways`](gallery/omics_differential/proteome_volcano_labeled_pathways.png)
+- **How well do replicate effect-size estimates agree per gene?** → [`omics_differential.effect_size_replicate_concordance`](gallery/omics_differential/effect_size_replicate_concordance.png)
+- **How does empirical-Bayes shrinkage change effect sizes?** → [`omics_differential.shrinkage_estimate_scatter`](gallery/omics_differential/shrinkage_estimate_scatter.png)
+- **How do 2-3 contrast hit-sets overlap (area-proportional)?** → [`omics_differential.contrast_overlap_euler`](gallery/omics_differential/contrast_overlap_euler.png)
+- **Which genes are consistently top-ranked across studies?** → [`omics_differential.rank_product_meta_analysis`](gallery/omics_differential/rank_product_meta_analysis.png)
+- **How do pathway-module activities compare across samples?** → [`omics_differential.pathway_module_activity_heatmap`](gallery/omics_differential/pathway_module_activity_heatmap.png)
+
 ## Gillespie-stochastic catch-up (v1.1.0-s08 additions)
 
 - **Does the sampled steady-state match the master-equation P(n)?** → [`gillespie_stochastic.master_equation_steady_state`](gallery/gillespie_stochastic/master_equation_steady_state.png)

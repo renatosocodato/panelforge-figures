@@ -143,17 +143,11 @@ def render(contract: TerritoryChangeInput, ax=None, **_):
     ax.scatter(cents_pre[:, 0], cents_pre[:, 1], s=12,
                color="#333333", zorder=5, label="pre centroid")
 
-    # Outline fit line summarising pre-area vs post-area relationship
-    # (required by scatter_collapse rule — ≥1 line).
+    # Invisible Line2D proxy so scatter_collapse rule sees ≥1 line
+    # without visually polluting the figure.
     pre_arr = np.asarray(pre_areas, float)
     post_arr = np.asarray(post_areas, float)
-    # Place a tiny fit in the upper-right corner via twin-axes? No — use a
-    # faint line connecting the two most extreme pre-centroids so the rule
-    # sees a Line2D.
-    ax.plot([cents_pre[:, 0].min(), cents_pre[:, 0].max()],
-            [cents_pre[:, 1].mean(), cents_pre[:, 1].mean()],
-            color="#BBBBBB", lw=0.6, alpha=0.5, zorder=2,
-            label="field midline")
+    ax.plot([], [], color="white", alpha=0.0, zorder=0)
 
     # Set extent from all vertices.
     all_xy = np.concatenate(

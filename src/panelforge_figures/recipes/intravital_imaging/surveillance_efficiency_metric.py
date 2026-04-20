@@ -96,13 +96,15 @@ def render(contract: SurveillanceEffInput, ax=None, **_):
         ax.scatter([e], [yi], s=38, color=color,
                    edgecolor="white", linewidth=0.9, zorder=4)
 
-    # Baseline reference.
+    # Baseline reference (label pinned to lower-right inside axes so it
+    # never collides with the title).
     ax.axvline(contract.baseline, color="#555555", lw=0.9, ls="--", zorder=2)
-    ax.text(contract.baseline, len(names) - 0.2,
+    ax.text(0.98, 0.04,
             f"baseline = {smart_fmt(contract.baseline)}",
-            ha="center", va="bottom", fontsize=6.6, color="#555555",
-            bbox=dict(boxstyle="round,pad=0.16", fc="white",
-                      ec="none", alpha=0.92),
+            transform=ax.transAxes, ha="right", va="bottom",
+            fontsize=6.6, color="#555555",
+            bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                      ec="#BBBBBB", lw=0.5, alpha=0.92),
             zorder=5)
 
     # Numeric labels right-of-CI.

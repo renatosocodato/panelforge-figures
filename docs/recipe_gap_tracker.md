@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 201 | ≥320 |
-| Sessions complete | 0 | 6.5 | 20 |
+| Total recipes | 137 | 210 | ≥320 |
+| Sessions complete | 0 | 7.5 | 20 |
 
 ## Per-session status
 
@@ -23,7 +23,7 @@ every PR merge. Governed by
 | 04 | `mixed_effects_models`       | merged  | — | `v1.1.0-s04` | 7 (9→16) | none | Raw-data raincloud + (int, slope) scatter + AIC/BIC ladder + Δ-posteriors + partial residuals + emmeans-with-brackets + fixed/random/residual partition; 3 panels polished (raincloud n-labels, AIC legend, variance legend) |
 | 05 | `sensitivity_analysis`       | merged  | — | `v1.1.0-s05` | 7 (8→15) | none | FAST spectrum + LHS coverage + OAT tornado + param×output matrix + bootstrap-CI convergence + interaction graph + time-resolved indices; 3 panels polished (tornado baseline pill, driver-markers as edge triangles, FAST top-drivers footer) |
 | 06 | `redox_imaging`              | merged  | — | `v1.1.0-s06` | 7 (8→15) | none | roGFP2 calibration + three-stat bimodality ladder + duration CCDF + 1-D paracrine kernel + Langevin model comparison + switching-rate heatmap + per-state ACF; 2 panels polished (CCDF median footer, Langevin demo convention) |
-| 07 | `intravital_imaging`         | pending | — | — | — | — | — |
+| 07 | `intravital_imaging`         | merged  | — | `v1.1.0-s07` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 8); +9 lands 15-target in one session; seeds (depth field, event timeline, territory pre/post, surveillance forest, contact matrix, laser injury radial, RGB overlay) + 2 gap-closers (MSD by state, velocity by state); 2 panels polished (midline line removed from territory, baseline label repositioned in surveillance) |
 | 08 | `gillespie_stochastic`       | pending | — | — | — | — | — |
 | 09 | `omics_differential`         | pending | — | — | — | — | — |
 | 10 | `calcium_signaling`          | pending | — | — | — | — | — |

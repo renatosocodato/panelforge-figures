@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 194 | ≥320 |
-| Sessions complete | 0 | 5.5 | 20 |
+| Total recipes | 137 | 201 | ≥320 |
+| Sessions complete | 0 | 6.5 | 20 |
 
 ## Per-session status
 
@@ -22,7 +22,7 @@ every PR merge. Governed by
 | 03b | `actin_microtubule_morphometry` (catch-up) | merged  | — | `v1.1.0-s03b` | 11 (24→35) | none | User approved "land all 11" → 5 over 30-roster target (4 real-v1.0 bonus + persistence_length_by_segment); 2 panels polished (sunburst legend, polarity summary) |
 | 04 | `mixed_effects_models`       | merged  | — | `v1.1.0-s04` | 7 (9→16) | none | Raw-data raincloud + (int, slope) scatter + AIC/BIC ladder + Δ-posteriors + partial residuals + emmeans-with-brackets + fixed/random/residual partition; 3 panels polished (raincloud n-labels, AIC legend, variance legend) |
 | 05 | `sensitivity_analysis`       | merged  | — | `v1.1.0-s05` | 7 (8→15) | none | FAST spectrum + LHS coverage + OAT tornado + param×output matrix + bootstrap-CI convergence + interaction graph + time-resolved indices; 3 panels polished (tornado baseline pill, driver-markers as edge triangles, FAST top-drivers footer) |
-| 06 | `redox_imaging`              | pending | — | — | — | — | — |
+| 06 | `redox_imaging`              | merged  | — | `v1.1.0-s06` | 7 (8→15) | none | roGFP2 calibration + three-stat bimodality ladder + duration CCDF + 1-D paracrine kernel + Langevin model comparison + switching-rate heatmap + per-state ACF; 2 panels polished (CCDF median footer, Langevin demo convention) |
 | 07 | `intravital_imaging`         | pending | — | — | — | — | — |
 | 08 | `gillespie_stochastic`       | pending | — | — | — | — | — |
 | 09 | `omics_differential`         | pending | — | — | — | — | — |

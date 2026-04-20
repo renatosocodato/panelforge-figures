@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 194 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7).
+v1.1 in progress: 201 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,26 @@ v1.1 in progress: 194 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s06 — redox_imaging hydration (+7, in progress)
+
+Expands redox_imaging from 8 to 15 recipes:
+
+- **roGFP2_ratio_vs_disulfide_titration** — biosensor calibration
+  curve with sigmoid fit and Rmin/Rmax/midpoint/R² callout.
+- **bimodality_kurtosis_vs_conditions** — grouped bars for BC / κ /
+  dip with per-statistic thresholds and consensus star marker.
+- **time_above_threshold_distribution** — per-condition duration
+  CCDF with median dots and consolidated median footer.
+- **paracrine_kernel_fit** — 1-D K(r) with SEM band, fitted kernel
+  and λ / amp / R² corner callout.
+- **multiplicative_vs_additive_noise_diagnostic** — Langevin ξ² vs Y
+  with competing additive / multiplicative fits and ΔAIC verdict.
+- **redox_state_switching_frequency_map** — inferno spatial
+  switching-rate heatmap with rate-scaled cell centroids and
+  mandatory scale bar.
+- **ratio_autocorrelation_decay** — temporal ACF per state with
+  exponential fits, 1/e reference and τ-ratio callout.
 
 ## v1.1.0-s05 — sensitivity_analysis hydration (+7, in progress)
 

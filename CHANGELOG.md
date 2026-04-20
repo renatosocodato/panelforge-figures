@@ -6,6 +6,75 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s06] — 2026-04-20
+
+Sixth session of the v1.1 hydration plan. Hydrates the
+`redox_imaging` modality from 8 to 15 recipes in direct support of
+the µRedoxScape submission.
+
+### Added
+
+- `redox_imaging.roGFP2_ratio_vs_disulfide_titration` — biosensor
+  calibration curve with sigmoid fit, Rmin/Rmax reference lines,
+  midpoint vertical and parameter callout.
+- `redox_imaging.bimodality_kurtosis_vs_conditions` — grouped
+  horizontal bars for three complementary bimodality statistics
+  (BC, κ, dip) per condition with per-statistic thresholds and a
+  red-star marker where all three agree.
+- `redox_imaging.time_above_threshold_distribution` — per-condition
+  CCDF of cell-level oxidation durations with median dots on P=0.5
+  and a consolidated median-values footer.
+- `redox_imaging.paracrine_kernel_fit` — 1-D K(r) with SEM band,
+  exponential/Gaussian fit overlay, λ vertical and corner callout
+  (λ / amp / R²).
+- `redox_imaging.multiplicative_vs_additive_noise_diagnostic` —
+  Langevin ξ² vs Y with two competing model fits (constant D_add vs
+  D_mult(Y) = σ²Y²) and a ΔAIC-based preferred-model callout.
+- `redox_imaging.redox_state_switching_frequency_map` — inferno
+  spatial switching-rate heatmap with cell centroids scaled by
+  per-cell rate, mandatory scale bar and mean / 95%ile pill.
+- `redox_imaging.ratio_autocorrelation_decay` — temporal ACF per
+  state with exponential fits, 1/e reference line and τ-ratio
+  crossover callout.
+
+### Infrastructure
+
+- No changes to `core/` — all 7 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (sigmoid calibration,
+  three-stat grouped bars, CCDF survival, 1-D kernel fit, Langevin
+  model comparison, switching-rate field, per-state ACF) live inline
+  within their recipes.
+- Liberation Sans-safe labels throughout (★ rendered via
+  `ax.scatter(marker="*")` instead of a unicode glyph).
+- Style-drift ratchet held; the single new `lw=0.0` that would have
+  broken the 20-literal ceiling was resolved by switching
+  `paracrine_kernel_fit` from `ax.plot(lw=0.0, marker=...)` to
+  `ax.scatter(...)`.
+
+### Visual-QA polish (two panels)
+
+- `time_above_threshold_distribution`: consolidated per-condition
+  median labels into a single figure-space footer — original
+  strategy (labels offset vertically per index) still collided with
+  the survival curves.
+- `multiplicative_vs_additive_noise_diagnostic`: fixed the demo
+  data-generation convention so `ξ² = 2·σ²·Y²·dt` matches the model
+  curves drawn on the axis; AIC verdict now correctly reports
+  "preferred: multiplicative" when the ground truth is multiplicative.
+
+### Progress
+
+| | v1.1.0-s05 | **v1.1.0-s06** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 194 | **201** |
+| `redox_imaging` | 8 | **15** |
+| Tests | 1021 | **1056** |
+
+
 ## [1.1.0-s05] — 2026-04-20
 
 Fifth session of the v1.1 hydration plan. Hydrates the

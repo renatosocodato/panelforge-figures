@@ -23,7 +23,7 @@ def test_each_modality_has_its_recipes_registered():
     counts = registry_counts()
     assert counts["grant_and_conceptual"] == 6
     assert counts["meta_and_diagnostic"] == 4
-    assert counts["sensitivity_analysis"] == 8
+    assert counts["sensitivity_analysis"] == 15
 
 
 def test_every_registered_recipe_has_required_fields_and_question():

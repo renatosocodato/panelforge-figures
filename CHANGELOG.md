@@ -6,6 +6,76 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s08] — 2026-04-20
+
+Eighth session of the v1.1 hydration plan. Hydrates the
+`gillespie_stochastic` modality from 7 to 15 recipes in direct
+support of HOME-GATE-TRAP dwell analyses and stochastic-state-
+switching manuscripts.
+
+### Added
+
+- `gillespie_stochastic.master_equation_steady_state` — analytical
+  master-equation P(n) overlaid with sampled SSA histogram, plus
+  KL + TV distance callout.
+- `gillespie_stochastic.tau_leaping_comparison` — exact-SSA vs
+  τ-leap trajectory overlay with inset residual strip and RMSE /
+  speedup callout.
+- `gillespie_stochastic.mean_first_passage_time_matrix` — lower-
+  triangular MFPT heatmap with every off-diagonal annotated and a
+  fastest-pair footer.
+- `gillespie_stochastic.fisher_information_parameter_estimation` —
+  K × K Fisher-information matrix with condition-number callout
+  and dominant / poorest-identified eigen-direction summaries.
+- `gillespie_stochastic.burst_size_distribution` — discrete burst-
+  count PMF with fitted geometric + negative-binomial overlays,
+  preferred-model callout, mean / CV pill.
+- `gillespie_stochastic.extinction_probability_vs_parameter` —
+  per-initial-state P_ext(θ) curves with 0.5-crossing tipping-point
+  markers and footer.
+- `gillespie_stochastic.autocorrelation_of_trajectories` — per-state
+  ACF(τ) with exponential fits, 1/e reference and slowest-over-
+  fastest ratio callout.
+- `gillespie_stochastic.stochastic_resonance_signature` — SNR vs
+  noise-amplitude sweep with parabolic fit, vertical σ* and red
+  peak-star marker.
+
+### Infrastructure
+
+- No changes to `core/` — all 8 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (analytic-vs-sampled
+  overlap, method comparison with inset residual, MFPT matrix,
+  FIM matrix, discrete-count PMF, P_ext-vs-θ sigmoid family,
+  per-state ACF, SNR-vs-σ bell) live inline.
+- Liberation Sans-safe labels — ASCII replacements for the
+  unicode ↔ arrow used in the fastest-pair MFPT footer.
+- Style-drift ratchet held on first pass; all new tests green.
+
+### Visual-QA polish (two panels)
+
+- `tau_leaping_comparison`: the residual inset was overlapping the
+  main axis's "time (s)" xlabel — hid the main xlabel and placed the
+  inset further below (y=[-0.40, -0.16]) so the residual-only axis
+  carries the time label.
+- `extinction_probability_vs_parameter`: tipping-point footer was
+  showing absurd values (~1e6) because `max(denom, 1e-9)` clipped
+  the negative denominator of a decreasing sigmoid; replaced with
+  a signed-denominator test `abs(denom) > 1e-6` so both increasing
+  and decreasing curves interpolate correctly.
+
+### Progress
+
+| | v1.1.0-s07 | **v1.1.0-s08** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 210 | **218** |
+| `gillespie_stochastic` | 7 | **15** |
+| Tests | 1101 | **1141** |
+
+
 ## [1.1.0-s07] — 2026-04-20
 
 Seventh session of the v1.1 hydration plan. Hydrates the

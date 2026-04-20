@@ -89,7 +89,9 @@ def render(contract: TauLeapingInput, ax=None, **_):
             alpha=0.85, zorder=4,
             label=f"τ-leap (τ={smart_fmt(contract.tau_leap_step)})")
 
-    ax.set_xlabel("time (s)")
+    # Main axis: keep tick labels but hide xlabel (the residual inset
+    # carries its own "time (s)" axis below).
+    ax.tick_params(axis="x", labelbottom=False)
     ax.set_ylabel(contract.species_label)
     ax.set_title(contract.title, fontsize=9.0, pad=4)
     ax.set_xlim(t.min(), t.max())
@@ -99,7 +101,7 @@ def render(contract: TauLeapingInput, ax=None, **_):
     ax.set_axisbelow(True)
 
     # Residual strip — inset axes below main.
-    resid_ax = ax.inset_axes([0.0, -0.34, 1.0, 0.22])
+    resid_ax = ax.inset_axes([0.0, -0.40, 1.0, 0.24])
     resid_ax.plot(t, residual, color="#6A1B9A", lw=0.9, zorder=3)
     resid_ax.axhline(0, color="#888888", lw=0.6, ls="--", zorder=1)
     resid_ax.set_xlim(t.min(), t.max())

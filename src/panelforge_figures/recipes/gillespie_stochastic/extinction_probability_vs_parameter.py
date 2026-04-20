@@ -81,15 +81,18 @@ def render(contract: ExtinctionInput, ax=None, **_):
         v = np.asarray(vals, float)
         color = palette[i % len(palette.colors)]
         ax.plot(theta, v, color=color, lw=1.3, zorder=3, label=name)
-        # Find θ at P_ext = 0.5 (linear interpolation).
+        # Find θ at P_ext = 0.5 (signed linear interpolation — works for
+        # both increasing and decreasing sigmoids).
         idx = np.where(np.diff(np.sign(v - 0.5)))[0]
         if idx.size:
             k = int(idx[0])
-            frac = (0.5 - v[k]) / max(v[k + 1] - v[k], 1e-9)
-            theta_cross = float(theta[k] + frac * (theta[k + 1] - theta[k]))
-            crossings.append((name, theta_cross, color))
-            ax.scatter([theta_cross], [0.5], s=26, color=color,
-                       edgecolor="white", linewidth=0.6, zorder=5)
+            denom = v[k + 1] - v[k]
+            if abs(denom) > 1e-6:
+                frac = (0.5 - v[k]) / denom
+                theta_cross = float(theta[k] + frac * (theta[k + 1] - theta[k]))
+                crossings.append((name, theta_cross, color))
+                ax.scatter([theta_cross], [0.5], s=26, color=color,
+                           edgecolor="white", linewidth=0.6, zorder=5)
 
     # 0.5 reference.
     ax.axhline(0.5, color="#888888", lw=0.6, ls="--", zorder=1,

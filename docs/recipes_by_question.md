@@ -10,6 +10,16 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Redox-imaging catch-up (v1.1.0-s06 additions)
+
+- **What is the roGFP2 calibration curve and fitted midpoint / R²?** → [`redox_imaging.roGFP2_ratio_vs_disulfide_titration`](gallery/redox_imaging/roGFP2_ratio_vs_disulfide_titration.png)
+- **How do BC / kurtosis / Hartigan's dip compare per condition?** → [`redox_imaging.bimodality_kurtosis_vs_conditions`](gallery/redox_imaging/bimodality_kurtosis_vs_conditions.png)
+- **How long do cells spend above the oxidation threshold per condition?** → [`redox_imaging.time_above_threshold_distribution`](gallery/redox_imaging/time_above_threshold_distribution.png)
+- **What is the 1-D paracrine coupling kernel K(r), and what is λ?** → [`redox_imaging.paracrine_kernel_fit`](gallery/redox_imaging/paracrine_kernel_fit.png)
+- **Is the Langevin noise better modelled as additive or multiplicative?** → [`redox_imaging.multiplicative_vs_additive_noise_diagnostic`](gallery/redox_imaging/multiplicative_vs_additive_noise_diagnostic.png)
+- **Where in the imaging field do cells switch redox state most often?** → [`redox_imaging.redox_state_switching_frequency_map`](gallery/redox_imaging/redox_state_switching_frequency_map.png)
+- **How fast does the ratio decorrelate in time, per state?** → [`redox_imaging.ratio_autocorrelation_decay`](gallery/redox_imaging/ratio_autocorrelation_decay.png)
+
 ## Sensitivity-analysis catch-up (v1.1.0-s05 additions)
 
 - **What does the FAST frequency spectrum reveal about each parameter?** → [`sensitivity_analysis.fast_sensitivity_spectrum`](gallery/sensitivity_analysis/fast_sensitivity_spectrum.png)

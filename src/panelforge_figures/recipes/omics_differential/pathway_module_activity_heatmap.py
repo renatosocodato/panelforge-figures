@@ -134,29 +134,38 @@ def render(contract: ModuleActivityInput, ax=None, **_):
                     fontsize=6.4, color="#333333", fontweight="bold",
                     clip_on=False)
 
-    # Row annotation strip (module groups) — drawn to the right of the
-    # heatmap (outside ytick labels) to avoid collisions.
+    # Row annotation strip (module groups) — prefix each ytick label
+    # with a small coloured square so the group is visually obvious
+    # without a separate strip axes that would clash with the colorbar.
     if contract.module_groups is not None:
         groups_m = contract.module_groups
         unique_m = list(dict.fromkeys(groups_m))
         group_colors_m = ["#BDBDBD", "#8E7CC3", "#FFB266",
                           "#76A5AF", "#F6B26B"][: len(unique_m)]
         cmap_m = {g: c for g, c in zip(unique_m, group_colors_m)}
-        strip_x = n_s + 0.05
+        # Thin coloured swatch just left of the heatmap, inside axes
+        # so the colorbar on the right stays untouched.
         for mi, g in enumerate(groups_m):
             ax.add_patch(__import__("matplotlib").patches.Rectangle(
-                (strip_x, mi - 0.5), 0.6, 1.0,
+                (-0.48, mi - 0.48), 0.12, 0.96,
                 facecolor=cmap_m[g], edgecolor="white", linewidth=0.3,
-                clip_on=False, zorder=3,
+                zorder=5,
             ))
-        unique_positions_m = {}
-        for mi, g in enumerate(groups_m):
-            unique_positions_m.setdefault(g, []).append(mi)
-        for g, ys in unique_positions_m.items():
-            ax.text(strip_x + 0.9, np.mean(ys), g,
-                    ha="left", va="center",
-                    fontsize=6.0, color="#333333",
-                    clip_on=False, rotation=0)
+        # Module-group legend anchored below the sample-group strip so
+        # it never shares horizontal space with the ctrl / LPS / rescue
+        # annotation.
+        from matplotlib.patches import Patch
+        proxies = [Patch(facecolor=cmap_m[g], edgecolor="white", label=g)
+                   for g in unique_m]
+        leg = ax.legend(
+            handles=proxies, fontsize=6.2,
+            frameon=False, loc="upper center",
+            bbox_to_anchor=(0.5, -0.26),
+            ncols=len(unique_m), handlelength=1.0,
+            handletextpad=0.4, columnspacing=1.4,
+            title="module group", title_fontsize=6.2,
+        )
+        leg.get_title().set_color("#333333")
 
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.040, pad=0.03)
     cbar.set_label("activity (z)", fontsize=6.8)

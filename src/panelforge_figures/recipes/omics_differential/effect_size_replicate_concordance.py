@@ -129,8 +129,8 @@ def render(contract: ReplicateConcordanceInput, ax=None, **_):
         f"{contract.title}  ·  N={int(r1.size)}, r={smart_fmt(r)}",
         fontsize=9.0, pad=4,
     )
-    ax.legend(fontsize=6.6, frameon=False, loc="upper left",
-              handlelength=1.6)
+    ax.legend(fontsize=6.6, frameon=False, loc="center left",
+              bbox_to_anchor=(1.02, 0.5), handlelength=1.6)
     ax.grid(color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
 

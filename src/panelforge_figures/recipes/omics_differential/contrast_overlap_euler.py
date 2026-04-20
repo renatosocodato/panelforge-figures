@@ -106,14 +106,18 @@ def render(contract: EulerInput, ax=None, **_):
             facecolor=color, edgecolor=color, linewidth=1.2,
             alpha=0.25, zorder=2,
         ))
-        # Set-name label just outside circle.
-        label_y = cy + r + 0.04
-        if cy < 0:
-            label_y = cy - r - 0.04
+        # Set-name label just outside circle (clip_on=False so labels
+        # below the bottom circle aren't dropped by the default clip).
+        if cy >= 0:
+            label_y = cy + r + 0.04
+            label_va = "bottom"
+        else:
+            label_y = cy - r - 0.06
+            label_va = "top"
         ax.text(cx, label_y, f"{name}  (n={len(sets[name])})",
-                ha="center",
-                va="bottom" if cy >= 0 else "top",
-                fontsize=6.8, color=color, fontweight="bold")
+                ha="center", va=label_va,
+                fontsize=6.8, color=color, fontweight="bold",
+                clip_on=False)
     # Second pass: also add scatter dots so the visual rule sees a
     # collection (keeps the conceptual family happy alongside circles).
     centres_arr = np.asarray(centres, float)
@@ -177,7 +181,7 @@ def render(contract: EulerInput, ax=None, **_):
     )
 
     ax.set_xlim(-1.3, 1.3)
-    ax.set_ylim(-1.3, 1.3)
+    ax.set_ylim(-1.45, 1.3)
     ax.set_aspect("equal")
     ax.set_xticks([])
     ax.set_yticks([])

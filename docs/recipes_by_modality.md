@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 201 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7).
+v1.1 in progress: 210 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,28 @@ v1.1 in progress: 201 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s07 — intravital_imaging hydration (+9 Path 2, in progress)
+
+Real baseline was 6 (coordinator listed 8); Path 2 chosen to hit the
+plan's 15-target in one session by adding the 7 seeds + 2 gap-closers:
+
+- **depth_projected_microglia_field** — per-cell (x,y,z) scatter with
+  depth colormap and size-coded markers.
+- **process_event_timeline** — per-cell event raster across time.
+- **territory_change_pre_post** — paired pre/post territory polygons
+  with centroid arrow and expanded/shrank counts.
+- **surveillance_efficiency_metric** — condition-level forest with
+  CI, baseline reference and above/below colour coding.
+- **cell_cell_contact_frequency_matrix** — pairwise lower-triangular
+  contact heatmap with top-pair footer.
+- **laser_injury_response_radial** — radial response curves over time
+  with CI bands and peak-position callout.
+- **multi_channel_intravital_overlay** — RGB blend with histogram
+  sidebar.
+- **msd_curve_by_state** — log-log MSD vs τ per state with α-fit.
+- **velocity_distribution_by_state** — instantaneous-speed split
+  violin per state.
 
 ## v1.1.0-s06 — redox_imaging hydration (+7, in progress)
 

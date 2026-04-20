@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Intravital-imaging catch-up (v1.1.0-s07 additions)
+
+- **Across a field, where are cells in (x, y) and at what depth z?** → [`intravital_imaging.depth_projected_microglia_field`](gallery/intravital_imaging/depth_projected_microglia_field.png)
+- **When do discrete events occur per cell across the observation window?** → [`intravital_imaging.process_event_timeline`](gallery/intravital_imaging/process_event_timeline.png)
+- **How does each cell's surveyed territory change pre to post?** → [`intravital_imaging.territory_change_pre_post`](gallery/intravital_imaging/territory_change_pre_post.png)
+- **How does the surveillance-efficiency metric compare across conditions?** → [`intravital_imaging.surveillance_efficiency_metric`](gallery/intravital_imaging/surveillance_efficiency_metric.png)
+- **How often does each pair of cells make contact?** → [`intravital_imaging.cell_cell_contact_frequency_matrix`](gallery/intravital_imaging/cell_cell_contact_frequency_matrix.png)
+- **At distance r from an ablation, how does the response evolve over time?** → [`intravital_imaging.laser_injury_response_radial`](gallery/intravital_imaging/laser_injury_response_radial.png)
+- **How do multiple intravital channels co-register across a field?** → [`intravital_imaging.multi_channel_intravital_overlay`](gallery/intravital_imaging/multi_channel_intravital_overlay.png)
+- **What is the ensemble MSD per state, and is motion sub- / super-diffusive?** → [`intravital_imaging.msd_curve_by_state`](gallery/intravital_imaging/msd_curve_by_state.png)
+- **How do instantaneous speeds distribute per morphological state?** → [`intravital_imaging.velocity_distribution_by_state`](gallery/intravital_imaging/velocity_distribution_by_state.png)
+
 ## Redox-imaging catch-up (v1.1.0-s06 additions)
 
 - **What is the roGFP2 calibration curve and fitted midpoint / R²?** → [`redox_imaging.roGFP2_ratio_vs_disulfide_titration`](gallery/redox_imaging/roGFP2_ratio_vs_disulfide_titration.png)

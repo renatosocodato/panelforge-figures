@@ -6,6 +6,89 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s07] — 2026-04-20
+
+Seventh session of the v1.1 hydration plan. Hydrates the
+`intravital_imaging` modality from 6 (real baseline; coordinator
+listed 8 but actual v1.0 count = 6) to 15 recipes in direct support
+of the Neuron figures and the formalised 2P-witness strategy. Path 2
+reconciliation adopted — land 9 recipes in one session to hit the
+plan's 15-target, matching the s03 precedent.
+
+### Added — seeds from brief (+7)
+
+- `intravital_imaging.depth_projected_microglia_field` — per-cell
+  (x, y, z) scatter with depth-coded colormap, size-encoded cell
+  size, faint per-bin density background, mandatory scale bar and
+  depth stats pill. Distinct from the generic z-stack depth MIP.
+- `intravital_imaging.process_event_timeline` — per-cell event
+  raster with row-background state shading, marker-coded event
+  types (extension / retraction / contact) and a bottom
+  total-events-per-minute strip.
+- `intravital_imaging.territory_change_pre_post` — paired
+  pre-condition filled polygon + post-condition dashed outline per
+  cell with centroid pre-to-post arrow and expanded/shrank counts in
+  the title.
+- `intravital_imaging.surveillance_efficiency_metric` — condition-
+  level forest with 95 % CI sorted by estimate, colour-coded above /
+  below baseline and numeric value labels right of CI.
+- `intravital_imaging.cell_cell_contact_frequency_matrix` — lower-
+  triangular inferno heatmap with threshold annotations and
+  top-pair footer.
+- `intravital_imaging.laser_injury_response_radial` — radial
+  response curves over time with CI bands, t=0 baseline and
+  peak-position / max-time callout.
+- `intravital_imaging.multi_channel_intravital_overlay` — RGB
+  channel blend with mandatory scale bar, per-channel step-histogram
+  sidebar and per-channel mean callout.
+
+### Added — gap-closers to hit 15 (+2)
+
+- `intravital_imaging.msd_curve_by_state` — log-log ensemble MSD vs
+  τ per state with α-slope fit labels and a pure-diffusion reference
+  line. Reviewer-mandatory intravital analysis, no existing
+  ensemble-statistic recipe.
+- `intravital_imaging.velocity_distribution_by_state` —
+  instantaneous-speed split violin with median / quartile overlays
+  and per-category N labels. Distinct quantity from
+  `cell_shape_descriptors_by_state` (shape, not motion) and
+  `migration_rose_diagram` (angle only).
+
+### Infrastructure
+
+- No changes to `core/` — all 9 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- `_aesthetic.py` unchanged. New grammars (per-cell depth field,
+  event raster, paired pre/post polygons, surveillance forest,
+  pairwise cell contact matrix, radial-over-time curves, RGB blend
+  with histogram sidebar, log-log MSD with α-fits, speed violin)
+  live inline within their recipes.
+- Liberation Sans-safe labels throughout — `→` replaced with
+  `vs` / `(R)`, no unicode arrows in saved figures.
+- Style-drift ratchet held; no new fontsize or linewidth literals.
+
+### Visual-QA polish (two panels)
+
+- `territory_change_pre_post`: the "field midline" faint line
+  originally added to satisfy the `scatter_collapse` ≥1-line rule
+  was visually distracting; replaced with an invisible
+  `ax.plot([], [])` proxy.
+- `surveillance_efficiency_metric`: baseline label pinned to the
+  lower-right axes-fraction corner — original data-coord placement
+  collided with the panel title at the top.
+
+### Progress
+
+| | v1.1.0-s06 | **v1.1.0-s07** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 201 | **210** |
+| `intravital_imaging` | 6 | **15** |
+| Tests | 1056 | **1101** |
+
+
 ## [1.1.0-s06] — 2026-04-20
 
 Sixth session of the v1.1 hydration plan. Hydrates the

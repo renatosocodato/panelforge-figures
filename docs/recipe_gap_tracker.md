@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 233 | ≥320 |
-| Sessions complete | 0 | 10.5 | 20 |
+| Total recipes | 137 | 241 | ≥320 |
+| Sessions complete | 0 | 11.5 | 20 |
 
 ## Per-session status
 
@@ -27,7 +27,7 @@ every PR merge. Governed by
 | 08 | `gillespie_stochastic`       | merged  | — | `v1.1.0-s08` | 8 (7→15) | none | Master-eq P(n) overlap + tau-leap method comparison + MFPT matrix + FIM matrix + burst-size PMF + extinction P_ext(θ) + trajectory ACF + stochastic-resonance SNR; 2 panels polished (tau-leap inset xlabel, extinction interpolation sign) |
 | 09 | `omics_differential`         | merged  | — | `v1.1.0-s09` | 6 (10→16) | none | Pathway-labelled proteome volcano + replicate concordance + shrinkage diagnostic + Euler overlap + rank-product meta-analysis + module activity heatmap; 2 panels polished (rank-product strip moved right, module-heatmap annotation strips repositioned) |
 | 10 | `calcium_signaling`          | merged  | — | `v1.1.0-s10` | 9 (6→15) | none | Amplitude ridge + PETH + sync timeline + burst overlay + wave-speed map + freq×amp landscape + Ca×FRET joint + oscillation polar + stim-triggered heatmap; 2 panels polished (burst-callout → title, polar radial-labels to 270°) |
-| 11 | `single_cell_embeddings`     | pending | — | — | — | — | — |
+| 11 | `single_cell_embeddings`     | merged  | — | `v1.1.0-s11` | 8 (7→15) | none | Condition-density UMAP overlay + rare-pop spotlight + per-sample composition stack + branching trajectory + marker heatmap + gene×pseudotime + RNA-velocity field + LR dotplot; 2 panels polished (per-sample tick labels, velocity legend) |
 | 12 | `dose_response_pharmacology` | pending | — | — | — | — | — |
 | 13 | `network_and_pathway`        | pending | — | — | — | — | — |
 | 14 | `biophysics_scaling`         | pending | — | — | — | — | — |

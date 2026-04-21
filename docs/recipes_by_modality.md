@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 233 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9).
+v1.1 in progress: 241 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,27 @@ v1.1 in progress: 233 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s11 — single_cell_embeddings hydration (+8, in progress)
+
+Expands single_cell_embeddings from 7 to 15 recipes:
+
+- **umap_density_contour_overlay** — per-condition density contours
+  on shared UMAP with mean-shift arrows.
+- **rare_population_highlighted_umap** — spotlight grammar: bulk
+  greyed, rare pop with hull + median + %.
+- **cluster_proportion_stacked_by_sample** — per-sample stacked
+  bars with condition-group strip.
+- **trajectory_branching_force_directed** — branching trajectory
+  with Circle-patch branch points and endpoint labels.
+- **per_cluster_marker_heatmap** — z-scored gene × cluster heatmap
+  with origin-cluster strip.
+- **pseudotime_gene_expression_trajectory** — gene(pseudotime)
+  smoothed curves with CI bands and peak-order footer.
+- **rnavelocity_arrow_field** — RNA-velocity quiver field with
+  faint speed underlay.
+- **receptor_ligand_signaling_dotplot** — (sender × receiver) ×
+  LR-pair dotplot.
 
 ## v1.1.0-s10 — calcium_signaling hydration (+9, in progress)
 

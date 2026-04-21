@@ -6,6 +6,61 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s13] — 2026-04-21
+
+Thirteenth session of the v1.1 hydration plan. Hydrates the
+`network_and_pathway` modality from 5 to 15 recipes for Commentary +
+Targetome network vocabulary.
+
+### Added
+
+- `directed_network_force_layout` (conceptual) — directed graph with
+  arrowed edges and Circle-patch nodes.
+- `hub_gene_radial` (conceptual) — hub-centre + neighbours on a
+  circle, activator/repressor colour coding.
+- `ppi_seed_expansion` (conceptual) — two-shell seed + expanded
+  ring layout.
+- `pathway_crosstalk_matrix` (matrix) — pathway × pathway crosstalk
+  heatmap with top-pair footer.
+- `kegg_overlay_enrichment` (conceptual) — KEGG schematic with
+  FancyBboxPatch nodes coloured by −log10(p).
+- `regulon_activity_heatmap` (heatmap) — TF × sample activity with
+  condition strip.
+- `module_preservation_zsummary` (ladder) — WGCNA Z-ladder with
+  Z=2 / Z=10 tier shading.
+- `centrality_vs_effect_scatter` (scatter_collapse) — centrality vs
+  effect size with OLS + −log10(p) colormap.
+- `subnetwork_comparison_diff` (conceptual) — Δ-weight graph with
+  gain/loss edge coding.
+- `pathway_flux_streamgraph` (timecourse_hierarchical_ci) —
+  normalised stacked flux(t) with dominant-per-window footer.
+
+### Infrastructure
+
+- No changes to `core/` — 10 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet held (hub-radial title 8.8 → 8.6).
+
+### Visual-QA polish (one panel)
+
+- `directed_network_force_layout`: the initial Fruchterman-Reingold
+  spring layout collapsed all 18 nodes to a tight cluster because
+  the uncapped attractive force dominated. Replaced with a
+  deterministic **degree-based radial layout** — hubs near centre,
+  rim nodes outside, with per-tier angular stratification + small
+  jitter — which reads cleanly for small/medium dense graphs.
+
+### Progress
+
+| | v1.1.0-s12 | **v1.1.0-s13** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 251 | **261** |
+| `network_and_pathway` | 5 | **15** |
+| Tests | 1306 | **1356** |
+
+
 ## [1.1.0-s12] — 2026-04-21
 
 Twelfth session of the v1.1 hydration plan. Hydrates the

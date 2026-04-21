@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 251 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10).
+v1.1 in progress: 261 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,22 @@ v1.1 in progress: 251 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s13 — network_and_pathway hydration (+10, in progress)
+
+Expands network_and_pathway from 5 to 15 recipes:
+
+- **directed_network_force_layout** — directed graph with arrowed
+  edges, degree-radial layout.
+- **hub_gene_radial** — hub-centre + neighbours on a circle.
+- **ppi_seed_expansion** — seed + first-neighbour two-shell layout.
+- **pathway_crosstalk_matrix** — pathway × pathway crosstalk.
+- **kegg_overlay_enrichment** — KEGG schematic with p-value coloring.
+- **regulon_activity_heatmap** — TF × sample activity.
+- **module_preservation_zsummary** — WGCNA Z-ladder with tiers.
+- **centrality_vs_effect_scatter** — centrality vs effect OLS.
+- **subnetwork_comparison_diff** — Δ-weight gain/loss graph.
+- **pathway_flux_streamgraph** — normalised flux(t) stack.
 
 ## v1.1.0-s12 — dose_response_pharmacology hydration (+10, in progress)
 

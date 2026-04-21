@@ -10,6 +10,19 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Network-and-pathway catch-up (v1.1.0-s13 additions)
+
+- **What does a directed regulatory network look like with hubs highlighted?** → [`network_and_pathway.directed_network_force_layout`](gallery/network_and_pathway/directed_network_force_layout.png)
+- **What are the hub's immediate neighbours and their edge weights?** → [`network_and_pathway.hub_gene_radial`](gallery/network_and_pathway/hub_gene_radial.png)
+- **What does a seed + first-neighbour expansion look like?** → [`network_and_pathway.ppi_seed_expansion`](gallery/network_and_pathway/ppi_seed_expansion.png)
+- **How do pathways cross-talk with each other?** → [`network_and_pathway.pathway_crosstalk_matrix`](gallery/network_and_pathway/pathway_crosstalk_matrix.png)
+- **Which nodes in a KEGG pathway are enriched?** → [`network_and_pathway.kegg_overlay_enrichment`](gallery/network_and_pathway/kegg_overlay_enrichment.png)
+- **How does each TF-regulon's activity vary across samples?** → [`network_and_pathway.regulon_activity_heatmap`](gallery/network_and_pathway/regulon_activity_heatmap.png)
+- **How preserved is each module (Zsummary)?** → [`network_and_pathway.module_preservation_zsummary`](gallery/network_and_pathway/module_preservation_zsummary.png)
+- **Do central nodes have the largest effect sizes?** → [`network_and_pathway.centrality_vs_effect_scatter`](gallery/network_and_pathway/centrality_vs_effect_scatter.png)
+- **Which edges gain / lose weight between conditions?** → [`network_and_pathway.subnetwork_comparison_diff`](gallery/network_and_pathway/subnetwork_comparison_diff.png)
+- **How does pathway-activity flux redistribute over time?** → [`network_and_pathway.pathway_flux_streamgraph`](gallery/network_and_pathway/pathway_flux_streamgraph.png)
+
 ## Dose-response pharmacology catch-up (v1.1.0-s12 additions)
 
 - **Do male and female Hill curves differ?** → [`dose_response_pharmacology.dose_response_sex_stratified`](gallery/dose_response_pharmacology/dose_response_sex_stratified.png)

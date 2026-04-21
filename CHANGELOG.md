@@ -6,6 +6,68 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s12] — 2026-04-21
+
+Twelfth session of the v1.1 hydration plan. Hydrates the
+`dose_response_pharmacology` modality from 5 to 15 recipes for
+ATHENA pharmacology + sex-stratified drug response.
+
+### Added
+
+- `dose_response_sex_stratified` (diagnostic_curve) — F/M Hill
+  curves with sex × dose interaction p + EC50-fold callout.
+- `dose_response_time_matrix` (heatmap) — concentration × time
+  effect matrix with per-conc peak isochrone and global peak star.
+- `response_rebound_kinetics` (diagnostic_curve) — washout curve
+  with rebound peak marker and recovery τ callout.
+- `ic50_vs_target_affinity_scatter` (scatter_collapse) — Ki vs IC50
+  log-log with identity + OLS fit, mechanism-class coloring.
+- `selectivity_index_tornado` (ladder) — fold-IC50 tornado with
+  10× cliff marker and tractability shading.
+- `dose_normalized_ec50_forest` (coef_forest) — x-fold EC50 vs
+  lead, log-x, mechanism-coloured.
+- `synergy_score_bliss_loewe` (scatter_collapse) — Bliss vs Loewe
+  scatter with agreement diagonal and synergy / antagonism /
+  disagreement quadrant coding.
+- `pharmacophore_activity_heatmap` (heatmap) — feature × compound
+  SAR heatmap with active-feature origin strip.
+- `compound_cluster_structure_activity` (conceptual) — structural
+  PCA + per-cluster mean activity two-panel.
+- `polypharmacology_radar` (radar) — multi-compound polar radar
+  with title-integrated mean-activity summary.
+
+### Infrastructure
+
+- No changes to `core/` — all 10 recipes use new per-recipe
+  Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet held — title fontsize 8.8 → 8.6 on two
+  recipes during implementation.
+- Conceptual-family rule satisfied in
+  `compound_cluster_structure_activity` by adding per-bar value
+  labels so ≥3 text artists are present.
+
+### Visual-QA polish (two panels)
+
+- `dose_normalized_ec50_forest`: the `lead (1×)` / `10×` legend
+  originally sat at lower-right where it clipped the right-most
+  x-fold labels; moved to upper-right.
+- `polypharmacology_radar`: the mean-activity footer and
+  compound legend both collided with the bottom "hydrolase"
+  target label; folded the mean-activity summary into a 2-line
+  title and anchored the legend at `bbox_to_anchor=(0.5, -0.14)`.
+
+### Progress
+
+| | v1.1.0-s11 | **v1.1.0-s12** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 241 | **251** |
+| `dose_response_pharmacology` | 5 | **15** |
+| Tests | 1256 | **1306** |
+
+
 ## [1.1.0-s11] — 2026-04-21
 
 Eleventh session of the v1.1 hydration plan. Hydrates the

@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Calcium-signaling catch-up (v1.1.0-s10 additions)
+
+- **How are Ca²⁺ event amplitudes distributed per condition?** → [`calcium_signaling.calcium_event_amplitude_distribution`](gallery/calcium_signaling/calcium_event_amplitude_distribution.png)
+- **What does the PETH around an event onset look like?** → [`calcium_signaling.calcium_event_onset_alignment`](gallery/calcium_signaling/calcium_event_onset_alignment.png)
+- **How does population synchrony evolve over time?** → [`calcium_signaling.population_synchronization_timeline`](gallery/calcium_signaling/population_synchronization_timeline.png)
+- **Where are network bursts in the recording?** → [`calcium_signaling.network_burst_detection_overlay`](gallery/calcium_signaling/network_burst_detection_overlay.png)
+- **What is the local wave propagation speed?** → [`calcium_signaling.calcium_wave_speed_map`](gallery/calcium_signaling/calcium_wave_speed_map.png)
+- **Per cell, how does frequency relate to amplitude?** → [`calcium_signaling.single_cell_calcium_landscape`](gallery/calcium_signaling/single_cell_calcium_landscape.png)
+- **How do Ca²⁺ and FRET covary per cell?** → [`calcium_signaling.calcium_and_fret_joint_plot`](gallery/calcium_signaling/calcium_and_fret_joint_plot.png)
+- **Where does the dominant oscillation phase fall on the unit circle?** → [`calcium_signaling.oscillation_frequency_polar`](gallery/calcium_signaling/oscillation_frequency_polar.png)
+- **How do all cells' ΔF/F traces align around a stimulus?** → [`calcium_signaling.stimulus_triggered_calcium_heatmap`](gallery/calcium_signaling/stimulus_triggered_calcium_heatmap.png)
+
 ## Omics-differential catch-up (v1.1.0-s09 additions)
 
 - **On a proteome volcano, which pathways dominate the hits?** → [`omics_differential.proteome_volcano_labeled_pathways`](gallery/omics_differential/proteome_volcano_labeled_pathways.png)

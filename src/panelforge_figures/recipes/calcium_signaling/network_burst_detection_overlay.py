@@ -112,7 +112,6 @@ def render(contract: NetworkBurstInput, ax=None, **_):
     ax_rate.plot(t_bins, rate_smooth, color=accent, lw=1.2, zorder=3)
     ax_rate.set_ylabel("rate (Hz/cell)", fontsize=7.0)
     ax_rate.tick_params(labelbottom=False)
-    ax_rate.set_title(contract.title, fontsize=9.0, pad=4)
 
     # Raster.
     for i, events in enumerate(contract.event_times):
@@ -143,11 +142,11 @@ def render(contract: NetworkBurstInput, ax=None, **_):
 
     n_bursts = len(contract.burst_start)
     mean_dur = float(np.mean(burst_durations)) if burst_durations else 0.0
-    ax_rate.text(0.99, 0.97,
-                 f"bursts = {n_bursts}   mean dur = {smart_fmt(mean_dur)} s",
-                 transform=ax_rate.transAxes, ha="right", va="top",
-                 fontsize=6.4, color=burst_color,
-                 bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                           ec=burst_color, lw=0.5, alpha=0.92),
-                 zorder=6)
+    # Fold the burst-count summary into the panel title so it never
+    # overlaps any of the B-labels or the rate peaks.
+    ax_rate.set_title(
+        f"{contract.title}  ·  bursts = {n_bursts},  "
+        f"mean dur = {smart_fmt(mean_dur)} s",
+        fontsize=8.6, pad=4, color=burst_color,
+    )
     return ax_rate

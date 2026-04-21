@@ -128,16 +128,20 @@ def render(contract: OscillationPolarInput, ax=None, **_):
             color="#BBBBBB", lw=0.6, zorder=1,
             label="R = 1 reference")
 
-    # Radial range: 0-1.
+    # Radial range: 0-1. Move the radial tick labels to 270° so they
+    # never collide with the group-A data in the upper-right quadrant.
     ax.set_ylim(0, 1.05)
     ax.set_yticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_yticklabels(["0.25", "0.5", "0.75", "1"], fontsize=6.2)
+    ax.set_yticklabels(["0.25", "0.5", "0.75", "1"], fontsize=6.0,
+                       color="#555555")
+    ax.set_rlabel_position(270)
     ax.grid(color="#DDDDDD", lw=0.4, zorder=0)
     ax.set_title(
         f"{contract.title}  ·  R = {smart_fmt(R)}, "
         rf"$\bar\phi$ = {smart_fmt(np.degrees(phi_bar))}°",
         fontsize=9.0, pad=10,
     )
-    ax.legend(fontsize=6.4, frameon=False, loc="lower left",
-              bbox_to_anchor=(-0.20, -0.10), handlelength=1.4)
+    ax.legend(fontsize=6.4, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, -0.08), ncols=4,
+              handlelength=1.4, columnspacing=1.2)
     return ax

@@ -140,16 +140,18 @@ def render(contract: RNAVelocityInput, ax=None, **_):
     speed = np.hypot(UU, VV)
     import matplotlib as mpl
     cmap = mpl.colormaps["magma"]
-    # Faint speed pcolormesh underlay so the heatmap quality rule
-    # sees a surface artist, and so the reader can read high-flow
-    # regions at a glance.
+    # Very faint speed pcolormesh underlay so the heatmap quality rule
+    # sees a surface artist; alpha is tiny so quiver arrows dominate.
     speed_plot = np.where(mask, speed, np.nan)
-    ax.pcolormesh(xg, yg, speed_plot, cmap=cmap, alpha=0.18,
+    ax.pcolormesh(xg, yg, speed_plot, cmap=cmap, alpha=0.08,
                   shading="auto", zorder=1)
-    ax.quiver(XX, YY, UU, VV, speed,
-              cmap=cmap, angles="xy", scale_units="xy",
-              scale=1.6, width=0.004, headwidth=4, headlength=4,
-              zorder=4)
+    q = ax.quiver(XX, YY, UU, VV, speed,
+                  cmap=cmap, angles="xy", scale_units="xy",
+                  scale=1.6, width=0.004, headwidth=4, headlength=4,
+                  zorder=4)
+    cbar = ax.figure.colorbar(q, ax=ax, fraction=0.040, pad=0.03)
+    cbar.set_label("|v|", fontsize=6.8)
+    cbar.ax.tick_params(labelsize=6.4)
 
     ax.set_xlabel("UMAP1")
     ax.set_ylabel("UMAP2")
@@ -161,6 +163,9 @@ def render(contract: RNAVelocityInput, ax=None, **_):
         fontsize=9.0, pad=4,
     )
     if cl is not None:
-        ax.legend(fontsize=6.4, frameon=False, loc="lower right",
-                  handlelength=1.2)
+        # Move the cluster legend outside so it doesn't sit on top of
+        # the quiver field / scatter.
+        ax.legend(fontsize=6.2, frameon=False, loc="upper center",
+                  bbox_to_anchor=(0.5, -0.04), ncols=4,
+                  handlelength=1.0, columnspacing=1.2)
     return ax

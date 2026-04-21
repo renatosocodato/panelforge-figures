@@ -6,6 +6,76 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s11] — 2026-04-21
+
+Eleventh session of the v1.1 hydration plan. Hydrates the
+`single_cell_embeddings` modality from 7 to 15 recipes for Targetome
+scRNA work and general single-cell omics.
+
+### Added
+
+- `single_cell_embeddings.umap_density_contour_overlay` — per-
+  condition density contours on a shared UMAP, mean-shift arrows
+  and pairwise centroid-distance callout.
+- `single_cell_embeddings.rare_population_highlighted_umap` —
+  spotlight grammar: bulk greyed, rare pop with convex hull +
+  median star + % callout.
+- `single_cell_embeddings.cluster_proportion_stacked_by_sample` —
+  per-sample stacked bars with condition-group strip below.
+- `single_cell_embeddings.trajectory_branching_force_directed` —
+  branching trajectory with Circle-patch branch points, per-branch
+  colours and endpoint labels.
+- `single_cell_embeddings.per_cluster_marker_heatmap` — z-scored
+  gene × cluster heatmap with origin-cluster annotation strip.
+- `single_cell_embeddings.pseudotime_gene_expression_trajectory` —
+  gene(pseudotime) smoothed curves with CI bands and peak-order
+  footer.
+- `single_cell_embeddings.rnavelocity_arrow_field` — RNA-velocity
+  quiver field over UMAP scatter with faint speed underlay and |v|
+  colorbar.
+- `single_cell_embeddings.receptor_ligand_signaling_dotplot` —
+  (sender × receiver) × LR-pair dotplot with size∝strength and
+  colour∝-log10(p).
+
+### Infrastructure
+
+- No changes to `core/` — all 8 recipes use new per-recipe Pydantic
+  contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Liberation Sans-safe throughout — the rightwards-arrow glyph was
+  replaced with `->` in branch labels, legend entries and peak-order
+  footers.
+- Quality-rule fit-ups during implementation:
+  - `rnavelocity_arrow_field` (heatmap): added a faint speed
+    `pcolormesh` underlay so the ≥1-surface rule is satisfied.
+  - `trajectory_branching_force_directed` (conceptual): branch
+    points drawn with `mpatches.Circle` patches so ≥2 decorative
+    patches are present.
+  - `umap_density_contour_overlay` (scatter_collapse): mean-shift
+    arrows are underpinned by a Line2D segment so the ≥1-line rule
+    is satisfied.
+
+### Visual-QA polish (two panels)
+
+- `cluster_proportion_stacked_by_sample`: per-sample tick labels
+  were hidden behind the condition-group strip; moved the strip
+  down (strip_y: -0.08 → -0.14) and shortened labels to the
+  per-condition index so the numbers stay visible.
+- `rnavelocity_arrow_field`: the cluster legend was inside the
+  plot covering the quiver field; moved to a single-row anchor
+  below the axes and added a |v| colorbar.
+
+### Progress
+
+| | v1.1.0-s10 | **v1.1.0-s11** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 233 | **241** |
+| `single_cell_embeddings` | 7 | **15** |
+| Tests | 1216 | **1256** |
+
+
 ## [1.1.0-s10] — 2026-04-21
 
 Tenth session of the v1.1 hydration plan. Hydrates the

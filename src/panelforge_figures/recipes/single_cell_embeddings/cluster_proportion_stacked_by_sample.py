@@ -111,12 +111,13 @@ def render(contract: SampleCompositionInput, ax=None, **_):
                edgecolor="white", linewidth=0.4, zorder=3, label=cl)
         bottoms += P[:, ci]
 
-    # Condition strip below the bars.
+    # Condition strip below the bars, positioned below the xtick labels
+    # so per-sample numbers remain readable.
     unique_conds = list(dict.fromkeys(conds))
     group_colors = ["#6FA8DC", "#E06666", "#93C47D", "#C27BA0",
                     "#FFD966"][: len(unique_conds)]
     cmap_c = {g: c for g, c in zip(unique_conds, group_colors)}
-    strip_y = -0.08
+    strip_y = -0.14
     strip_h = 0.05
     for xi, c in enumerate(conds):
         ax.add_patch(mpatches.Rectangle(
@@ -129,7 +130,7 @@ def render(contract: SampleCompositionInput, ax=None, **_):
     for xi, c in enumerate(conds):
         pos_by_group.setdefault(c, []).append(xi)
     for g, positions in pos_by_group.items():
-        ax.text(float(np.mean(positions)), strip_y - 0.04, g,
+        ax.text(float(np.mean(positions)), strip_y - 0.03, g,
                 transform=ax.get_xaxis_transform(),
                 ha="center", va="top", fontsize=6.4,
                 color="#333333", fontweight="bold",
@@ -137,8 +138,12 @@ def render(contract: SampleCompositionInput, ax=None, **_):
 
     ax.set_xlim(-0.5, len(samples) - 0.5)
     ax.set_ylim(0, 1.0)
+    # Short per-sample tick labels (strip the condition prefix so the
+    # rotated text doesn't run together); full sample IDs remain in the
+    # condition strip below.
+    short_labels = [s.rsplit("_", 1)[-1] for s in samples]
     ax.set_xticks(x)
-    ax.set_xticklabels(samples, rotation=45, ha="right", fontsize=6.4)
+    ax.set_xticklabels(short_labels, rotation=0, ha="center", fontsize=6.4)
     ax.set_ylabel("proportion")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
     ax.legend(fontsize=6.4, frameon=False, loc="center left",

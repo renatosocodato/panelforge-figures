@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 251 | ≥320 |
-| Sessions complete | 0 | 12.5 | 20 |
+| Total recipes | 137 | 261 | ≥320 |
+| Sessions complete | 0 | 13.5 | 20 |
 
 ## Per-session status
 
@@ -29,7 +29,7 @@ every PR merge. Governed by
 | 10 | `calcium_signaling`          | merged  | — | `v1.1.0-s10` | 9 (6→15) | none | Amplitude ridge + PETH + sync timeline + burst overlay + wave-speed map + freq×amp landscape + Ca×FRET joint + oscillation polar + stim-triggered heatmap; 2 panels polished (burst-callout → title, polar radial-labels to 270°) |
 | 11 | `single_cell_embeddings`     | merged  | — | `v1.1.0-s11` | 8 (7→15) | none | Condition-density UMAP overlay + rare-pop spotlight + per-sample composition stack + branching trajectory + marker heatmap + gene×pseudotime + RNA-velocity field + LR dotplot; 2 panels polished (per-sample tick labels, velocity legend) |
 | 12 | `dose_response_pharmacology` | merged  | — | `v1.1.0-s12` | 10 (5→15) | none | Sex-stratified Hill + dose×time matrix + rebound kinetics + IC50-vs-Ki + selectivity tornado + fold-EC50 forest + Bliss-vs-Loewe + SAR heatmap + cluster-SAR two-panel + polypharmacology radar; 2 panels polished (forest legend, radar footer/legend) |
-| 13 | `network_and_pathway`        | pending | — | — | — | — | — |
+| 13 | `network_and_pathway`        | merged  | — | `v1.1.0-s13` | 10 (5→15) | none | Force layout + hub radial + PPI seed expansion + crosstalk matrix + KEGG overlay + regulon heatmap + module preservation + centrality-vs-effect + diff subnetwork + flux streamgraph; 1 panel polished (force layout -> degree-radial after spring collapse) |
 | 14 | `biophysics_scaling`         | pending | — | — | — | — | — |
 | 15 | `diffusion_and_tracking`     | pending | — | — | — | — | — |
 | 16 | `spatial_statistics`         | pending | — | — | — | — | — |

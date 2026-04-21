@@ -26,36 +26,41 @@ class DirectedNetworkInput(RecipeContract):
     title: str = "Directed network · force layout"
 
 
-def _spring_layout(n, edges, iters=60, seed=0):
+def _degree_radial_layout(n, edges, seed=0):
+    """Degree-based radial layout: high-degree nodes near centre, low at
+    rim. Deterministic and readable for small-to-medium graphs where a
+    spring layout collapses. Nodes of equal degree are spaced angularly.
+    """
     rng = np.random.default_rng(seed)
-    pos = rng.uniform(-1, 1, (n, 2))
-    k = np.sqrt(1.0 / max(n, 1))
-    for _ in range(iters):
-        disp = np.zeros_like(pos)
-        # Repulsion.
-        for i in range(n):
-            delta = pos[i] - pos
-            dist = np.linalg.norm(delta, axis=1)
-            dist = np.where(dist < 1e-3, 1e-3, dist)
-            force = k * k / dist[:, None]
-            disp[i] += (delta / dist[:, None] * force).sum(axis=0)
-        # Attraction along edges.
-        for s, d in edges:
-            if s >= n or d >= n:
-                continue
-            delta = pos[s] - pos[d]
-            dist = np.linalg.norm(delta) + 1e-9
-            force = dist * dist / k
-            disp[s] -= delta / dist * force * 0.5
-            disp[d] += delta / dist * force * 0.5
-        # Step with cooling.
-        step = np.minimum(np.linalg.norm(disp, axis=1, keepdims=True), 0.1)
-        pos += disp / (np.linalg.norm(disp, axis=1, keepdims=True) + 1e-9) * step
-    # Rescale to [-1, 1] per axis.
-    pos -= pos.mean(axis=0)
-    scale = max(np.abs(pos).max(), 1e-6)
-    pos = pos / scale * 0.9
-    return pos
+    deg = np.zeros(n, dtype=int)
+    for s, d in edges:
+        if s < n:
+            deg[s] += 1
+        if d < n:
+            deg[d] += 1
+    # Assign radii: rank nodes by degree descending (hubs at centre).
+    order = np.argsort(-deg)
+    ranks = np.empty(n, dtype=int)
+    ranks[order] = np.arange(n)
+    # Radius increases with rank; add a small jitter for aesthetic.
+    base_r = 0.15 + 0.75 * (ranks / max(n - 1, 1))
+    # Angle: stratify within degree tiers to avoid overlap.
+    angles = np.zeros(n)
+    unique_d = sorted(set(deg.tolist()), reverse=True)
+    for d_val in unique_d:
+        idx = np.where(deg == d_val)[0]
+        rng.shuffle(idx)
+        for k, i in enumerate(idx):
+            angles[i] = 2 * np.pi * k / max(len(idx), 1) + d_val * 0.37
+    jitter = rng.uniform(-0.03, 0.03, n)
+    x = base_r * np.cos(angles) + jitter
+    y = base_r * np.sin(angles) + jitter
+    return np.column_stack([x, y])
+
+
+def _spring_layout(n, edges, iters=50, seed=0):
+    """Public entry — delegates to the degree-radial layout."""
+    return _degree_radial_layout(n, edges, seed=seed)
 
 
 def _demo() -> DirectedNetworkInput:

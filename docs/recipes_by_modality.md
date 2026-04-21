@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 241 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8).
+v1.1 in progress: 251 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,21 @@ v1.1 in progress: 241 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s12 — dose_response_pharmacology hydration (+10, in progress)
+
+Expands dose_response_pharmacology from 5 to 15 recipes:
+
+- **dose_response_sex_stratified** — F/M Hill curves with interaction p.
+- **dose_response_time_matrix** — conc × time effect heatmap.
+- **response_rebound_kinetics** — washout recovery with rebound peak.
+- **ic50_vs_target_affinity_scatter** — Ki vs IC50 log-log concordance.
+- **selectivity_index_tornado** — off-target fold-IC50 tornado.
+- **dose_normalized_ec50_forest** — x-fold EC50 vs lead.
+- **synergy_score_bliss_loewe** — Bliss vs Loewe scatter with quadrants.
+- **pharmacophore_activity_heatmap** — feature × compound SAR.
+- **compound_cluster_structure_activity** — PCA + cluster activity.
+- **polypharmacology_radar** — multi-compound target radar.
 
 ## v1.1.0-s11 — single_cell_embeddings hydration (+8, in progress)
 

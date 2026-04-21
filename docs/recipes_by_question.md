@@ -10,6 +10,19 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Dose-response pharmacology catch-up (v1.1.0-s12 additions)
+
+- **Do male and female Hill curves differ?** → [`dose_response_pharmacology.dose_response_sex_stratified`](gallery/dose_response_pharmacology/dose_response_sex_stratified.png)
+- **Over conc × time, when / where does the effect peak?** → [`dose_response_pharmacology.dose_response_time_matrix`](gallery/dose_response_pharmacology/dose_response_time_matrix.png)
+- **After washout, does the response overshoot?** → [`dose_response_pharmacology.response_rebound_kinetics`](gallery/dose_response_pharmacology/response_rebound_kinetics.png)
+- **How well does functional IC50 correlate with binding Ki?** → [`dose_response_pharmacology.ic50_vs_target_affinity_scatter`](gallery/dose_response_pharmacology/ic50_vs_target_affinity_scatter.png)
+- **How selective is the lead across the target panel?** → [`dose_response_pharmacology.selectivity_index_tornado`](gallery/dose_response_pharmacology/selectivity_index_tornado.png)
+- **How do EC50s compare normalised to the most potent lead?** → [`dose_response_pharmacology.dose_normalized_ec50_forest`](gallery/dose_response_pharmacology/dose_normalized_ec50_forest.png)
+- **Do Bliss and Loewe synergy scores agree?** → [`dose_response_pharmacology.synergy_score_bliss_loewe`](gallery/dose_response_pharmacology/synergy_score_bliss_loewe.png)
+- **Which pharmacophore features drive activity?** → [`dose_response_pharmacology.pharmacophore_activity_heatmap`](gallery/dose_response_pharmacology/pharmacophore_activity_heatmap.png)
+- **Which compound cluster has the best mean activity?** → [`dose_response_pharmacology.compound_cluster_structure_activity`](gallery/dose_response_pharmacology/compound_cluster_structure_activity.png)
+- **What is a compound's polypharmacology profile across targets?** → [`dose_response_pharmacology.polypharmacology_radar`](gallery/dose_response_pharmacology/polypharmacology_radar.png)
+
 ## Single-cell embeddings catch-up (v1.1.0-s11 additions)
 
 - **How do condition densities shift across a shared UMAP?** → [`single_cell_embeddings.umap_density_contour_overlay`](gallery/single_cell_embeddings/umap_density_contour_overlay.png)

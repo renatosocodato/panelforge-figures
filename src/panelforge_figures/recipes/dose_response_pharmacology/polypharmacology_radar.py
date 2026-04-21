@@ -104,18 +104,14 @@ def render(contract: PolypharmRadarInput, ax=None, **_):
     ax.set_rlabel_position(190)
     ax.grid(color="#DDDDDD", lw=0.4)
 
-    ax.set_title(contract.title, fontsize=9.0, pad=12)
-    ax.legend(fontsize=6.4, frameon=False, loc="upper center",
-              bbox_to_anchor=(0.5, -0.06), ncols=len(mean_acts),
-              handlelength=1.2)
-
-    # Mean-activity footer.
-    fig = ax.figure
-    bits = [f"{n}: mean={smart_fmt(m)}" for n, m in mean_acts.items()]
-    fig.text(
-        0.5, 0.02, "   ·   ".join(bits),
-        ha="center", va="bottom", fontsize=6.2, color="#333333",
-        bbox=dict(boxstyle="round,pad=0.16", fc="white",
-                  ec="#BBBBBB", lw=0.5, alpha=0.92),
+    # Fold the mean-activity summary into the title so no target label
+    # at the bottom of the polar disc collides with the footer.
+    bits = [f"{nm}: mean={smart_fmt(m)}" for nm, m in mean_acts.items()]
+    ax.set_title(
+        f"{contract.title}\n" + "   ·   ".join(bits),
+        fontsize=9.0, pad=14,
     )
+    ax.legend(fontsize=6.4, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, -0.14), ncols=len(mean_acts),
+              handlelength=1.2)
     return ax

@@ -109,7 +109,7 @@ def render(contract: NormalizedEC50Input, ax=None, **_):
         f"({names[-1]})",
         fontsize=8.6, pad=4,
     )
-    ax.legend(fontsize=6.6, frameon=False, loc="lower right",
+    ax.legend(fontsize=6.6, frameon=False, loc="upper right",
               handlelength=1.4)
     ax.grid(axis="x", which="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

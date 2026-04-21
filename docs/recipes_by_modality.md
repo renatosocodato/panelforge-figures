@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 224 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6).
+v1.1 in progress: 233 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,27 @@ v1.1 in progress: 224 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s10 — calcium_signaling hydration (+9, in progress)
+
+Expands calcium_signaling from 6 to 15 recipes:
+
+- **calcium_event_amplitude_distribution** — per-condition ΔF/F peak
+  ridge plot.
+- **calcium_event_onset_alignment** — PETH rate curves with CI band.
+- **population_synchronization_timeline** — scalar sync(t) with
+  threshold shading.
+- **network_burst_detection_overlay** — raster+rate with shaded
+  burst epochs.
+- **calcium_wave_speed_map** — per-pixel wave-speed magma map.
+- **single_cell_calcium_landscape** — per-cell (freq, amp) scatter
+  with density + hulls.
+- **calcium_and_fret_joint_plot** — Ca × FRET joint scatter with
+  marginals.
+- **oscillation_frequency_polar** — dominant-phase polar scatter
+  with mean resultant R.
+- **stimulus_triggered_calcium_heatmap** — cell × time ΔF/F matrix
+  sorted by peak latency.
 
 ## v1.1.0-s09 — omics_differential hydration (+6, in progress)
 

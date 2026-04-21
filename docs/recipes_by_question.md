@@ -10,6 +10,17 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Single-cell embeddings catch-up (v1.1.0-s11 additions)
+
+- **How do condition densities shift across a shared UMAP?** → [`single_cell_embeddings.umap_density_contour_overlay`](gallery/single_cell_embeddings/umap_density_contour_overlay.png)
+- **Where does a rare population sit vs the bulk?** → [`single_cell_embeddings.rare_population_highlighted_umap`](gallery/single_cell_embeddings/rare_population_highlighted_umap.png)
+- **Per sample, how do cluster proportions vary?** → [`single_cell_embeddings.cluster_proportion_stacked_by_sample`](gallery/single_cell_embeddings/cluster_proportion_stacked_by_sample.png)
+- **Where are the branch points in a multi-branch trajectory?** → [`single_cell_embeddings.trajectory_branching_force_directed`](gallery/single_cell_embeddings/trajectory_branching_force_directed.png)
+- **What's the z-scored expression pattern of top markers per cluster?** → [`single_cell_embeddings.per_cluster_marker_heatmap`](gallery/single_cell_embeddings/per_cluster_marker_heatmap.png)
+- **How do marker genes evolve along pseudotime?** → [`single_cell_embeddings.pseudotime_gene_expression_trajectory`](gallery/single_cell_embeddings/pseudotime_gene_expression_trajectory.png)
+- **What does the RNA-velocity field look like on UMAP?** → [`single_cell_embeddings.rnavelocity_arrow_field`](gallery/single_cell_embeddings/rnavelocity_arrow_field.png)
+- **Which LR interactions are enriched across sender × receiver pairs?** → [`single_cell_embeddings.receptor_ligand_signaling_dotplot`](gallery/single_cell_embeddings/receptor_ligand_signaling_dotplot.png)
+
 ## Calcium-signaling catch-up (v1.1.0-s10 additions)
 
 - **How are Ca²⁺ event amplitudes distributed per condition?** → [`calcium_signaling.calcium_event_amplitude_distribution`](gallery/calcium_signaling/calcium_event_amplitude_distribution.png)

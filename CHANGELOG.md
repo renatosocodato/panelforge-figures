@@ -6,6 +6,50 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s10] — 2026-04-21
+
+Tenth session of the v1.1 hydration plan. Hydrates the
+`calcium_signaling` modality from 6 to 15 recipes for the scaffold-
+v4.3 GCaMP6f integration.
+
+### Added
+
+- `calcium_signaling.calcium_event_amplitude_distribution` — per-
+  condition ridge of event amplitudes.
+- `calcium_signaling.calcium_event_onset_alignment` — peri-event
+  time histogram with CI.
+- `calcium_signaling.population_synchronization_timeline` — sync(t)
+  scalar curve with threshold shading.
+- `calcium_signaling.network_burst_detection_overlay` — raster +
+  rate with shaded burst epochs.
+- `calcium_signaling.calcium_wave_speed_map` — per-pixel wave speed.
+- `calcium_signaling.single_cell_calcium_landscape` — per-cell
+  (frequency, amplitude) scatter with hulls.
+- `calcium_signaling.calcium_and_fret_joint_plot` — Ca × FRET joint
+  scatter with marginal histograms.
+- `calcium_signaling.oscillation_frequency_polar` — dominant-phase
+  polar with mean resultant R.
+- `calcium_signaling.stimulus_triggered_calcium_heatmap` — cell ×
+  time ΔF/F aligned to stim.
+
+### Visual-QA polish (two panels)
+
+- `network_burst_detection_overlay`: burst-count callout moved from
+  rate-panel top-right (covered B3) into the title.
+- `oscillation_frequency_polar`: radial tick labels moved to 270°
+  via `set_rlabel_position(270)`; legend moved to a single-row anchor
+  below the polar disc.
+
+### Progress
+
+| | v1.1.0-s09 | **v1.1.0-s10** |
+|---|---|---|
+| Modalities | 20 | 20 |
+| Recipes | 224 | **233** |
+| `calcium_signaling` | 6 | **15** |
+| Tests | 1171 | **1216** |
+
+
 ## [1.1.0-s09] — 2026-04-20
 
 Ninth session of the v1.1 hydration plan. Hydrates the

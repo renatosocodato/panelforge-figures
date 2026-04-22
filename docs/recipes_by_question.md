@@ -10,6 +10,19 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Diffusion-and-tracking catch-up (v1.1.0-s15 additions)
+
+- **How is the per-track anomalous-diffusion exponent α distributed?** → [`diffusion_and_tracking.msd_anomalous_exponent_fit`](gallery/diffusion_and_tracking/msd_anomalous_exponent_fit.png)
+- **How long do tracks persist across conditions, with acquisition censoring?** → [`diffusion_and_tracking.track_length_distribution`](gallery/diffusion_and_tracking/track_length_distribution.png)
+- **Is P(Δr, Δt) Gaussian, or non-Gaussian at which lag?** → [`diffusion_and_tracking.jump_distance_van_hove`](gallery/diffusion_and_tracking/jump_distance_van_hove.png)
+- **Where in raw trajectories do tracks switch state?** → [`diffusion_and_tracking.track_spaghetti_plot_colored_by_state`](gallery/diffusion_and_tracking/track_spaghetti_plot_colored_by_state.png)
+- **How long do tracks dwell in each HMM state?** → [`diffusion_and_tracking.hmm_state_dwell_distribution`](gallery/diffusion_and_tracking/hmm_state_dwell_distribution.png)
+- **Given state residence time, how does next-step displacement shift?** → [`diffusion_and_tracking.displacement_vs_state_residence`](gallery/diffusion_and_tracking/displacement_vs_state_residence.png)
+- **Where in the field of view is diffusion fast vs slow?** → [`diffusion_and_tracking.diffusion_coefficient_heatmap_spatial`](gallery/diffusion_and_tracking/diffusion_coefficient_heatmap_spatial.png)
+- **Is motion isotropic, or is there a preferred direction?** → [`diffusion_and_tracking.track_directionality_polar`](gallery/diffusion_and_tracking/track_directionality_polar.png)
+- **Is motion ergodic — do EA-MSD and TA-MSD agree?** → [`diffusion_and_tracking.ensemble_vs_time_averaged_msd`](gallery/diffusion_and_tracking/ensemble_vs_time_averaged_msd.png)
+- **Does a track's confinement radius evolve over time?** → [`diffusion_and_tracking.confinement_radius_vs_time`](gallery/diffusion_and_tracking/confinement_radius_vs_time.png)
+
 ## Biophysics-scaling catch-up (v1.1.0-s14 additions)
 
 - **Is data consistent with a theoretically predicted scaling exponent?** → [`biophysics_scaling.log_log_with_theory_line`](gallery/biophysics_scaling/log_log_with_theory_line.png)

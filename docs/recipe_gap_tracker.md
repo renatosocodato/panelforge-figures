@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 271 | ≥320 |
-| Sessions complete | 0 | 14.5 | 20 |
+| Total recipes | 137 | 281 | ≥320 |
+| Sessions complete | 0 | 15.5 | 20 |
 
 ## Per-session status
 
@@ -31,7 +31,7 @@ every PR merge. Governed by
 | 12 | `dose_response_pharmacology` | merged  | — | `v1.1.0-s12` | 10 (5→15) | none | Sex-stratified Hill + dose×time matrix + rebound kinetics + IC50-vs-Ki + selectivity tornado + fold-EC50 forest + Bliss-vs-Loewe + SAR heatmap + cluster-SAR two-panel + polypharmacology radar; 2 panels polished (forest legend, radar footer/legend) |
 | 13 | `network_and_pathway`        | merged  | — | `v1.1.0-s13` | 10 (5→15) | none | Force layout + hub radial + PPI seed expansion + crosstalk matrix + KEGG overlay + regulon heatmap + module preservation + centrality-vs-effect + diff subnetwork + flux streamgraph; 1 panel polished (force layout -> degree-radial after spring collapse) |
 | 14 | `biophysics_scaling`         | merged  | — | `v1.1.0-s14` | 10 (5→15) | none | Theory-line overlay + universality-class comparison + fractal D_f with local-window inset + σ-ε regime map + Kn × Re regime grid + 1-D energy-landscape cartoon + scaling-exponent CI forest + τ(p) critical/Arrhenius + Π-group sensitivity bar + crossover diagnostic; 3 panels polished (fractal legend upper-left, Kn-Re regime labels to bottom + legend below, crossover inset linear y) |
-| 15 | `diffusion_and_tracking`     | pending | — | — | — | — | — |
+| 15 | `diffusion_and_tracking`     | merged  | — | `v1.1.0-s15` | 10 (5→15) | none | Per-track α fit + track-duration CCDF + van Hove self-correlation + state-coloured spaghetti + HMM dwell + residence-conditional Δr matrix + spatial D map + directionality polar + EA-vs-TA MSD ergodicity + R_conf time evolution; 1 panel polished (displacement × state-residence heatmap: removed right-edge Δ arrows, added compact trends footer) |
 | 16 | `spatial_statistics`         | pending | — | — | — | — | — |
 | 17 | `grant_and_conceptual`       | pending | — | — | — | — | — |
 | 18 | `meta_and_diagnostic`        | pending | — | — | — | — | — |

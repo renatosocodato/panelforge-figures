@@ -6,6 +6,70 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s15] — 2026-04-22
+
+Fifteenth session of the v1.1 hydration plan. Hydrates the
+`diffusion_and_tracking` modality from 5 to 15 recipes. This is the
+intravital downstream SPT workhorse.
+
+### Added
+
+- `msd_anomalous_exponent_fit` (scatter_collapse) — per-track α × D
+  scatter coloured by α + representative MSD fit inset.
+- `track_length_distribution` (diagnostic_curve) — per-condition CCDF
+  of track duration with censoring marker.
+- `jump_distance_van_hove` (ridge_by_group) — |Δr| stacked by lag with
+  Gaussian reference and non-Gaussian α₂ per-lag callout.
+- `track_spaghetti_plot_colored_by_state` (scatter_collapse) — raw
+  trajectories with per-segment LineCollection state colouring,
+  start/end markers, state-fraction footer.
+- `hmm_state_dwell_distribution` (ridge_by_group) — per-state dwell-
+  time ridges with exponential reference and mean-dwell markers.
+- `displacement_vs_state_residence` (matrix) — state × residence-bin
+  heatmap of median |Δr| with per-row trend summary footer.
+- `diffusion_coefficient_heatmap_spatial` (heatmap) — gridded D(x, y)
+  pcolormesh with quartile contour overlay.
+- `track_directionality_polar` (radar) — polar histogram with isotropic
+  reference, mean-direction vector, and Rayleigh r statistic.
+- `ensemble_vs_time_averaged_msd` (scatter_collapse) — EA-MSD line,
+  TA-MSD cloud, and EB(τ) ergodicity-breaking parameter callout.
+- `confinement_radius_vs_time` (timecourse_hierarchical_ci) — per-track
+  R_conf(t) with mean ± 95 % CI per condition.
+
+### Infrastructure
+
+- No changes to `core/` — 10 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet held (invisible-line proxy uses `lw=0.5,
+  alpha=0.0, color="none"` — no new literal introduced).
+
+### Fit-ups during authoring
+
+- `track_spaghetti_plot_colored_by_state`: scatter_collapse rule
+  requires ≥1 Line2D; LineCollection segments live on
+  `ax.collections`, not `ax.get_lines()`. Added an invisible
+  `ax.plot([], [])` proxy.
+- Replaced unicode glyphs incompatible with Helvetica: rightwards
+  arrow `→` → `->`; mathematical angle brackets `⟨...⟩` → `mean ...`.
+
+### Visual-QA polish (one panel)
+
+- `displacement_vs_state_residence`: initial render had three
+  overlaps (first-column numeric labels clipped by y-ticks, right-
+  edge per-row Δ-arrows overlapping the colorbar, header "largest
+  trend" annotation colliding with the title). Removed the per-row
+  right-edge annotations and replaced with a single compact trends
+  footer below the axes; kept the in-cell numeric labels but skip
+  them when column width is narrower than 60 % of the median width.
+
+### Progress
+
+- Total recipes: **271 → 281** (+10).
+- Tests: **1406 → 1456** (+50).
+- Modalities at v1.1 target (≥15): 12 of 20.
+- Sessions complete: **15 of 20**.
+
 ## [1.1.0-s14] — 2026-04-22
 
 Fourteenth session of the v1.1 hydration plan. Hydrates the

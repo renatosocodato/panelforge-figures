@@ -121,6 +121,9 @@ def render(contract: DeliverablesTimelineInput, ax=None, **_):
 
     # Deliverable markers. Each WP lane is already a Rectangle patch
     # so the gantt ≥3-patches rule is satisfied via lanes.
+    # Alternate the title above / below the marker within each WP
+    # row to avoid horizontal overlap for closely-spaced deliverables.
+    per_wp_count: dict[str, int] = {}
     for d in dels:
         yi = wp_y[d.wp]
         style = status_styles.get(d.status, status_styles["pending"])
@@ -134,21 +137,28 @@ def render(contract: DeliverablesTimelineInput, ax=None, **_):
                    marker=style["marker"], color=color,
                    edgecolor="white", linewidth=0.6,
                    alpha=0.95, zorder=5)
-        # ID label inside / below marker.
+        # ID label inside marker (white bold on WP-colour fill).
         ax.text(d.due_month, yi - 0.02, d.id,
                 ha="center", va="center", fontsize=5.8,
                 color="white", fontweight="bold", zorder=6)
-        # Title angled above marker (rotation=20) to avoid horizontal
-        # overlap between closely-spaced deliverables.
-        ax.text(d.due_month, yi + 0.25, d.title,
-                ha="left", va="bottom", fontsize=5.8,
-                color="#333333", rotation=20, zorder=5)
+        # Alternating above / below title placement per row.
+        idx_in_wp = per_wp_count.get(d.wp, 0)
+        per_wp_count[d.wp] = idx_in_wp + 1
+        above = idx_in_wp % 2 == 0
+        if above:
+            ax.text(d.due_month, yi + 0.27, d.title,
+                    ha="center", va="bottom", fontsize=5.8,
+                    color="#333333", zorder=5)
+        else:
+            ax.text(d.due_month, yi - 0.27, d.title,
+                    ha="center", va="top", fontsize=5.8,
+                    color="#555555", zorder=5)
 
     # Year dividers.
     for year_m in range(12, months, 12):
         ax.axvline(year_m, color="#BBBBBB", lw=0.6, ls=":", zorder=2)
 
-    ax.set_xlim(-1, months + 6)
+    ax.set_xlim(-1, months + 1)
     ax.set_ylim(-0.8, len(wps) - 0.2)
     ax.invert_yaxis()
     ax.set_yticks([])

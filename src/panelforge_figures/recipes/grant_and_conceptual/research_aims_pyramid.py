@@ -145,17 +145,20 @@ def render(contract: AimsPyramidInput, ax=None, **_):
                 color="#888888", lw=0.8, zorder=1)
 
     # Base: per-aim sub-question cards stacked beneath each aim.
+    # Use a **fixed card height** across columns so columns with 2
+    # sub-questions don't render taller cards than columns with 3.
+    max_sub = max(
+        (min(len(subs), 3) for subs in contract.aim_subquestions),
+        default=1,
+    )
+    top_y = 0.48
+    bot_y = 0.04
+    card_gap = 0.015
+    sub_h = (top_y - bot_y - card_gap * (max_sub - 1)) / max(max_sub, 1)
     for i, subs in enumerate(contract.aim_subquestions):
         x = col_x[i]
-        n_sub = min(len(subs), 3)
-        if n_sub == 0:
-            continue
-        # Allocate vertical space 0.04..0.48 for this column's subs.
-        top_y = 0.48
-        bot_y = 0.04
-        sub_h = (top_y - bot_y - 0.015 * (n_sub - 1)) / n_sub
         for j, q in enumerate(subs[:3]):
-            sub_y = top_y - (j + 1) * sub_h - j * 0.015
+            sub_y = top_y - (j + 1) * sub_h - j * card_gap
             ax.add_patch(mpatches.FancyBboxPatch(
                 (x, sub_y), col_w, sub_h,
                 boxstyle="round,pad=0.004,rounding_size=0.010",

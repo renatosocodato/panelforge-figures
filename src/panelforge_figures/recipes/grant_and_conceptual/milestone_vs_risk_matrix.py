@@ -155,15 +155,4 @@ def render(contract: MilestoneRiskInput, ax=None, **_):
     ax.set_ylabel("impact if it occurs")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
 
-    # Axis corner labels (low / high).
-    ax.text(0.02, -0.04, "low", transform=ax.transAxes,
-            ha="left", va="top", fontsize=6.2, color="#666666")
-    ax.text(0.98, -0.04, "high", transform=ax.transAxes,
-            ha="right", va="top", fontsize=6.2, color="#666666")
-    ax.text(-0.02, 0.02, "low", transform=ax.transAxes,
-            ha="right", va="bottom", fontsize=6.2, color="#666666",
-            rotation=90)
-    ax.text(-0.02, 0.98, "high", transform=ax.transAxes,
-            ha="right", va="top", fontsize=6.2, color="#666666",
-            rotation=90)
     return ax

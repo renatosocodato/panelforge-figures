@@ -6,6 +6,60 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s16] — 2026-04-22
+
+Sixteenth session of the v1.1 hydration plan. Hydrates the
+`spatial_statistics` modality from 6 to 15 recipes via Path 2.
+
+### Plan-vs-reality reconciliation
+
+- Coordinator listed v1.0=4 but actual baseline is 6. Two seeds
+  (`l_function_with_envelope`, `point_pattern_density_map`) already
+  ship as `ripley_l_function` and `kernel_density_heatmap`.
+- **Path 2**: drop duplicates, land +9 new to reach the 15-target in
+  one session (analogous to s07).
+
+### Added
+
+- `clark_evans_aggregation_bar` (ladder) — per-condition CE index ± CI
+  with CSR reference, clustered / random / dispersed colour coding.
+- `f_function_empty_space` (diagnostic_curve) — F(r) with CSR
+  analytical reference + envelope, interpretation pill.
+- `spatial_covariogram` (diagnostic_curve) — C(h) with exponential
+  fit and nugget / sill / range annotations.
+- `lisa_cluster_map` (heatmap) — per-point HH / HL / LH / LL
+  classification with HH-minus-LL density overlay for the heatmap-
+  rule and pseudo-p alpha scaling.
+- `bivariate_pair_correlation` (diagnostic_curve) — g_12(r) with
+  signed fill, peak + trough markers.
+- `voronoi_area_distribution` (ridge_by_group) — log-space ridge stack
+  of per-condition Voronoi areas with med / mean markers.
+- `co_occurrence_significance_matrix` (matrix) — type × type z-score
+  matrix with star-significance overlay + strongest-pair title.
+- `quadrat_count_chisq` (matrix) — Pearson residual heatmap with
+  counts, χ² / df / p verdict pill.
+- `spatial_permutation_null_distribution` (ridge_by_group) — null +
+  alternative ridges with observed statistic line and empirical p.
+
+### Infrastructure
+
+- No changes to `core/` — 9 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet held: fontsize `7.5` snapped to `7.4` in two
+  titles (co_occurrence_significance_matrix, quadrat_count_chisq).
+
+### Visual-QA polish
+
+- None — all 9 panels passed visual-QA on first render.
+
+### Progress
+
+- Total recipes: **281 → 290** (+9).
+- Tests: **1456 → 1501** (+45).
+- Modalities at v1.1 target (≥15): 13 of 20.
+- Sessions complete: **16 of 20**.
+
 ## [1.1.0-s15] — 2026-04-22
 
 Fifteenth session of the v1.1 hydration plan. Hydrates the

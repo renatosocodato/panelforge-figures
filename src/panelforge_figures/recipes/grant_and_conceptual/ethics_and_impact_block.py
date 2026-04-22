@@ -36,19 +36,19 @@ def _demo() -> EthicsImpactInput:
             EthicsImpactSection(
                 heading="Data protection",
                 bullets=["GDPR-compliant pipelines",
-                         "Pseudonymised IDs, local lock-boxes",
+                         "Pseudonymised IDs, lock-boxes",
                          "Institutional DPIA filed"],
             ),
             EthicsImpactSection(
                 heading="Animal welfare",
-                bullets=["3Rs adherence, FELASA B trained staff",
+                bullets=["FELASA-B trained, 3Rs adherent",
                          "Ethics approval ORBEA/DGAV",
                          "In vivo work limited to WP3"],
             ),
             EthicsImpactSection(
                 heading="DEI & open science",
                 bullets=["50/50 gender target on trainees",
-                         "All code + data released CC-BY-4.0"],
+                         "Code + data open under CC-BY"],
             ),
         ],
         impact_sections=[
@@ -61,11 +61,11 @@ def _demo() -> EthicsImpactInput:
             EthicsImpactSection(
                 heading="Societal",
                 bullets=["Patient-advocate sounding board",
-                         "Open outreach kit (Portuguese + English)"],
+                         "Bilingual outreach (PT + EN)"],
             ),
             EthicsImpactSection(
                 heading="Economic",
-                bullets=["Industry LoI for a Phase-0 spinout",
+                bullets=["Industry LoI for Phase-0 spinout",
                          "2 patent-ready assays by M30"],
             ),
         ],

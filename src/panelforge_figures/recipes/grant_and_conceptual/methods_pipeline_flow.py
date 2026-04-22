@@ -81,7 +81,7 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
 
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(8.0, 2.6))
+        _, ax = plt.subplots(figsize=(9.0, 2.8))
     AESTHETIC.apply_to_ax(ax)
     palette = get_palette(AESTHETIC.primary_palette)
 
@@ -114,8 +114,11 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
         zorder=3,
     ))
     ax.text(x_in + slot_w / 2, y_mid,
-            "\n".join(textwrap.wrap(contract.input_label, width=13)),
-            ha="center", va="center", fontsize=6.6,
+            "\n".join(textwrap.wrap(
+                contract.input_label, width=14,
+                break_long_words=False, break_on_hyphens=False,
+            )),
+            ha="center", va="center", fontsize=6.2,
             color="#333333", zorder=4)
 
     # Step boxes.
@@ -133,9 +136,12 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
                 ha="center", va="center", fontsize=7.4,
                 color="white", fontweight="bold", zorder=4)
         if step.description:
-            desc = "\n".join(textwrap.wrap(step.description, width=14))
+            desc = "\n".join(textwrap.wrap(
+                step.description, width=14,
+                break_long_words=False, break_on_hyphens=False,
+            ))
             ax.text(x + slot_w / 2, y_mid - box_h * 0.16, desc,
-                    ha="center", va="center", fontsize=6.2,
+                    ha="center", va="center", fontsize=6.0,
                     color="white", zorder=4)
 
     # Output box (rounded rectangle, matching input style).
@@ -147,8 +153,11 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
         zorder=3,
     ))
     ax.text(x_out + slot_w / 2, y_mid,
-            "\n".join(textwrap.wrap(contract.output_label, width=13)),
-            ha="center", va="center", fontsize=6.6,
+            "\n".join(textwrap.wrap(
+                contract.output_label, width=14,
+                break_long_words=False, break_on_hyphens=False,
+            )),
+            ha="center", va="center", fontsize=6.2,
             color="white", zorder=4)
 
     # Arrows between adjacent boxes — in the visible gap.

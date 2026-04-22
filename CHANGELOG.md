@@ -6,6 +6,75 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s17] — 2026-04-22
+
+Seventeenth session of the v1.1 hydration plan. Hydrates the
+`grant_and_conceptual` modality from 6 to 15 recipes for ATHENA,
+MIRROR, and Horizon Europe proposals. A4-portrait + Helvetica-safe
+(Portuguese-compatible) typography.
+
+### Added
+
+- `research_aims_pyramid` (conceptual) — hierarchical objective → aims
+  → sub-questions with coloured aim bands and white sub-question cards.
+- `methods_pipeline_flow` (flow) — strictly linear input → step 1 …
+  step N → output with rounded coloured boxes and arrow connectors.
+- `milestone_vs_risk_matrix` (matrix) — 2×2 probability × impact grid
+  with per-milestone tiles and risk-rated border colour.
+- `innovation_positioning_quadrant` (matrix) — novelty × feasibility
+  quadrant with competitor scatter + starred our-proposal marker.
+- `cost_by_work_package_bar` (ladder) — per-WP stacked horizontal bars
+  by cost category with grand-total callout.
+- `ethics_and_impact_block` (conceptual) — two-column ETHICS / IMPACT
+  panel with sub-section cards + bullets.
+- `interdisciplinary_contribution_spider` (radar) — polar coverage
+  radar with optional reference polygon + mean-coverage callout.
+- `team_network_graph` (conceptual) — institutional-sector radial
+  layout with Circle-patch partner nodes and collaboration edges
+  scaled by strength.
+- `deliverables_timeline` (gantt) — per-WP lane with angled deliverable
+  IDs, status-coloured rings, year dividers.
+
+### Infrastructure
+
+- No changes to `core/` — 9 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Updated `tests/test_contracts.py` to expect 15 (was 6) recipes in
+  `grant_and_conceptual`.
+- Style-drift ratchet held (fontsize `14` snapped to `9.6` in
+  `milestone_vs_risk_matrix` decorative `!!` glyph).
+
+### Visual-QA polish (4 panels)
+
+- `research_aims_pyramid`: initial layout clipped the objective text
+  (wrap too wide) and aim titles (em-dash too long). Reworked to
+  column-based layout with `width=58` objective wrap, ASCII-dash aim
+  titles and narrower sub-question wrap (`width=20`).
+- `methods_pipeline_flow`: step boxes too narrow — titles / descriptions
+  clipped. Reworked slot-width formula to explicit margin + gap that
+  leaves enough box width at the default 6-step pipeline, arrow gaps
+  set to 0.018 axes-fraction for visible arrowheads.
+- `innovation_positioning_quadrant`: legend duplicated the starred
+  data-point label. Removed the legend; starred marker has its own
+  bold red label above.
+- `deliverables_timeline`: titles overlapped horizontally at closely-
+  spaced deliverables, ID labels overlapped markers. Switched to
+  angled (`rotation=20`) titles above, ID labels centred inside the
+  scatter marker (white bold text on WP-colour fill). Also
+  `cost_by_work_package_bar` — legend below axes bbox shifted to
+  `(1.0, -0.20)` to clear the "cost (EUR)" x-axis label.
+- `team_network_graph`: long partner names (`postdoc A`, `PI-partner`)
+  clipped inside circles. Switched to short ID inside circle, full
+  name + role below.
+
+### Progress
+
+- Total recipes: **290 → 299** (+9).
+- Tests: **1501 → 1546** (+45).
+- Modalities at v1.1 target (≥15): 14 of 20.
+- Sessions complete: **17 of 20**.
+
 ## [1.1.0-s16] — 2026-04-22
 
 Sixteenth session of the v1.1 hydration plan. Hydrates the

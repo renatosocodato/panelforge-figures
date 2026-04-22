@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 281 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10).
+v1.1 in progress: 290 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,31 @@ v1.1 in progress: 281 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s16 — spatial_statistics hydration (+9 Path 2, in progress)
+
+Plan-vs-reality: coordinator listed v1.0=4, actual=6 (two seeds
+already shipped). Path 2 lands +9 to hit 15-target. Expands
+spatial_statistics from 6 to 15 recipes:
+
+- **clark_evans_aggregation_bar** — per-condition CE index ± CI with
+  CSR reference and clustered / random / dispersed colour coding.
+- **f_function_empty_space** — F(r) vs analytical CSR reference +
+  envelope, clustered / dispersed interpretation pill.
+- **spatial_covariogram** — C(h) with exponential fit, nugget / sill /
+  range annotations.
+- **lisa_cluster_map** — per-point HH / HL / LH / LL classification
+  with HH-minus-LL density overlay.
+- **bivariate_pair_correlation** — g_12(r) with signed fill, peak +
+  trough markers.
+- **voronoi_area_distribution** — log-space ridge stack of per-
+  condition area distributions.
+- **co_occurrence_significance_matrix** — type × type z-score matrix
+  with star-significance overlay and strongest-pair callouts.
+- **quadrat_count_chisq** — Pearson residual heatmap with counts,
+  χ² / df / p verdict.
+- **spatial_permutation_null_distribution** — null + alternative
+  ridges with observed statistic line and empirical p.
 
 ## v1.1.0-s15 — diffusion_and_tracking hydration (+10, in progress)
 

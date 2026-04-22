@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Spatial-statistics catch-up (v1.1.0-s16 additions)
+
+- **Is the point pattern clustered, random, or dispersed (CE index)?** → [`spatial_statistics.clark_evans_aggregation_bar`](gallery/spatial_statistics/clark_evans_aggregation_bar.png)
+- **Is there more empty space than CSR predicts?** → [`spatial_statistics.f_function_empty_space`](gallery/spatial_statistics/f_function_empty_space.png)
+- **What is the correlation length of a continuous spatial field?** → [`spatial_statistics.spatial_covariogram`](gallery/spatial_statistics/spatial_covariogram.png)
+- **Where are local HH / LL / HL / LH tiles (LISA)?** → [`spatial_statistics.lisa_cluster_map`](gallery/spatial_statistics/lisa_cluster_map.png)
+- **At what radii are two cell types co-clustered vs segregated?** → [`spatial_statistics.bivariate_pair_correlation`](gallery/spatial_statistics/bivariate_pair_correlation.png)
+- **How are per-cell territory areas distributed across conditions?** → [`spatial_statistics.voronoi_area_distribution`](gallery/spatial_statistics/voronoi_area_distribution.png)
+- **Which cell-type pairs significantly co-occur vs avoid?** → [`spatial_statistics.co_occurrence_significance_matrix`](gallery/spatial_statistics/co_occurrence_significance_matrix.png)
+- **Is the point pattern non-uniform at the chosen quadrat scale?** → [`spatial_statistics.quadrat_count_chisq`](gallery/spatial_statistics/quadrat_count_chisq.png)
+- **How significant is the observed statistic against a permutation null?** → [`spatial_statistics.spatial_permutation_null_distribution`](gallery/spatial_statistics/spatial_permutation_null_distribution.png)
+
 ## Diffusion-and-tracking catch-up (v1.1.0-s15 additions)
 
 - **How is the per-track anomalous-diffusion exponent α distributed?** → [`diffusion_and_tracking.msd_anomalous_exponent_fit`](gallery/diffusion_and_tracking/msd_anomalous_exponent_fit.png)

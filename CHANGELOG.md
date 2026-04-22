@@ -6,6 +6,63 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s14] — 2026-04-22
+
+Fourteenth session of the v1.1 hydration plan. Hydrates the
+`biophysics_scaling` modality from 5 to 15 recipes for the Manuscript 3
+collapse narrative and the `gc-chirrut` force-balance / Π-group analysis.
+
+### Added
+
+- `log_log_with_theory_line` (scatter_collapse) — data vs theory-
+  predicted reference line with residuals-from-theory inset.
+- `universality_class_comparison` (scatter_collapse) — 2-3 candidate
+  universality curves overlaid, per-class RMS residual bar inset.
+- `fractal_dimension_scaling` (scatter_collapse) — box-counting
+  N(L) ~ L^D_f with sliding-window local D_f(L) inset.
+- `stress_strain_regime_map` (matrix) — σ-ε with elastic/plastic/failure
+  bands, yield + ultimate markers, Young's-modulus slope inset.
+- `knudsen_reynolds_regime_diagram` (matrix) — Kn × Re log-log grid with
+  continuum/slip/transition/free-molecular bands + sample scatter.
+- `energy_landscape_1d_cartoon` (conceptual) — schematic U(x) with
+  labelled wells, barriers, k_B T scale bar, transition arrows.
+- `scaling_exponent_ci_forest` (coef_forest) — per-study α ± CI forest
+  with theoretical reference line and heterogeneity summary.
+- `characteristic_time_vs_control` (diagnostic_curve) — τ(p) critical
+  divergence or Arrhenius fit with fitted exponent callout.
+- `pi_group_sensitivity_bar` (ladder) — Buckingham Π-group variance
+  contribution ranked with cumulative top-2/top-3 share.
+- `crossover_scaling_diagnostic` (diagnostic_curve) — two-slope
+  piecewise power law with crossover ξ + local-slope inset.
+
+### Infrastructure
+
+- No changes to `core/` — 10 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Style-drift ratchet held; all new fontsize/lw literals snap to the
+  existing canonical set.
+
+### Visual-QA polish (three panels)
+
+- `fractal_dimension_scaling`: legend + D_f callout originally both
+  at lower-left → legend moved to upper-left, callout retained at
+  lower-left.
+- `knudsen_reynolds_regime_diagram`: rotated 90° regime labels
+  collided with the 2-column upper-right legend → regime labels moved
+  to the bottom of each band (horizontal, bold); sample legend moved
+  below the axes; counts callout moved to upper-right.
+- `crossover_scaling_diagnostic`: inset y-label "local α" was hidden
+  by inset tick labels on a log y-axis → forced `inset.set_yscale
+  ("linear")` plus `labelpad` tweaks for readable "local α" axis.
+
+### Progress
+
+- Total recipes: **261 → 271** (+10).
+- Tests: **1356 → 1406** (+50).
+- Modalities at v1.1 target (≥15): 11 of 20.
+- Sessions complete: **14 of 20**.
+
 ## [1.1.0-s13] — 2026-04-21
 
 Thirteenth session of the v1.1 hydration plan. Hydrates the

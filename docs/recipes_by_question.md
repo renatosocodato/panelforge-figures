@@ -10,6 +10,19 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Biophysics-scaling catch-up (v1.1.0-s14 additions)
+
+- **Is data consistent with a theoretically predicted scaling exponent?** → [`biophysics_scaling.log_log_with_theory_line`](gallery/biophysics_scaling/log_log_with_theory_line.png)
+- **Which universality class best matches the data?** → [`biophysics_scaling.universality_class_comparison`](gallery/biophysics_scaling/universality_class_comparison.png)
+- **What is the box-counting fractal dimension D_f of a structure?** → [`biophysics_scaling.fractal_dimension_scaling`](gallery/biophysics_scaling/fractal_dimension_scaling.png)
+- **Where does material transition from elastic to plastic to failure?** → [`biophysics_scaling.stress_strain_regime_map`](gallery/biophysics_scaling/stress_strain_regime_map.png)
+- **Which flow regime does my system occupy in Kn × Re?** → [`biophysics_scaling.knudsen_reynolds_regime_diagram`](gallery/biophysics_scaling/knudsen_reynolds_regime_diagram.png)
+- **How does a 1-D energy landscape U(x) explain state lifetimes?** → [`biophysics_scaling.energy_landscape_1d_cartoon`](gallery/biophysics_scaling/energy_landscape_1d_cartoon.png)
+- **How does the fitted scaling exponent α vary across studies?** → [`biophysics_scaling.scaling_exponent_ci_forest`](gallery/biophysics_scaling/scaling_exponent_ci_forest.png)
+- **How does the characteristic time τ diverge near a critical point?** → [`biophysics_scaling.characteristic_time_vs_control`](gallery/biophysics_scaling/characteristic_time_vs_control.png)
+- **Which Buckingham Π-group contributes most to the response variance?** → [`biophysics_scaling.pi_group_sensitivity_bar`](gallery/biophysics_scaling/pi_group_sensitivity_bar.png)
+- **Does the data cross over between two power-law regimes at a scale ξ?** → [`biophysics_scaling.crossover_scaling_diagnostic`](gallery/biophysics_scaling/crossover_scaling_diagnostic.png)
+
 ## Network-and-pathway catch-up (v1.1.0-s13 additions)
 
 - **What does a directed regulatory network look like with hubs highlighted?** → [`network_and_pathway.directed_network_force_layout`](gallery/network_and_pathway/directed_network_force_layout.png)

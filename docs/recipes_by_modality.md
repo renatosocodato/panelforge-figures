@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 261 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10).
+v1.1 in progress: 271 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,31 @@ v1.1 in progress: 261 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s14 — biophysics_scaling hydration (+10, in progress)
+
+Expands biophysics_scaling from 5 to 15 recipes:
+
+- **log_log_with_theory_line** — data vs theory-predicted slope with
+  residuals-from-theory inset.
+- **universality_class_comparison** — 2-3 candidate universality curves
+  with per-class RMS residual bars.
+- **fractal_dimension_scaling** — box-counting N(L) ~ L^D_f with local
+  D_f(L) window inset.
+- **stress_strain_regime_map** — σ-ε with elastic/plastic/failure bands,
+  yield/ultimate markers, Young's-modulus inset.
+- **knudsen_reynolds_regime_diagram** — Kn × Re regime grid with
+  continuum/slip/transition/free-molecular bands.
+- **energy_landscape_1d_cartoon** — schematic U(x) with wells, barriers,
+  k_B T scale bar, transition arrows.
+- **scaling_exponent_ci_forest** — per-study α ± CI forest with
+  theoretical reference line.
+- **characteristic_time_vs_control** — τ(p) critical divergence or
+  Arrhenius fit.
+- **pi_group_sensitivity_bar** — Buckingham Π-group variance
+  contribution ranking.
+- **crossover_scaling_diagnostic** — two-slope piecewise power law with
+  crossover ξ + local-slope inset.
 
 ## v1.1.0-s13 — network_and_pathway hydration (+10, in progress)
 

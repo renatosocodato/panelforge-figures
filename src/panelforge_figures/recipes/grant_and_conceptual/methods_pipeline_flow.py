@@ -95,8 +95,8 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
     steps = contract.steps
     n = len(steps)
     slots = n + 2                    # input + n steps + output
-    margin = 0.01
-    gap = 0.018                       # visible arrow gap
+    margin = 0.005
+    gap = 0.035                       # visible arrow gap
     slot_w = (1.0 - 2 * margin - gap * (slots - 1)) / slots
     y_mid = 0.50
     box_h = 0.64
@@ -104,17 +104,18 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
     def _slot_x(idx: int) -> float:
         return margin + idx * (slot_w + gap)
 
-    # Input box (pill).
+    # Input box (rounded rectangle, not pill — pill-level rounding
+    # steals horizontal text space at small slot widths).
     x_in = _slot_x(0)
     ax.add_patch(mpatches.FancyBboxPatch(
         (x_in, y_mid - box_h / 2), slot_w, box_h,
-        boxstyle="round,pad=0.004,rounding_size=0.08",
+        boxstyle="round,pad=0.004,rounding_size=0.02",
         facecolor="#F5F5F5", edgecolor="#888888", linewidth=0.8,
         zorder=3,
     ))
     ax.text(x_in + slot_w / 2, y_mid,
             "\n".join(textwrap.wrap(contract.input_label, width=13)),
-            ha="center", va="center", fontsize=6.8,
+            ha="center", va="center", fontsize=6.6,
             color="#333333", zorder=4)
 
     # Step boxes.
@@ -137,17 +138,17 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
                     ha="center", va="center", fontsize=6.2,
                     color="white", zorder=4)
 
-    # Output box (pill).
+    # Output box (rounded rectangle, matching input style).
     x_out = _slot_x(n + 1)
     ax.add_patch(mpatches.FancyBboxPatch(
         (x_out, y_mid - box_h / 2), slot_w, box_h,
-        boxstyle="round,pad=0.004,rounding_size=0.08",
+        boxstyle="round,pad=0.004,rounding_size=0.02",
         facecolor="#263238", edgecolor="white", linewidth=0.8,
         zorder=3,
     ))
     ax.text(x_out + slot_w / 2, y_mid,
             "\n".join(textwrap.wrap(contract.output_label, width=13)),
-            ha="center", va="center", fontsize=6.8,
+            ha="center", va="center", fontsize=6.6,
             color="white", zorder=4)
 
     # Arrows between adjacent boxes — in the visible gap.
@@ -157,8 +158,8 @@ def render(contract: MethodsPipelineInput, ax=None, **_):
         ax.annotate(
             "",
             xy=(x_to, y_mid), xytext=(x_from, y_mid),
-            arrowprops=dict(arrowstyle="->", color="#555555",
-                            lw=1.1, mutation_scale=12,
+            arrowprops=dict(arrowstyle="-|>", color="#444444",
+                            lw=1.3, mutation_scale=18,
                             shrinkA=0, shrinkB=0),
             zorder=2,
         )

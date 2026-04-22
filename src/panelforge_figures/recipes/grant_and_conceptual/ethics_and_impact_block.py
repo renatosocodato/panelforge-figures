@@ -151,12 +151,26 @@ def render(contract: EthicsImpactInput, ax=None, **_):
             ax.text(x + 0.01, y + sec_h - 0.035, sec.heading,
                     ha="left", va="top", fontsize=7.4,
                     color=color, fontweight="bold", zorder=5)
-            # Bullets.
+            # Bullets — wrap at a width that matches the column width
+            # comfortably and never breaks on hyphens (so tokens like
+            # "CC-BY-4.0" or "lock-boxes" stay intact).
+            import textwrap
             bullet_y0 = y + sec_h - 0.08
-            for k, b in enumerate(sec.bullets[:3]):
-                ax.text(x + 0.018, bullet_y0 - k * 0.052, f"• {b}",
-                        ha="left", va="top", fontsize=6.8,
-                        color="#333333", zorder=5)
+            line_dy = 0.024
+            cur_y = bullet_y0
+            for b in sec.bullets[:3]:
+                lines = textwrap.wrap(
+                    b, width=36, break_on_hyphens=False,
+                    break_long_words=False,
+                )
+                for li, line in enumerate(lines):
+                    prefix = "• " if li == 0 else "  "
+                    ax.text(x + 0.018, cur_y,
+                            f"{prefix}{line}",
+                            ha="left", va="top", fontsize=6.4,
+                            color="#333333", zorder=5)
+                    cur_y -= line_dy
+                cur_y -= 0.010   # extra gap between bullets
 
     ax.set_title(contract.title, fontsize=9.0, pad=4)
     return ax

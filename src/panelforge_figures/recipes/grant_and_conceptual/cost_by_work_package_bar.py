@@ -94,18 +94,25 @@ def render(contract: CostByWPInput, ax=None, **_):
                 label=cat)
         left += col
 
-    # Per-WP total label at right.
+    # Per-WP total label at right — use integer-k formatting.
     for yi, t in zip(y, totals):
         ax.text(t + grand_total * 0.005, yi,
-                f"{smart_fmt(t / 1000)}k",
+                f"{int(round(t / 1000)):,}k",
                 ha="left", va="center", fontsize=6.8,
                 color="#333333", zorder=5)
 
     ax.set_yticks(y)
     ax.set_yticklabels(wps, fontsize=7.2)
     ax.invert_yaxis()
+    # Format x-axis ticks as "NNk" rather than raw cost numbers.
+    xticks = ax.get_xticks()
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(
+        [f"{int(t / 1000):,}k" if t else "0" for t in xticks],
+        fontsize=6.8,
+    )
+    ax.set_xlim(0, float(totals.max()) * 1.18)
     ax.set_xlabel(f"cost ({contract.currency})")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
     # Legend below axes with enough vertical offset to clear the
     # x-axis label.
     ax.legend(fontsize=6.8, frameon=False, loc="upper right",
@@ -113,14 +120,12 @@ def render(contract: CostByWPInput, ax=None, **_):
               ncols=min(len(cats), 5), handlelength=1.0,
               columnspacing=1.2)
 
-    # Grand-total footer.
-    ax.text(0.02, 0.97,
-            f"total: {smart_fmt(grand_total / 1000)}k {contract.currency}",
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.8, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.22", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
+    # Grand-total in the title to avoid colliding with bars.
+    ax.set_title(
+        f"{contract.title}  ·  total {int(round(grand_total / 1000)):,}k "
+        f"{contract.currency}",
+        fontsize=8.6, pad=4,
+    )
 
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

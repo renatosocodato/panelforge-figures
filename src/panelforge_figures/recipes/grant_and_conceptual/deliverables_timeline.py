@@ -128,30 +128,33 @@ def render(contract: DeliverablesTimelineInput, ax=None, **_):
         yi = wp_y[d.wp]
         style = status_styles.get(d.status, status_styles["pending"])
         color = wp_colors[d.wp]
-        # Status-coloured ring under the WP-coloured fill.
-        ax.scatter([d.due_month], [yi], s=180,
+        # Smaller markers so titles don't need large offsets.
+        ax.scatter([d.due_month], [yi], s=120,
                    marker=style["marker"], color="white",
-                   edgecolor=style["edgecolor"], linewidth=1.8,
+                   edgecolor=style["edgecolor"], linewidth=1.6,
                    zorder=4)
-        ax.scatter([d.due_month], [yi], s=90,
+        ax.scatter([d.due_month], [yi], s=60,
                    marker=style["marker"], color=color,
-                   edgecolor="white", linewidth=0.6,
+                   edgecolor="white", linewidth=0.5,
                    alpha=0.95, zorder=5)
-        # ID label inside marker (white bold on WP-colour fill).
-        ax.text(d.due_month, yi - 0.02, d.id,
-                ha="center", va="center", fontsize=5.8,
+        # ID label centred inside the marker (white bold on WP fill).
+        ax.text(d.due_month, yi, d.id,
+                ha="center", va="center", fontsize=5.6,
                 color="white", fontweight="bold", zorder=6)
-        # Alternating above / below title placement per row.
+        # Alternating above / below title placement per row — offsets
+        # sized to clear the marker bounding circle with headroom.
         idx_in_wp = per_wp_count.get(d.wp, 0)
         per_wp_count[d.wp] = idx_in_wp + 1
-        above = idx_in_wp % 2 == 0
-        if above:
-            ax.text(d.due_month, yi + 0.27, d.title,
-                    ha="center", va="bottom", fontsize=5.8,
+        below = idx_in_wp % 2 == 0
+        # With `ax.invert_yaxis()`, +y data renders visually **below**
+        # the marker on screen. Using that convention:
+        if below:
+            ax.text(d.due_month, yi + 0.45, d.title,
+                    ha="center", va="top", fontsize=5.8,
                     color="#333333", zorder=5)
         else:
-            ax.text(d.due_month, yi - 0.27, d.title,
-                    ha="center", va="top", fontsize=5.8,
+            ax.text(d.due_month, yi - 0.45, d.title,
+                    ha="center", va="bottom", fontsize=5.8,
                     color="#555555", zorder=5)
 
     # Year dividers.
@@ -159,7 +162,9 @@ def render(contract: DeliverablesTimelineInput, ax=None, **_):
         ax.axvline(year_m, color="#BBBBBB", lw=0.6, ls=":", zorder=2)
 
     ax.set_xlim(-1, months + 1)
-    ax.set_ylim(-0.8, len(wps) - 0.2)
+    # Extra vertical headroom so the alternating above/below titles
+    # never run off the top/bottom of the axes.
+    ax.set_ylim(-1.0, len(wps))
     ax.invert_yaxis()
     ax.set_yticks([])
     ax.set_xticks(list(range(0, months + 1, 6)))

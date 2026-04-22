@@ -80,20 +80,23 @@ def render(contract: InnovationPositioningInput, ax=None, **_):
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
 
-    # 2 x 2 quadrant backgrounds.
+    # 2 x 2 quadrant backgrounds. Place labels in the *outer* corners
+    # of each quadrant so they never collide with the central dashed
+    # axis lines or with competitor markers clustering near the mid.
     quadrants = [
-        (0.0, 0.0, "#ECEFF1", "incremental"),
-        (0.5, 0.0, "#FFF3E0", "risky-risky"),
-        (0.0, 0.5, "#E8F5E9", "safe-safe"),
-        (0.5, 0.5, "#E3F2FD", "sweet spot"),
+        # (lo_x, lo_y, color, label, label_x, label_y, ha, va)
+        (0.0, 0.0, "#ECEFF1", "incremental",    0.02, 0.02, "left",  "bottom"),
+        (0.5, 0.0, "#FFF3E0", "risky-risky",    0.98, 0.02, "right", "bottom"),
+        (0.0, 0.5, "#E8F5E9", "safe-safe",      0.02, 0.98, "left",  "top"),
+        (0.5, 0.5, "#E3F2FD", "sweet spot",     0.98, 0.98, "right", "top"),
     ]
-    for (lo_x, lo_y, color, lab) in quadrants:
+    for (lo_x, lo_y, color, lab, lx, ly, ha, va) in quadrants:
         ax.add_patch(mpatches.Rectangle(
             (lo_x, lo_y), 0.5, 0.5,
             facecolor=color, edgecolor="none", alpha=0.85, zorder=1,
         ))
-        ax.text(lo_x + 0.02, lo_y + 0.02, lab,
-                ha="left", va="bottom", fontsize=6.2,
+        ax.text(lx, ly, lab,
+                ha=ha, va=va, fontsize=6.2,
                 color="#555555", style="italic", zorder=2)
 
     # Axis reference lines.

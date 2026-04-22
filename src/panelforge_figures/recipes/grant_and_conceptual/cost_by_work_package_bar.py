@@ -106,8 +106,10 @@ def render(contract: CostByWPInput, ax=None, **_):
     ax.invert_yaxis()
     ax.set_xlabel(f"cost ({contract.currency})")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
+    # Legend below axes with enough vertical offset to clear the
+    # x-axis label.
     ax.legend(fontsize=6.8, frameon=False, loc="upper right",
-              bbox_to_anchor=(1.0, -0.08),
+              bbox_to_anchor=(1.0, -0.20),
               ncols=min(len(cats), 5), handlelength=1.0,
               columnspacing=1.2)
 

@@ -119,40 +119,36 @@ def render(contract: DeliverablesTimelineInput, ax=None, **_):
         "pending":    dict(marker="o", edgecolor="#888888", size=0.5),
     }
 
-    # Deliverable markers.
+    # Deliverable markers. Each WP lane is already a Rectangle patch
+    # so the gantt ≥3-patches rule is satisfied via lanes.
     for d in dels:
         yi = wp_y[d.wp]
         style = status_styles.get(d.status, status_styles["pending"])
         color = wp_colors[d.wp]
-        # Diamond patches for all deliverables so quality rule sees
-        # ≥3 patches; use Circle-Diamond style.
-        diamond = mpatches.FancyBboxPatch(
-            (d.due_month - style["size"] / 2, yi - style["size"] / 2),
-            style["size"], style["size"],
-            boxstyle="round,pad=0.0,rounding_size=0.18",
-            facecolor=color, edgecolor=style["edgecolor"],
-            linewidth=1.2, alpha=0.95, zorder=4,
-        )
-        ax.add_patch(diamond)
-        # ID label above.
-        ax.text(d.due_month, yi + 0.32, d.id,
-                ha="center", va="bottom", fontsize=6.4,
-                color="#222222", fontweight="bold", zorder=5)
-        # Title below.
-        ax.text(d.due_month, yi - 0.32, d.title,
-                ha="center", va="top", fontsize=5.8,
-                color="#555555", zorder=5)
-        # Status marker via scatter (milestone-diamond rule).
-        ax.scatter([d.due_month], [yi],
-                   s=24, marker=style["marker"],
-                   color=style["edgecolor"],
-                   edgecolor="white", linewidth=0.5, zorder=6)
+        # Status-coloured ring under the WP-coloured fill.
+        ax.scatter([d.due_month], [yi], s=180,
+                   marker=style["marker"], color="white",
+                   edgecolor=style["edgecolor"], linewidth=1.8,
+                   zorder=4)
+        ax.scatter([d.due_month], [yi], s=90,
+                   marker=style["marker"], color=color,
+                   edgecolor="white", linewidth=0.6,
+                   alpha=0.95, zorder=5)
+        # ID label inside / below marker.
+        ax.text(d.due_month, yi - 0.02, d.id,
+                ha="center", va="center", fontsize=5.8,
+                color="white", fontweight="bold", zorder=6)
+        # Title angled above marker (rotation=20) to avoid horizontal
+        # overlap between closely-spaced deliverables.
+        ax.text(d.due_month, yi + 0.25, d.title,
+                ha="left", va="bottom", fontsize=5.8,
+                color="#333333", rotation=20, zorder=5)
 
     # Year dividers.
     for year_m in range(12, months, 12):
         ax.axvline(year_m, color="#BBBBBB", lw=0.6, ls=":", zorder=2)
 
-    ax.set_xlim(-1, months + 1)
+    ax.set_xlim(-1, months + 6)
     ax.set_ylim(-0.8, len(wps) - 0.2)
     ax.invert_yaxis()
     ax.set_yticks([])

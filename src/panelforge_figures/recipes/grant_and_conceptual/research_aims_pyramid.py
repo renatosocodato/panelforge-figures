@@ -91,68 +91,80 @@ def render(contract: AimsPyramidInput, ax=None, **_):
     for s in ("top", "right", "left", "bottom"):
         ax.spines[s].set_visible(False)
 
-    # Top: objective banner.
+    import textwrap
+
+    # Column layout: n_aims equal-width columns covering 0.04..0.96.
+    aims = contract.aim_titles
+    n_aims = len(aims)
+    avail = 0.92
+    col_gap = 0.02
+    col_w = (avail - col_gap * (n_aims - 1)) / n_aims
+    col_x = [0.04 + i * (col_w + col_gap) for i in range(n_aims)]
+
+    # Top: objective banner spans full width with the OBJECTIVE label
+    # fully above the objective sentence (no overlap).
     obj_h = 0.20
-    obj_y = 0.78
+    obj_y = 0.76
     ax.add_patch(mpatches.FancyBboxPatch(
-        (0.08, obj_y), 0.84, obj_h,
-        boxstyle="round,pad=0.008,rounding_size=0.02",
+        (0.04, obj_y), avail, obj_h,
+        boxstyle="round,pad=0.008,rounding_size=0.018",
         facecolor="#263238", edgecolor="none", alpha=0.92,
         zorder=3,
     ))
-    ax.text(0.10, obj_y + obj_h * 0.68, "OBJECTIVE",
-            ha="left", va="center", fontsize=7.0,
+    ax.text(0.06, obj_y + obj_h - 0.025, "OBJECTIVE",
+            ha="left", va="top", fontsize=7.0,
             color="#B0BEC5", fontweight="bold", zorder=4)
-    # Wrap objective text.
-    import textwrap
-    wrapped = "\n".join(textwrap.wrap(contract.objective, width=72))
-    ax.text(0.10, obj_y + obj_h * 0.32, wrapped,
-            ha="left", va="center", fontsize=8.2,
+    wrapped = "\n".join(textwrap.wrap(contract.objective, width=58))
+    ax.text(0.5, obj_y + 0.055, wrapped,
+            ha="center", va="center", fontsize=7.0,
             color="white", zorder=4)
 
-    # Middle: aims row.
-    aims = contract.aim_titles
-    n_aims = len(aims)
-    aim_w = 0.76 / n_aims
-    aim_gap = 0.08 / max(n_aims - 1, 1)
-    aim_y = 0.46
-    aim_h = 0.20
+    # Middle: aim bands, one per column.
+    aim_y = 0.54
+    aim_h = 0.16
     color_keys = ["signaling", "metabolic", "cytoskeletal", "other"]
     for i, title in enumerate(aims):
-        x = 0.12 + i * (aim_w + aim_gap * (n_aims - 1) / n_aims)
+        x = col_x[i]
         ck = color_keys[i % len(color_keys)]
         color = palette.pick(ck) if ck in palette.semantic else palette[i]
         ax.add_patch(mpatches.FancyBboxPatch(
-            (x, aim_y), aim_w, aim_h,
-            boxstyle="round,pad=0.006,rounding_size=0.016",
+            (x, aim_y), col_w, aim_h,
+            boxstyle="round,pad=0.006,rounding_size=0.014",
             facecolor=color, edgecolor="white", linewidth=0.7,
             alpha=0.90, zorder=3,
         ))
-        ax.text(x + aim_w / 2, aim_y + aim_h / 2, title,
-                ha="center", va="center", fontsize=8.2,
+        # Normalise em-dash to ASCII + wrap narrowly.
+        title_ascii = title.replace("—", "-").replace("–", "-")
+        title_wrap = "\n".join(textwrap.wrap(title_ascii, width=13))
+        ax.text(x + col_w / 2, aim_y + aim_h / 2, title_wrap,
+                ha="center", va="center", fontsize=7.2,
                 color="white", fontweight="bold", zorder=4)
         # Connector from objective down to aim.
-        ax.plot([x + aim_w / 2, x + aim_w / 2],
+        ax.plot([x + col_w / 2, x + col_w / 2],
                 [obj_y, aim_y + aim_h],
                 color="#888888", lw=0.8, zorder=1)
 
     # Base: per-aim sub-question cards stacked beneath each aim.
-    sub_y_top = aim_y - 0.04
     for i, subs in enumerate(contract.aim_subquestions):
-        x = 0.12 + i * (aim_w + aim_gap * (n_aims - 1) / n_aims)
+        x = col_x[i]
+        n_sub = min(len(subs), 3)
+        if n_sub == 0:
+            continue
+        # Allocate vertical space 0.04..0.48 for this column's subs.
+        top_y = 0.48
+        bot_y = 0.04
+        sub_h = (top_y - bot_y - 0.015 * (n_sub - 1)) / n_sub
         for j, q in enumerate(subs[:3]):
-            sub_y = sub_y_top - j * 0.10
+            sub_y = top_y - (j + 1) * sub_h - j * 0.015
             ax.add_patch(mpatches.FancyBboxPatch(
-                (x + aim_w * 0.06, sub_y - 0.07),
-                aim_w * 0.88, 0.07,
+                (x, sub_y), col_w, sub_h,
                 boxstyle="round,pad=0.004,rounding_size=0.010",
                 facecolor="white", edgecolor="#BBBBBB", linewidth=0.5,
                 alpha=0.98, zorder=3,
             ))
-            # Wrap to fit.
-            q_wrap = "\n".join(textwrap.wrap(q, width=40))
-            ax.text(x + aim_w / 2, sub_y - 0.035, q_wrap,
-                    ha="center", va="center", fontsize=6.8,
+            q_wrap = "\n".join(textwrap.wrap(q, width=20))
+            ax.text(x + col_w / 2, sub_y + sub_h / 2, q_wrap,
+                    ha="center", va="center", fontsize=6.4,
                     color="#333333", zorder=4)
 
     ax.set_title(contract.title, fontsize=9.0, pad=4)

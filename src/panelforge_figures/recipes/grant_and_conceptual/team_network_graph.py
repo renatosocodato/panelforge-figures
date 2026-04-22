@@ -162,14 +162,18 @@ def render(contract: TeamNetworkInput, ax=None, **_):
             xy, r, facecolor=color, edgecolor="white",
             linewidth=1.0, alpha=0.92, zorder=4,
         ))
-        # Name label inside circle (centred).
-        ax.text(xy[0], xy[1], p.name,
+        # Short ID inside the circle (always fits).
+        ax.text(xy[0], xy[1], p.id,
                 ha="center", va="center", fontsize=6.6,
                 color="white", fontweight="bold", zorder=5)
-        # Role tag below circle.
-        ax.text(xy[0], xy[1] - r - 0.03, p.role,
+        # Full name + role below circle (name first, then role on a
+        # second line in a lighter weight).
+        ax.text(xy[0], xy[1] - r - 0.025, p.name,
+                ha="center", va="top", fontsize=6.4,
+                color="#222222", zorder=5)
+        ax.text(xy[0], xy[1] - r - 0.080, f"({p.role})",
                 ha="center", va="top", fontsize=5.8,
-                color="#555555", zorder=5)
+                color="#777777", zorder=5)
 
     # Institution legend (Patch proxies).
     proxies = [

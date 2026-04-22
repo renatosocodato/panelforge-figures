@@ -109,12 +109,13 @@ def render(contract: InnovationPositioningInput, ax=None, **_):
                 ha="left", va="bottom", fontsize=6.4,
                 color="#455A64", zorder=5)
 
-    # Our proposal — distinct star marker.
+    # Our proposal — distinct star marker (label is drawn by hand
+    # above the marker; no legend needed since it would duplicate
+    # that label and clutter a corner).
     ax.scatter([contract.our_novelty], [contract.our_feasibility],
                s=260, marker="*", color="#C62828",
                edgecolor="white", linewidth=1.0,
-               alpha=0.95, zorder=6,
-               label=contract.our_name)
+               alpha=0.95, zorder=6)
     ax.text(contract.our_novelty, contract.our_feasibility + 0.035,
             contract.our_name,
             ha="center", va="bottom", fontsize=7.4,
@@ -129,6 +130,4 @@ def render(contract: InnovationPositioningInput, ax=None, **_):
     ax.set_xlabel("novelty")
     ax.set_ylabel("feasibility")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
-              handlelength=0.8)
     return ax

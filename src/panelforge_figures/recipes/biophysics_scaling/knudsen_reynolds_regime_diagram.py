@@ -92,11 +92,13 @@ def render(contract: KnReInput, ax=None, **_):
             (lo, re_lo), hi - lo, re_hi - re_lo,
             facecolor=color, edgecolor="none", alpha=0.6, zorder=1,
         ))
-        # Regime label at top of each strip.
+        # Regime label at bottom of each strip (horizontal, no legend
+        # collision).
         mid = np.sqrt(lo * hi)
-        ax.text(mid, re_hi * 0.6, name,
-                ha="center", va="top", fontsize=6.8,
-                color="#444444", zorder=2, rotation=90)
+        ax.text(mid, re_lo * 2.5, name,
+                ha="center", va="bottom", fontsize=6.8,
+                color="#444444", zorder=2, rotation=0,
+                fontweight="bold")
 
     # Kn threshold vertical lines.
     for cut in [1e-2, 1e-1, 1e1]:
@@ -126,8 +128,8 @@ def render(contract: KnReInput, ax=None, **_):
         w = _which(float(k))
         counts[w] = counts.get(w, 0) + 1
     summary = "  ".join(f"{k}: {v}" for k, v in counts.items())
-    ax.text(0.02, 0.02, summary,
-            transform=ax.transAxes, ha="left", va="bottom",
+    ax.text(0.98, 0.97, summary,
+            transform=ax.transAxes, ha="right", va="top",
             fontsize=6.4, color="#333333",
             bbox=dict(boxstyle="round,pad=0.22", fc="white",
                       ec="#BBBBBB", lw=0.5, alpha=0.92),
@@ -136,6 +138,8 @@ def render(contract: KnReInput, ax=None, **_):
     ax.set_xlabel("Knudsen number Kn")
     ax.set_ylabel("Reynolds number Re")
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
-              handlelength=1.0, ncols=2, columnspacing=0.8)
+    # Legend below axes to avoid the regime labels.
+    ax.legend(fontsize=6.8, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, -0.14),
+              handlelength=1.0, ncols=len(unique), columnspacing=1.2)
     return ax

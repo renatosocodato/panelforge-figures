@@ -103,7 +103,7 @@ def render(contract: FractalDimensionInput, ax=None, **_):
     ax.set_xlabel(contract.x_label)
     ax.set_ylabel(contract.y_label)
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower left",
+    ax.legend(fontsize=6.8, frameon=False, loc="upper left",
               handlelength=1.6)
     ax.grid(axis="both", which="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

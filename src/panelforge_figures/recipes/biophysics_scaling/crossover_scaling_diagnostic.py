@@ -144,9 +144,12 @@ def render(contract: CrossoverInput, ax=None, **_):
     inset.axhline(a_lo, color="#2E7D32", lw=0.5, ls=":", zorder=2)
     inset.axhline(a_hi, color="#C62828", lw=0.5, ls=":", zorder=2)
     inset.set_xscale("log")
-    inset.set_xlabel("x", fontsize=6.2)
-    inset.set_ylabel("local α", fontsize=6.2)
-    inset.tick_params(labelsize=6.2)
+    inset.set_xlabel("x", fontsize=6.2, labelpad=1)
+    inset.set_ylabel("local α", fontsize=6.2, labelpad=2)
+    inset.tick_params(labelsize=6.2, pad=1)
+    # Force linear (not log) y so the label is visually distinct from
+    # the parent axes log ticks.
+    inset.set_yscale("linear")
     inset.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
     inset.set_axisbelow(True)
     return ax

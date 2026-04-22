@@ -103,28 +103,36 @@ def render(contract: DispStateResInput, ax=None, **_):
     cbar.set_label("median |Δr| (μm)", fontsize=6.8)
     cbar.ax.tick_params(labelsize=6.4)
 
-    # Per-state trend arrow + summary in-cell labels.
+    # In-cell numeric labels. Skip the leftmost column if it is
+    # narrower than the others (common when bins start at 0) to avoid
+    # collision with y-tick labels.
+    col_widths = np.diff(bins)
+    median_width = float(np.median(col_widths))
     for s in range(n_states):
-        delta = M[s, -1] - M[s, 0]
-        arrow = "->" if delta > 0 else ("<-" if delta < 0 else "~")
-        ax.text(bins[-1] + 0.04 * (bins[-1] - bins[0]), s,
-                f"Δ = {smart_fmt(float(delta))} {arrow}",
-                ha="left", va="center", fontsize=6.4,
-                color="#333333", zorder=5)
         for j, c in enumerate(centres):
+            # Skip cells where the column is narrower than 60% of the
+            # median width — the numeric label would not fit.
+            if col_widths[j] < 0.6 * median_width:
+                continue
             ax.text(c, s, smart_fmt(float(M[s, j])),
-                    ha="center", va="center", fontsize=5.8,
+                    ha="center", va="center", fontsize=6.2,
                     color=("white" if M[s, j] > v_hi * 0.55 else "#222222"),
                     zorder=4)
 
-    # Top summary: which state changes most.
+    # Compact per-row trend footer below the axes — one pill for all
+    # states so nothing collides with y-tick labels or the colorbar.
     deltas = M[:, -1] - M[:, 0]
-    top_idx = int(np.argmax(np.abs(deltas)))
-    ax.text(0.02, 1.04,
-            f"largest trend: {states[top_idx]}  "
-            f"(Δ|Δr| = {smart_fmt(float(deltas[top_idx]))} μm)",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.4, color="#333333", zorder=6)
+    trend_txt = "   ".join(
+        f"{states[s]}: Δ={smart_fmt(float(d))} "
+        f"({'up' if d > 0.01 else ('down' if d < -0.01 else 'flat')})"
+        for s, d in enumerate(deltas)
+    )
+    ax.text(0.5, -0.22, f"trends (bin0 -> bin-last)   {trend_txt}",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=6.2, color="#333333",
+            bbox=dict(boxstyle="round,pad=0.22", fc="white",
+                      ec="#BBBBBB", lw=0.5, alpha=0.92),
+            zorder=6)
 
     ax.set_xlim(bins[0], bins[-1])
     return ax

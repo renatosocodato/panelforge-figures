@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 271 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10).
+v1.1 in progress: 281 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,31 @@ v1.1 in progress: 271 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s15 — diffusion_and_tracking hydration (+10, in progress)
+
+Expands diffusion_and_tracking from 5 to 15 recipes:
+
+- **msd_anomalous_exponent_fit** — per-track α × D with representative
+  MSD fit inset.
+- **track_length_distribution** — per-condition CCDF of track duration
+  with censoring marker.
+- **jump_distance_van_hove** — P(|Δr|, Δt) stacked by lag, Gaussian
+  reference, α₂ non-Gaussian parameter.
+- **track_spaghetti_plot_colored_by_state** — per-segment LineCollection
+  state colouring with start/end markers.
+- **hmm_state_dwell_distribution** — per-state dwell ridges with
+  exponential references and mean markers.
+- **displacement_vs_state_residence** — state × residence-bin heatmap
+  of median |Δr| with per-row trend summary.
+- **diffusion_coefficient_heatmap_spatial** — D(x,y) pcolormesh with
+  quartile contour overlay.
+- **track_directionality_polar** — polar histogram with isotropic
+  reference, mean direction and Rayleigh r.
+- **ensemble_vs_time_averaged_msd** — EA-MSD line, TA-MSD cloud and
+  EB(τ) ergodicity-breaking callout.
+- **confinement_radius_vs_time** — per-track R_conf(t) mean ± 95 % CI
+  per condition.
 
 ## v1.1.0-s14 — biophysics_scaling hydration (+10, in progress)
 

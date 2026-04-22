@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 281 | ≥320 |
-| Sessions complete | 0 | 15.5 | 20 |
+| Total recipes | 137 | 290 | ≥320 |
+| Sessions complete | 0 | 16.5 | 20 |
 
 ## Per-session status
 
@@ -32,7 +32,7 @@ every PR merge. Governed by
 | 13 | `network_and_pathway`        | merged  | — | `v1.1.0-s13` | 10 (5→15) | none | Force layout + hub radial + PPI seed expansion + crosstalk matrix + KEGG overlay + regulon heatmap + module preservation + centrality-vs-effect + diff subnetwork + flux streamgraph; 1 panel polished (force layout -> degree-radial after spring collapse) |
 | 14 | `biophysics_scaling`         | merged  | — | `v1.1.0-s14` | 10 (5→15) | none | Theory-line overlay + universality-class comparison + fractal D_f with local-window inset + σ-ε regime map + Kn × Re regime grid + 1-D energy-landscape cartoon + scaling-exponent CI forest + τ(p) critical/Arrhenius + Π-group sensitivity bar + crossover diagnostic; 3 panels polished (fractal legend upper-left, Kn-Re regime labels to bottom + legend below, crossover inset linear y) |
 | 15 | `diffusion_and_tracking`     | merged  | — | `v1.1.0-s15` | 10 (5→15) | none | Per-track α fit + track-duration CCDF + van Hove self-correlation + state-coloured spaghetti + HMM dwell + residence-conditional Δr matrix + spatial D map + directionality polar + EA-vs-TA MSD ergodicity + R_conf time evolution; 1 panel polished (displacement × state-residence heatmap: removed right-edge Δ arrows, added compact trends footer) |
-| 16 | `spatial_statistics`         | pending | — | — | — | — | — |
+| 16 | `spatial_statistics`         | merged  | — | `v1.1.0-s16` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 4); dropped 2 duplicate seeds (l_function_with_envelope ≡ ripley_l_function, point_pattern_density_map ≡ kernel_density_heatmap); +9 lands 15-target: Clark-Evans ladder + F function + spatial covariogram + LISA cluster map + bivariate PCF + Voronoi area ridges + co-occurrence z-matrix + quadrat χ² + permutation null ridges; 0 panels polished (clean first render) |
 | 17 | `grant_and_conceptual`       | pending | — | — | — | — | — |
 | 18 | `meta_and_diagnostic`        | pending | — | — | — | — | — |
 | 19 | `clinical_cohort`            | pending | — | — | — | — | — |

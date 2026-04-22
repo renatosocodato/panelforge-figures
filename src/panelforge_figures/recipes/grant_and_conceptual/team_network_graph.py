@@ -45,19 +45,19 @@ class TeamNetworkInput(RecipeContract):
 def _demo() -> TeamNetworkInput:
     return TeamNetworkInput(
         partners=[
-            Partner(id="P1", name="PI", institution="i3S",
+            Partner(id="P1", name="Alves", institution="i3S",
                     role="coordinator"),
-            Partner(id="P2", name="co-I", institution="i3S",
+            Partner(id="P2", name="Costa", institution="i3S",
                     role="co-I"),
-            Partner(id="P3", name="postdoc A", institution="i3S",
+            Partner(id="P3", name="Matos", institution="i3S",
                     role="postdoc"),
-            Partner(id="P4", name="PI-partner", institution="INESC",
+            Partner(id="P4", name="Santos", institution="INESC",
                     role="PI"),
-            Partner(id="P5", name="postdoc B", institution="INESC",
+            Partner(id="P5", name="Ribeiro", institution="INESC",
                     role="postdoc"),
-            Partner(id="P6", name="clinical", institution="CHUSJ",
+            Partner(id="P6", name="Pereira", institution="CHUSJ",
                     role="clinician"),
-            Partner(id="P7", name="industry",
+            Partner(id="P7", name="Lopes",
                     institution="spin-out", role="CSO"),
         ],
         collaborations=[
@@ -167,13 +167,15 @@ def render(contract: TeamNetworkInput, ax=None, **_):
                 ha="center", va="center", fontsize=6.6,
                 color="white", fontweight="bold", zorder=5)
         # Full name + role below circle (name first, then role on a
-        # second line in a lighter weight).
+        # second line in a lighter weight). Omit the role line when
+        # name == role (avoids the "co-I / (co-I)" visual repetition).
         ax.text(xy[0], xy[1] - r - 0.025, p.name,
                 ha="center", va="top", fontsize=6.4,
                 color="#222222", zorder=5)
-        ax.text(xy[0], xy[1] - r - 0.080, f"({p.role})",
-                ha="center", va="top", fontsize=5.8,
-                color="#777777", zorder=5)
+        if p.role and p.role.strip() != p.name.strip():
+            ax.text(xy[0], xy[1] - r - 0.080, f"({p.role})",
+                    ha="center", va="top", fontsize=5.8,
+                    color="#777777", zorder=5)
 
     # Institution legend (Patch proxies).
     proxies = [

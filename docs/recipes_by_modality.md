@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 290 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2).
+v1.1 in progress: 299 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,29 @@ v1.1 in progress: 290 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s17 — grant_and_conceptual hydration (+9, in progress)
+
+Expands grant_and_conceptual from 6 to 15 recipes:
+
+- **research_aims_pyramid** — hierarchical objective → aims →
+  sub-questions card stack.
+- **methods_pipeline_flow** — strictly linear input → steps → output
+  with arrow connectors.
+- **milestone_vs_risk_matrix** — 2×2 probability × impact with per-
+  milestone tiles and risk-rated borders.
+- **innovation_positioning_quadrant** — novelty × feasibility 2×2 with
+  competitor scatter and starred our-proposal marker.
+- **cost_by_work_package_bar** — per-WP stacked horizontal bars by
+  cost category with grand-total callout.
+- **ethics_and_impact_block** — two-column ETHICS / IMPACT panel with
+  sub-section cards + bullets.
+- **interdisciplinary_contribution_spider** — radar of discipline
+  coverage with optional reference polygon.
+- **team_network_graph** — institutional-sector radial consortium
+  graph with collaboration edges.
+- **deliverables_timeline** — per-WP lane with angled D-ID markers,
+  status-coloured rings, year dividers.
 
 ## v1.1.0-s16 — spatial_statistics hydration (+9 Path 2, in progress)
 

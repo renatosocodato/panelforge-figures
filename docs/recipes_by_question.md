@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Grant-and-conceptual catch-up (v1.1.0-s17 additions)
+
+- **How do specific aims nest under an overarching objective?** → [`grant_and_conceptual.research_aims_pyramid`](gallery/grant_and_conceptual/research_aims_pyramid.png)
+- **What are the sequential methods-pipeline steps?** → [`grant_and_conceptual.methods_pipeline_flow`](gallery/grant_and_conceptual/methods_pipeline_flow.png)
+- **Which milestones are high-risk and high-impact?** → [`grant_and_conceptual.milestone_vs_risk_matrix`](gallery/grant_and_conceptual/milestone_vs_risk_matrix.png)
+- **Where does our proposal sit on the novelty × feasibility plane?** → [`grant_and_conceptual.innovation_positioning_quadrant`](gallery/grant_and_conceptual/innovation_positioning_quadrant.png)
+- **How is the budget distributed across WPs and cost categories?** → [`grant_and_conceptual.cost_by_work_package_bar`](gallery/grant_and_conceptual/cost_by_work_package_bar.png)
+- **What are the ethics safeguards and societal-impact pathways?** → [`grant_and_conceptual.ethics_and_impact_block`](gallery/grant_and_conceptual/ethics_and_impact_block.png)
+- **How interdisciplinary is the proposal across fields?** → [`grant_and_conceptual.interdisciplinary_contribution_spider`](gallery/grant_and_conceptual/interdisciplinary_contribution_spider.png)
+- **How do consortium partners connect (institution, role)?** → [`grant_and_conceptual.team_network_graph`](gallery/grant_and_conceptual/team_network_graph.png)
+- **When does each deliverable land and in which WP?** → [`grant_and_conceptual.deliverables_timeline`](gallery/grant_and_conceptual/deliverables_timeline.png)
+
 ## Spatial-statistics catch-up (v1.1.0-s16 additions)
 
 - **Is the point pattern clustered, random, or dispersed (CE index)?** → [`spatial_statistics.clark_evans_aggregation_bar`](gallery/spatial_statistics/clark_evans_aggregation_bar.png)

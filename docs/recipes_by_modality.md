@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 299 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9).
+v1.1 in progress: 310 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,33 @@ v1.1 in progress: 299 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s18 — meta_and_diagnostic hydration (+11, in progress)
+
+Expands meta_and_diagnostic from 4 to 15 recipes:
+
+- **prisma_flow_diagram** — PRISMA-2020 record-flow with main +
+  excluded boxes and transitions.
+- **effect_size_funnel_plot** — ES × SE funnel with 95 % cone and
+  Egger's test verdict.
+- **heterogeneity_forest** — per-study ES forest with pooled diamond
+  and I² / τ² / Q in title.
+- **sensitivity_leave_one_out** — LOO pooled-without-k forest with
+  flagged-study callouts.
+- **data_quality_heatmap** — per-sample × QC metric z-score heatmap
+  with per-cell threshold-fail overlay.
+- **missingness_upset** — intersection-dot UpSet view of
+  co-missingness with per-set count bars.
+- **outlier_detection_scatter** — 2-D Mahalanobis outlier detection
+  with flagged X markers.
+- **retention_vs_attrition_sankey** — cohort flow with per-stage
+  retention bars and attrition tabs.
+- **replication_retrospective_matrix** — study × attempt success
+  grid with ES overlay.
+- **reproducibility_correlogram** — replicate × replicate r heatmap
+  with group-coded tick labels.
+- **batch_effect_diagnostic_pca** — PC1 × PC2 per-batch ellipses with
+  a batch-clustering-score verdict.
 
 ## v1.1.0-s17 — grant_and_conceptual hydration (+9, in progress)
 

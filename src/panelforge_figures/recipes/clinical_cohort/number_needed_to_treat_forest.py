@@ -137,7 +137,9 @@ def render(contract: NNTForestInput, ax=None, **_):
     ax.set_yticklabels(names_s, fontsize=7.0)
     ax.set_xlabel("number needed to treat (lower is better)")
     ax.set_xlim(0, max_shown)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
+    # Legend below axes so it can't sit on any forest row.
+    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
+              bbox_to_anchor=(1.0, -0.10),
               handlelength=1.4)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

@@ -113,8 +113,12 @@ def render(contract: PSBalanceInput, ax=None, **_):
     ax.set_yticks(y)
     ax.set_yticklabels(names_s, fontsize=6.8)
     ax.set_xlabel("standardised mean difference (SMD)")
-    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
-              handlelength=1.2)
+    # Legend below the axes so it cannot hide the bottom forest rows
+    # (the rows with positive before-SMD typically sit at the bottom
+    # of the sort).
+    ax.legend(fontsize=6.8, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, -0.18),
+              handlelength=1.2, ncols=3, columnspacing=1.4)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
 

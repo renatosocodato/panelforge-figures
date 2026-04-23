@@ -10,6 +10,20 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Meta-and-diagnostic catch-up (v1.1.0-s18 additions)
+
+- **How many records survive each stage of a systematic review?** → [`meta_and_diagnostic.prisma_flow_diagram`](gallery/meta_and_diagnostic/prisma_flow_diagram.png)
+- **Is there publication-bias asymmetry in a meta-analysis funnel?** → [`meta_and_diagnostic.effect_size_funnel_plot`](gallery/meta_and_diagnostic/effect_size_funnel_plot.png)
+- **What is the pooled ES and how heterogeneous (I², τ²) are studies?** → [`meta_and_diagnostic.heterogeneity_forest`](gallery/meta_and_diagnostic/heterogeneity_forest.png)
+- **Does any single study drive the pooled meta-analysis effect (LOO)?** → [`meta_and_diagnostic.sensitivity_leave_one_out`](gallery/meta_and_diagnostic/sensitivity_leave_one_out.png)
+- **Which sample × QC-metric cells fail a threshold?** → [`meta_and_diagnostic.data_quality_heatmap`](gallery/meta_and_diagnostic/data_quality_heatmap.png)
+- **Which combinations of variables are co-missing (UpSet view)?** → [`meta_and_diagnostic.missingness_upset`](gallery/meta_and_diagnostic/missingness_upset.png)
+- **Which 2-D samples are Mahalanobis outliers?** → [`meta_and_diagnostic.outlier_detection_scatter`](gallery/meta_and_diagnostic/outlier_detection_scatter.png)
+- **How do participants flow through enrolment / attrition stages?** → [`meta_and_diagnostic.retention_vs_attrition_sankey`](gallery/meta_and_diagnostic/retention_vs_attrition_sankey.png)
+- **Across study × replication attempt, which succeeded?** → [`meta_and_diagnostic.replication_retrospective_matrix`](gallery/meta_and_diagnostic/replication_retrospective_matrix.png)
+- **How correlated are replicate runs, and do they form blocks?** → [`meta_and_diagnostic.reproducibility_correlogram`](gallery/meta_and_diagnostic/reproducibility_correlogram.png)
+- **Do samples cluster by batch rather than condition?** → [`meta_and_diagnostic.batch_effect_diagnostic_pca`](gallery/meta_and_diagnostic/batch_effect_diagnostic_pca.png)
+
 ## Grant-and-conceptual catch-up (v1.1.0-s17 additions)
 
 - **How do specific aims nest under an overarching objective?** → [`grant_and_conceptual.research_aims_pyramid`](gallery/grant_and_conceptual/research_aims_pyramid.png)

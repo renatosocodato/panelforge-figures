@@ -131,32 +131,32 @@ def render(contract: ReplicationMatrixInput, ax=None, **_):
     ax.set_yticks(np.arange(n_s) + 0.5)
     ax.set_yticklabels(studies[::-1], fontsize=7.0)
     ax.set_xlabel("replication attempt")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
 
-    # Legend.
-    legend_patches = [
-        mpatches.Patch(facecolor=status_colors[k], edgecolor="white",
-                       label=k)
-        for k in ["success", "partial", "failure", "na"]
-    ]
-    ax.legend(handles=legend_patches, fontsize=6.8, frameon=False,
-              loc="upper center", bbox_to_anchor=(0.5, -0.12),
-              ncols=4, handlelength=1.0)
-
-    # Summary.
+    # Success-rate summary baked into title to avoid colliding with
+    # the title line or with cell labels.
     flat = S.ravel()
     n_success = int((flat == "success").sum())
     n_partial = int((flat == "partial").sum())
     n_fail = int((flat == "failure").sum())
     total = n_success + n_partial + n_fail
     success_rate = (n_success + 0.5 * n_partial) / max(total, 1)
-    ax.text(0.02, 1.02,
-            f"weighted success rate: "
-            f"{smart_fmt(success_rate * 100)} %  "
-            f"(successes {n_success}, partials {n_partial}, "
-            f"failures {n_fail})",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.4, color="#333333", zorder=6)
+    ax.set_title(
+        f"{contract.title}  ·  weighted success "
+        f"{smart_fmt(success_rate * 100)} %   "
+        f"(S {n_success} · P {n_partial} · F {n_fail})",
+        fontsize=8.2, pad=4,
+    )
+
+    # Legend below axes, with extra vertical offset so the x-tick
+    # labels stay clear.
+    legend_patches = [
+        mpatches.Patch(facecolor=status_colors[k], edgecolor="white",
+                       label=k)
+        for k in ["success", "partial", "failure", "na"]
+    ]
+    ax.legend(handles=legend_patches, fontsize=6.8, frameon=False,
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
+              ncols=4, handlelength=1.0)
 
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)

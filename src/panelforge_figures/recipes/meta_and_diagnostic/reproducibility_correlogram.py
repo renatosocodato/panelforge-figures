@@ -107,29 +107,26 @@ def render(contract: CorrelogramInput, ax=None, **_):
                     color=("white" if abs(r) > 0.55 else "#222222"),
                     zorder=4)
 
-    # Group strip on the left edge if provided.
+    # Group membership encoded by colouring the y-tick labels
+    # themselves (avoids the tick-label-vs-strip clipping tangle).
     if contract.group_membership is not None:
         groups = contract.group_membership
         unique = list(dict.fromkeys(groups))
-        group_colors = ["#6FA8DC", "#E06666", "#93C47D", "#C27BA0", "#FFD966"]
+        group_colors = ["#1565C0", "#C62828", "#2E7D32", "#6A1B9A", "#E65100"]
         gmap = {g: group_colors[i % len(group_colors)]
                 for i, g in enumerate(unique)}
+        # Colour each y-tick label by its group.
+        for tick_lbl, g in zip(ax.get_yticklabels(), groups):
+            tick_lbl.set_color(gmap[g])
+        # Group legend below axes with clearance for x-ticks.
         import matplotlib.patches as mpatches
-        strip_x = -1.2
-        for i, g in enumerate(groups):
-            ax.add_patch(mpatches.Rectangle(
-                (strip_x, i - 0.5), 0.6, 1.0,
-                facecolor=gmap[g], edgecolor="white", linewidth=0.4,
-                clip_on=False, zorder=3,
-            ))
-        # Group legend below axes.
         patches = [
             mpatches.Patch(facecolor=gmap[g], edgecolor="white",
                            label=f"group {g}")
             for g in unique
         ]
         ax.legend(handles=patches, fontsize=6.6, frameon=False,
-                  loc="upper center", bbox_to_anchor=(0.5, -0.14),
+                  loc="upper center", bbox_to_anchor=(0.5, -0.22),
                   ncols=len(unique), handlelength=1.0)
 
     # Summary: mean within-group vs between-group r.

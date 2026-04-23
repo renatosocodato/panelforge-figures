@@ -126,17 +126,15 @@ def render(contract: PRISMAInput, ax=None, **_):
                 facecolor="#FFF3E0", edgecolor="#E65100", linewidth=0.7,
                 zorder=3,
             ))
+            # Top line: 'Excluded  n = N'
             ax.text(excl_x + 0.015, y + box_h - 0.018,
-                    "Excluded",
-                    ha="left", va="top", fontsize=7.0,
+                    f"Excluded  n = {stage.excluded:,}",
+                    ha="left", va="top", fontsize=6.8,
                     color="#E65100", fontweight="bold", zorder=4)
-            ax.text(excl_x + 0.015, y + box_h / 2,
-                    f"n = {stage.excluded:,}",
-                    ha="left", va="center", fontsize=6.8,
-                    color="#E65100", zorder=4)
-            reason = textwrap.fill(stage.exclusion_reason, width=24)
-            ax.text(excl_x + 0.015, y + 0.015, reason,
-                    ha="left", va="bottom", fontsize=6.2,
+            # Reason wrapped below with ample clearance.
+            reason = textwrap.fill(stage.exclusion_reason, width=28)
+            ax.text(excl_x + 0.015, y + box_h * 0.42, reason,
+                    ha="left", va="top", fontsize=6.2,
                     color="#8E4500", zorder=4)
             # Side-arrow from main box to excluded box.
             ax.annotate(

@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 299 | ≥320 |
-| Sessions complete | 0 | 17.5 | 20 |
+| Total recipes | 137 | 310 | ≥320 |
+| Sessions complete | 0 | 18.5 | 20 |
 
 ## Per-session status
 
@@ -34,7 +34,7 @@ every PR merge. Governed by
 | 15 | `diffusion_and_tracking`     | merged  | — | `v1.1.0-s15` | 10 (5→15) | none | Per-track α fit + track-duration CCDF + van Hove self-correlation + state-coloured spaghetti + HMM dwell + residence-conditional Δr matrix + spatial D map + directionality polar + EA-vs-TA MSD ergodicity + R_conf time evolution; 1 panel polished (displacement × state-residence heatmap: removed right-edge Δ arrows, added compact trends footer) |
 | 16 | `spatial_statistics`         | merged  | — | `v1.1.0-s16` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 4); dropped 2 duplicate seeds (l_function_with_envelope ≡ ripley_l_function, point_pattern_density_map ≡ kernel_density_heatmap); +9 lands 15-target: Clark-Evans ladder + F function + spatial covariogram + LISA cluster map + bivariate PCF + Voronoi area ridges + co-occurrence z-matrix + quadrat χ² + permutation null ridges; 0 panels polished (clean first render) |
 | 17 | `grant_and_conceptual`       | merged  | — | `v1.1.0-s17` | 9 (6→15) | none | Aims pyramid + linear methods pipeline + milestone-risk matrix + innovation-positioning quadrant + cost-by-WP stacked bars + ethics & impact block + interdisciplinary spider + consortium network + deliverables timeline; 4 panels polished (aims wrap widths, methods pipeline slot width, innovation-positioning legend removed, deliverables-timeline angled titles + in-marker IDs, cost legend below xlabel, team-network ID inside + names below) |
-| 18 | `meta_and_diagnostic`        | pending | — | — | — | — | — |
+| 18 | `meta_and_diagnostic`        | merged  | — | `v1.1.0-s18` | 11 (4→15) | none | PRISMA flow + funnel plot + heterogeneity forest + LOO sensitivity + QC heatmap + missingness UpSet + outlier scatter + retention Sankey + replication matrix + correlogram + batch PCA; 7 panels polished (PRISMA reason layout, forest legend to upper-right + I²/τ²/Q in title, LOO summary in title, Sankey arrow-gap/bar-centre/tab layout, replication summary in title, correlogram tick-label colouring, PCA legend outside) |
 | 19 | `clinical_cohort`            | pending | — | — | — | — | — |
 | 20 | `cryoem_and_structure`       | pending | — | — | — | — | — |
 

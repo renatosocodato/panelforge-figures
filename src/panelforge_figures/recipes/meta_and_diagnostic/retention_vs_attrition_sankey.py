@@ -73,7 +73,7 @@ def render(contract: RetentionSankeyInput, ax=None, **_):
 
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(6.8, 3.6))
+        _, ax = plt.subplots(figsize=(8.4, 3.6))
     AESTHETIC.apply_to_ax(ax)
 
     ax.set_xlim(0, 1)
@@ -87,79 +87,101 @@ def render(contract: RetentionSankeyInput, ax=None, **_):
     n = len(stages)
     max_ret = max(s.retained for s in stages)
 
-    # Horizontal layout.
-    lane_x = 0.04
+    # Horizontal layout. Each lane gets a centred retention bar
+    # (52 % of lane width) with an attrition tab hanging off the
+    # right edge. The left chunk of each lane is arrow-gap from the
+    # previous stage, so 'n = N' never sits under an arrow head.
+    lane_x = 0.02
     lane_w = (1.0 - 2 * lane_x) / n
-    baseline_y = 0.50
-    max_bar_h = 0.40   # max stage bar height, scaled by retention
+    baseline_y = 0.52
+    max_bar_h = 0.38
+    bar_xfrac_lo = 0.18
+    bar_xfrac_hi = 0.70
+    drop_xfrac_lo = 0.74
+    drop_xfrac_hi = 0.96
 
-    prev_ret_x = None
+    prev_bar_right = None
     for i, stage in enumerate(stages):
         x = lane_x + i * lane_w
         bar_h = max_bar_h * (stage.retained / max_ret)
         # Stage retention bar.
+        bar_left = x + lane_w * bar_xfrac_lo
+        bar_width = lane_w * (bar_xfrac_hi - bar_xfrac_lo)
         ax.add_patch(mpatches.FancyBboxPatch(
-            (x + lane_w * 0.10, baseline_y - bar_h / 2),
-            lane_w * 0.55, bar_h,
+            (bar_left, baseline_y - bar_h / 2),
+            bar_width, bar_h,
             boxstyle="round,pad=0.002,rounding_size=0.010",
             facecolor="#1565C0", edgecolor="white", linewidth=0.6,
             alpha=0.92, zorder=3,
         ))
-        # Stage name above, retention n below-center.
-        ax.text(x + lane_w * 0.375, baseline_y + bar_h / 2 + 0.04,
-                stage.name,
+        # Stage name wrapped above bar, retention-n inside bar.
+        stage_name_wrap = "\n".join(
+            textwrap.wrap(stage.name, width=12,
+                          break_long_words=False, break_on_hyphens=False)
+        )
+        ax.text(bar_left + bar_width / 2,
+                baseline_y + max_bar_h / 2 + 0.04,
+                stage_name_wrap,
                 ha="center", va="bottom", fontsize=7.0,
                 color="#263238", fontweight="bold", zorder=4)
-        ax.text(x + lane_w * 0.375, baseline_y,
+        ax.text(bar_left + bar_width / 2, baseline_y,
                 f"n = {stage.retained:,}",
                 ha="center", va="center", fontsize=7.6,
                 color="white", fontweight="bold", zorder=5)
 
-        # Attrition tab on the right of the retention bar.
+        # Attrition tab on the right of the retention bar, inside lane.
         if stage.dropped > 0:
             drop_h = max_bar_h * (stage.dropped / max_ret)
+            drop_left = x + lane_w * drop_xfrac_lo
+            drop_width = lane_w * (drop_xfrac_hi - drop_xfrac_lo)
             ax.add_patch(mpatches.FancyBboxPatch(
-                (x + lane_w * 0.70, baseline_y - bar_h / 2),
-                lane_w * 0.22, drop_h,
+                (drop_left, baseline_y - bar_h / 2),
+                drop_width, drop_h,
                 boxstyle="round,pad=0.002,rounding_size=0.008",
                 facecolor="#E65100", edgecolor="white", linewidth=0.5,
                 alpha=0.9, zorder=3,
             ))
-            ax.text(x + lane_w * 0.81,
+            ax.text(drop_left + drop_width / 2,
                     baseline_y - bar_h / 2 + drop_h / 2,
                     f"-{stage.dropped}",
                     ha="center", va="center", fontsize=6.4,
                     color="white", fontweight="bold", zorder=5)
-            reason_wrap = textwrap.fill(stage.reason, width=18)
-            ax.text(x + lane_w * 0.81, baseline_y - bar_h / 2 - 0.02,
+            reason_wrap = textwrap.fill(
+                stage.reason, width=16,
+                break_long_words=False, break_on_hyphens=False,
+            )
+            ax.text(drop_left + drop_width / 2,
+                    baseline_y - bar_h / 2 - 0.02,
                     reason_wrap,
                     ha="center", va="top", fontsize=5.8,
                     color="#8E4500", zorder=4)
 
-        # Connector arrow from prev right-edge to this left-edge.
-        if i > 0:
+        # Connector arrow — head lands in the arrow-gap zone (the
+        # left 0.18 of each lane), so it never overlaps the retention
+        # bar or its 'n = N' label.
+        if i > 0 and prev_bar_right is not None:
+            arrow_head_x = x + lane_w * 0.14
             ax.annotate(
                 "",
-                xy=(x + lane_w * 0.10, baseline_y),
-                xytext=(prev_ret_x, baseline_y),
+                xy=(arrow_head_x, baseline_y),
+                xytext=(prev_bar_right, baseline_y),
                 arrowprops=dict(arrowstyle="-|>", color="#455A64",
-                                lw=1.2, mutation_scale=14),
+                                lw=1.2, mutation_scale=14,
+                                shrinkA=0, shrinkB=0),
                 zorder=2,
             )
-        prev_ret_x = x + lane_w * 0.65
+        # Next arrow starts from the right edge of this lane's drop
+        # tab (or bar if no drop).
+        prev_bar_right = x + lane_w * (drop_xfrac_hi + 0.01)
 
-    # Overall retention rate callout.
+    # Overall retention rate baked into title (keeps figure interior
+    # free of floating callouts that could overlap reason text).
     initial = stages[0].retained
     final = stages[-1].retained
     retention_pct = 100 * final / max(initial, 1)
-    ax.text(0.02, 0.02,
-            f"overall retention: {final} / {initial} "
-            f"({retention_pct:.1f} %)",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.8, color="#263238",
-            bbox=dict(boxstyle="round,pad=0.22", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
-
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
+    ax.set_title(
+        f"{contract.title}  ·  overall retention "
+        f"{final} / {initial} ({retention_pct:.1f} %)",
+        fontsize=8.6, pad=4,
+    )
     return ax

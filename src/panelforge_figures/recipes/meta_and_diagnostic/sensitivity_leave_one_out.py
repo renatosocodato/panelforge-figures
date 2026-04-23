@@ -133,19 +133,17 @@ def render(contract: LOOInput, ax=None, **_):
     ax.set_yticks(y)
     ax.set_yticklabels([f"w/o {n}" for n in names], fontsize=6.8)
     ax.set_xlabel("pooled effect size (study removed)")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
-              handlelength=1.2)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
+    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
+              handlelength=1.2)
 
+    # Bake N + flag summary into the title so it doesn't occlude any
+    # row marker at the bottom of the forest.
     n_flag = int(flagged.sum())
-    ax.text(0.02, 0.04,
-            f"N = {len(names)}   flagged (|Δ| > {smart_fmt(threshold)}) "
-            f"= {n_flag}",
-            transform=ax.transAxes, ha="left", va="bottom",
-            fontsize=6.4, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.22", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
+    ax.set_title(
+        f"{contract.title}  ·  N = {len(names)}   "
+        f"flagged (|Δ| > {smart_fmt(threshold)}) = {n_flag}",
+        fontsize=8.4, pad=4,
+    )
     return ax

@@ -142,7 +142,10 @@ def render(contract: BatchPCAInput, ax=None, **_):
         ax.set_ylabel("PC2")
 
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
+    # Legend outside the axes on the right so per-batch labels never
+    # collide with the data scatter clusters.
+    ax.legend(fontsize=6.8, frameon=False, loc="center left",
+              bbox_to_anchor=(1.02, 0.5),
               handlelength=1.0)
     ax.grid(axis="both", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

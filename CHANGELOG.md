@@ -6,6 +6,72 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s18] — 2026-04-23
+
+Eighteenth session of the v1.1 hydration plan. Hydrates the
+`meta_and_diagnostic` modality from 4 to 15 recipes — the QC,
+meta-analysis, and reproducibility workhorse used across every paper.
+
+### Added
+
+- `prisma_flow_diagram` (flow) — PRISMA-2020 stage funnel with main
+  + excluded boxes and arrowed transitions.
+- `effect_size_funnel_plot` (scatter_collapse) — ES × SE scatter with
+  95 % pseudo-CI cone + Egger's test p-value / verdict.
+- `heterogeneity_forest` (coef_forest) — per-study forest with pooled
+  diamond and I² / τ² / Q-statistic in title.
+- `sensitivity_leave_one_out` (coef_forest) — per-row pooled-without-k
+  ES with influential-study flags (|Δ| above threshold).
+- `data_quality_heatmap` (heatmap) — sample × QC-metric z-score heatmap
+  with per-cell threshold-fail × overlay + global pass-rate.
+- `missingness_upset` (matrix) — intersection-dot matrix with top
+  per-set count bars (set-intersection view of co-missingness).
+- `outlier_detection_scatter` (scatter_collapse) — 2-D feature plane
+  with Mahalanobis boundary contour and flagged-marker annotations.
+- `retention_vs_attrition_sankey` (flow) — per-stage retention bars
+  with attrition tabs and reason callouts.
+- `replication_retrospective_matrix` (matrix) — study × attempt
+  success / partial / failure / na grid with ES overlay.
+- `reproducibility_correlogram` (matrix) — replicate × replicate
+  Pearson r heatmap with group-coded tick labels.
+- `batch_effect_diagnostic_pca` (scatter_collapse) — PC1 × PC2 scatter
+  with per-batch covariance ellipses and a batch-clustering-score
+  verdict.
+
+### Infrastructure
+
+- No changes to `core/` — 11 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Updated `tests/test_contracts.py` to expect 15 (was 4) recipes in
+  `meta_and_diagnostic`.
+
+### Visual-QA polish (7 panels)
+
+- `prisma_flow_diagram` — exclusion-reason text overlapped the "n = N"
+  count; consolidated to "Excluded  n = N" single line + reason
+  below.
+- `heterogeneity_forest` — pooled-diamond label collided with legend;
+  moved I²/τ²/Q into title and legend to upper-right.
+- `sensitivity_leave_one_out` — bottom-left callout pill occluded the
+  Study 1 marker; consolidated into title.
+- `retention_vs_attrition_sankey` — arrow heads covered "n = N"
+  labels; reworked layout to put arrow heads in left-of-lane gap,
+  retention bars centred in lane, attrition tabs on the right.
+- `replication_retrospective_matrix` — top summary callout collided
+  with title; consolidated into title; legend offset below axes.
+- `reproducibility_correlogram` — tick labels clipped by group strip;
+  replaced strip with group-coloured y-tick labels.
+- `batch_effect_diagnostic_pca` — legend inside axes hidden by data
+  points; moved to outside-right (`bbox_to_anchor=(1.02, 0.5)`).
+
+### Progress
+
+- Total recipes: **299 → 310** (+11).
+- Tests: **1546 → 1601** (+55).
+- Modalities at v1.1 target (≥15): 15 of 20.
+- Sessions complete: **18 of 20**.
+
 ## [1.1.0-s17] — 2026-04-22
 
 Seventeenth session of the v1.1 hydration plan. Hydrates the

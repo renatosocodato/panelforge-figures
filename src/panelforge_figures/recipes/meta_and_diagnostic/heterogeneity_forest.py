@@ -153,24 +153,27 @@ def render(contract: HeterogeneityForestInput, ax=None, **_):
     ax.set_yticklabels(["Pooled"] + names_s, fontsize=7.0)
     ax.set_ylim(diamond_y - 1.0, n - 0.2)
     ax.set_xlabel("effect size")
-    ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower right",
-              handlelength=1.4)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
 
-    # I² / τ² / Q callout.
+    # I² / τ² / Q rolled into the title to avoid overlapping either
+    # the pooled-diamond label (lower) or a legend at lower-right.
     i2_pct = float(contract.i_squared) * 100
-    lines = [
+    het_bits = [
         f"I² = {smart_fmt(i2_pct)} %",
         f"τ² = {smart_fmt(float(contract.tau_squared))}",
     ]
     if contract.q_stat is not None:
-        lines.append(f"Q = {smart_fmt(float(contract.q_stat))} (df = {n - 1})")
-    ax.text(0.02, 0.97, "\n".join(lines),
-            transform=ax.transAxes, ha="left", va="top",
-            fontsize=6.6, color="#333333",
-            bbox=dict(boxstyle="round,pad=0.22", fc="white",
-                      ec="#BBBBBB", lw=0.5, alpha=0.92),
-            zorder=6)
+        het_bits.append(
+            f"Q = {smart_fmt(float(contract.q_stat))} (df = {n - 1})"
+        )
+    ax.set_title(
+        f"{contract.title}  ·  {'   '.join(het_bits)}",
+        fontsize=8.6, pad=4,
+    )
+
+    # Pooled reference legend in the top-right corner where no studies
+    # or pooled-diamond label sit.
+    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
+              handlelength=1.4)
     return ax

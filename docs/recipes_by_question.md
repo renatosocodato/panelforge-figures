@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Clinical-cohort catch-up (v1.1.0-s19 additions)
+
+- **At what cutoff is sens+spec maximal (Youden) and what is AUC?** → [`clinical_cohort.roc_with_cutoff_optimization`](gallery/clinical_cohort/roc_with_cutoff_optimization.png)
+- **Is the model calibrated (Hosmer-Lemeshow)?** → [`clinical_cohort.calibration_plot_with_hl_test`](gallery/clinical_cohort/calibration_plot_with_hl_test.png)
+- **Does the model's net benefit beat treat-all/treat-none?** → [`clinical_cohort.decision_curve_analysis`](gallery/clinical_cohort/decision_curve_analysis.png)
+- **With competing risks, what are per-cause CIFs (Gray's test)?** → [`clinical_cohort.competing_risks_cumulative_incidence`](gallery/clinical_cohort/competing_risks_cumulative_incidence.png)
+- **Does the hazard ratio change over follow-up (PH check)?** → [`clinical_cohort.hazard_ratio_over_time_smoothed`](gallery/clinical_cohort/hazard_ratio_over_time_smoothed.png)
+- **Does the event rate rise monotonically across risk-score tiers?** → [`clinical_cohort.risk_score_discrimination_ladder`](gallery/clinical_cohort/risk_score_discrimination_ladder.png)
+- **What is the NNT across subgroups (with CIs)?** → [`clinical_cohort.number_needed_to_treat_forest`](gallery/clinical_cohort/number_needed_to_treat_forest.png)
+- **Did propensity-score matching achieve balance (|SMD|<0.1)?** → [`clinical_cohort.propensity_score_balance_diagnostic`](gallery/clinical_cohort/propensity_score_balance_diagnostic.png)
+- **Per AE, how do arm incidences compare (with RR)?** → [`clinical_cohort.adverse_event_incidence_bar`](gallery/clinical_cohort/adverse_event_incidence_bar.png)
+
 ## Meta-and-diagnostic catch-up (v1.1.0-s18 additions)
 
 - **How many records survive each stage of a systematic review?** → [`meta_and_diagnostic.prisma_flow_diagram`](gallery/meta_and_diagnostic/prisma_flow_diagram.png)

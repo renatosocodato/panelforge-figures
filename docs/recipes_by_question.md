@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## CryoEM-and-structure catch-up (v1.1.0-s20 additions)
+
+- **How do B-factor distributions compare between chains?** → [`cryoem_and_structure.b_factor_distribution_by_chain`](gallery/cryoem_and_structure/b_factor_distribution_by_chain.png)
+- **Which residues have the highest RMS fluctuation in the ensemble?** → [`cryoem_and_structure.conformational_ensemble_rmsf`](gallery/cryoem_and_structure/conformational_ensemble_rmsf.png)
+- **Does the docking score form a funnel around the native pose?** → [`cryoem_and_structure.docking_pose_score_vs_rmsd`](gallery/cryoem_and_structure/docking_pose_score_vs_rmsd.png)
+- **Which residue pairs form contacts, in context of secondary structure?** → [`cryoem_and_structure.contact_map_with_secondary_structure`](gallery/cryoem_and_structure/contact_map_with_secondary_structure.png)
+- **Where are the positive / negative patches on the molecular surface?** → [`cryoem_and_structure.surface_electrostatics_colormap`](gallery/cryoem_and_structure/surface_electrostatics_colormap.png)
+- **Does buried surface area correlate with binding affinity?** → [`cryoem_and_structure.interface_area_vs_affinity`](gallery/cryoem_and_structure/interface_area_vs_affinity.png)
+- **Which normal modes capture most concerted-motion variance?** → [`cryoem_and_structure.domain_motion_decomposition`](gallery/cryoem_and_structure/domain_motion_decomposition.png)
+- **Around a key residue, what is the H-bond network with occupancies?** → [`cryoem_and_structure.hydrogen_bond_network_diagram`](gallery/cryoem_and_structure/hydrogen_bond_network_diagram.png)
+- **How large and correlated were the motion-correction shifts?** → [`cryoem_and_structure.motion_correction_shift_vector`](gallery/cryoem_and_structure/motion_correction_shift_vector.png)
+
 ## Clinical-cohort catch-up (v1.1.0-s19 additions)
 
 - **At what cutoff is sens+spec maximal (Youden) and what is AUC?** → [`clinical_cohort.roc_with_cutoff_optimization`](gallery/clinical_cohort/roc_with_cutoff_optimization.png)

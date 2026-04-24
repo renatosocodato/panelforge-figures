@@ -108,7 +108,7 @@ def render(contract: LOOInput, ax=None, **_):
     # Original pooled band.
     ax.axvspan(orig_lo, orig_hi, color="#BBBBBB", alpha=0.20,
                linewidth=0, zorder=1,
-               label=f"original pooled 95 % CI")
+               label="original pooled 95 % CI")
     ax.axvline(orig, color="#222222", lw=0.8, zorder=2,
                label=f"original pooled = {smart_fmt(orig)}")
 

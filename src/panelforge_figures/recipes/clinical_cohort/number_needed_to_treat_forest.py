@@ -36,7 +36,6 @@ class NNTForestInput(RecipeContract):
 
 
 def _demo() -> NNTForestInput:
-    rng = np.random.default_rng(2407)
     subgroups = [
         "overall",
         "age < 65",

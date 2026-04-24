@@ -34,7 +34,6 @@ class AEIncidenceInput(RecipeContract):
 
 
 def _demo() -> AEIncidenceInput:
-    rng = np.random.default_rng(2617)
     ae_names = ["any AE", "serious AE",
                 "nausea", "headache", "fatigue",
                 "injection-site reaction",

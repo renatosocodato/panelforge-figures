@@ -97,7 +97,6 @@ def render(contract: HMMDwellInput, ax=None, **_):
                 zorder=5)
 
         # Mean marker.
-        mean_y = float(np.interp(mean_d, xg, y_base + dens_s))
         ax.scatter([mean_d], [y_base + 0.08],
                    s=22, marker="v", color=color,
                    edgecolor="white", linewidth=0.4, zorder=6)

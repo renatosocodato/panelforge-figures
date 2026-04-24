@@ -81,13 +81,12 @@ def render(contract: DSpatialInput, ax=None, **_):
     y_edges = np.asarray(contract.y_edges, float)
     D = np.asarray(contract.D_map, float)
 
-    # Transparency-gate bins with few tracks.
+    # Mask bins with zero tracks (rely on masked-array transparency
+    # rather than a separate alpha_mask — pcolormesh honours the mask).
     if contract.track_count_map is not None:
         counts = np.asarray(contract.track_count_map, float)
-        alpha_mask = np.clip(counts / max(counts.max(), 1), 0.25, 1.0)
         D_plot = np.ma.array(D, mask=(counts < 1))
     else:
-        alpha_mask = None
         D_plot = D
 
     im = ax.pcolormesh(x_edges, y_edges, D_plot,

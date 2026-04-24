@@ -89,9 +89,9 @@ def render(contract: MissingnessUpsetInput, ax=None, **_):
     AESTHETIC.apply_to_ax(ax)
 
     vars_ = contract.variable_names
-    I = np.asarray(contract.intersections, int)
+    I_mat = np.asarray(contract.intersections, int)
     counts = np.asarray(contract.intersection_counts, int)
-    n_intr, n_var = I.shape
+    n_intr, n_var = I_mat.shape
 
     # Layout: top 60 % of axes = count bars; bottom 40 % = intersection
     # dot-matrix.
@@ -136,7 +136,7 @@ def render(contract: MissingnessUpsetInput, ax=None, **_):
     dot_r = min(col_w, row_h) * 0.35
     for i in range(n_intr):
         cx = col_x[i] + col_w * 0.5
-        missing_rows = [v_i for v_i in range(n_var) if I[i, v_i] == 1]
+        missing_rows = [v_i for v_i in range(n_var) if I_mat[i, v_i] == 1]
         # Connect selected rows with a vertical line.
         if len(missing_rows) >= 2:
             ys = [y_dot_top - (v + 0.5) * row_h for v in missing_rows]
@@ -144,7 +144,7 @@ def render(contract: MissingnessUpsetInput, ax=None, **_):
                     color="#263238", lw=1.2, zorder=3)
         for v_i in range(n_var):
             y_row = y_dot_top - (v_i + 0.5) * row_h
-            filled = (I[i, v_i] == 1)
+            filled = (I_mat[i, v_i] == 1)
             ax.add_patch(mpatches.Circle(
                 (cx, y_row), dot_r,
                 facecolor=("#263238" if filled else "#DDDDDD"),
@@ -155,7 +155,7 @@ def render(contract: MissingnessUpsetInput, ax=None, **_):
     # Per-variable totals (bottom-left margin).
     per_var_total = []
     for v_i in range(n_var):
-        t = int(np.sum(counts * I[:, v_i]))
+        t = int(np.sum(counts * I_mat[:, v_i]))
         per_var_total.append(t)
         y_row = y_dot_top - (v_i + 0.5) * row_h
         ax.text(x_hi + 0.005, y_row, f"  {t}",

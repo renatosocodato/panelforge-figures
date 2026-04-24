@@ -28,7 +28,7 @@ class StimTriggeredHeatmapInput(RecipeContract):
         ..., description="n_cells × n_time dF/F matrix aligned to stim at t=0"
     )
     sort_by_peak: bool = True
-    title: str = "Stim-triggered Ca²⁺ heatmap"
+    title: str = "Stim-triggered Ca2+ heatmap"
 
 
 def _demo() -> StimTriggeredHeatmapInput:

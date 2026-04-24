@@ -119,9 +119,12 @@ def render(contract: KnReInput, ax=None, **_):
 
     # Count points per regime.
     def _which(k):
-        if k < 1e-2: return "continuum"
-        if k < 1e-1: return "slip"
-        if k < 1e1:  return "transition"
+        if k < 1e-2:
+            return "continuum"
+        if k < 1e-1:
+            return "slip"
+        if k < 1e1:
+            return "transition"
         return "free-mol."
     counts: dict[str, int] = {}
     for k in kn:

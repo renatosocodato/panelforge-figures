@@ -1,6 +1,6 @@
-"""Joint Ca²⁺ × FRET activity scatter with marginal histograms.
+"""Joint Ca2+ × FRET activity scatter with marginal histograms.
 
-For cells recorded simultaneously in Ca²⁺ and FRET, plots per-cell
+For cells recorded simultaneously in Ca2+ and FRET, plots per-cell
 (event rate, FRET ratio) as a central scatter with marginal histograms
 on the top and right, fitted OLS line, Pearson r.
 """
@@ -25,7 +25,7 @@ class CaFretJointInput(RecipeContract):
     ca_event_rate_hz: list[float] = Field(...)
     fret_ratio: list[float] = Field(...)
     condition: list[str] | None = None
-    title: str = "Ca²⁺ × FRET joint"
+    title: str = "Ca2+ × FRET joint"
 
 
 def _demo() -> CaFretJointInput:
@@ -48,7 +48,7 @@ _META = RecipeMetadata(
     modality="calcium_signaling",
     family=RecipeFamily.scatter_collapse,
     answers_question=(
-        "For cells recorded simultaneously in Ca²⁺ and FRET, how do "
+        "For cells recorded simultaneously in Ca2+ and FRET, how do "
         "the two activity measures covary?"
     ),
     required_fields=("cell_id", "ca_event_rate_hz", "fret_ratio"),
@@ -119,7 +119,7 @@ def render(contract: CaFretJointInput, ax=None, **_):
                      label=f"OLS slope={smart_fmt(float(slope))}")
 
     r = float(np.corrcoef(ca, fr)[0, 1]) if ca.std() > 0 else 0.0
-    ax_main.set_xlabel("Ca²⁺ event rate (Hz)")
+    ax_main.set_xlabel("Ca2+ event rate (Hz)")
     ax_main.set_ylabel("FRET ratio")
     ax_main.legend(fontsize=6.4, frameon=False, loc="lower right",
                    handlelength=1.4)

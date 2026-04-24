@@ -26,7 +26,7 @@ class CalciumLandscapeInput(RecipeContract):
     event_frequency_hz: list[float] = Field(...)
     event_amplitude: list[float] = Field(...)
     condition: list[str] = Field(...)
-    title: str = "Single-cell Ca²⁺ landscape"
+    title: str = "Single-cell Ca2+ landscape"
 
 
 def _demo() -> CalciumLandscapeInput:

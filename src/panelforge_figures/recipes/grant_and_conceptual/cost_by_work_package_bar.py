@@ -15,7 +15,6 @@ from ...core import (
     RecipeFamily,
     RecipeMetadata,
     register_recipe,
-    smart_fmt,
 )
 from ._aesthetic import AESTHETIC
 

@@ -86,7 +86,6 @@ def render(contract: VoronoiAreasInput, ax=None, **_):
     for i, c in enumerate(conditions[::-1]):
         color = palette[(len(conditions) - 1 - i) % len(palette.colors)]
         vals = np.asarray(contract.areas_by_condition[c], float)
-        log_v = np.log10(np.clip(vals, 1e-6, None))
         dens = kdes[c](xg)
         dens_s = (dens / max_d) * 0.85 * y_step
         y_base = i * y_step

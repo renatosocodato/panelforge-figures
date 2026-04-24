@@ -21,7 +21,7 @@ wave's gap-analysis for approval.
 
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
-| w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **implementation** | `beta-biophysics-scaling-w1` | — | Commit 2 landed (code + tests); awaiting gallery regen + PR |
+| w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **review** | `beta-biophysics-scaling-w1` | — | All 3 commits landed; 2 visual-QA fit-ups (A.1 scale-label count + legend; D.5 verdict-header); awaiting PR merge |
 | w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | pending | — | — | Depends on w1 landing |
 | w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | pending | — | — | Depends on w2 |
 | w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | pending | — | — | Depends on w3; closes pack |

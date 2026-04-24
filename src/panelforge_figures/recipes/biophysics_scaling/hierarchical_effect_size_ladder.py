@@ -185,20 +185,27 @@ def render(contract: HierarchicalEffectSizeLadderInput, ax=None, **_):
     ax.set_yticklabels(tick_labels, fontsize=6.8)
     ax.invert_yaxis()
 
-    # Scale-group labels in right margin.
+    # Scale-group labels — placed just below each stratum separator,
+    # left-aligned in axes-fraction x and data-units y. Decoupled from
+    # stratum size so single-feature strata (e.g. 'territory') don't
+    # collide with neighbours.
+    import matplotlib.transforms as mtrans
+    trans = mtrans.blended_transform_factory(ax.transAxes, ax.transData)
     row_idx = 0
     x_hi = max(1.1, float(max(
         (e.ci_hi for _, _, e in rows), default=1.0)) + 0.15)
     for scale in contract.scale_order:
-        count = len(by_scale[scale])
-        if count == 0:
+        features_in_scale = {e.feature for e in by_scale[scale]}
+        n_unique = len(features_in_scale)
+        if n_unique == 0:
             continue
-        n_rows_this = count * len(contract.compartment_order)
-        mid_y = row_idx + n_rows_this / 2 - 0.5
-        ax.text(x_hi * 0.98, mid_y, scale,
-                ha="right", va="center", fontsize=6.6,
+        n_rows_this = n_unique * len(contract.compartment_order)
+        # Anchor just above the first row of the stratum (y = row_idx - 0.35).
+        label_y = row_idx - 0.35
+        ax.text(1.005, label_y, scale,
+                ha="left", va="center", fontsize=6.4,
                 color="#555555", fontweight="bold",
-                rotation=90, zorder=6)
+                transform=trans, clip_on=False, zorder=6)
         row_idx += n_rows_this
 
     # Legend — outcome colours + compartment markers + TOST band.
@@ -223,8 +230,10 @@ def render(contract: HierarchicalEffectSizeLadderInput, ax=None, **_):
     if contract.show_tost_band and len(tost_zones) == 1:
         handles.append(Patch(facecolor="#D0D0D0", alpha=0.45,
                              label="TOST zone"))
+    # Legend sits well below the xlabel so it never overlaps the
+    # 'effect size (Cohen's d)' axis label.
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="upper center", bbox_to_anchor=(0.5, -0.08),
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
               ncols=3, handlelength=1.0)
 
     ax.set_xlim(min(-1.1, float(min(

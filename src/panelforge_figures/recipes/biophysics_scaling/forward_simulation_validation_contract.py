@@ -177,17 +177,18 @@ def render(contract: ValidationContractInput, ax=None, **_):
     for sep in metric_separators[:-1]:
         ax.axhline(sep, color="#DDDDDD", lw=0.5, zorder=1)
 
-    # Verdict glyph column — place at x_right.
+    # Verdict glyph column — place at x_right. No separate header label
+    # (it would escape the axis above the top row and collide with the
+    # title); the legend's pass / fail entries already identify the
+    # column.
     x_right = 1.9
     for yi, passes in zip(y, verdicts):
         glyph = "+" if passes else "x"
         colour = "#2E7D32" if passes else "#C62828"
         ax.text(x_right, yi, glyph,
                 ha="center", va="center", fontsize=8.4,
-                color=colour, fontweight="bold", zorder=6)
-    ax.text(x_right, -0.85, "verdict",
-            ha="center", va="center", fontsize=6.4,
-            color="#555555", fontweight="bold", zorder=6)
+                color=colour, fontweight="bold", zorder=6,
+                clip_on=True)
 
     ax.set_xlim(-2.2, 2.3)
     ax.set_xlabel("empirical - sim median (in sim-CI half-width units)")

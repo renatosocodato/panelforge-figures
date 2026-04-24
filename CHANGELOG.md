@@ -70,6 +70,27 @@ expands from 15 to 19 recipes; total catalog 328 → 332.
 - `pytest tests/` passes green; style-drift ratchet held; quality rules
   satisfied for all 4 new recipes.
 
+### Visual-QA polish (2 panels)
+
+- `hierarchical_effect_size_ladder`: scale-group sidebar labels were
+  double-counted (used `len(by_scale[scale])` which already contains
+  both compartments); `geometry` and `whole_cell` labels drifted into
+  whitespace below the axis. Fixed to count unique features and
+  relocated labels to a horizontal, blended-transform anchor above
+  each stratum separator — decoupled from stratum size so
+  single-feature strata (e.g. `territory`) don't collide with
+  neighbours. Legend bbox also shifted from `(0.5, -0.08)` to
+  `(0.5, -0.16)` so it clears the xlabel.
+- `forward_simulation_validation_contract`: 'verdict' header label at
+  `y=-0.85` escaped the axis above the top row and collided with the
+  title. Removed — the legend's pass/fail entries already identify
+  the column.
+
+### Gallery
+
+- `biophysics_scaling/` regenerated: **15 → 19 PNGs**. Total catalog
+  PNGs: **328 → 332**.
+
 ### Progress
 
 - biophysics_scaling recipes: **15 → 19** (+4).

@@ -120,14 +120,16 @@ def render(contract: RMSFInput, ax=None, **_):
                 facecolor=color, edgecolor="none", alpha=0.8, zorder=3,
             ))
             i = j
-        # Track legend.
+        # Track legend — below axes so it can't overlap the top SS
+        # strip.
         proxies = [
             mpatches.Patch(facecolor="#C62828", label="α-helix"),
             mpatches.Patch(facecolor="#2E7D32", label="β-strand"),
             mpatches.Patch(facecolor="#BDBDBD", label="loop / coil"),
         ]
         ax.legend(handles=proxies, fontsize=6.8, frameon=False,
-                  loc="upper right", handlelength=1.0, ncols=3)
+                  loc="upper center", bbox_to_anchor=(0.5, -0.14),
+                  handlelength=1.0, ncols=3)
 
     # Mark top-5 most flexible residues.
     top_k = 5

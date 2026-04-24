@@ -84,39 +84,51 @@ def render(contract: MotionShiftInput, ax=None, **_):
                          zorder=5)
     ax.plot(dx, dy, color="#777777", lw=0.7, alpha=0.7, zorder=3)
 
-    # Compute a scale for label offsets based on data extent.
-    lim = float(max(abs(dx).max(), abs(dy).max())) * 1.25 + 0.1
-    offset = lim * 0.06
+    # Data-driven extents so we don't render huge empty quadrants
+    # when the drift is one-directional.
+    x_pad = (float(dx.max() - dx.min()) * 0.15) + 0.25
+    y_pad = (float(dy.max() - dy.min()) * 0.15) + 0.25
+    x_lo = min(float(dx.min()), 0.0) - x_pad
+    x_hi = max(float(dx.max()), 0.0) + x_pad
+    y_lo = min(float(dy.min()), 0.0) - y_pad
+    y_hi = max(float(dy.max()), 0.0) + y_pad
+    offset_x = (x_hi - x_lo) * 0.02
+    offset_y = (y_hi - y_lo) * 0.02
+    marker_r = min(offset_x, offset_y) * 1.5
 
-    # Origin marker — label below-left to stay clear of frame-0.
+    # Origin marker — label placed LOWER-LEFT so it never stacks with
+    # the frame-0 marker (which sits near origin for typical data).
     ax.add_patch(mpatches.Circle(
-        (0, 0), offset * 0.5,
+        (0, 0), marker_r,
         facecolor="#222222", edgecolor="white",
         linewidth=0.8, zorder=6,
     ))
-    ax.text(-offset, -offset, "origin",
+    ax.text(-offset_x, -offset_y * 2.5, "origin",
             ha="right", va="top", fontsize=6.6,
             color="#333333", zorder=7)
 
-    # First and last frame markers — labels offset so they don't
-    # stack on the origin or each other.
+    # First and last frame markers — 'frame 0' label lifted above
+    # and right of its marker; 'frame N' label below-left of its
+    # marker (which sits at the end of the trajectory).
     ax.add_patch(mpatches.Circle(
-        (float(dx[0]), float(dy[0])), offset * 0.6,
+        (float(dx[0]), float(dy[0])), marker_r * 1.2,
         facecolor="none", edgecolor="#2E7D32", linewidth=1.2,
         zorder=7,
     ))
-    ax.text(float(dx[0]) + offset, float(dy[0]) - offset,
-            "frame 0", ha="left", va="top",
-            fontsize=6.4, color="#2E7D32", zorder=7)
+    ax.text(float(dx[0]) + offset_x * 2, float(dy[0]) + offset_y * 2,
+            "frame 0", ha="left", va="bottom",
+            fontsize=6.4, color="#2E7D32",
+            fontweight="bold", zorder=7)
     ax.add_patch(mpatches.Circle(
-        (float(dx[-1]), float(dy[-1])), offset * 0.6,
+        (float(dx[-1]), float(dy[-1])), marker_r * 1.2,
         facecolor="none", edgecolor="#C62828", linewidth=1.2,
         zorder=7,
     ))
-    ax.text(float(dx[-1]) + offset, float(dy[-1]) + offset,
+    ax.text(float(dx[-1]) + offset_x * 2, float(dy[-1]) + offset_y * 2,
             f"frame {int(frames[-1])}",
             ha="left", va="bottom",
-            fontsize=6.4, color="#C62828", zorder=7)
+            fontsize=6.4, color="#C62828",
+            fontweight="bold", zorder=7)
 
     # Crosshair at origin.
     ax.axhline(0, color="#DDDDDD", lw=0.5, zorder=1)
@@ -136,9 +148,9 @@ def render(contract: MotionShiftInput, ax=None, **_):
     ax.set_xlabel("dx (Å)")
     ax.set_ylabel("dy (Å)")
 
-    # Tight limits around the actual data range.
-    ax.set_xlim(-lim, lim)
-    ax.set_ylim(-lim, lim)
+    # Per-axis tight limits (already computed above from data extent).
+    ax.set_xlim(x_lo, x_hi)
+    ax.set_ylim(y_lo, y_hi)
 
     ax.set_title(
         f"{contract.title}  ·  n_frames = {len(frames)}  ·  "
@@ -146,10 +158,13 @@ def render(contract: MotionShiftInput, ax=None, **_):
         f"net drift {smart_fmt(net_disp)} Å",
         fontsize=7.8, pad=4,
     )
-    ax.text(0.02, 0.97,
+    # Callout at the lower-right — it can't collide with the frame-0
+    # marker (near origin) nor with the frame-N marker (which sits at
+    # the end of the trajectory wherever that is).
+    ax.text(0.98, 0.04,
             f"dose per frame: {smart_fmt(float(contract.dose_per_frame))} e-/Å²\n"
             f"mean per-frame step: {smart_fmt(mean_step)} Å",
-            transform=ax.transAxes, ha="left", va="top",
+            transform=ax.transAxes, ha="right", va="bottom",
             fontsize=6.4, color="#333333",
             bbox=dict(boxstyle="round,pad=0.22", fc="white",
                       ec="#BBBBBB", lw=0.5, alpha=0.92),

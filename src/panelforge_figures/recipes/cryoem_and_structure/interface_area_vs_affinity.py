@@ -80,8 +80,13 @@ def render(contract: InterfaceAffinityInput, ax=None, **_):
                if contract.complex_class is not None
                else ["complex"] * len(bsa))
 
-    # High-affinity shading: Kd < 1e-8 AND BSA > 1500.
-    ax.axhspan(1e-12, 1e-8, color="#2E7D32", alpha=0.07,
+    # Use tight y-limits around the actual Kd range so the plot isn't
+    # dominated by empty low-Kd decades. Keep a 0.5-decade margin.
+    kd_lo = 10 ** (np.log10(kd.min()) - 0.5)
+    kd_hi = 10 ** (np.log10(kd.max()) + 0.5)
+    ax.set_ylim(kd_lo, kd_hi)
+    # High-affinity shading: tightest-observed decade + BSA > 1500.
+    ax.axhspan(kd_lo, kd.min() * 3, color="#2E7D32", alpha=0.08,
                linewidth=0, zorder=1)
     ax.axvspan(1500, bsa.max() * 1.2, color="#2E7D32", alpha=0.05,
                linewidth=0, zorder=1)

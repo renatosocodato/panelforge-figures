@@ -6,9 +6,10 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-`v1.0.0` stable; `v1.1.0-s19` in progress — 20 modalities, 319
-recipes, CI-enforced typography + figure-integrity contract, 1646
-passing tests. The v1.1 hydration plan (see
+**`v1.1.0` — hydration complete**: 20 modalities, **328 recipes**,
+CI-enforced typography + figure-integrity contract, **1691 passing
+tests**. The v1.1 plan landed +191 recipes across 21 user-gated
+sessions (137 → 328, +139 %). The v1.1 hydration plan (see
 `docs/hydration_coordinator.md`) grows the catalogue to 320+ recipes
 across 20 user-gated sessions.
 

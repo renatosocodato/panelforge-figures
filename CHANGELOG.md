@@ -15,8 +15,18 @@ project follows semantic versioning.
   for the full pack plan.
 - **Wave 1** merged via PR #27 (substrate + 4 recipes;
   biophysics_scaling 15 → 19).
-- **Wave 2** implementation landed (+8 recipes; biophysics_scaling
-  19 → 27). **Waves 3–4 pending.**
+- **Wave 2** merged via PR #29 (+8 recipes;
+  biophysics_scaling 19 → 27).
+- **Wave 3** gap-analysis in review (+8 recipes: C.3
+  `euler_critical_length_crossing_distribution`, C.4
+  `confinement_free_energy_vs_width_curve`, C.5
+  `compartment_split_curvature_crosscorr`, C.6
+  `xz_microtubule_bowing_z_span`, C.8
+  `width_alignment_buffered_unbuffered_interaction`, C.9
+  `per_cell_colocalization_parallel_coordinates`, D.3
+  `ordered_trajectory_checkpoint_divergence`, D.4
+  `s_state_frontier_tip_raster`). biophysics_scaling will expand
+  27 → 35; total catalog 340 → 348. **Wave 4 pending.**
 
 ## [1.2.0-beta-biophysics_scaling-w2] — 2026-04-24
 

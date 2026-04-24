@@ -3,7 +3,7 @@
 v1.0.0 stable: 20 modalities, 137 recipes.
 **v1.1.0 complete: 328 recipes across 20 modalities** (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11, s19 clinical_cohort +9 Path 2, s20 cryoem_and_structure +9 Path 2).
 
-**v1.2.0-beta-biophysics_scaling — Wave 1 landed: 332 recipes** (biophysics_scaling +4 substrate: scale-hierarchy effect-size forest, TOST equivalence forest, pre-registered censoring audit, forward-simulation validation contract). Pack total: 4/23 recipes; 1/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
+**v1.2.0-beta-biophysics_scaling — Wave 2 landed: 340 recipes** (biophysics_scaling +12 cumulative across Waves 1–2). Pack total: 12/23 recipes; 2/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -57,6 +57,33 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.2.0-beta-biophysics_scaling — Wave 2 (scale-hierarchy + narrative anchors, +8)
+
+Rounds out the scale-hierarchy grammar (A.2 / A.3 / A.4 / A.5) and
+adds the §3 / §5 narrative anchors (C.1 / C.2 / D.1 / D.2). After
+Wave 2, §1, §3, and the first half of §5 of the anchor manuscript
+are fully panelable. biophysics_scaling expands from 19 to 27
+recipes; total catalog 332 → 340.
+
+- **compartment_paired_delta_scatter** (`scatter_collapse`) —
+  whole-cell vs protrusion-internal d per feature; diagonal + null
+  square.
+- **feature_outcome_sankey_sig_vs_null** (`flow`) — three-column
+  alluvial (total → scale → outcome) from matplotlib primitives only.
+- **random_forest_importance_by_scale** (`coef_forest`) — top-N RF
+  importance bars coloured by scale with CI whiskers.
+- **scale_stratified_permanova_r2** (`coef_forest`) — per-scale R² ±
+  CI with inline p-values and threshold reference.
+- **persistence_length_lp_with_equivalence_bounds** (`split_violin`) —
+  Lp 2×N split violin with TOST verdict per compartment.
+- **psd_active_gel_overlay_with_motor_inset**
+  (`timecourse_hierarchical_ci`) — log-log PSD with CI, ω^-2
+  reference, active-gel / motor-band shading, motor-ratio inset.
+- **geometric_mediation_path_diagram** (`conceptual`) — 3-node DAG
+  with bootstrap-CI edge annotations and mediation verdict.
+- **shared_manifold_scatter_with_residuals** (`scatter_collapse`) —
+  central scatter + shared LOESS + marginal residual histograms + ANCOVA pill.
 
 ## v1.2.0-beta-biophysics_scaling — Wave 1 (substrate, +4)
 

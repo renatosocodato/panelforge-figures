@@ -26,7 +26,6 @@ from ...core import (
 from ._aesthetic import AESTHETIC
 from ._shared import CensoringMode, CensoringResult
 
-
 _TRAFFIC_LIGHT = {
     "green":  "#2E7D32",   # direction preserved + passes threshold
     "amber":  "#F9A825",   # direction preserved, sub-threshold

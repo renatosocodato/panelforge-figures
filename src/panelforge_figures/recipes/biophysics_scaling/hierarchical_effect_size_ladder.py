@@ -21,7 +21,6 @@ from ...core import (
     RecipeMetadata,
     classify_outcome,
     register_recipe,
-    smart_fmt,
     tost_band_patch,
 )
 from ._aesthetic import AESTHETIC

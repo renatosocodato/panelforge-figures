@@ -10,6 +10,17 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Biophysics-scaling beta-pack Wave 2 additions (v1.2.0-beta-biophysics_scaling-w2)
+
+- **Per feature, how does the whole-cell effect size compare to the protrusion-internal one?** → [`biophysics_scaling.compartment_paired_delta_scatter`](gallery/biophysics_scaling/compartment_paired_delta_scatter.png)
+- **Where across the scale hierarchy do the significant / null-accepting / equivocal feature outcomes concentrate?** → [`biophysics_scaling.feature_outcome_sankey_sig_vs_null`](gallery/biophysics_scaling/feature_outcome_sankey_sig_vs_null.png)
+- **Which features drive genotype classification (RF importance) and from which organizational scale do they come?** → [`biophysics_scaling.random_forest_importance_by_scale`](gallery/biophysics_scaling/random_forest_importance_by_scale.png)
+- **Where across the organizational hierarchy does the genotype signal account for the most variance (PERMANOVA R²)?** → [`biophysics_scaling.scale_stratified_permanova_r2`](gallery/biophysics_scaling/scale_stratified_permanova_r2.png)
+- **Across compartments, does polymer Lp lie inside the pre-registered equivalence zone or outside it?** → [`biophysics_scaling.persistence_length_lp_with_equivalence_bounds`](gallery/biophysics_scaling/persistence_length_lp_with_equivalence_bounds.png)
+- **Does the active-gel PSD differ between groups, and does the motor band show a genotype-dependent deviation?** → [`biophysics_scaling.psd_active_gel_overlay_with_motor_inset`](gallery/biophysics_scaling/psd_active_gel_overlay_with_motor_inset.png)
+- **Does the putative mediator absorb the direct effect of predictor on outcome (path diagram with bootstrap CIs)?** → [`biophysics_scaling.geometric_mediation_path_diagram`](gallery/biophysics_scaling/geometric_mediation_path_diagram.png)
+- **Do two groups share the same (x, y) manifold after accounting for x, or does a residual group effect remain?** → [`biophysics_scaling.shared_manifold_scatter_with_residuals`](gallery/biophysics_scaling/shared_manifold_scatter_with_residuals.png)
+
 ## Biophysics-scaling beta-pack Wave 1 additions (v1.2.0-beta-biophysics_scaling-w1)
 
 - **Across the polymer → network → territory → geometry → whole-cell hierarchy, how large are the per-feature effects and how do they split across compartments?** → [`biophysics_scaling.hierarchical_effect_size_ladder`](gallery/biophysics_scaling/hierarchical_effect_size_ladder.png)

@@ -12,7 +12,97 @@ project follows semantic versioning.
   23 new recipes + shared sub-contract module + new `core/tost_bounds_utility.py`,
   landed across 4 user-gated waves. See
   [`docs/biophysics_scaling_beta_pack_tracker.md`](docs/biophysics_scaling_beta_pack_tracker.md)
-  for the full pack plan. Status: **Wave 1 implementation landed; Waves 2–4 pending**.
+  for the full pack plan.
+- **Wave 1** merged via PR #27 (substrate + 4 recipes;
+  biophysics_scaling 15 → 19).
+- **Wave 2** implementation landed (+8 recipes; biophysics_scaling
+  19 → 27). **Waves 3–4 pending.**
+
+## [1.2.0-beta-biophysics_scaling-w2] — 2026-04-24
+
+Second wave of the `biophysics_scaling` beta expansion pack. Lands
+the scale-hierarchy remainder (A.2 / A.3 / A.4 / A.5) and the §3 / §5
+narrative anchors (C.1 / C.2 / D.1 / D.2). After this wave, §1, §3,
+and the first half of §5 of the anchor manuscript are fully panelable.
+`biophysics_scaling` expands from 19 to 27 recipes; total catalog
+332 → 340.
+
+### Added (8 recipes)
+
+- `compartment_paired_delta_scatter` (`scatter_collapse`) — whole-cell
+  vs protrusion-internal effect-size scatter with diagonal reference
+  and null-zone square; Spearman-ρ verdict.
+- `feature_outcome_sankey_sig_vs_null` (`flow`) — three-column alluvial
+  flow (total → scale → outcome) built with FancyBboxPatch nodes and
+  smoothstep-interpolated Polygon ribbons; no matplotlib-Sankey dep.
+- `random_forest_importance_by_scale` (`coef_forest`) — top-N feature
+  importance ranked horizontally, bars coloured by scale stratum, CI
+  whiskers, null-threshold reference.
+- `scale_stratified_permanova_r2` (`coef_forest`) — per-scale R² ± CI
+  with p-value annotations and a typical-threshold reference; shows
+  where genotype variance lives across the hierarchy.
+- `persistence_length_lp_with_equivalence_bounds` (`split_violin`) —
+  2×N split violin (N compartments × 2 groups) with per-compartment
+  log10-fold / TOST verdict reported inline.
+- `psd_active_gel_overlay_with_motor_inset`
+  (`timecourse_hierarchical_ci`) — log-log PSD per channel × group
+  with CI ribbons, ω^-2 reference, active-gel + motor-band shading,
+  and a motor-band deviation inset.
+- `geometric_mediation_path_diagram` (`conceptual`) — 3-node DAG
+  (X predictor → M mediator → Y outcome + X → Y direct) with bootstrap
+  β ± CI edge annotations and mediation verdict footer.
+- `shared_manifold_scatter_with_residuals` (`scatter_collapse`) —
+  central scatter with shared LOESS fit + per-group marginal residual
+  histograms via `make_axes_locatable`; inline ANCOVA `group | x` pill.
+
+### Infrastructure
+
+- 8 new recipe modules; `biophysics_scaling/__init__.py` registers
+  them (imports + `__all__`).
+- Reused from Wave 1: `_shared.EffectSizeEstimate`, `TostZone`,
+  `ScaleTaggedFeature`, `MediationPathEstimate`, `PSDCurve`,
+  `_demo_estimate_roster()`.
+- No new `core/` utilities; no changes to `core/aesthetic_base.py`.
+- A.3 (Sankey) and D.1 (DAG) are genuinely novel primitives in the
+  repo — no existing recipe implements them. They use only matplotlib
+  stdlib (no matplotlib-venn, no networkx).
+
+### Visual-QA polish (4 panels)
+
+- `scale_stratified_permanova_r2`: legend moved to upper-right-outside
+  axes; per-row p-values anchored to the CI upper edge (clears the
+  legend box).
+- `psd_active_gel_overlay_with_motor_inset`: motor-band inset
+  relocated from upper-right (overlapped the decaying PSD) to
+  lower-left; PSD curve legend moved to upper-right where no data lives.
+- `geometric_mediation_path_diagram`: M-node external label placed
+  ABOVE the node so it no longer collides with the X→M and M→Y beta
+  annotation boxes.
+- `shared_manifold_scatter_with_residuals`: title moved to the top
+  marginal strip (the main-axes title was hidden behind the
+  `make_axes_locatable` top histogram).
+
+### Fit-ups during authoring
+
+- `random_forest_importance_by_scale`: added scatter markers at bar
+  tips to satisfy the `coef_forest` ≥3-marker rule (bars alone register
+  as `ax.patches`, not `ax.collections`).
+- Style-drift ratchet: `lw=2.0` → `lw=2.2`, `fontsize=10.0` → `9.6`,
+  `linewidth=0.3` → `0.4` (all snapped to existing literals). Ratchet
+  held at 20/20.
+- `_demo()` of C.2 PSD uses deterministic analytic curves — no RNG
+  needed (auto-removed by ruff after initial draft).
+
+### Tests
+
+- Total: **1724 → 1764** (+40).
+- `pytest tests/` passes green; all smoke / quality / contract /
+  style-drift / tost assertions satisfied for all 8 new recipes.
+
+### Progress
+
+- biophysics_scaling recipes: **19 → 27** (+8).
+- Beta-pack recipes landed: **4 → 12** (Wave 2 of 4).
 
 ## [1.2.0-beta-biophysics_scaling-w1] — 2026-04-24
 

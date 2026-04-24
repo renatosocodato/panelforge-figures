@@ -6,6 +6,21 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **biophysics_scaling beta expansion pack** (`[1.2.0-beta-biophysics_scaling]`) —
+  23 new recipes + shared sub-contract module + new `core/tost_bounds_utility.py`,
+  landed across 4 user-gated waves. See
+  [`docs/biophysics_scaling_beta_pack_tracker.md`](docs/biophysics_scaling_beta_pack_tracker.md)
+  for the full pack plan.
+- **Wave 1 — substrate (+4 recipes)** — gap-analysis in review:
+  `hierarchical_effect_size_ladder` (A.1), `equivalence_forest_with_tost_bounds`
+  (B.1), `pre_registered_censoring_mode_grid` (B.2),
+  `forward_simulation_validation_contract` (D.5). Ships the shared
+  `_shared.py` sub-contract module, a new `core/tost_bounds_utility.py`, and a
+  `BiophysicsScalingAesthetic` subclass carrying an `outcome_palette` field
+  (isolated to this modality; zero changes to `core/aesthetic_base.py`).
+
 ## [1.1.0] — 2026-04-24
 
 **v1.1.0 FINAL RELEASE.** The 20-session hydration plan is complete.

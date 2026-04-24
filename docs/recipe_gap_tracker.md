@@ -9,8 +9,8 @@ every PR merge. Governed by
 | Metric | v1.0 | Current | v1.1 target |
 |---|---|---|---|
 | Modalities | 20 | 20 | 20 |
-| Total recipes | 137 | 319 | ≥320 |
-| Sessions complete | 0 | 19.5 | 20 |
+| Total recipes | 137 | **328** | ≥320 ✅ |
+| Sessions complete | 0 | **20.5** | 20 ✅ |
 
 ## Per-session status
 
@@ -36,7 +36,7 @@ every PR merge. Governed by
 | 17 | `grant_and_conceptual`       | merged  | — | `v1.1.0-s17` | 9 (6→15) | none | Aims pyramid + linear methods pipeline + milestone-risk matrix + innovation-positioning quadrant + cost-by-WP stacked bars + ethics & impact block + interdisciplinary spider + consortium network + deliverables timeline; 4 panels polished (aims wrap widths, methods pipeline slot width, innovation-positioning legend removed, deliverables-timeline angled titles + in-marker IDs, cost legend below xlabel, team-network ID inside + names below) |
 | 18 | `meta_and_diagnostic`        | merged  | — | `v1.1.0-s18` | 11 (4→15) | none | PRISMA flow + funnel plot + heterogeneity forest + LOO sensitivity + QC heatmap + missingness UpSet + outlier scatter + retention Sankey + replication matrix + correlogram + batch PCA; 7 panels polished (PRISMA reason layout, forest legend to upper-right + I²/τ²/Q in title, LOO summary in title, Sankey arrow-gap/bar-centre/tab layout, replication summary in title, correlogram tick-label colouring, PCA legend outside) |
 | 19 | `clinical_cohort`            | merged  | — | `v1.1.0-s19` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 3); 4 duplicate seeds dropped; +9 lands 15-target: ROC with Youden + HL calibration + decision curve + competing risks CIF + HR(t) PH check + risk-score ladder + NNT forest + PS balance + AE bars; 2 panels polished (NNT + PS-balance legends moved below axes) |
-| 20 | `cryoem_and_structure`       | pending | — | — | — | — | — |
+| 20 | `cryoem_and_structure`       | merged  | — | `v1.1.0-s20` | 9 (6→15, Path 2) | none | Real baseline 6 (plan listed 3); 3 duplicate seeds dropped; +9 lands 15-target and crosses >=320 v1.1 finish line: per-chain B-factor ridge + RMSF + docking funnel + contact map + electrostatics + BSA-vs-Kd + mode variance + H-bond network + motion-correction shifts; 3 panels polished (H-bond center circle size, motion-correction xlim/offsets, surface-electrostatics title) |
 
 ## Status legend
 

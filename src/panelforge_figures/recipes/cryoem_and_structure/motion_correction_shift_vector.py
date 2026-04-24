@@ -84,31 +84,39 @@ def render(contract: MotionShiftInput, ax=None, **_):
                          zorder=5)
     ax.plot(dx, dy, color="#777777", lw=0.7, alpha=0.7, zorder=3)
 
-    # Origin marker.
+    # Compute a scale for label offsets based on data extent.
+    lim = float(max(abs(dx).max(), abs(dy).max())) * 1.25 + 0.1
+    offset = lim * 0.06
+
+    # Origin marker — label below-left to stay clear of frame-0.
     ax.add_patch(mpatches.Circle(
-        (0, 0), 0.05, facecolor="#222222", edgecolor="white",
+        (0, 0), offset * 0.5,
+        facecolor="#222222", edgecolor="white",
         linewidth=0.8, zorder=6,
     ))
-    ax.text(0.02, 0.02, "origin",
-            ha="left", va="bottom", fontsize=6.6,
+    ax.text(-offset, -offset, "origin",
+            ha="right", va="top", fontsize=6.6,
             color="#333333", zorder=7)
 
-    # First and last frame markers.
+    # First and last frame markers — labels offset so they don't
+    # stack on the origin or each other.
     ax.add_patch(mpatches.Circle(
-        (float(dx[0]), float(dy[0])), 0.06,
+        (float(dx[0]), float(dy[0])), offset * 0.6,
         facecolor="none", edgecolor="#2E7D32", linewidth=1.2,
         zorder=7,
     ))
-    ax.text(float(dx[0]) + 0.05, float(dy[0]) + 0.05,
-            f"frame 0", fontsize=6.4, color="#2E7D32", zorder=7)
+    ax.text(float(dx[0]) + offset, float(dy[0]) - offset,
+            "frame 0", ha="left", va="top",
+            fontsize=6.4, color="#2E7D32", zorder=7)
     ax.add_patch(mpatches.Circle(
-        (float(dx[-1]), float(dy[-1])), 0.06,
+        (float(dx[-1]), float(dy[-1])), offset * 0.6,
         facecolor="none", edgecolor="#C62828", linewidth=1.2,
         zorder=7,
     ))
-    ax.text(float(dx[-1]) + 0.05, float(dy[-1]) + 0.05,
-            f"frame {int(frames[-1])}", fontsize=6.4, color="#C62828",
-            zorder=7)
+    ax.text(float(dx[-1]) + offset, float(dy[-1]) + offset,
+            f"frame {int(frames[-1])}",
+            ha="left", va="bottom",
+            fontsize=6.4, color="#C62828", zorder=7)
 
     # Crosshair at origin.
     ax.axhline(0, color="#DDDDDD", lw=0.5, zorder=1)
@@ -128,8 +136,7 @@ def render(contract: MotionShiftInput, ax=None, **_):
     ax.set_xlabel("dx (Å)")
     ax.set_ylabel("dy (Å)")
 
-    # Symmetric limits with a small margin.
-    lim = float(max(abs(dx).max(), abs(dy).max())) * 1.25 + 0.1
+    # Tight limits around the actual data range.
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim, lim)
 

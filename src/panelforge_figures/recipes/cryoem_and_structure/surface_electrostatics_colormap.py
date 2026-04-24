@@ -126,8 +126,8 @@ def render(contract: SurfaceElectrostaticsInput, ax=None, **_):
     pos_frac = float(np.mean(valid_arr > 1.0))
     neg_frac = float(np.mean(valid_arr < -1.0))
     ax.set_title(
-        f"{contract.title}  ·  +patch frac {smart_fmt(pos_frac)}  "
-        f"-patch frac {smart_fmt(neg_frac)}",
+        f"{contract.title}  ·  +/- patch frac "
+        f"{smart_fmt(pos_frac)} / {smart_fmt(neg_frac)}",
         fontsize=8.4, pad=4,
     )
 

@@ -95,13 +95,14 @@ def render(contract: HBondNetworkInput, ax=None, **_):
     )
     radii = r_min + (r_max - r_min) * d_norm
 
-    # Central residue node.
+    # Central residue node — bigger than partners so the name label
+    # (e.g. 'Asp 124') fits inside without clipping.
     ax.add_patch(mpatches.Circle(
-        (0, 0), 0.16, facecolor="#0D47A1", edgecolor="white",
+        (0, 0), 0.24, facecolor="#0D47A1", edgecolor="white",
         linewidth=1.2, zorder=5,
     ))
     ax.text(0, 0, contract.central_residue,
-            ha="center", va="center", fontsize=7.2,
+            ha="center", va="center", fontsize=6.8,
             color="white", fontweight="bold", zorder=6)
 
     # Partner nodes + edges.
@@ -124,8 +125,9 @@ def render(contract: HBondNetworkInput, ax=None, **_):
             (x, y), 0.10, facecolor=color, edgecolor="white",
             linewidth=0.8, alpha=0.92, zorder=4,
         ))
-        # Partner label outside the marker.
-        label_r = r + 0.18
+        # Partner label outside the marker — farther out so neighbouring
+        # labels don't overlap.
+        label_r = r + 0.32
         ax.text(label_r * np.cos(th), label_r * np.sin(th),
                 f"{p.residue}\nocc {smart_fmt(p.occupancy)}  "
                 f"d = {smart_fmt(p.distance_angstrom)} Å",
@@ -141,8 +143,8 @@ def render(contract: HBondNetworkInput, ax=None, **_):
               loc="lower center", bbox_to_anchor=(0.5, -0.08),
               ncols=2, handlelength=1.0)
 
-    ax.set_xlim(-1.5, 1.5)
-    ax.set_ylim(-1.5, 1.5)
+    ax.set_xlim(-1.8, 1.8)
+    ax.set_ylim(-1.8, 1.8)
     ax.set_aspect("equal")
     ax.set_xticks([])
     ax.set_yticks([])

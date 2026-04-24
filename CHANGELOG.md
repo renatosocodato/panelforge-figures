@@ -6,6 +6,122 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-04-24
+
+**v1.1.0 FINAL RELEASE.** The 20-session hydration plan is complete.
+The catalog now contains **328 recipes** across 20 modalities, up
+from 137 at v1.0.0 — a **+139 % increase** landed across 21 user-
+gated sessions (20 planned + s03b catch-up).
+
+### Summary of per-session deltas
+
+| Session | Modality | Δ | Notes |
+|---|---|---|---|
+| s01 | `rhogtpase_dynamics` | +6 (12→18) | Waddington family retagged |
+| s02 | `fret_biosensors` | +8 (10→18) | dose-matrix callout anchor |
+| s03 | `actin_microtubule_morphometry` | +18 (6→24) | Path 2 |
+| s03b | `actin_microtubule_morphometry` catch-up | +11 (24→35) | approved overage |
+| s04 | `mixed_effects_models` | +7 (9→16) | raincloud + partition |
+| s05 | `sensitivity_analysis` | +7 (8→15) | FAST + LHS + Sobol |
+| s06 | `redox_imaging` | +7 (8→15) | roGFP2 + Langevin |
+| s07 | `intravital_imaging` | +9 (6→15, Path 2) | depth + laser injury |
+| s08 | `gillespie_stochastic` | +8 (7→15) | master-eq + stochastic-resonance |
+| s09 | `omics_differential` | +6 (10→16) | pathway volcano + Euler |
+| s10 | `calcium_signaling` | +9 (6→15) | sync + wave-speed + polar |
+| s11 | `single_cell_embeddings` | +8 (7→15) | density + rare-pop + LR |
+| s12 | `dose_response_pharmacology` | +10 (5→15) | sex-stratified + SAR |
+| s13 | `network_and_pathway` | +10 (5→15) | force layout + crosstalk |
+| s14 | `biophysics_scaling` | +10 (5→15) | universality + Π-groups |
+| s15 | `diffusion_and_tracking` | +10 (5→15) | van Hove + ergodicity |
+| s16 | `spatial_statistics` | +9 (6→15, Path 2) | LISA + F function |
+| s17 | `grant_and_conceptual` | +9 (6→15) | aims pyramid + deliverables |
+| s18 | `meta_and_diagnostic` | +11 (4→15) | PRISMA + funnel + UpSet |
+| s19 | `clinical_cohort` | +9 (6→15, Path 2) | ROC + NNT + PS balance |
+| s20 | `cryoem_and_structure` | +9 (6→15, Path 2) | funnel + electrostatics |
+
+### Catalog growth
+- Total recipes: **137 → 328** (+191, +139 %)
+- Total tests: **~500 → 1691** (+1191)
+- Modalities at v1.1 target (≥15): **17 of 20** (mixed_effects at 16, omics_differential at 16, actin_microtubule_morphometry at 35 per s03b approval)
+
+### Infrastructure kept stable across all 21 sessions
+- No changes to `core/`
+- No new top-level dependencies
+- Style-drift ratchet held throughout
+
+### Path-2 reconciliations
+- s07 `intravital_imaging`: coord=8, actual=6 → +9
+- s16 `spatial_statistics`: coord=4, actual=6 → +9
+- s19 `clinical_cohort`: coord=3, actual=6 → +9
+- s20 `cryoem_and_structure`: coord=3, actual=6 → +9
+
+## [1.1.0-s20] — 2026-04-24
+
+Twentieth (final) session of the v1.1 hydration plan. Hydrates the
+`cryoem_and_structure` modality from 6 to 15 recipes via Path 2.
+
+### Plan-vs-reality reconciliation
+
+- Coordinator listed v1.0=3 but actual=6. Three seeds already
+  shipped or duplicate existing: `ramachandran_plot`,
+  `cryosparc_2d_class_averages_grid`, `local_resolution_volume_slice`.
+- **Path 2**: drop duplicates, +9 new → 15-target and catalog
+  crosses the ≥320 v1.1 finish line.
+
+### Added
+
+- `b_factor_distribution_by_chain` (ridge_by_group) — per-chain
+  B-factor KDE ridges with median markers.
+- `conformational_ensemble_rmsf` (diagnostic_curve) — per-residue
+  RMSF trace with SS track (α/β/loop) and top-5 flex markers.
+- `docking_pose_score_vs_rmsd` (scatter_collapse) — funnel diagnostic
+  with near-native zone, lower envelope, Spearman ρ verdict.
+- `contact_map_with_secondary_structure` (matrix) — residue × residue
+  contact imshow with top/right SS tracks + long-range fraction.
+- `surface_electrostatics_colormap` (heatmap) — 2-D potential
+  projection with ±1 kT/e contours + charge-patch summary.
+- `interface_area_vs_affinity` (scatter_collapse) — BSA × Kd log-log
+  scatter with trend fit + Pearson r on log-transformed.
+- `domain_motion_decomposition` (ladder) — normal-mode variance bars
+  with cumulative-variance line on secondary axis + top-N-for-80 %.
+- `hydrogen_bond_network_diagram` (conceptual) — radial network with
+  occupancy-scaled line thickness, dashed when occ < 0.5.
+- `motion_correction_shift_vector` (conceptual) — cumulative (dx, dy)
+  trajectory coloured by frame, first/last frame markers,
+  total-path / net-drift callouts.
+
+### Infrastructure
+
+- No changes to `core/` — 9 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+
+### Fit-ups during authoring
+
+- `conformational_ensemble_rmsf`: added median-RMSF reference line to
+  satisfy diagnostic_curve ≥ 2-line rule.
+- Style-drift ratchet: fontsize `8.0` snapped to `7.8` in
+  `motion_correction_shift_vector` title.
+
+### Visual-QA polish (3 panels)
+
+- `hydrogen_bond_network_diagram`: "Asp 124" clipped inside 0.16-
+  radius central circle; bumped radius to 0.24 + font 7.2 → 6.8 +
+  xlim 1.5 → 1.8 + partner-label offset 0.18 → 0.32.
+- `motion_correction_shift_vector`: fixed-4-Å xlim left empty space
+  and origin/frame-0 labels stacked; switched to data-driven xlim
+  and scaled offsets so labels separate cleanly.
+- `surface_electrostatics_colormap`: title "+patch frac ... -patch
+  frac ..." clipped at right; shortened to "+/- patch frac A / B".
+
+### Progress
+
+- Total recipes: **319 → 328** (+9). **Catalog crosses the ≥320
+  v1.1 target.**
+- Tests: **1646 → 1691** (+45).
+- Modalities at v1.1 target (≥15): **17 of 20**.
+- Sessions complete: **20 of 20** — **v1.1 hydration plan complete.**
+
 ## [1.1.0-s19] — 2026-04-23
 
 Nineteenth session of the v1.1 hydration plan. Hydrates the

@@ -12,7 +12,19 @@ project follows semantic versioning.
   23 new recipes + shared sub-contract module + new `core/tost_bounds_utility.py`,
   landed across 4 user-gated waves. See
   [`docs/biophysics_scaling_beta_pack_tracker.md`](docs/biophysics_scaling_beta_pack_tracker.md)
-  for the full pack plan. Status: **Wave 1 implementation landed; Waves 2–4 pending**.
+  for the full pack plan.
+- **Wave 1** merged via PR #27 (substrate + 4 recipes;
+  biophysics_scaling 15 → 19).
+- **Wave 2** gap-analysis in review (+8 recipes: A.2
+  `compartment_paired_delta_scatter`, A.3
+  `feature_outcome_sankey_sig_vs_null`, A.4
+  `random_forest_importance_by_scale`, A.5
+  `scale_stratified_permanova_r2`, C.1
+  `persistence_length_lp_with_equivalence_bounds`, C.2
+  `psd_active_gel_overlay_with_motor_inset`, D.1
+  `geometric_mediation_path_diagram`, D.2
+  `shared_manifold_scatter_with_residuals`). biophysics_scaling will
+  expand 19 → 27. **Waves 3–4 pending.**
 
 ## [1.2.0-beta-biophysics_scaling-w1] — 2026-04-24
 

@@ -1,7 +1,7 @@
 # Recipes by modality
 
 v1.0.0 stable: 20 modalities, 137 recipes.
-v1.1 in progress: 310 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11).
+v1.1 in progress: 319 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11, s19 clinical_cohort +9 Path 2).
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -55,6 +55,31 @@ v1.1 in progress: 310 recipes (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.1.0-s19 — clinical_cohort hydration (+9 Path 2, in progress)
+
+Plan-vs-reality: coordinator listed v1.0=3, actual=6 (four seeds
+already shipped). Path 2 lands +9 to hit 15-target. Expands
+clinical_cohort from 6 to 15 recipes:
+
+- **roc_with_cutoff_optimization** — ROC curve with Youden star,
+  AUC bootstrap CI, sensitivity/specificity callout.
+- **calibration_plot_with_hl_test** — decile observed vs predicted
+  with y=x line and Hosmer-Lemeshow χ² p verdict.
+- **decision_curve_analysis** — net-benefit vs threshold for model
+  / treat-all / treat-none, with dominance-range callout.
+- **competing_risks_cumulative_incidence** — per-cause CIF with
+  Gray's test verdict.
+- **hazard_ratio_over_time_smoothed** — HR(t) with 95 % band +
+  Schoenfeld PH-violation verdict.
+- **risk_score_discrimination_ladder** — event rate per risk-score
+  tier with monotonicity + p-for-trend.
+- **number_needed_to_treat_forest** — subgroup NNT ± CI with
+  best/worst callouts.
+- **propensity_score_balance_diagnostic** — before / after SMD
+  paired forest with balance band.
+- **adverse_event_incidence_bar** — per-AE arm-A vs arm-B bars with
+  RR annotation and serious-event `!` markers.
 
 ## v1.1.0-s18 — meta_and_diagnostic hydration (+11, in progress)
 

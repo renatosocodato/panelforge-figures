@@ -6,6 +6,65 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+## [1.1.0-s19] — 2026-04-23
+
+Nineteenth session of the v1.1 hydration plan. Hydrates the
+`clinical_cohort` modality from 6 to 15 recipes via Path 2 (forward-
+looking ATHENA clinical-validation work).
+
+### Plan-vs-reality reconciliation
+
+- Coordinator listed v1.0=3 but actual baseline is 6. Four seeds
+  (`consort_flow_diagram`, `baseline_characteristics_table_figure`,
+  `subgroup_forest_clinical`, `time_to_event_stratified_km`) already
+  ship as existing recipes or duplicate them.
+- **Path 2**: drop duplicates, land +9 new to reach the 15-target
+  (same pattern as s07 / s16).
+
+### Added
+
+- `roc_with_cutoff_optimization` (diagnostic_curve) — ROC with Youden
+  star, AUC bootstrap CI, sens/spec callout.
+- `calibration_plot_with_hl_test` (scatter_collapse) — decile
+  observed vs predicted with HL χ² p-value verdict.
+- `decision_curve_analysis` (diagnostic_curve) — net-benefit vs
+  threshold with model-dominates range callout.
+- `competing_risks_cumulative_incidence` (diagnostic_curve) — per-
+  cause CIF with Gray's test verdict.
+- `hazard_ratio_over_time_smoothed` (diagnostic_curve) — HR(t) with
+  95 % band + Schoenfeld PH-violation verdict.
+- `risk_score_discrimination_ladder` (ladder) — event rate per
+  risk-score tier with monotonicity + p-for-trend.
+- `number_needed_to_treat_forest` (coef_forest) — subgroup NNT ± CI
+  with best / worst subgroup in title.
+- `propensity_score_balance_diagnostic` (coef_forest) — paired
+  before / after SMD forest with 0.1 balance band.
+- `adverse_event_incidence_bar` (ladder) — per-AE arm-A vs arm-B
+  horizontal bars with RR annotation + serious-event markers.
+
+### Infrastructure
+
+- No changes to `core/` — 9 new per-recipe Pydantic contracts.
+- No new top-level dependencies.
+- No modifications to other modalities.
+- Compat: `np.trapz` → `np.trapezoid` (numpy 2.x).
+- Helvetica-safe: replaced `→` / `∞` glyphs with ASCII substitutes.
+
+### Visual-QA polish (2 panels)
+
+- `number_needed_to_treat_forest` — legend at lower-right occluded
+  the bottom-row's NNT label; moved legend below axes.
+- `propensity_score_balance_diagnostic` — legend at lower-right
+  occluded `prior CVD` and `hypertension` rows; moved to below
+  axes (`bbox_to_anchor=(0.5, -0.18)`, 3 columns).
+
+### Progress
+
+- Total recipes: **310 → 319** (+9).
+- Tests: **1601 → 1646** (+45).
+- Modalities at v1.1 target (≥15): 16 of 20.
+- Sessions complete: **19 of 20**.
+
 ## [1.1.0-s18] — 2026-04-23
 
 Eighteenth session of the v1.1 hydration plan. Hydrates the

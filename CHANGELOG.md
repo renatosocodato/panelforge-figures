@@ -6,6 +6,97 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **biophysics_scaling beta expansion pack** (`[1.2.0-beta-biophysics_scaling]`) —
+  23 new recipes + shared sub-contract module + new `core/tost_bounds_utility.py`,
+  landed across 4 user-gated waves. See
+  [`docs/biophysics_scaling_beta_pack_tracker.md`](docs/biophysics_scaling_beta_pack_tracker.md)
+  for the full pack plan. Status: **Wave 1 implementation landed; Waves 2–4 pending**.
+
+## [1.2.0-beta-biophysics_scaling-w1] — 2026-04-24
+
+First wave of the `biophysics_scaling` beta expansion pack. Lands the
+shared sub-contract infrastructure, a new core TOST utility, and 4
+substrate recipes that close the module's scale-aware effect-size +
+equivalence + censoring + validation-contract gap. `biophysics_scaling`
+expands from 15 to 19 recipes; total catalog 328 → 332.
+
+### Added (4 recipes)
+
+- `hierarchical_effect_size_ladder` (`coef_forest`) — stratified
+  effect-size forest over polymer / network / territory / geometry /
+  whole-cell scales; two markers per feature (whole-cell vs
+  protrusion-internal compartment); outcome coded by TOST zone.
+- `equivalence_forest_with_tost_bounds` (`coef_forest`) — feature
+  effect-size forest with shaded TOST equivalence zone; three-colour
+  outcome classification (significant / null-accepting / equivocal);
+  optional per-feature N annotation.
+- `pre_registered_censoring_mode_grid` (`matrix`) — feature × mode
+  traffic-light grid (green = direction + sig; amber = direction,
+  sub-sig; red = flipped / opposite; grey = null / excluded); column
+  headers show per-mode `n_cells_retained`.
+- `forward_simulation_validation_contract` (`coef_forest`) — n-metric
+  parameter-sufficiency audit; empirical medians normalized in
+  simulated-CI units so metrics plot on a shared axis; +/- verdict
+  glyph per (metric, group); overall contract verdict in title.
+
+### Infrastructure
+
+- `src/panelforge_figures/recipes/biophysics_scaling/_shared.py`
+  (new) — 11 nested Pydantic sub-contracts (`ScaleTaggedFeature`,
+  `TostZone`, `EffectSizeEstimate`, `CensoringMode`, `CensoringResult`,
+  `ValidationMetric`, `MediationPathEstimate`, `PhaseMapGrid`,
+  `OrderedTrajectoryPoint`, `TipStateCall`, `PSDCurve`);
+  `OUTCOME_PALETTE_DEFAULT` fallback; shared `_demo_estimate_roster()`
+  helper that A.1 and B.1 demos consume.
+- `src/panelforge_figures/core/tost_bounds_utility.py` (new) —
+  `classify_outcome(ci_lo, ci_hi, lower, upper)` returns one of
+  `significant` / `null_accepting` / `equivocal`;
+  `tost_band_patch(ax, lower, upper, orientation="y"|"x")` shades the
+  equivalence zone. Both duck-type on the TostZone sub-contract.
+- `src/panelforge_figures/recipes/biophysics_scaling/_aesthetic.py`
+  (edit) — `ModalityAesthetic` subclass `BiophysicsScalingAesthetic`
+  carries `outcome_palette: dict[str, str]` (default blue / green /
+  grey). Subclass is isolated to this modality; no changes to
+  `core/aesthetic_base.py`.
+- Registered 4 recipes in `biophysics_scaling/__init__.py`.
+- `tests/test_tost_bounds_utility.py` (new, 13 tests) — classification
+  numerics on synthetic CIs + `tost_band_patch` render smoke.
+
+### Tests
+
+- Total: **1691 → 1724** (+33).
+- `pytest tests/` passes green; style-drift ratchet held; quality rules
+  satisfied for all 4 new recipes.
+
+### Visual-QA polish (2 panels)
+
+- `hierarchical_effect_size_ladder`: scale-group sidebar labels were
+  double-counted (used `len(by_scale[scale])` which already contains
+  both compartments); `geometry` and `whole_cell` labels drifted into
+  whitespace below the axis. Fixed to count unique features and
+  relocated labels to a horizontal, blended-transform anchor above
+  each stratum separator — decoupled from stratum size so
+  single-feature strata (e.g. `territory`) don't collide with
+  neighbours. Legend bbox also shifted from `(0.5, -0.08)` to
+  `(0.5, -0.16)` so it clears the xlabel.
+- `forward_simulation_validation_contract`: 'verdict' header label at
+  `y=-0.85` escaped the axis above the top row and collided with the
+  title. Removed — the legend's pass/fail entries already identify
+  the column.
+
+### Gallery
+
+- `biophysics_scaling/` regenerated: **15 → 19 PNGs**. Total catalog
+  PNGs: **328 → 332**.
+
+### Progress
+
+- biophysics_scaling recipes: **15 → 19** (+4).
+- Beta-pack recipes landed: **0 → 4** (Wave 1 of 4).
+- Sub-contract module available for consumption by Waves 2–4.
+
 ## [1.1.0] — 2026-04-24
 
 **v1.1.0 FINAL RELEASE.** The 20-session hydration plan is complete.

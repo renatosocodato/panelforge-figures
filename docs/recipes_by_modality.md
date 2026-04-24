@@ -3,6 +3,8 @@
 v1.0.0 stable: 20 modalities, 137 recipes.
 **v1.1.0 complete: 328 recipes across 20 modalities** (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11, s19 clinical_cohort +9 Path 2, s20 cryoem_and_structure +9 Path 2).
 
+**v1.2.0-beta-biophysics_scaling — Wave 1 landed: 332 recipes** (biophysics_scaling +4 substrate: scale-hierarchy effect-size forest, TOST equivalence forest, pre-registered censoring audit, forward-simulation validation contract). Pack total: 4/23 recipes; 1/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
+
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
 - **grant_and_conceptual** (6): executive summaries, Gantts, WP flows,
@@ -55,6 +57,36 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.2.0-beta-biophysics_scaling — Wave 1 (substrate, +4)
+
+Opens the `biophysics_scaling` beta expansion pack. Lands the shared
+sub-contract module (`_shared.py` with 11 nested Pydantic sub-contracts),
+a new `core/tost_bounds_utility.py`, and 4 substrate recipes that close
+the module's scale-aware effect-size + equivalence + censoring +
+validation-contract gap. biophysics_scaling expands from 15 to 19
+recipes; total catalog 328 → 332.
+
+- **hierarchical_effect_size_ladder** (`coef_forest`) — stratified
+  effect-size forest over polymer / network / territory / geometry /
+  whole-cell scales; two markers per feature (whole-cell vs
+  protrusion-internal); outcome coded by TOST zone.
+- **equivalence_forest_with_tost_bounds** (`coef_forest`) — feature
+  forest with shaded TOST zone; three-colour outcome coding
+  (significant / null-accepting / equivocal); optional per-feature N.
+- **pre_registered_censoring_mode_grid** (`matrix`) — feature × mode
+  traffic-light audit of direction × significance survival across
+  pre-registered quality-gating modes.
+- **forward_simulation_validation_contract** (`coef_forest`) — n-metric
+  parameter-sufficiency audit; empirical medians normalized in
+  simulated-CI units so metrics plot on a shared axis; +/- verdict
+  glyph per (metric, group).
+
+**Aesthetic change (isolated to this modality):**
+`BiophysicsScalingAesthetic` subclasses `ModalityAesthetic` with an
+`outcome_palette: dict[str, str]` field (default blue / green / grey).
+Zero changes to `core/aesthetic_base.py` and no impact on other
+modalities.
 
 ## v1.1.0-s20 — cryoem_and_structure hydration (+9 Path 2, FINAL)
 

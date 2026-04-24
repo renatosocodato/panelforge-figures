@@ -33,6 +33,10 @@ from .style import (
     current_theme,
     is_approved_font_family,
 )
+from .tost_bounds_utility import (
+    classify_outcome,
+    tost_band_patch,
+)
 
 __all__ = [
     "FIGSIZE_PRESETS",
@@ -53,6 +57,7 @@ __all__ = [
     "bootstrap_ci",
     "callout_box",
     "check_figure_integrity",
+    "classify_outcome",
     "colored_bracket",
     "current_theme",
     "density_alpha",
@@ -72,5 +77,6 @@ __all__ = [
     "shaded_regime",
     "smart_fmt",
     "smart_place_callout",
+    "tost_band_patch",
     "violin_with_ring_markers",
 ]

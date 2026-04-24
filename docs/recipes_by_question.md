@@ -10,6 +10,13 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Biophysics-scaling beta-pack Wave 1 additions (v1.2.0-beta-biophysics_scaling-w1)
+
+- **Across the polymer → network → territory → geometry → whole-cell hierarchy, how large are the per-feature effects and how do they split across compartments?** → [`biophysics_scaling.hierarchical_effect_size_ladder`](gallery/biophysics_scaling/hierarchical_effect_size_ladder.png)
+- **Which features lie inside the pre-registered TOST equivalence zone (null-accepting), which sit outside it (significant), and which straddle a bound (equivocal)?** → [`biophysics_scaling.equivalence_forest_with_tost_bounds`](gallery/biophysics_scaling/equivalence_forest_with_tost_bounds.png)
+- **Does each feature's conclusion survive all four pre-registered censoring modes (permissive, standard, quality-gated, strict)?** → [`biophysics_scaling.pre_registered_censoring_mode_grid`](gallery/biophysics_scaling/pre_registered_censoring_mode_grid.png)
+- **Across n metrics × m groups, does each empirical median lie inside its forward-simulation CI (parameter-sufficiency contract)?** → [`biophysics_scaling.forward_simulation_validation_contract`](gallery/biophysics_scaling/forward_simulation_validation_contract.png)
+
 ## CryoEM-and-structure catch-up (v1.1.0-s20 additions)
 
 - **How do B-factor distributions compare between chains?** → [`cryoem_and_structure.b_factor_distribution_by_chain`](gallery/cryoem_and_structure/b_factor_distribution_by_chain.png)

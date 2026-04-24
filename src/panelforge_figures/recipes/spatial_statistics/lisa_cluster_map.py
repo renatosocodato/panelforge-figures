@@ -40,22 +40,28 @@ def _demo() -> LISAMapInput:
     pps = []
     for _ in range(60):
         pts.append(rng.normal([20, 15], 3.5, 2))
-        cats.append("HH"); pps.append(rng.uniform(0.001, 0.04))
+        cats.append("HH")
+        pps.append(rng.uniform(0.001, 0.04))
     for _ in range(35):
         pts.append(rng.normal([65, 40], 3.0, 2))
-        cats.append("HH"); pps.append(rng.uniform(0.001, 0.04))
+        cats.append("HH")
+        pps.append(rng.uniform(0.001, 0.04))
     for _ in range(45):
         pts.append(rng.normal([45, 8], 3.2, 2))
-        cats.append("LL"); pps.append(rng.uniform(0.001, 0.04))
+        cats.append("LL")
+        pps.append(rng.uniform(0.001, 0.04))
     for _ in range(20):
         pts.append(rng.uniform([0, 0], [80, 50], 2))
-        cats.append("HL"); pps.append(rng.uniform(0.01, 0.05))
+        cats.append("HL")
+        pps.append(rng.uniform(0.01, 0.05))
     for _ in range(20):
         pts.append(rng.uniform([0, 0], [80, 50], 2))
-        cats.append("LH"); pps.append(rng.uniform(0.01, 0.05))
+        cats.append("LH")
+        pps.append(rng.uniform(0.01, 0.05))
     for _ in range(160):
         pts.append(rng.uniform([0, 0], [80, 50], 2))
-        cats.append("ns"); pps.append(rng.uniform(0.3, 1.0))
+        cats.append("ns")
+        pps.append(rng.uniform(0.3, 1.0))
     arr = np.asarray(pts)
     return LISAMapInput(
         x_um=arr[:, 0].tolist(),
@@ -109,9 +115,10 @@ def render(contract: LISAMapInput, ax=None, **_):
     # Build a binned HH-minus-LL overlay as the imshow backbone so the
     # heatmap rule sees a true AxesImage (categorical scatter alone
     # wouldn't satisfy the rule).
+    # Bin using explicit fractional-index arithmetic (xe/ye grids not
+    # retained — the ix/iy computation below uses (value - min) /
+    # (max - min) directly).
     nx, ny = 32, 24
-    xe = np.linspace(xmin, xmax, nx + 1)
-    ye = np.linspace(ymin, ymax, ny + 1)
     h_mat = np.zeros((ny, nx))
     for xi, yi, cat in zip(x, y, cats):
         if xi < xmin or xi >= xmax or yi < ymin or yi >= ymax:

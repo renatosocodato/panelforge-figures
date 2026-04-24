@@ -1,7 +1,7 @@
 """Surveillance-efficiency metric forest — condition-level summary with CI.
 
 A composite metric (area surveilled per unit time per cell, in
-μm²·min⁻¹·cell⁻¹) per condition, shown as horizontal forest bars with
+μm²·min-1·cell-1) per condition, shown as horizontal forest bars with
 95 % CI, sorted by estimate. A reference line marks the baseline value
 and conditions that cross it in either direction are colour-coded.
 """
@@ -27,7 +27,7 @@ class SurveillanceEffInput(RecipeContract):
     ci_lo: list[float] = Field(...)
     ci_hi: list[float] = Field(...)
     baseline: float = Field(default=0.0, description="reference baseline")
-    metric_label: str = "surveillance (μm²·min⁻¹·cell⁻¹)"
+    metric_label: str = "surveillance (μm²·min-1·cell-1)"
     title: str = "Surveillance efficiency"
 
 

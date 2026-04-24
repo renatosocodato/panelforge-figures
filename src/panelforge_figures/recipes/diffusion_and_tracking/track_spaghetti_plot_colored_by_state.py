@@ -93,8 +93,8 @@ _META = RecipeMetadata(
     demo_contract=_demo,
 )
 def render(contract: TrackSpaghettiInput, ax=None, **_):
-    from matplotlib.collections import LineCollection
     import matplotlib.patches as mpatches
+    from matplotlib.collections import LineCollection
 
     if ax is None:
         import matplotlib.pyplot as plt

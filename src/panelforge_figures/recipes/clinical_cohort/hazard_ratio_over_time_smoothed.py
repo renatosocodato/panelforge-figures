@@ -100,10 +100,8 @@ def render(contract: HRTimeInput, ax=None, **_):
         p = float(contract.ph_test_p)
         if p < 0.05:
             verdict = f"PH violated (p = {smart_fmt(p)})"
-            color = "#C62828"
         else:
             verdict = f"PH holds (p = {smart_fmt(p)})"
-            color = "#2E7D32"
         ax.set_title(
             f"{contract.title}  ·  Schoenfeld p = {smart_fmt(p)}  "
             f"· {verdict}",

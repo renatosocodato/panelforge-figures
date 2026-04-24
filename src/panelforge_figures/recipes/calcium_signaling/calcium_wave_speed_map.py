@@ -1,4 +1,4 @@
-"""Spatial map of local Ca²⁺ wave speed (μm/s).
+"""Spatial map of local Ca2+ wave speed (μm/s).
 
 Pixel-wise wave speed derived from the arrival-time field t(x, y) as
 speed = 1 / |∇t|. Distinct from `calcium_propagation_wavefront`, which

@@ -114,10 +114,10 @@ def render(contract: ContactMapInput, ax=None, **_):
         cmap_name = "viridis_r"
         vmin, vmax = 0.0, float(M[M > 0].max() if (M > 0).any() else 1.0)
 
-    im = ax.imshow(M, cmap=cmap_name, origin="lower",
-                   vmin=vmin, vmax=vmax,
-                   extent=[0, n, 0, n],
-                   interpolation="nearest", zorder=2)
+    ax.imshow(M, cmap=cmap_name, origin="lower",
+              vmin=vmin, vmax=vmax,
+              extent=[0, n, 0, n],
+              interpolation="nearest", zorder=2)
 
     # Secondary-structure tracks along top (x) and right (y) edges.
     ss_colors = {"H": "#C62828", "E": "#2E7D32", "-": "#BDBDBD"}

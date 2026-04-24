@@ -116,7 +116,6 @@ def render(contract: CooccurrenceInput, ax=None, **_):
     # Top-pair callouts.
     triu = np.triu_indices(n, k=1)
     triu_z = Z[triu]
-    triu_p = P[triu]
     triu_pairs = list(zip(*triu))
     if len(triu_z) > 0:
         top_pos_i = int(np.argmax(triu_z))

@@ -1,4 +1,4 @@
-"""Per-condition ridge of Ca²⁺ event amplitudes.
+"""Per-condition ridge of Ca2+ event amplitudes.
 
 Plots stacked density ridges of per-cell event amplitudes (ΔF/F peak),
 one ridge per condition. A shared x-axis compares distributions; the
@@ -28,7 +28,7 @@ class AmplitudeRidgeInput(RecipeContract):
         ..., description="condition → list of per-cell event amplitudes (ΔF/F)"
     )
     amplitude_label: str = r"event amplitude ($\Delta F/F$)"
-    title: str = "Ca²⁺ event amplitudes"
+    title: str = "Ca2+ event amplitudes"
 
 
 def _demo() -> AmplitudeRidgeInput:
@@ -48,7 +48,7 @@ _META = RecipeMetadata(
     modality="calcium_signaling",
     family=RecipeFamily.ridge_by_group,
     answers_question=(
-        "Across cells, how are Ca²⁺ event amplitudes distributed, "
+        "Across cells, how are Ca2+ event amplitudes distributed, "
         "per condition?"
     ),
     required_fields=("amplitudes_by_condition",),

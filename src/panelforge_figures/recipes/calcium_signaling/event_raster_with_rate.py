@@ -1,4 +1,4 @@
-"""Event raster with population-rate overlay — classic Ca²⁺ imaging summary."""
+"""Event raster with population-rate overlay — classic Ca2+ imaging summary."""
 
 from __future__ import annotations
 

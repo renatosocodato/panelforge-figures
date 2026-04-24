@@ -6,8 +6,8 @@ Conceptual family: ≥3 text labels + ≥2 patches.
 
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.patches as mpatches
+import numpy as np
 from pydantic import Field
 
 from ...core import (

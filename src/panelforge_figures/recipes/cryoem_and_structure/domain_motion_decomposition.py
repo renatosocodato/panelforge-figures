@@ -31,7 +31,6 @@ class ModeDecompositionInput(RecipeContract):
 
 
 def _demo() -> ModeDecompositionInput:
-    rng = np.random.default_rng(3331)
     names = [f"mode {i + 1}" for i in range(8)]
     # Steeply decaying variance spectrum.
     var = np.array([0.38, 0.22, 0.14, 0.08, 0.06, 0.05, 0.04, 0.03])

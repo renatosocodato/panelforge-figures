@@ -1,4 +1,4 @@
-"""Peri-event time histogram (PETH) aligned to Ca²⁺ event onsets.
+"""Peri-event time histogram (PETH) aligned to Ca2+ event onsets.
 
 Histograms the probability of observing another event at lag τ from
 a reference onset (per-cell or pooled), with a ±CI shaded band and a
@@ -57,7 +57,7 @@ _META = RecipeMetadata(
     modality="calcium_signaling",
     family=RecipeFamily.timecourse_hierarchical_ci,
     answers_question=(
-        "Aligned to each Ca²⁺ event onset (PETH), what is the per-cell "
+        "Aligned to each Ca2+ event onset (PETH), what is the per-cell "
         "event probability vs lag?"
     ),
     required_fields=("lag_s", "rate_by_group"),

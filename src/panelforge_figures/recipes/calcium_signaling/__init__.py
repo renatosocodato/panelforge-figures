@@ -12,7 +12,7 @@ register_modality(
         "by condition, calcium-wave propagation fronts + wave-speed maps, "
         "peri-event time histograms, spike-triggered averages, pairwise "
         "synchronization matrices + population synchronization timelines, "
-        "single-cell (frequency, amplitude) landscapes, Ca²⁺ × FRET joint "
+        "single-cell (frequency, amplitude) landscapes, Ca2+ × FRET joint "
         "plots, dominant-oscillation phase polar diagrams."
     ),
     aesthetic=AESTHETIC,

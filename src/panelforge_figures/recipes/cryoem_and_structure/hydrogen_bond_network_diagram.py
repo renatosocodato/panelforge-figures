@@ -125,13 +125,17 @@ def render(contract: HBondNetworkInput, ax=None, **_):
             (x, y), 0.10, facecolor=color, edgecolor="white",
             linewidth=0.8, alpha=0.92, zorder=4,
         ))
-        # Partner label outside the marker — farther out so neighbouring
-        # labels don't overlap.
-        label_r = r + 0.32
-        ax.text(label_r * np.cos(th), label_r * np.sin(th),
-                f"{p.residue}\nocc {smart_fmt(p.occupancy)}  "
-                f"d = {smart_fmt(p.distance_angstrom)} Å",
-                ha="center", va="center", fontsize=6.2,
+        # Partner label outside the marker. Line 1 = residue name,
+        # line 2 = compact 'occ X  d Y' with a smaller font so
+        # neighbouring labels never collide at the bottom-pair gap.
+        label_r = r + 0.34
+        ax.text(label_r * np.cos(th), label_r * np.sin(th) + 0.03,
+                p.residue,
+                ha="center", va="bottom", fontsize=6.4,
+                color=color, fontweight="bold", zorder=6)
+        ax.text(label_r * np.cos(th), label_r * np.sin(th) - 0.04,
+                f"{smart_fmt(p.occupancy)}  {smart_fmt(p.distance_angstrom)} Å",
+                ha="center", va="top", fontsize=5.8,
                 color=color, zorder=6)
 
     # Legend.

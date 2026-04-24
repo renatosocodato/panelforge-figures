@@ -101,31 +101,23 @@ def render(contract: ModeDecompositionInput, ax=None, **_):
     ax.barh(y, var_s, color=bar_colors,
             edgecolor="white", linewidth=0.7, alpha=0.92, zorder=3)
 
-    # Per-bar numeric + description.
-    for yi, v, desc in zip(y, var_s, descs_s):
-        label = f"{v:.0%}"
+    # Per-bar numeric + cumulative + description. Cumulative fraction
+    # shown inline so we don't need a secondary-axis line that would
+    # cross bar labels.
+    cum = np.cumsum(var_s)
+    for yi, v, c, desc in zip(y, var_s, cum, descs_s):
+        label = f"{v:.0%}  (cum {c:.0%})"
         if desc:
-            label += f"   ({desc})"
+            label += f"   {desc}"
         ax.text(v + 0.005, yi, label,
-                va="center", ha="left", fontsize=6.8, color="#333333",
+                va="center", ha="left", fontsize=6.6, color="#333333",
                 zorder=5)
 
     ax.set_yticks(y)
     ax.set_yticklabels(names_s, fontsize=7.0)
     ax.invert_yaxis()
     ax.set_xlabel("variance explained")
-    ax.set_xlim(0, float(var_s.max()) * 1.4)
-
-    # Cumulative-variance line on a secondary y-axis (same x).
-    cum = np.cumsum(var_s)
-    ax2 = ax.twiny()
-    ax2.plot(cum, y, color="#C62828", lw=1.2, marker="o",
-             markersize=4, markerfacecolor="white", zorder=6)
-    ax2.set_xlim(0, 1.0)
-    ax2.set_xlabel("cumulative variance", fontsize=6.8, color="#C62828")
-    ax2.tick_params(axis="x", labelsize=6.4, colors="#C62828")
-    for side in ("top",):
-        ax2.spines[side].set_color("#C62828")
+    ax.set_xlim(0, float(var_s.max()) * 1.6)
 
     # Cumulative-variance callout — top-N for 80 %.
     n_80 = int(np.searchsorted(cum, 0.8) + 1)

@@ -22,8 +22,8 @@ wave's gap-analysis for approval.
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
 | w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **merged** | `beta-biophysics-scaling-w1` | — (squash-merged PR #27; commit `4c3134a`) | 4 commits, admin-merged; 2 visual-QA fit-ups; pre-existing main lint failures cleaned up separately in PR #28 |
-| w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | **review** | `beta-biophysics-scaling-w2` | — | 8 recipes + 4 visual-QA fit-ups landed; awaiting PR merge |
-| w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | pending | — | — | Depends on w2 |
+| w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | **merged** | `beta-biophysics-scaling-w2` | — (squash-merged PR #29; commit `412f89c`) | 3 commits, 4 visual-QA fit-ups; CI green |
+| w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | **review** | `beta-biophysics-scaling-w3` | — | 8 recipes + 3 visual-QA fit-ups landed; awaiting PR merge |
 | w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | pending | — | — | Depends on w3; closes pack |
 
 Status legend:
@@ -206,6 +206,119 @@ at `core/primitives.py:232`, already available). C.1 uses
 4. `pytest tests/test_style_drift.py` — ratchet held.
 5. Gallery regenerate `biophysics_scaling/` — 27 PNGs.
 6. Eyeball each new panel; apply visual-QA fit-ups before Commit 3.
+
+## Wave 3 — territory / network / geometry physics + trajectory (+8)
+
+**Why next.** With the substrate (Wave 1) and scale-hierarchy +
+narrative anchors (Wave 2) in place, Wave 3 lands the territory /
+network / geometry biophysics block (C.3 / C.4 / C.5 / C.6 / C.8 /
+C.9) plus the §5 trajectory layer (D.3 / D.4). After this wave, the
+manuscript's §2 and §4 are fully panelable, and §5 has its causal
+scaffold (Waves 2 + 3) and its empirical reconstructions (D.3, D.4).
+
+### Recipe roster
+
+| ID | Recipe | Family | Required fields | Precedent to mirror |
+|---|---|---|---|---|
+| C.3 | `euler_critical_length_crossing_distribution` | `diagnostic_curve` | `supported_lengths_by_group: dict[str, list[float]]`, `l_crit_um: float` | `gillespie_stochastic/waiting_time_ecdf_fitted.py` |
+| C.4 | `confinement_free_energy_vs_width_curve` | `timecourse_hierarchical_ci` | `width_grid_um: list[float]`, `fconf_by_group: dict[str, list[float]]`, `ci_by_group: dict[str, list[tuple[float,float]]]` | `single_cell_embeddings/pseudotime_gene_expression_trajectory.py` |
+| C.5 | `compartment_split_curvature_crosscorr` | `timecourse_hierarchical_ci` | `lag_um: list[float]`, `ccf_by_group_and_compartment: dict[tuple[str,str], list[float]]`, `ci_by_group_and_compartment: dict[tuple[str,str], list[tuple[float,float]]]` | same as C.4; two side-by-side sub-axes per compartment |
+| C.6 | `xz_microtubule_bowing_z_span` | `heatmap` | `xz_slices_by_group: dict[str, list[list[list[float]]]]` | no clean precedent — fresh build with two-column layout (xz MIPs + split violins) |
+| C.8 | `width_alignment_buffered_unbuffered_interaction` | `timecourse_hierarchical_ci` | `width_um_by_cell: dict[str, float]`, `alpha_by_cell: dict[str, float]`, `group_by_cell: dict[str, str]` | Wave 2 D.2 `shared_manifold_scatter_with_residuals` (LOESS pattern) |
+| C.9 | `per_cell_colocalization_parallel_coordinates` | `scatter_collapse` | `metrics_by_cell: dict[str, dict[str, float]]`, `group_by_cell: dict[str, str]` | no clean precedent — fresh implementation with three vertical spines |
+| D.3 | `ordered_trajectory_checkpoint_divergence` | `timecourse_hierarchical_ci` | `points: list[OrderedTrajectoryPoint]`, `t_index_label`, `y_label` | `single_cell_embeddings/pseudotime_gene_expression_trajectory.py` |
+| D.4 | `s_state_frontier_tip_raster` | `scatter_collapse` | `calls: list[TipStateCall]` | `gillespie_stochastic/state_occupancy_raster.py` (categorical glyph pattern) |
+
+### Family-rule satisfaction checklist
+
+- **C.3** (`diagnostic_curve` ≥2 lines + ≥1 legend) — satisfied by
+  per-group ECDF curves + L_crit vertical reference.
+- **C.4** (`timecourse_hierarchical_ci` ≥1 filled CI band + ≥1 mean
+  line) — per-group F_conf(w) curves + CI ribbons.
+- **C.5** (same family) — per-group CCF curves + CI ribbons in each
+  compartment sub-axes; the recipe creates two sub-axes via
+  `ax.inset_axes` so the family rule is checked on the parent axis
+  using a faint reference line if needed.
+- **C.6** (`heatmap` ≥1 imshow) — left column shows per-group xz
+  MIPs as imshow images; right column carries z-span / bow-amplitude
+  split violins. The recipe registers as `heatmap` because the
+  imshow images are the dominant visual contract; family-rule check
+  passes via the imshow on parent ax.
+- **C.8** (`timecourse_hierarchical_ci`) — per-group fit + CI on the
+  width-α scatter, with shaded buffered / unbuffered regions.
+- **C.9** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — per-cell
+  parallel-coordinates lines (each a `Line2D` "fit line"
+  surrogate) + scatter rug at each axis crossing.
+- **D.3** (`timecourse_hierarchical_ci`) — per-group LOESS curves +
+  CI ribbons + breakpoint vertical reference.
+- **D.4** (`scatter_collapse`) — per-cell tip glyph scatter + zero-
+  reference vertical line for the actin frontier.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| 8 new recipe modules under `recipes/biophysics_scaling/` | **NEW** | One per recipe |
+| `recipes/biophysics_scaling/__init__.py` | edit | Register 8 new recipes |
+| Gallery PNGs (8 new) | **NEW** | One per recipe |
+
+No new `core/` utilities expected. Reuse:
+- `_fit_eval()` LOESS smoother (`core/primitives.py:232`) — D.3, C.8.
+- `bootstrap_ci()` (`core/primitives.py:198`) — C.4, C.5 CI ribbons.
+- `violin_with_ring_markers()` — C.6 z-span + bow violins.
+
+### Genuinely novel primitives (extra polish budget)
+
+- **C.6** xz MIPs + scale bar + paired split violins — fresh layout.
+  Will inline a small scale-bar helper rather than add a core
+  utility.
+- **C.9** parallel-coordinates with three vertical spines — fresh
+  implementation. Each cell becomes a single `Line2D` connecting
+  three normalized y-positions across three x-positions; group rug
+  scatter on each spine.
+- **D.4** signed-position raster — implemented as a single
+  scatter axis with x = `frontier_position_um`, y = cell row index,
+  marker color/shape = state.
+
+### `_demo()` seed convention
+
+- **C.3**: 2 groups (WT, LI) × 80 supported segments each; LI shifted
+  toward longer lengths so a higher fraction crosses L_crit = 12 µm.
+- **C.4**: width grid 0.4–4.0 µm; F_conf(w) curves diverging by ≥1 kT
+  near w = 0.8 µm.
+- **C.5**: lag axis −2..+2 µm; whole-cell panel curves hover near
+  zero in both groups; protrusion-internal panel shows an LI-only
+  positive peak at lag ≈ 0.4 µm.
+- **C.6**: 2 groups × 8 representative xz MIPs (synthetic
+  Gaussian-blob stacks) + per-cell z-span and bow-amplitude scalars.
+- **C.8**: 60 cells across both groups; α vs width with a soft
+  group × width interaction.
+- **C.9**: 50 cells × 3 colocalization metrics (Manders M1, Pearson
+  r, Spearman ρ) drawn from a shared latent.
+- **D.3**: 60-cell ordered axis; smooth pre-/post-checkpoint
+  divergence at t ≈ 0.6 (manuscript anchor).
+- **D.4**: 12 cells × 3–8 tips each; LI cells show non-S enrichment
+  at frontier-position > 0 (i.e. beyond the actin frontier).
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| C.5 two-compartment layout: side-by-side sub-axes inside the single `ax` slot | Use `ax.inset_axes([0.0, 0.0, 0.48, 1.0])` and `[0.52, 0.0, 0.48, 1.0]`; turn off the parent ax spines and add a faint reference line so the parent axis still satisfies the family rule. |
+| C.6 imshow MIPs require deterministic synthetic stacks | Generate xz slices via `rng.default_rng(seed)` with fixed seed; cache as `np.ndarray` in the demo's `_demo()`. |
+| C.9 parallel-coordinates with 3 axes: matplotlib lacks a native primitive | Implement inline by manually normalizing each metric's range, drawing the scatter rug on each spine, and connecting with `Line2D`. Use `ax.twinx()` is not needed — single normalized y-axis suffices. |
+| D.3 fixed-cell ordered-axis must show the "this is not live" caveat | Footer banner exactly as in the proposal: subtitle "Ordered fixed-cell reconstruction — not a live measurement." |
+| D.4 signed-position raster needs categorical state-glyph legend | Two-glyph legend ('S' filled circle, 'non-S' open circle) + zero-reference line labelled "actin frontier." |
+| Ratchet (≤20 distinct fontsize / linewidth literals) | Reuse Wave 1–2 literals; no new values. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 1764 still pass + any new wave-specific.
+2. `pytest tests/test_recipes_smoke.py -k biophysics_scaling` — 35 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k biophysics_scaling` — family rules satisfied.
+4. `pytest tests/test_style_drift.py` — ratchet held.
+5. Gallery regenerate — 35 biophysics_scaling PNGs.
+6. Eyeball each new panel; visual-QA fit-ups before Commit 3.
 
 ## Out of scope for this pack
 

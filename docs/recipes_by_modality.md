@@ -3,7 +3,7 @@
 v1.0.0 stable: 20 modalities, 137 recipes.
 **v1.1.0 complete: 328 recipes across 20 modalities** (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11, s19 clinical_cohort +9 Path 2, s20 cryoem_and_structure +9 Path 2).
 
-**v1.2.0-beta-biophysics_scaling — Wave 2 landed: 340 recipes** (biophysics_scaling +12 cumulative across Waves 1–2). Pack total: 12/23 recipes; 2/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
+**v1.2.0-beta-biophysics_scaling — Wave 3 landed: 348 recipes** (biophysics_scaling +20 cumulative across Waves 1–3). Pack total: 20/23 recipes; 3/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -57,6 +57,37 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.2.0-beta-biophysics_scaling — Wave 3 (territory / network / geometry + trajectory, +8)
+
+Lands the territory / network / geometry physics block (C.3 / C.4 /
+C.5 / C.6 / C.8 / C.9) plus the §5 trajectory layer (D.3 / D.4).
+After Wave 3, §2 and §4 of the anchor manuscript are fully
+panelable, and §5 has both its causal scaffold (Waves 2 + 3) and
+its empirical reconstructions (D.3, D.4). biophysics_scaling
+expands from 27 to 35 recipes; total catalog 340 → 348.
+
+- **euler_critical_length_crossing_distribution** (`diagnostic_curve`)
+  — per-group ECDF of supported lengths with L_crit reference.
+- **confinement_free_energy_vs_width_curve**
+  (`timecourse_hierarchical_ci`) — F_conf(w) per group with CI;
+  divergence-width callout.
+- **compartment_split_curvature_crosscorr**
+  (`timecourse_hierarchical_ci`) — actin × MT CCF, side-by-side
+  whole-cell / protrusion-internal sub-panels.
+- **xz_microtubule_bowing_z_span** (`heatmap`) — per-group xz MIPs +
+  paired z-span / bow-amplitude split violins.
+- **width_alignment_buffered_unbuffered_interaction**
+  (`timecourse_hierarchical_ci`) — α vs width with per-group LOESS,
+  bootstrap CI, and buffered / unbuffered shading.
+- **per_cell_colocalization_parallel_coordinates**
+  (`scatter_collapse`) — three-spine parallel-coordinates with
+  per-spine scatter rug and per-group median trace.
+- **ordered_trajectory_checkpoint_divergence**
+  (`timecourse_hierarchical_ci`) — per-group LOESS along an ordered
+  axis with breakpoint reference and live-measurement caveat banner.
+- **s_state_frontier_tip_raster** (`scatter_collapse`) — per-cell
+  signed-position raster with frontier zero-line and S / non-S glyphs.
 
 ## v1.2.0-beta-biophysics_scaling — Wave 2 (scale-hierarchy + narrative anchors, +8)
 

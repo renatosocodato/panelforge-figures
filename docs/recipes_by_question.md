@@ -10,6 +10,11 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Biophysics-scaling beta-pack Wave 4 additions (v1.2.0-beta-biophysics_scaling-w4)
+
+- **Does the regime classification at this phase corner hold across a local perturbation neighborhood of simulation parameters?** → [`biophysics_scaling.robustness_neighborhood_phase_corner`](gallery/biophysics_scaling/robustness_neighborhood_phase_corner.png)
+- **Across (width, alpha) parameter space, where do the genotypes live, where do regime boundaries sit, and where would a model-hypothesised rescue zone be?** → [`biophysics_scaling.width_alpha_regime_phase_map`](gallery/biophysics_scaling/width_alpha_regime_phase_map.png)
+
 ## Biophysics-scaling beta-pack Wave 3 additions (v1.2.0-beta-biophysics_scaling-w3)
 
 - **Per genotype, what fraction of supported filament segments exceed the Euler buckling length L_crit?** → [`biophysics_scaling.euler_critical_length_crossing_distribution`](gallery/biophysics_scaling/euler_critical_length_crossing_distribution.png)

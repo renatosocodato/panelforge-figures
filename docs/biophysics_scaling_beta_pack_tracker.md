@@ -13,9 +13,9 @@ wave's gap-analysis for approval.
 
 | Metric | Start | After W1 | After W2 | After W3 | After W4 |
 |---|---|---|---|---|---|
-| biophysics_scaling recipes | 15 | 19 | 27 | 35 | 38 |
-| Total catalog recipes | 328 | 332 | 340 | 348 | 351 |
-| Beta-pack recipes landed | 0 | 4 | 12 | 20 | 23 |
+| biophysics_scaling recipes | 15 | 19 | 27 | 35 | **37 (final)** |
+| Total catalog recipes | 328 | 332 | 340 | 348 | **350 (final)** |
+| Beta-pack recipes landed | 0 | 4 | 12 | 20 | **22 (C.9 absorbed 23rd)** |
 
 ## Per-wave status
 
@@ -23,8 +23,8 @@ wave's gap-analysis for approval.
 |---|---|---|---|---|---|
 | w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **merged** | `beta-biophysics-scaling-w1` | — (squash-merged PR #27; commit `4c3134a`) | 4 commits, admin-merged; 2 visual-QA fit-ups; pre-existing main lint failures cleaned up separately in PR #28 |
 | w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | **merged** | `beta-biophysics-scaling-w2` | — (squash-merged PR #29; commit `412f89c`) | 3 commits, 4 visual-QA fit-ups; CI green |
-| w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | **review** | `beta-biophysics-scaling-w3` | — | 8 recipes + 3 visual-QA fit-ups landed; awaiting PR merge |
-| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | pending | — | — | Depends on w3; closes pack |
+| w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | **merged** | `beta-biophysics-scaling-w3` | — (squash-merged PR #30; commit `4d4ea0a`) | 3 commits, 3 visual-QA fit-ups; CI green |
+| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | **review** | `beta-biophysics-scaling-w4` | — | 2 recipes + 4 visual-QA fit-ups landed; awaiting PR merge — closes pack |
 
 Status legend:
 - **pending** — not yet started
@@ -319,6 +319,109 @@ No new `core/` utilities expected. Reuse:
 4. `pytest tests/test_style_drift.py` — ratchet held.
 5. Gallery regenerate — 35 biophysics_scaling PNGs.
 6. Eyeball each new panel; visual-QA fit-ups before Commit 3.
+
+## Wave 4 — forward-validation capstone (+2)
+
+**Why last.** With Waves 1–3 in place — substrate (TOST utility +
+shared sub-contracts), scale hierarchy + narrative anchors, territory
+/ network / geometry physics, and the §5 trajectory layer — Wave 4
+delivers the *phase-diagram* claim: where in (width, α) parameter space
+do the genotypes live, where do regime boundaries sit, and is the
+regime-split robust to a perturbation neighborhood?
+
+C.7 is the proposal §6 centerpiece. B.3 is its robustness audit.
+Together they consume the `PhaseMapGrid` sub-contract that Wave 1
+already shipped, so no new core utilities are needed.
+
+After Wave 4: biophysics_scaling **35 → 38** (final), catalog
+**348 → 351**, pack **23/23 complete (4/4 waves)**.
+
+### Recipe roster
+
+| ID | Recipe | Family | Required fields | Precedent to mirror |
+|---|---|---|---|---|
+| B.3 | `robustness_neighborhood_phase_corner` | `heatmap` | `grid: PhaseMapGrid` (with `robustness_neighborhood` polygon populated) | Wave 3 C.6 (matplotlib-only `imshow` + overlay polygon) + `biophysics_scaling/stress_strain_regime_map.py` (regime callouts) |
+| C.7 | `width_alpha_regime_phase_map` | `heatmap` | `grid: PhaseMapGrid` with `x_axis_label="protrusion_width_um"` + `y_axis_label="alignment_alpha"`, `group_density_contours` populated, `regime_corners` populated | `rhogtpase_dynamics/basin_of_attraction_map.py` + Wave 3 C.6 |
+
+### Family-rule satisfaction checklist
+
+- **B.3, C.7** (`heatmap` ≥1 imshow / pcolormesh) — both render the
+  `PhaseMapGrid.values` array as `pcolormesh` on the parent ax;
+  overlays (contours, density polygons, regime glyphs, robustness
+  ring) draw on top without disturbing the underlying surface.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `recipes/biophysics_scaling/robustness_neighborhood_phase_corner.py` | **NEW** | B.3 implementation |
+| `recipes/biophysics_scaling/width_alpha_regime_phase_map.py` | **NEW** | C.7 implementation |
+| `recipes/biophysics_scaling/__init__.py` | edit | Register both new recipes (imports + `__all__`) |
+| Gallery PNGs (2 new) | **NEW** | One per recipe |
+
+No new `core/` utilities, no new shared sub-contracts. Both recipes
+consume the existing `PhaseMapGrid` from `_shared.py` (Wave 1).
+
+### Genuinely novel primitives
+
+- **B.3** robustness-neighborhood polygon overlay — a closed dashed
+  polygon drawn over the phase-map heatmap, with a footer pill
+  reporting "fraction of neighborhood preserving the regime split."
+- **C.7** iso-α contours + group density contours + regime-corner
+  glyphs in a single panel — combination not in any existing recipe.
+
+### `_demo()` seed convention
+
+- **B.3 demo:** width grid 0.4–4.0 µm × α grid 0.0–1.0; values =
+  smoothly varying scalar (e.g. some "regime-split likelihood")
+  from a 2-D Gaussian centred on (1.6, 0.7); `regime_corners` =
+  {"WT buffered": (2.5, 0.55), "LI confinement-facing": (0.8, 0.85)};
+  `robustness_neighborhood` = closed polygon of ±20 % perturbation
+  around the WT centroid; report fraction preserving regime split.
+- **C.7 demo:** same grid; values = simulated alignment α at
+  steady state; `iso_lines` = {"α=0.3": …, "α=0.5": …, "α=0.7": …}
+  — three iso-α curves; `group_density_contours` = WT density
+  polygon centred on (2.0, 0.55), LI density polygon centred on
+  (0.8, 0.78); `regime_corners` populated with anchored labels.
+  Optional `rescue_zone_polygon` (model-space hypothesis): the
+  width range (1.5–2.0 µm) where LI cells would behave as WT.
+  Render with an explicit "model-space hypothesis" tag to prevent
+  over-reading.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| Phase-map overlays (contours + density + regime glyphs + robustness ring + iso-α lines) crowd the panel | Use distinct line styles / alphas: `pcolormesh` (alpha 0.85), iso-α as solid contours, group density as dashed contours, robustness as dotted polygon, regime corners as plus markers with text labels offset by `xytext`. |
+| `iso_lines` and `group_density_contours` are arbitrary closed polygons in `PhaseMapGrid` — recipe shouldn't assume one specific structure | Iterate: each value is a list of (x,y) coordinate sequences; recipe loops and draws each as a separate `Polygon` or `plot()` line. |
+| Rescue-zone polygon could be misread as observed data | Render with low-saturation fill, dashed border, and an explicit "model hypothesis" text label inside the polygon. |
+| `regime_corners` text labels may collide if corners are close | Auto-offset labels via short bracket lines from corner glyph to label position; default to `va="bottom"` for upper corners and `va="top"` for lower corners. |
+| Ratchet (≤20 distinct fontsize / linewidth literals) | Reuse Wave 1–3 literals; no new values. |
+| C.7 robustness-neighborhood interaction with regime corners | Draw robustness ring last (highest z-order) so it doesn't get hidden by overlays. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 1804 still pass.
+2. `pytest tests/test_recipes_smoke.py -k biophysics_scaling` — 37 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k biophysics_scaling` — both heatmap rules satisfied.
+4. `pytest tests/test_style_drift.py` — ratchet held.
+5. Gallery regenerate — 37 biophysics_scaling PNGs.
+6. Eyeball each new panel; visual-QA fit-ups before Commit 3.
+
+### Pack closeout
+
+Once Wave 4 merges, the `[1.2.0-beta-biophysics_scaling]` pack is
+complete (23/23 recipes across 4 waves). At that point:
+
+- Update `CHANGELOG.md` with a `[1.2.0-beta-biophysics_scaling]`
+  rollup entry summarising all 4 waves.
+- Optionally tag `v1.2.0-beta-biophysics_scaling` on `main`.
+- Tracker doc bumped to "complete".
+- The pack remains *additive* — zero ModalityAesthetic changes
+  outside `biophysics_scaling`, zero `RecipeFamily` additions, no
+  changes to other modalities. Only edits beyond `biophysics_scaling`
+  are: `core/__init__.py` (TOST utility export, Wave 1) and the
+  shared lint-cleanup in PR #28.
 
 ## Out of scope for this pack
 

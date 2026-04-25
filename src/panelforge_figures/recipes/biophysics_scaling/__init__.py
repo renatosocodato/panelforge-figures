@@ -46,6 +46,7 @@ from . import (  # noqa: E402,F401
     pre_registered_censoring_mode_grid,
     psd_active_gel_overlay_with_motor_inset,
     random_forest_importance_by_scale,
+    robustness_neighborhood_phase_corner,
     s_state_frontier_tip_raster,
     scale_stratified_permanova_r2,
     scaling_exponent_ci_forest,
@@ -53,6 +54,7 @@ from . import (  # noqa: E402,F401
     stress_strain_regime_map,
     universality_class_comparison,
     width_alignment_buffered_unbuffered_interaction,
+    width_alpha_regime_phase_map,
     xz_microtubule_bowing_z_span,
 )
 
@@ -85,6 +87,7 @@ __all__ = [
     "pre_registered_censoring_mode_grid",
     "psd_active_gel_overlay_with_motor_inset",
     "random_forest_importance_by_scale",
+    "robustness_neighborhood_phase_corner",
     "s_state_frontier_tip_raster",
     "scale_stratified_permanova_r2",
     "scaling_exponent_ci_forest",
@@ -92,5 +95,6 @@ __all__ = [
     "stress_strain_regime_map",
     "universality_class_comparison",
     "width_alignment_buffered_unbuffered_interaction",
+    "width_alpha_regime_phase_map",
     "xz_microtubule_bowing_z_span",
 ]

@@ -6,24 +6,94 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
-### In planning
+### biophysics_scaling beta expansion pack — COMPLETE
 
-- **biophysics_scaling beta expansion pack** (`[1.2.0-beta-biophysics_scaling]`) —
-  23 new recipes + shared sub-contract module + new `core/tost_bounds_utility.py`,
-  landed across 4 user-gated waves. See
-  [`docs/biophysics_scaling_beta_pack_tracker.md`](docs/biophysics_scaling_beta_pack_tracker.md)
-  for the full pack plan.
-- **Wave 1** merged via PR #27 (substrate + 4 recipes;
-  biophysics_scaling 15 → 19).
-- **Wave 2** merged via PR #29 (+8 recipes;
-  biophysics_scaling 19 → 27).
-- **Wave 3** merged via PR #30 (+8 recipes;
-  biophysics_scaling 27 → 35).
-- **Wave 4** gap-analysis in review (+2 recipes: B.3
-  `robustness_neighborhood_phase_corner` and C.7
-  `width_alpha_regime_phase_map`). biophysics_scaling will
-  expand 35 → 38 (final); total catalog 348 → 351. **Closes the
-  pack at 23/23 recipes across 4 waves.**
+The 4-wave pack closes at **22 new recipes** across 4 waves (the
+proposal's 23rd recipe, the per-cell colocalization parallel-
+coordinates "lower-rank backup" alternative, was absorbed into the
+single C.9 recipe — see Wave 2 / 3 commits). Final catalog:
+**348 → 350** (`biophysics_scaling` **35 → 37**).
+
+Cumulative summary across PRs #27, #29, #30, and (this) Wave-4 PR:
+
+| Wave | Scope | PR | biophysics_scaling | Δ |
+|---|---|---|---|---|
+| w1 | substrate + 4 recipes | #27 | 15 → 19 | +4 |
+| w2 | scale-hierarchy + narrative anchors | #29 | 19 → 27 | +8 |
+| w3 | territory/network/geometry + trajectory | #30 | 27 → 35 | +8 |
+| w4 | forward-validation capstone | (this PR) | 35 → 37 | +2 |
+
+Plus PR #28: `chore: fix all 28 ruff lint errors across the codebase`,
+the cross-cutting cleanup that turned `main` CI green for the first
+time in 3+ commits.
+
+## [1.2.0-beta-biophysics_scaling-w4] — 2026-04-25
+
+Fourth and FINAL wave of the `biophysics_scaling` beta expansion
+pack. Lands the two heatmap-family phase-diagram recipes that consume
+the `PhaseMapGrid` sub-contract shipped in Wave 1.
+
+### Added (2 recipes)
+
+- `robustness_neighborhood_phase_corner` (`heatmap`, B.3) —
+  pcolormesh of regime-split likelihood with WT/LI density contours,
+  per-group centroid markers, regime-corner glyphs, and a dotted
+  perturbation-neighborhood polygon. Footer pill reports the
+  fraction of the neighborhood that preserves the regime split
+  (computed via point-in-polygon ray-casting + value-side
+  classification against the grid-wide median).
+- `width_alpha_regime_phase_map` (`heatmap`, C.7) — the §6
+  centerpiece. pcolormesh of simulated steady-state alpha over
+  (width, alpha) with per-group density contours, regime-corner
+  glyphs, iso-alpha contours (clamped to the actual value range so
+  out-of-range levels are silently dropped), and an optional
+  model-space rescue-zone polygon rendered with a 'model hypothesis'
+  tag inside the polygon to prevent over-reading.
+
+### Genuinely novel primitives
+
+- **B.3** robustness-neighborhood polygon overlay with point-in-
+  polygon ray-casting for the 'fraction preserving split' metric.
+- **C.7** multi-overlay phase map (heatmap + iso-contours + density
+  contours + regime corners + rescue zone) — five layers compatible
+  on a single panel via z-order discipline.
+
+### Visual-QA polish (4 fit-ups)
+
+- C.7 iso-alpha contours: initial coordinate-grid bug used
+  cell-CENTER coords (`Xc.shape == (25, 35)`) while `values` came
+  from edges (`(26, 36)`) — the `values.shape == Xc.shape` guard
+  silently skipped contour drawing. Fixed by switching to
+  `Xc, Yc = np.meshgrid(x_edges, y_edges)`. Also bumped contour
+  color from white (illegible against light-tan high-value region)
+  to black for high contrast against magma cmap.
+- C.7 rescue-zone label: relocated from polygon centroid (collided
+  with WT-buffered regime-corner label) to bottom edge of the
+  polygon.
+- C.7 legend: moved from upper-left (collided with LI density
+  contour and 'LI confinement-facing' regime corner) to centered-
+  below-axes.
+- B.3 regime-corner labels: offset bumped from (8, 8) to (12, 12)
+  to clear nearby centroid markers and density contours.
+
+### Fit-ups during authoring
+
+- C.7: `fontsize=8.0` → `8.2` to keep ratchet at 20/20.
+- C.7: `→` (RIGHTWARDS ARROW, U+2192) → ASCII `-` in title
+  (Helvetica-missing-glyph would have failed warnings-as-errors).
+
+### Tests
+
+- Total: **1804 → 1814** (+10).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Pack closeout
+
+- biophysics_scaling: **35 → 37** (final).
+- Beta-pack recipes landed: **20 → 22** of an originally proposed
+  23 (C.9 absorbed the 23rd as an alternative).
+- All 4 waves merged. Pack tag candidate:
+  `v1.2.0-beta-biophysics_scaling`.
 
 ## [1.2.0-beta-biophysics_scaling-w3] — 2026-04-25
 

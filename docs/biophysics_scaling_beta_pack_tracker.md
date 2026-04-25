@@ -13,9 +13,9 @@ wave's gap-analysis for approval.
 
 | Metric | Start | After W1 | After W2 | After W3 | After W4 |
 |---|---|---|---|---|---|
-| biophysics_scaling recipes | 15 | 19 | 27 | 35 | 38 |
-| Total catalog recipes | 328 | 332 | 340 | 348 | 351 |
-| Beta-pack recipes landed | 0 | 4 | 12 | 20 | 23 |
+| biophysics_scaling recipes | 15 | 19 | 27 | 35 | **37 (final)** |
+| Total catalog recipes | 328 | 332 | 340 | 348 | **350 (final)** |
+| Beta-pack recipes landed | 0 | 4 | 12 | 20 | **22 (C.9 absorbed 23rd)** |
 
 ## Per-wave status
 
@@ -24,7 +24,7 @@ wave's gap-analysis for approval.
 | w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **merged** | `beta-biophysics-scaling-w1` | — (squash-merged PR #27; commit `4c3134a`) | 4 commits, admin-merged; 2 visual-QA fit-ups; pre-existing main lint failures cleaned up separately in PR #28 |
 | w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | **merged** | `beta-biophysics-scaling-w2` | — (squash-merged PR #29; commit `412f89c`) | 3 commits, 4 visual-QA fit-ups; CI green |
 | w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | **merged** | `beta-biophysics-scaling-w3` | — (squash-merged PR #30; commit `4d4ea0a`) | 3 commits, 3 visual-QA fit-ups; CI green |
-| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | **gap-analysis** | `beta-biophysics-scaling-w4` | — | Wave 4 gap analysis in review — closes pack |
+| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | **review** | `beta-biophysics-scaling-w4` | — | 2 recipes + 4 visual-QA fit-ups landed; awaiting PR merge — closes pack |
 
 Status legend:
 - **pending** — not yet started

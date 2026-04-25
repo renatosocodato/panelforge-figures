@@ -3,7 +3,7 @@
 v1.0.0 stable: 20 modalities, 137 recipes.
 **v1.1.0 complete: 328 recipes across 20 modalities** (s01 rhogtpase_dynamics +6, s02 fret_biosensors +8, s03 actin_microtubule_morphometry +18, s03b actin_microtubule_morphometry catch-up +11, s04 mixed_effects_models +7, s05 sensitivity_analysis +7, s06 redox_imaging +7, s07 intravital_imaging +9, s08 gillespie_stochastic +8, s09 omics_differential +6, s10 calcium_signaling +9, s11 single_cell_embeddings +8, s12 dose_response_pharmacology +10, s13 network_and_pathway +10, s14 biophysics_scaling +10, s15 diffusion_and_tracking +10, s16 spatial_statistics +9 Path 2, s17 grant_and_conceptual +9, s18 meta_and_diagnostic +11, s19 clinical_cohort +9 Path 2, s20 cryoem_and_structure +9 Path 2).
 
-**v1.2.0-beta-biophysics_scaling — Wave 3 landed: 348 recipes** (biophysics_scaling +20 cumulative across Waves 1–3). Pack total: 20/23 recipes; 3/4 waves. See `docs/biophysics_scaling_beta_pack_tracker.md`.
+**v1.2.0-beta-biophysics_scaling — COMPLETE: 350 recipes** (biophysics_scaling +22 cumulative across all 4 waves). Pack total: 22/23 recipes (C.9 absorbed the 23rd); 4/4 waves; pack tag candidate `v1.2.0-beta-biophysics_scaling`. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -57,6 +57,22 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.2.0-beta-biophysics_scaling — Wave 4 (forward-validation capstone, +2)
+
+Closes the pack. Both new recipes are heatmap-family phase-diagram
+panels that consume the `PhaseMapGrid` sub-contract shipped in
+Wave 1. After Wave 4: biophysics_scaling **35 → 37 (final)**, total
+catalog **348 → 350**, pack **22/22 across 4 waves**.
+
+- **robustness_neighborhood_phase_corner** (`heatmap`) — phase-map
+  pcolormesh + group density contours + regime-corner glyphs +
+  perturbation-neighborhood polygon; footer reports % of
+  neighborhood preserving the regime split.
+- **width_alpha_regime_phase_map** (`heatmap`) — the §6 centerpiece.
+  Multi-overlay phase map with iso-alpha contours, group density
+  contours, regime corners, and an optional 'model hypothesis'
+  rescue-zone polygon.
 
 ## v1.2.0-beta-biophysics_scaling — Wave 3 (territory / network / geometry + trajectory, +8)
 

@@ -17,8 +17,13 @@ project follows semantic versioning.
   biophysics_scaling 15 → 19).
 - **Wave 2** merged via PR #29 (+8 recipes;
   biophysics_scaling 19 → 27).
-- **Wave 3** implementation landed (+8 recipes; biophysics_scaling
-  27 → 35). **Wave 4 pending.**
+- **Wave 3** merged via PR #30 (+8 recipes;
+  biophysics_scaling 27 → 35).
+- **Wave 4** gap-analysis in review (+2 recipes: B.3
+  `robustness_neighborhood_phase_corner` and C.7
+  `width_alpha_regime_phase_map`). biophysics_scaling will
+  expand 35 → 38 (final); total catalog 348 → 351. **Closes the
+  pack at 23/23 recipes across 4 waves.**
 
 ## [1.2.0-beta-biophysics_scaling-w3] — 2026-04-25
 

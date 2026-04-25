@@ -17,16 +17,101 @@ project follows semantic versioning.
   biophysics_scaling 15 → 19).
 - **Wave 2** merged via PR #29 (+8 recipes;
   biophysics_scaling 19 → 27).
-- **Wave 3** gap-analysis in review (+8 recipes: C.3
-  `euler_critical_length_crossing_distribution`, C.4
-  `confinement_free_energy_vs_width_curve`, C.5
-  `compartment_split_curvature_crosscorr`, C.6
-  `xz_microtubule_bowing_z_span`, C.8
-  `width_alignment_buffered_unbuffered_interaction`, C.9
-  `per_cell_colocalization_parallel_coordinates`, D.3
-  `ordered_trajectory_checkpoint_divergence`, D.4
-  `s_state_frontier_tip_raster`). biophysics_scaling will expand
-  27 → 35; total catalog 340 → 348. **Wave 4 pending.**
+- **Wave 3** implementation landed (+8 recipes; biophysics_scaling
+  27 → 35). **Wave 4 pending.**
+
+## [1.2.0-beta-biophysics_scaling-w3] — 2026-04-25
+
+Third wave of the `biophysics_scaling` beta expansion pack. Lands the
+territory / network / geometry physics block (C.3 / C.4 / C.5 / C.6 /
+C.8 / C.9) plus the §5 trajectory layer (D.3 / D.4). After this wave,
+§2 and §4 of the anchor manuscript are fully panelable, and §5 has
+both its causal scaffold (Waves 2 + 3) and its empirical
+reconstructions (D.3, D.4). `biophysics_scaling` expands from 27 to
+35 recipes; total catalog 340 → 348.
+
+### Added (8 recipes)
+
+- `euler_critical_length_crossing_distribution` (`diagnostic_curve`)
+  — per-group ECDF of supported segment lengths with DKW 95 % bands;
+  L_crit vertical reference and per-group crossing-fraction in title.
+- `confinement_free_energy_vs_width_curve`
+  (`timecourse_hierarchical_ci`) — F_conf(w) per group with CI ribbons
+  and crossing-width annotation (where |Δ| ≥ 1 kT).
+- `compartment_split_curvature_crosscorr`
+  (`timecourse_hierarchical_ci`) — actin × MT curvature CCF in two
+  side-by-side sub-axes (whole-cell vs protrusion-internal); LI-only
+  positive peak in the protrusion-internal compartment is the
+  emergent finding.
+- `xz_microtubule_bowing_z_span` (`heatmap`) — per-group xz MIP
+  images (synthetic Gaussian-backbone stacks) with paired split
+  violins of z-span and bow amplitude. Distinguishes bow signature
+  from diffuse thickening.
+- `width_alignment_buffered_unbuffered_interaction`
+  (`timecourse_hierarchical_ci`) — α vs width per cell with per-group
+  LOESS + 200-iter bootstrap CI ribbons; buffered / unbuffered region
+  shading; group × width interaction reported.
+- `per_cell_colocalization_parallel_coordinates` (`scatter_collapse`)
+  — three-spine parallel-coordinates with per-spine scatter rug and
+  per-group median bold trace; pairwise Pearson r in title.
+- `ordered_trajectory_checkpoint_divergence`
+  (`timecourse_hierarchical_ci`) — per-group LOESS curves with
+  bootstrap CI on an ordered axis (e.g. Actin Drive Index); breakpoint
+  vertical reference. Footer banner: 'Ordered fixed-cell
+  reconstruction — not a live measurement.'
+- `s_state_frontier_tip_raster` (`scatter_collapse`) — per-cell signed
+  -position raster with frontier zero-line; S state filled circle,
+  non-S hollow circle; per-cell %S sidebar.
+
+### Infrastructure
+
+- 8 new recipe modules; `biophysics_scaling/__init__.py` registers
+  them.
+- Reused from earlier waves: `OrderedTrajectoryPoint`, `TipStateCall`
+  sub-contracts (Wave 1); inline LOESS pattern (Wave 2).
+- No new `core/` utilities; no aesthetic changes.
+
+### Genuinely novel primitives (no in-repo precedent)
+
+- **C.6** xz MIPs + scale-bar overlay + paired split violins —
+  deterministic Gaussian-backbone xz-slice synthesis.
+- **C.9** three-spine parallel-coordinates with per-spine scatter
+  rug.
+- **D.4** signed-position raster with filled/hollow state glyph
+  convention and frontier zero-reference.
+
+### Visual-QA polish (3 panels)
+
+- `xz_microtubule_bowing_z_span`: MIP insets switched from
+  `set_yticks([])` (which still leaks tick labels under imshow) to
+  `axis('off')`. Violin metric labels moved from ylabel (overlapped
+  violins inside the narrow inset) to inset titles, shortened to
+  'z-span' / 'bow amp' so adjacent inset titles don't collide.
+- `per_cell_colocalization_parallel_coordinates`: legend moved from
+  upper-right (collided with topmost data markers at y = 1.0) to
+  centered-below-axes (ncols=2).
+- `s_state_frontier_tip_raster`: legend moved further below axes
+  (`bbox_to_anchor=(0.5, -0.18)`) so it clears the wrapped
+  signed-frontier-position xlabel.
+
+### Fit-ups during authoring
+
+- `s_state_frontier_tip_raster`: replaced 'x' marker for non-S tips
+  with hollow circles to avoid matplotlib's 'x' + edgecolor
+  warning under warnings-as-errors in the smoke suite.
+- Style-drift ratchet: `fontsize=8.0` → `8.2` in two title strings
+  (existing literal). Ratchet held at 20/20.
+
+### Tests
+
+- Total: **1764 → 1804** (+40).
+- `pytest tests/` passes green; all smoke / quality / contracts /
+  style-drift / tost assertions satisfied for all 8 new recipes.
+
+### Progress
+
+- biophysics_scaling recipes: **27 → 35** (+8).
+- Beta-pack recipes landed: **12 → 20** (Wave 3 of 4).
 
 ## [1.2.0-beta-biophysics_scaling-w2] — 2026-04-24
 

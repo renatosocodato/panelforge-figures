@@ -10,6 +10,17 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Biophysics-scaling beta-pack Wave 3 additions (v1.2.0-beta-biophysics_scaling-w3)
+
+- **Per genotype, what fraction of supported filament segments exceed the Euler buckling length L_crit?** → [`biophysics_scaling.euler_critical_length_crossing_distribution`](gallery/biophysics_scaling/euler_critical_length_crossing_distribution.png)
+- **How does the per-group confinement free-energy cost F_conf(w) depend on protrusion width, and where do the curves diverge?** → [`biophysics_scaling.confinement_free_energy_vs_width_curve`](gallery/biophysics_scaling/confinement_free_energy_vs_width_curve.png)
+- **Does the actin × MT curvature cross-correlation differ between compartments, and does an emergent peak appear in the protrusion-internal compartment?** → [`biophysics_scaling.compartment_split_curvature_crosscorr`](gallery/biophysics_scaling/compartment_split_curvature_crosscorr.png)
+- **Are LI protrusion microtubules bowed (increased z-span with preserved local variance) or diffusely thickened?** → [`biophysics_scaling.xz_microtubule_bowing_z_span`](gallery/biophysics_scaling/xz_microtubule_bowing_z_span.png)
+- **Does the protrusion alignment α scale with width differently per genotype, and where is the relationship buffered vs unbuffered?** → [`biophysics_scaling.width_alignment_buffered_unbuffered_interaction`](gallery/biophysics_scaling/width_alignment_buffered_unbuffered_interaction.png)
+- **Across cells, do the three colocalization metrics (Manders M1, Pearson r, Spearman ρ) move together, and does the genotype shift the consensus level?** → [`biophysics_scaling.per_cell_colocalization_parallel_coordinates`](gallery/biophysics_scaling/per_cell_colocalization_parallel_coordinates.png)
+- **Along the ordered fixed-cell trajectory, where do the per-group curves diverge (checkpoint location)?** → [`biophysics_scaling.ordered_trajectory_checkpoint_divergence`](gallery/biophysics_scaling/ordered_trajectory_checkpoint_divergence.png)
+- **Along the signed actin-frontier axis, how do tip states (S vs non-S) distribute per cell?** → [`biophysics_scaling.s_state_frontier_tip_raster`](gallery/biophysics_scaling/s_state_frontier_tip_raster.png)
+
 ## Biophysics-scaling beta-pack Wave 2 additions (v1.2.0-beta-biophysics_scaling-w2)
 
 - **Per feature, how does the whole-cell effect size compare to the protrusion-internal one?** → [`biophysics_scaling.compartment_paired_delta_scatter`](gallery/biophysics_scaling/compartment_paired_delta_scatter.png)

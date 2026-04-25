@@ -24,7 +24,7 @@ wave's gap-analysis for approval.
 | w1 | Substrate (+4): A.1, B.1, B.2, D.5 + shared contracts + TOST utility | **merged** | `beta-biophysics-scaling-w1` | — (squash-merged PR #27; commit `4c3134a`) | 4 commits, admin-merged; 2 visual-QA fit-ups; pre-existing main lint failures cleaned up separately in PR #28 |
 | w2 | Scale-hierarchy + narrative anchors (+8): A.2, A.3, A.4, A.5, C.1, C.2, D.1, D.2 | **merged** | `beta-biophysics-scaling-w2` | — (squash-merged PR #29; commit `412f89c`) | 3 commits, 4 visual-QA fit-ups; CI green |
 | w3 | Territory/network/geometry physics + trajectory (+8): C.3, C.4, C.5, C.6, C.8, C.9, D.3, D.4 | **merged** | `beta-biophysics-scaling-w3` | — (squash-merged PR #30; commit `4d4ea0a`) | 3 commits, 3 visual-QA fit-ups; CI green |
-| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | **review** | `beta-biophysics-scaling-w4` | — | 2 recipes + 4 visual-QA fit-ups landed; awaiting PR merge — closes pack |
+| w4 | Forward-validation capstone (+2): B.3, C.7 (+ robustness ring) | **merged** | `beta-biophysics-scaling-w4` | `v1.2.0-beta-biophysics_scaling` (squash-merged PR #31; commit `bcdf833`) | 3 commits, 4 visual-QA fit-ups; CI green; **PACK COMPLETE** |
 
 Status legend:
 - **pending** — not yet started

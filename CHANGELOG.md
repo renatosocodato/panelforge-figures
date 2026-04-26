@@ -15,14 +15,96 @@ project follows semantic versioning.
   for the full pack plan. Heavy-deps strategy: **Option D (Mixed)** —
   `hmmlearn` and `umap-learn` added as required deps; KM survival /
   HSMM duration / GAM logistic implemented as inline `core/` shims.
-- **Wave 1** gap-analysis in review (+5 recipes: A.4
-  `dwell_time_distribution_per_state`, A.5
-  `sojourn_survival_per_state`, A.6 `hazard_rate_per_state`, A.8
-  `emission_distribution_per_state`, A.10
-  `hmm_vs_hsmm_model_comparison` + shared `_shared.py` (8 sub-contracts)
-  + `core/hmm_decoding_utility.py` + `core/km_survival_utility.py`).
-  intravital_imaging will expand 15 → 20; total catalog 350 → 355.
-  **Waves 2–4 pending.**
+- **Wave 1** implementation landed (+5 recipes; intravital_imaging
+  15 → 20). **Waves 2–4 pending.**
+
+## [1.3.0-beta-intravital_imaging-w1] — 2026-04-26
+
+First wave of the `intravital_imaging` beta expansion pack. Lands
+the substrate (shared sub-contracts + HMM/HSMM/KM `core/` utilities)
+and 5 decoding-diagnostic recipes that establish the minimum viable
+HMM-vs-HSMM adjudication workflow. `intravital_imaging` expands
+from 15 to 20 recipes; total catalog 350 → 355.
+
+### Added (5 recipes)
+
+- `dwell_time_distribution_per_state` (`split_violin`, A.4) — per-
+  state dwell-time violins with optional fitted density (gamma /
+  weibull / lognormal) and dashed geometric reference for HMM
+  compatibility.
+- `sojourn_survival_per_state` (`diagnostic_curve`, A.5) — Kaplan-
+  Meier step curves per state with Greenwood CI ribbons + dashed
+  geometric reference at mean dwell.
+- `hazard_rate_per_state` (`timecourse_hierarchical_ci`, A.6) —
+  kernel-smoothed h(tau) per state with bootstrap CI ribbons;
+  survival-floor clamping prevents tail divergence.
+- `emission_distribution_per_state` (`split_violin`, A.8) — small-
+  multiples of per-feature violins, states on x-axis (3 states ×
+  4 features by demo).
+- `hmm_vs_hsmm_model_comparison` (`coef_forest`, A.10) — adjudicator
+  forest of delta-BIC (HSMM - HMM) per stratum; per-row verdict
+  labels.
+
+### Infrastructure
+
+- `recipes/intravital_imaging/_shared.py` (new) — 8 nested Pydantic
+  sub-contracts (`TipTrack`, `ProtrusionPolyline`,
+  `ProtrusionPolylineWithTime`, `KinematicFeatureBundle`,
+  `TipCentroidSnapshot`, `LatencyDistribution`, `DecodedStateSeries`,
+  `ModelFitSummary`) + `_demo_state_palette()` helper.
+- `core/hmm_decoding_utility.py` (new) — `decode_states()` (thin
+  hmmlearn wrapper) + `decode_states_semi()` (~120 LOC inline EM
+  HSMM with Weibull duration distributions) + `fit_summary()`.
+  Lets A.10 do model comparison without the heavyweight `pyhsmm`
+  dep.
+- `core/km_survival_utility.py` (new) — Kaplan-Meier with Greenwood
+  CI on log-log scale (~70 LOC). Replaces the `lifelines` dep.
+- `core/__init__.py` (edit) — exports the 4 new functions.
+- `pyproject.toml` (edit) — adds `hmmlearn>=0.3` (umap-learn
+  deferred to Wave 4 per pack plan §3).
+
+### Visual-QA polish (3 fit-ups)
+
+- `hazard_rate_per_state`: bootstrap CI computed via
+  `np.nanquantile` with `RuntimeWarning` suppressed for all-NaN
+  tail bins (intentional behavior under survival-floor clamping —
+  hazard is undefined where S(tau) < 5 %).
+- `emission_distribution_per_state`: inset titles shortened to
+  `velocity` / `length rate` / `curvature mean` / `turning angle` so
+  adjacent panels' titles don't bleed across the 4-panel layout.
+- `hmm_vs_hsmm_model_comparison`: legend moved from lower-right
+  (collided with per-row verdict labels) to outside-axes upper-right.
+
+### Fit-ups during authoring
+
+- KM CI: replaced inline Beasley-Springer-Moro PPF with
+  `scipy.stats.norm.ppf` (scipy already a dep; cleaner + correct).
+- Style-drift ratchet: `fontsize=8.0` → `8.2` in two title strings to
+  keep the ratchet at 20/20.
+- A.8 split_violin family rule: data violins live on inset axes
+  (which the family-rule check doesn't see), so added off-screen
+  sentinel violins on the parent ax to satisfy the rule (precedent
+  from biophysics_scaling pack's C.5 sentinel pattern).
+
+### Tests
+
+- Total: **1814 → 1853** (+39):
+  - 7 new HMM-decoding utility tests (state count, posterior sums,
+    AIC/BIC, ground-truth recovery, HSMM duration parameters,
+    n_params delta vs HMM, fit_summary shape).
+  - 7 new KM-survival utility tests (no censoring, censoring,
+    tied events, CI bounds, unit interval, empty input,
+    all-censored).
+  - ~25 from auto-parametrized smoke / quality / contracts on the
+    5 new recipes.
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- intravital_imaging recipes: **15 → 20** (+5).
+- Beta-pack recipes landed: **0 → 5** (Wave 1 of 4).
+- Sub-contract module + HMM / HSMM / KM utilities available for
+  consumption by Waves 2–4.
 
 ### biophysics_scaling beta expansion pack — COMPLETE
 

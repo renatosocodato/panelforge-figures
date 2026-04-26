@@ -35,7 +35,7 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
-| w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **gap-analysis** | `beta-intravital-imaging-w1` | — | Wave 1 gap analysis in review |
+| w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **review** | `beta-intravital-imaging-w1` | — | 5 recipes + 3 visual-QA fit-ups landed; awaiting PR merge |
 | w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | pending | — | — | Depends on w1 |
 | w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 | pending | — | — | Depends on w2; ships GAM utility (Wave 3 footnote in plan §3) |
 | w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | pending | — | — | Depends on w3; closes pack |

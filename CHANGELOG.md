@@ -18,18 +18,89 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #33; polish PR #34 added contemporary
   `microglia_states` palette + emission inset-gremlin fix
   (intravital_imaging 15 → 20).
-- **Wave 2** gap-analysis in review (+11 recipes: A.1
-  `state_decoded_tip_track_field`, A.2
-  `state_decoded_protrusion_polyline_field`, A.3
-  `posterior_state_probability_ribbons`, A.7
-  `state_transition_kernel_matrix`, A.9
-  `state_occupancy_stacked_area`, A.11 `state_entry_exit_raster`,
-  A.12 `state_conditional_tip_msd` + B.4
-  `launch_to_commitment_latency`, B.5
-  `cue_to_reorientation_latency`, B.6
-  `cue_to_net_displacement_latency`, B.7
-  `latency_decomposition_forest`). intravital_imaging will expand
-  20 → 31; total catalog 355 → 366. **Waves 3–4 pending.**
+- **Wave 2** implementation landed (+11 recipes; intravital_imaging
+  20 → 31). **Waves 3–4 pending.**
+
+## [1.3.0-beta-intravital_imaging-w2] — 2026-04-26
+
+Second wave of the `intravital_imaging` beta expansion pack. Lands
+the 7 decoding-product recipes (turn decoded states into visual
+primitives) and the 4-component latency decomposition (the headline
+panel of any chemotaxis figure). `intravital_imaging` expands from
+20 to 31 recipes; total catalog 355 → 366.
+
+### Added (11 recipes)
+
+- `state_decoded_tip_track_field` (`scatter_collapse`, A.1) —
+  per-tip XY trajectories with state-coloured `LineCollection`
+  segments + start/end markers + 20 µm scale bar.
+- `state_decoded_protrusion_polyline_field` (`scatter_collapse`,
+  A.2) — per-protrusion polyline overlays coloured by the parent
+  cell's state at the polyline's timestamp.
+- `posterior_state_probability_ribbons`
+  (`timecourse_hierarchical_ci`, A.3) — `stackplot` of mean
+  posterior γ(t) across cells with white centerlines.
+- `state_transition_kernel_matrix` (`matrix`, A.7) — N × N P(next |
+  current) heatmap on cividis with cell annotations + verdict
+  callout (mean diagonal + top off-diagonal transition).
+- `state_occupancy_stacked_area` (`timecourse_hierarchical_ci`,
+  A.9) — per-condition stacked-area panels (control on top by
+  convention) with shared state legend below.
+- `state_entry_exit_raster` (`matrix`, A.11) — per-cell row × time
+  columns of state-segment Rectangles with switch ticks; sorted by
+  total time in dominant state.
+- `state_conditional_tip_msd` (`timecourse_hierarchical_ci`, A.12)
+  — log-log MSD restricted to same-state epochs with per-state α
+  fit and Brownian (α=1) reference.
+- `launch_to_commitment_latency` (`split_violin`, B.4) — τ_commit
+  per condition.
+- `cue_to_reorientation_latency` (`split_violin`, B.5) — τ_reorient
+  per condition with alignment-threshold annotation.
+- `cue_to_net_displacement_latency` (`split_violin`, B.6) —
+  τ_drift per condition with sustained-drift threshold annotation.
+- `latency_decomposition_forest` (`coef_forest`, B.7) — **the
+  headline panel of any chemotaxis figure**. 3 latency types
+  (teal/coral/amber) × conditions, with control-τ_reorient
+  reference line and auto-detected bottleneck verdict in title
+  ("which latency has largest condition / control ratio").
+
+### Visual-QA polish (3 fit-ups)
+
+- A.1, A.2: invisible-proxy line on `ax.get_lines()` so the
+  `scatter_collapse` family rule sees ≥1 line (LineCollection
+  lives on `ax.collections`, which the rule doesn't count). Same
+  pattern as biophysics_scaling pack's C.5 sentinel.
+- A.9: added sentinel CI band + line on parent ax (data on inset
+  ax which family rule doesn't see). Reordered conditions so
+  'control' / 'WT' appears at top (panel-1) — convention for
+  cohort comparisons. Legend moved from right side (overlapped
+  panel edge) to below the bottom panel.
+- A.12: `fontsize=8.0` → `8.2` to keep style-drift ratchet at
+  20/20.
+
+### Demo conventions
+
+- All Wave 2 demos use semantic state names (`homeostatic` /
+  `surveillant` / `activated`) that map to the registered
+  `microglia_states` semantic palette via `_demo_state_palette`
+  (locked in by Wave 1 polish PR #34).
+- Latency conditions use `control` / `DISC1` (or `WT` / `LI`) with
+  a contemporary slate / coral palette defined per-recipe.
+- A.7 transition matrix demo uses sticky-chain HMM ground truth so
+  the diagonal-dominance pattern is visually immediate.
+- A.12 MSD demo synthesises anomalous walks per state (different
+  σ per state); fitted α values are visible in the title.
+
+### Tests
+
+- Total: **1853 → 1908** (+55: 11 smoke + 11 quality + ~33 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- intravital_imaging recipes: **20 → 31** (+11).
+- Beta-pack recipes landed: **5 → 16** (Wave 2 of 4).
 
 ## [1.3.0-beta-intravital_imaging-w1] — 2026-04-26
 

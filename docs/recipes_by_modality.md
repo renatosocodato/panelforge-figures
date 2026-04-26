@@ -5,6 +5,8 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.2.0-beta-biophysics_scaling — COMPLETE: 350 recipes** (biophysics_scaling +22 cumulative across all 4 waves). Pack total: 22/23 recipes (C.9 absorbed the 23rd); 4/4 waves; pack tag candidate `v1.2.0-beta-biophysics_scaling`. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
+**v1.3.0-beta-intravital_imaging — Wave 1 landed: 355 recipes** (intravital_imaging +5 substrate: HMM/HSMM/KM utilities + dwell-time, sojourn-survival, hazard-rate, emission-distribution, HMM-vs-HSMM model comparison). Pack total: 5/42 recipes; 1/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
+
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
 - **grant_and_conceptual** (6): executive summaries, Gantts, WP flows,
@@ -57,6 +59,34 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.3.0-beta-intravital_imaging — Wave 1 (substrate, +5)
+
+Opens the intravital_imaging beta expansion pack. Lands shared
+sub-contracts (`_shared.py` with 8 nested Pydantic classes), a new
+HMM/HSMM decoding utility (hmmlearn wrapper + inline EM HSMM shim),
+and a Kaplan-Meier survival utility (Greenwood CI inline shim).
+Adds 5 decoding-diagnostic recipes that establish the minimum
+viable HMM-vs-HSMM adjudication workflow. intravital_imaging
+expands from 15 to 20 recipes; total catalog 350 → 355.
+
+- **dwell_time_distribution_per_state** (`split_violin`) — per-state
+  dwell violins with optional fitted density and dashed geometric
+  reference for HMM compatibility.
+- **sojourn_survival_per_state** (`diagnostic_curve`) — KM step
+  curves per state with Greenwood CI ribbons.
+- **hazard_rate_per_state** (`timecourse_hierarchical_ci`) —
+  kernel-smoothed h(tau) per state with bootstrap CI; flat = HMM,
+  ramp / peak = HSMM territory.
+- **emission_distribution_per_state** (`split_violin`) — small-
+  multiples of per-feature violins (states on x-axis).
+- **hmm_vs_hsmm_model_comparison** (`coef_forest`) — adjudicator
+  forest of delta-BIC (HSMM - HMM) per stratum with per-row verdict.
+
+**Heavy-deps decision: Option D (Mixed)** — `hmmlearn` added as
+required dep; KM survival, HSMM duration, and GAM logistic
+implemented as inline `core/` shims (replacing `lifelines`,
+`pyhsmm`, `statsmodels` deps).
 
 ## v1.2.0-beta-biophysics_scaling — Wave 4 (forward-validation capstone, +2)
 

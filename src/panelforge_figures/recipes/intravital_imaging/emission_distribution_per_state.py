@@ -40,9 +40,9 @@ class EmissionDistributionPerStateInput(RecipeContract):
 
 def _demo() -> EmissionDistributionPerStateInput:
     rng = np.random.default_rng(1733)
-    # 3 states x 4 features. Each state's signature shifts across
-    # features so per-state means are visually distinct.
-    states = ["S0", "S1", "S2"]
+    # 3 states x 4 features with semantic state names that map to the
+    # `microglia_states` semantic palette.
+    states = ["homeostatic", "surveillant", "activated"]
     base_means = {
         "velocity_um_per_min":   [0.5, 2.5, 6.0],
         "length_rate_um_per_min": [0.1, 0.4, 1.2],
@@ -135,17 +135,19 @@ def render(contract: EmissionDistributionPerStateInput, ax=None, **_):
                alpha=0.0, zorder=0)
     ax.set_xlim(0, 1)  # clip sentinels off-screen
 
-    # Grid layout: small-multiples in one row.
+    # Grid layout: small-multiples in one row. Wider horizontal gap
+    # (0.08 vs the prior 0.04) so the next panel's y-axis tick labels
+    # don't bleed into the previous panel's right edge.
     pad_left = 0.08
     pad_right = 0.02
     pad_bottom = 0.18
     pad_top = 0.12
     avail_w = 1.0 - pad_left - pad_right
-    panel_w = (avail_w - 0.04 * (n_features - 1)) / n_features
+    panel_w = (avail_w - 0.08 * (n_features - 1)) / n_features
     panel_h = 1.0 - pad_bottom - pad_top
     sub_axes = []
     for i, feat in enumerate(feature_order):
-        x_lo = pad_left + i * (panel_w + 0.04)
+        x_lo = pad_left + i * (panel_w + 0.08)
         sub = ax.inset_axes([x_lo, pad_bottom, panel_w, panel_h])
         AESTHETIC.apply_to_ax(sub)
         sub_axes.append(sub)
@@ -174,7 +176,10 @@ def render(contract: EmissionDistributionPerStateInput, ax=None, **_):
                             facecolor="white", edgecolor="black",
                             linewidth=0.7, zorder=6)
         sub.set_xticks(positions)
-        sub.set_xticklabels(states, fontsize=6.6)
+        # Shorten state labels (3-letter abbreviations) so x-tick
+        # text doesn't crowd the now-tighter inset.
+        short_labels = [s[:4] if len(s) > 4 else s for s in states]
+        sub.set_xticklabels(short_labels, fontsize=6.6)
         # Short title — full name truncated so adjacent inset titles
         # don't bleed across panels (4 panels in a 7" wide figure).
         short = feat.replace("_um_per_min", "").replace("_per_um", "") \

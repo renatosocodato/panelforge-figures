@@ -38,6 +38,9 @@ class HMMvsHSMMComparisonInput(RecipeContract):
 
 
 def _demo() -> HMMvsHSMMComparisonInput:
+    # Strata kept as cohort labels (this recipe doesn't show per-state
+    # decoding, so semantic-state palette doesn't apply). Ordering /
+    # synthesised delta-BIC values are unchanged.
     rng = np.random.default_rng(1741)
     strata = ["control", "treated", "DISC1", "rescue"]
     fits: list[ModelFitSummary] = []

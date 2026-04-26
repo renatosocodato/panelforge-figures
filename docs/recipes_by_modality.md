@@ -5,7 +5,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.2.0-beta-biophysics_scaling — COMPLETE: 350 recipes** (biophysics_scaling +22 cumulative across all 4 waves). Pack total: 22/23 recipes (C.9 absorbed the 23rd); 4/4 waves; pack tag candidate `v1.2.0-beta-biophysics_scaling`. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
-**v1.3.0-beta-intravital_imaging — Wave 2 landed: 366 recipes** (intravital_imaging +16 cumulative across Waves 1–2). Pack total: 16/42 recipes; 2/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
+**v1.3.0-beta-intravital_imaging — Wave 3 landed: 382 recipes** (intravital_imaging +32 cumulative across Waves 1–3). Pack total: 32/42 recipes; 3/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -59,6 +59,60 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.3.0-beta-intravital_imaging — Wave 3 (commitment kinetics + biophysics axes, +16)
+
+Lands the 11-recipe commitment-kinetics block (the heart of the
+"committed-vs-bystander" question) plus the first 5 biophysics-axes
+recipes that recast tip-tracking as kinematic / spatial / shape /
+mechanical phenomena. intravital_imaging expands from 31 to 47
+recipes; total catalog 366 → 382.
+
+Commitment-kinetics block (B.1, B.2, B.3, B.8–B.15):
+
+- **protrusion_commitment_survival** (`diagnostic_curve`) — Kaplan-
+  Meier S(t) per condition with median-T_commit annotations.
+- **commitment_hazard_with_age** (`timecourse_hierarchical_ci`) —
+  kernel-smoothed h(τ) per condition.
+- **commitment_phase_diagram** (`heatmap`) — fitted P(commit | L,
+  v_bar) heatmap with iso-prob contours + scatter overlay.
+- **chemotaxis_index_trajectory** (`timecourse_hierarchical_ci`) —
+  CI(t) = ⟨cos(θ − cue)⟩ per condition aligned to cue onset.
+- **directional_persistence_autocorr** (`timecourse_hierarchical_ci`)
+  — heading autocorrelation C(τ) per condition with τ_p fit.
+- **ornstein_uhlenbeck_fit_per_state** (`coef_forest`) — OU (τ, σ)
+  per (state × condition) forest.
+- **speed_commitment_coupling** (`timecourse_hierarchical_ci`) —
+  velocity / length-rate cross-correlation per condition.
+- **commitment_vs_chemotaxis_contingency** (`matrix`) — per-
+  condition 2×2 contingency panels with OR + 95 % CI.
+- **protrusion_dominance_race_winner** (`scatter_collapse`) —
+  per-cell ΔL traces (winner vs runner-up) with median margin.
+- **cue_response_dose_latency** (`timecourse_hierarchical_ci`) —
+  τ vs dose with bootstrap CI + power-law fit.
+- **aligned_vs_unaligned_velocity_split** (`split_violin`) — split
+  velocity violins by alignment.
+
+Biophysics-axes block (C.1–C.5):
+
+- **tip_ripleys_k_in_window** (`diagnostic_curve`) — polygon-clipped
+  K(r) on tip centroid snapshots with CSR Monte Carlo envelope.
+- **tip_pair_correlation_in_window** (`timecourse_hierarchical_ci`)
+  — window-conditional g(r) per condition with CSR baseline.
+- **branch_order_topology_per_cell** (`split_violin`) — per-cell
+  branch-order distribution by condition.
+- **curvature_along_protrusion_kymograph** (`heatmap`) — κ(s, t)
+  with white max-κ ridge overlay.
+- **viscous_drag_tip_force_map** (`scatter_collapse`) — F = 6π η r v
+  Stokes lower-bound force estimate scatter (data-driven colour
+  limits).
+
+New `core/` utility:
+
+- **`gam_logistic_utility.py`** — `fit_phase_boundary(x, y,
+  committed, …)` — Gaussian RBF basis + IRLS-fit logistic regression
+  for B.3 phase-diagram. Replaces a `pygam` / `statsmodels` dep
+  (Option D inline-shim discipline).
 
 ## v1.3.0-beta-intravital_imaging — Wave 2 (decoding products + latency, +11)
 

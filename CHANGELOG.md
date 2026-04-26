@@ -6,6 +6,24 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **intravital_imaging beta expansion pack** (`[1.3.0-beta-intravital_imaging]`) —
+  42 new recipes + shared sub-contract module + 2–3 new `core/` utilities,
+  landed across 4 user-gated waves. See
+  [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
+  for the full pack plan. Heavy-deps strategy: **Option D (Mixed)** —
+  `hmmlearn` and `umap-learn` added as required deps; KM survival /
+  HSMM duration / GAM logistic implemented as inline `core/` shims.
+- **Wave 1** gap-analysis in review (+5 recipes: A.4
+  `dwell_time_distribution_per_state`, A.5
+  `sojourn_survival_per_state`, A.6 `hazard_rate_per_state`, A.8
+  `emission_distribution_per_state`, A.10
+  `hmm_vs_hsmm_model_comparison` + shared `_shared.py` (8 sub-contracts)
+  + `core/hmm_decoding_utility.py` + `core/km_survival_utility.py`).
+  intravital_imaging will expand 15 → 20; total catalog 350 → 355.
+  **Waves 2–4 pending.**
+
 ### biophysics_scaling beta expansion pack — COMPLETE
 
 The 4-wave pack closes at **22 new recipes** across 4 waves (the

@@ -62,7 +62,6 @@ def kaplan_meier(
     if t_event.size == 0:
         return (np.array([]), np.array([]), np.array([]),
                 np.array([]))
-    n_total = d.size
     s = np.zeros_like(t_event)
     cum_log_s = 0.0
     cum_var = 0.0

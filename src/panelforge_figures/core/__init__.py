@@ -3,6 +3,12 @@
 from .aesthetic_base import AnnotationStyle, InsetConvention, ModalityAesthetic
 from .contract import RecipeContract, RecipeFamily, RecipeMetadata, register_recipe
 from .export import export_figure, multi_format_export
+from .hmm_decoding_utility import (
+    decode_states,
+    decode_states_semi,
+    fit_summary,
+)
+from .km_survival_utility import kaplan_meier
 from .layout import FIGSIZE_PRESETS, make_figure, make_panel_grid
 from .palette import Palette, get_palette, list_palettes, register_palette
 from .primitives import (
@@ -33,12 +39,6 @@ from .style import (
     current_theme,
     is_approved_font_family,
 )
-from .hmm_decoding_utility import (
-    decode_states,
-    decode_states_semi,
-    fit_summary,
-)
-from .km_survival_utility import kaplan_meier
 from .tost_bounds_utility import (
     classify_outcome,
     tost_band_patch,

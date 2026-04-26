@@ -5,7 +5,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.2.0-beta-biophysics_scaling — COMPLETE: 350 recipes** (biophysics_scaling +22 cumulative across all 4 waves). Pack total: 22/23 recipes (C.9 absorbed the 23rd); 4/4 waves; pack tag candidate `v1.2.0-beta-biophysics_scaling`. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
-**v1.3.0-beta-intravital_imaging — Wave 1 landed: 355 recipes** (intravital_imaging +5 substrate: HMM/HSMM/KM utilities + dwell-time, sojourn-survival, hazard-rate, emission-distribution, HMM-vs-HSMM model comparison). Pack total: 5/42 recipes; 1/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
+**v1.3.0-beta-intravital_imaging — Wave 2 landed: 366 recipes** (intravital_imaging +16 cumulative across Waves 1–2). Pack total: 16/42 recipes; 2/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -59,6 +59,36 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.3.0-beta-intravital_imaging — Wave 2 (decoding products + latency, +11)
+
+Lands the decoding-product recipes (turn decoded states into visual
+primitives) and the 4-component latency decomposition (the headline
+panel of any chemotaxis figure). intravital_imaging expands from
+20 to 31 recipes; total catalog 355 → 366.
+
+- **state_decoded_tip_track_field** (`scatter_collapse`) — per-tip
+  XY with state-coloured LineCollection segments.
+- **state_decoded_protrusion_polyline_field** (`scatter_collapse`)
+  — per-protrusion polylines coloured by parent-cell state.
+- **posterior_state_probability_ribbons** (`timecourse_hierarchical_ci`)
+  — stackplot of mean γ(t) across cells.
+- **state_transition_kernel_matrix** (`matrix`) — N × N P(next |
+  current) heatmap with verdict callout.
+- **state_occupancy_stacked_area** (`timecourse_hierarchical_ci`) —
+  per-condition stacked-area panels.
+- **state_entry_exit_raster** (`matrix`) — per-cell × time state
+  segments with switch ticks.
+- **state_conditional_tip_msd** (`timecourse_hierarchical_ci`) —
+  log-log MSD restricted to same-state epochs with per-state α.
+- **launch_to_commitment_latency** (`split_violin`) — τ_commit per
+  condition.
+- **cue_to_reorientation_latency** (`split_violin`) — τ_reorient
+  per condition.
+- **cue_to_net_displacement_latency** (`split_violin`) — τ_drift
+  per condition.
+- **latency_decomposition_forest** (`coef_forest`) — **headline
+  panel**: 3 latency types × conditions with bottleneck verdict.
 
 ## v1.3.0-beta-intravital_imaging — Wave 1 (substrate, +5)
 

@@ -37,9 +37,12 @@ def _demo() -> HazardRatePerStateInput:
     rng = np.random.default_rng(1729)
     return HazardRatePerStateInput(
         dwells_by_state={
-            "S0": rng.geometric(p=0.20, size=120).astype(float).tolist(),
-            "S1": rng.gamma(shape=4.0, scale=1.5, size=120).tolist(),
-            "S2": rng.lognormal(mean=2.0, sigma=0.4, size=120).tolist(),
+            "homeostatic":
+                rng.geometric(p=0.20, size=120).astype(float).tolist(),
+            "surveillant":
+                rng.gamma(shape=4.0, scale=1.5, size=120).tolist(),
+            "activated":
+                rng.lognormal(mean=2.0, sigma=0.4, size=120).tolist(),
         },
         decoder_label="HMM",
     )

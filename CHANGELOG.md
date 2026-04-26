@@ -18,8 +18,13 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #33; polish PR #34 added contemporary
   `microglia_states` palette + emission inset-gremlin fix
   (intravital_imaging 15 → 20).
-- **Wave 2** implementation landed (+11 recipes; intravital_imaging
-  20 → 31). **Waves 3–4 pending.**
+- **Wave 2** merged via PR #35 (+11 recipes; intravital_imaging
+  20 → 31).
+- **Wave 3** gap-analysis in review (+16 recipes: 11 commitment-
+  kinetics B.1 / B.2 / B.3 / B.8–B.15 + 5 biophysics-axes C.1 / C.2
+  / C.3 / C.4 / C.5 + a new `core/gam_logistic_utility.py` shim for
+  B.3 phase-diagram fitting). intravital_imaging will expand
+  31 → 47; total catalog 366 → 382. **Wave 4 pending.**
 
 ## [1.3.0-beta-intravital_imaging-w2] — 2026-04-26
 

@@ -36,8 +36,8 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
 | w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **merged** | `beta-intravital-imaging-w1` | — (squash-merged PR #33; commit `384bf88`); polish PR #34 (`c8851d0`) added contemporary palette + emission gremlin fix | 5 recipes + 3 visual-QA fit-ups (Wave 1) + 2 polish fix-ups (palette + gremlin); CI green |
-| w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | **review** | `beta-intravital-imaging-w2` | — | 11 recipes + 3 visual-QA fit-ups landed; awaiting PR merge |
-| w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 | pending | — | — | Depends on w2; ships GAM utility (Wave 3 footnote in plan §3) |
+| w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | **merged** | `beta-intravital-imaging-w2` | — (squash-merged PR #35; commit `c0b65e5`) | 3 commits, 3 visual-QA fit-ups; CI green |
+| w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 + GAM utility | **gap-analysis** | `beta-intravital-imaging-w3` | — | Wave 3 gap analysis in review |
 | w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | pending | — | — | Depends on w3; closes pack |
 
 Status legend:
@@ -176,6 +176,101 @@ All Wave 2 demos use the same `microglia_states` semantic palette via the Wave 1
 4. `pytest tests/test_style_drift.py` — ratchet held at 20/20.
 5. Gallery regenerate — 31 intravital_imaging PNGs.
 6. Eyeball each new panel; estimate 5–8 visual-QA fit-ups for this wave.
+
+## Wave 3 — commitment kinetics + biophysics block (+16)
+
+**Why next.** Wave 1 shipped the substrate (decoding utilities +
+diagnostics). Wave 2 turned decoded states into visual primitives
+and shipped the headline latency forest. Wave 3 lands the
+**commitment-kinetics** block (B.1 / B.2 / B.3 / B.8–B.15) — the
+quantitative substrate for chemotaxis kinetics — and the
+**biophysics-axes** block (C.1 / C.2 / C.3 / C.4 / C.5). After this
+wave, all Part B recipes are complete and Part C is half-shipped.
+
+### Recipe roster (Wave 3)
+
+| ID | Recipe | Family | Required fields | Notes |
+|---|---|---|---|---|
+| B.1 | `protrusion_commitment_survival` | `diagnostic_curve` | `protrusions: list[ProtrusionPolyline]`, `condition_by_protrusion: dict[str, str]` | KM curves per condition via `kaplan_meier`; log-rank p in title if ≥2 conditions |
+| B.2 | `commitment_hazard_with_age` | `timecourse_hierarchical_ci` | same as B.1 | Smoothed h(τ); ramp/peak = staged commitment |
+| B.3 | `commitment_phase_diagram` | `heatmap` | `per_protrusion: list[{L_um, v_bar_um_per_min, committed}]` | **Ships GAM utility** (logistic-spline shim) for the boundary fit |
+| B.8 | `chemotaxis_index_trajectory` | `timecourse_hierarchical_ci` | `bundles: list[KinematicFeatureBundle]`, `cue_onset_s_by_cell` | CI(t) = ⟨cos(θ−ĉ)⟩ ± 95 % CI per condition; t = 0 at cue onset |
+| B.9 | `directional_persistence_autocorr` | `timecourse_hierarchical_ci` | `bundles` (need `heading_deg`) | C(τ) = ⟨cos(Δθ(τ))⟩ with fitted exponential τ_p callout |
+| B.10 | `ornstein_uhlenbeck_fit_per_state` | `coef_forest` | `bundles`, `decoded` | Forest of (τ, σ) per state × condition |
+| B.11 | `speed_commitment_coupling` | `timecourse_hierarchical_ci` | `bundles` (need both velocity + length-rate) | Cross-correlation function with peak-lag callout |
+| B.12 | `commitment_vs_chemotaxis_contingency` | `matrix` | per-protrusion `{committed, aligned, condition}` | 2×2 with overlaid OR ± 95 % CI per condition |
+| B.13 | `protrusion_dominance_race_winner` | `scatter_collapse` | per-cell polylines + win/loss labels | ΔL(t) traces colored by winner / runner-up |
+| B.14 | `cue_response_dose_latency` | `timecourse_hierarchical_ci` | `LatencyDistribution` + `gradient_magnitude_per_cell: dict[str, float]` | τ vs |∇c| with fitted curve and CI band |
+| B.15 | `aligned_vs_unaligned_velocity_split` | `split_violin` | per-step `{v, cos_theta_c, condition}` | Aligned-left / unaligned-right split per condition |
+| C.1 | `tip_ripleys_k_in_window` | `diagnostic_curve` | `snapshots: list[TipCentroidSnapshot]`, `r_grid_um: list[float]` | **Window-conditional** intravital recast (option (b) decision); polygon-clipped edge correction; CSR envelope |
+| C.2 | `tip_pair_correlation_in_window` | `timecourse_hierarchical_ci` | same as C.1 | Window-conditional g(r) per condition with CI |
+| C.3 | `branch_order_topology_per_cell` | `split_violin` | `skeletons: list[{cell_id, branch_orders, n_bifurcations, total_length_um}]` | Branch-order distribution per condition + n_bif vs L scatter inset |
+| C.4 | `curvature_along_protrusion_kymograph` | `heatmap` | `ProtrusionPolylineWithTime` with `curvature_per_s_per_t` | κ(s, t) heatmap with ridge-tracked max-κ overlay |
+| C.5 | `viscous_drag_tip_force_map` | `scatter_collapse` | `tip_tracks: list[TipTrack]`, `viscosity_pa_s`, `tip_radius_um` | Tip XY coloured by F = 6πηr·v; lower-bound caveat banner |
+
+### Family-rule satisfaction checklist
+
+- **B.1, C.1** (`diagnostic_curve` ≥2 curves + ≥1 legend) — satisfied by per-condition KM (B.1) / Ripley K (C.1) curves + CSR / geometric reference + legend.
+- **B.2, B.8, B.9, B.11, B.14, C.2** (`timecourse_hierarchical_ci` ≥1 CI band + ≥1 mean line) — satisfied by per-condition curves with bootstrap CI ribbons + per-condition mean lines.
+- **B.3, C.4** (`heatmap` ≥1 imshow / pcolormesh) — B.3 satisfied by 2-D commitment-probability surface (`pcolormesh`) with iso-prob contours; C.4 by κ(s, t) heatmap.
+- **B.10** (`coef_forest` ≥3 markers + ≥1 reference line) — satisfied by ≥3 (state × condition) (τ, σ) markers + zero-reference for τ.
+- **B.12** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by 2×2 contingency with annotated counts (4 cell patches; `OR ± 95 % CI` overlay).
+- **B.13, C.5** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — B.13 satisfied by per-cell ΔL(t) traces + winner-vs-loser fit; C.5 by tip XY scatter + invisible-proxy line (LineCollection-shaped data).
+- **B.15, C.3** (`split_violin` ≥2 violin bodies + ≥1 median marker) — satisfied by per-condition split violins with median markers.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/core/gam_logistic_utility.py` | **NEW** | Inline GAM-style logistic regression with B-spline basis (~80 LOC). Used by B.3 commitment_phase_diagram. Signature: `fit_phase_boundary(L, v_bar, committed, n_grid_x=40, n_grid_y=40) -> tuple[X, Y, P_grid]`. Replaces `pygam` / `statsmodels.GAM` deps (Option D). |
+| `src/panelforge_figures/core/__init__.py` | edit | Export `fit_phase_boundary`. |
+| 16 new recipe modules under `src/panelforge_figures/recipes/intravital_imaging/` | **NEW** | One per recipe |
+| `src/panelforge_figures/recipes/intravital_imaging/__init__.py` | edit | Register 16 new recipes (imports + `__all__`); bumps total to 47 |
+| `tests/test_gam_logistic_utility.py` | **NEW** | Boundary recovery on synthetic ground truth + spline-basis sanity |
+
+No new top-level deps (the GAM utility is the third and final inline shim per the Option D heavy-deps decision; `umap-learn` lands in Wave 4 with C.12).
+
+### Demo seed convention (Wave 3)
+
+All Wave 3 demos use seeded RNG and the contemporary palette (slate / teal / coral / purple / amber for states; slate / coral for control / DISC1 conditions per Wave 2 lock-in).
+
+- **B.1, B.2**: 80 protrusions × 2 conditions; commitment defined as no retraction in 30 s window. Median lifetime ~120 s control / ~75 s DISC1 (DISC1 commits faster — visible in KM crossover).
+- **B.3**: 200 protrusions on (L, v̄) grid; logistic boundary at L · v̄ ≈ 30; iso-prob 0.5 contour; demo data crosses the boundary visibly.
+- **B.8**: 2 conditions × 30 cells × 90-frame heading + cue series; CI(t) ramps from ~0 (random) to ~0.6 (control) or ~0.3 (DISC1) post-cue.
+- **B.9**: 2 conditions × 40 cells; τ_p ≈ 12 s (control) / 25 s (DISC1) — DISC1 has more directional memory.
+- **B.10**: 3 states × 2 conditions = 6 markers; (τ, σ) per state distinct.
+- **B.11**: speed-commit cross-correlation peaks at lag = +6 s (length-rate leads speed by 6 s).
+- **B.12**: 4 strata of 2×2 contingency; per-condition OR labelled.
+- **B.13**: 12 cells × 2 protrusions; winning protrusion has ΔL ≈ 8 µm ± 2 µm by end.
+- **B.14**: 5 |∇c| levels × 30 cells; τ_reorient inversely scales with |∇c|.
+- **B.15**: 2 conditions × 600 step-pairs; aligned (cos θ_c > 0) ~30 % faster than unaligned.
+- **C.1, C.2**: 4-frame snapshots × 2 conditions; tips clustered (Ripley K > CSR envelope) in DISC1.
+- **C.3**: 40 cells × 2 conditions; branch-order distribution shifts from mean 2.1 (control) to 2.7 (DISC1).
+- **C.4**: 1 protrusion × 30 timepoints × 40 arc points; curvature ridge migrates over time.
+- **C.5**: 60 tips with F = 6πηr·v range 0.5–4 pN.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| GAM utility correctness (B-spline basis + logistic IRLS — easy to introduce subtle bugs) | Write `tests/test_gam_logistic_utility.py` with hand-computed boundary recovery on a synthetic logistic ground truth; require accuracy > 80 % on a clean test before merging. |
+| B.3 phase-diagram heatmap + iso-prob contours + scatter overlay — three layers, easy to crowd | Use cividis cmap for heatmap (low-saturation), black solid contours, white-edged scatter for committed / hollow scatter for not-committed. |
+| C.1, C.2 polygon-clipped edge correction (tip-window-conditional) is the differentiator from `spatial_statistics` | Implement Ripley correction via `shapely.geometry.Point.distance` to the polygon boundary; keep ~30 LOC of correction code; document the difference from `spatial_statistics/ripley_l_function`. |
+| C.4 kymograph y-axis (arc length) needs interpretable units even when `normalize_arclength=True` | Two y-axis modes: arc length (µm) for absolute, arc fraction (0–1) for normalized — annotate which mode in title. |
+| B.10 OU fit per state can fail when state-conditional epochs are too short | Require ≥ 20 frames per state × condition; degrade to "fit not shown, data shown" if not met. |
+| B.13 ΔL(t) traces colour-coded by winner: legend duplication if shown per cell | Single shared 2-entry legend (winner / runner-up) below axes. |
+| B.14 fitting `τ vs |∇c|` with fitted curve + CI band on log-log axes — curve may extrapolate poorly outside data | Restrict fit / CI to the data range; clip extrapolation. |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. The 16 recipes need to be disciplined. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 1908 still pass + new GAM utility tests.
+2. `pytest tests/test_recipes_smoke.py -k intravital_imaging` — 47 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k intravital_imaging` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet held at 20/20.
+5. `pytest tests/test_gam_logistic_utility.py` — boundary recovery on synthetic data > 80 %.
+6. Gallery regenerate `intravital_imaging/` — 47 PNGs.
+7. Eyeball each new panel; estimate 5–8 visual-QA fit-ups (16 recipes is the largest wave so far for this pack).
 
 ## Out of scope for this pack
 

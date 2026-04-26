@@ -126,30 +126,34 @@ class ModelFitSummary(RecipeContract):
 
 
 def _demo_state_palette(states: list[str]) -> dict[str, str]:
-    """Map decoded states to colours from the `microglia_states` palette.
+    """Map decoded states to the registered `microglia_states` palette.
+
+    Uses the contemporary editorial palette (slate / teal / coral /
+    purple / amber) registered in `core/palette.py` rather than the
+    traditional MUI blue-green-red triad. Semantic state names
+    (`homeostatic`, `surveillant`, `activated`, `DAM`, `proliferative`)
+    map directly to the registered semantic keys; generic indexed
+    labels (`S0`, `S1`, ...) fall through to the same colour ramp.
 
     Used by every Wave 1 / Wave 2 decoding recipe so the same state
     colours appear across A.4 (dwell), A.5 (survival), A.6 (hazard),
     A.8 (emission), A.10 (model comparison), and the Wave 2 recipes.
     """
-    fixed = {
-        "patrolling": "#1565C0",
-        "scanning":   "#2E7D32",
-        "engaged":    "#C62828",
-        "S0":         "#1565C0",
-        "S1":         "#2E7D32",
-        "S2":         "#C62828",
-        "S3":         "#6A1B9A",
-        "S4":         "#E65100",
-    }
-    fallback_palette = ["#1565C0", "#2E7D32", "#C62828",
-                        "#6A1B9A", "#E65100", "#455A64"]
+    # Reuse the registered palette so colours stay aligned with the
+    # rest of the modality (no parallel hex literal drift).
+    from ...core.palette import get_palette
+    pal = get_palette("microglia_states")
+    semantic = pal.semantic   # keyed by 'homeostatic' / 'surveillant' / ...
+    ordered_ramp = list(pal.colors)
     out: dict[str, str] = {}
     fallback_i = 0
     for s in states:
-        if s in fixed:
-            out[s] = fixed[s]
+        if s in semantic:
+            out[s] = semantic[s]
+        elif s.startswith("S") and s[1:].isdigit():
+            i = int(s[1:])
+            out[s] = ordered_ramp[i % len(ordered_ramp)]
         else:
-            out[s] = fallback_palette[fallback_i % len(fallback_palette)]
+            out[s] = ordered_ramp[fallback_i % len(ordered_ramp)]
             fallback_i += 1
     return out

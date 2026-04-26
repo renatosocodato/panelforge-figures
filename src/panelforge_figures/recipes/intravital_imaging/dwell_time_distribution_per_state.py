@@ -42,12 +42,18 @@ class DwellTimePerStateInput(RecipeContract):
 
 def _demo() -> DwellTimePerStateInput:
     rng = np.random.default_rng(1717)
-    # Three-state synthesis: S0 geometric, S1 gamma, S2 lognormal.
+    # Three-state synthesis with semantic state names that map to the
+    # `microglia_states` semantic palette: homeostatic (geometric),
+    # surveillant (gamma, weakly HSMM-favouring), activated (lognormal,
+    # strongly HSMM-favouring).
     return DwellTimePerStateInput(
         dwells_by_state={
-            "S0": rng.geometric(p=0.20, size=120).astype(float).tolist(),
-            "S1": rng.gamma(shape=4.0, scale=1.5, size=120).tolist(),
-            "S2": rng.lognormal(mean=2.0, sigma=0.4, size=120).tolist(),
+            "homeostatic":
+                rng.geometric(p=0.20, size=120).astype(float).tolist(),
+            "surveillant":
+                rng.gamma(shape=4.0, scale=1.5, size=120).tolist(),
+            "activated":
+                rng.lognormal(mean=2.0, sigma=0.4, size=120).tolist(),
         },
         decoder_label="HMM",
     )

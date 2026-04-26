@@ -10,6 +10,20 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Intravital-imaging beta-pack Wave 2 additions (v1.3.0-beta-intravital_imaging-w2)
+
+- **Where do tips travel, and how do their decoded states map onto the spatial trajectory?** → [`intravital_imaging.state_decoded_tip_track_field`](gallery/intravital_imaging/state_decoded_tip_track_field.png)
+- **How do protrusion shapes (polylines of arbitrary length) differ across decoded states?** → [`intravital_imaging.state_decoded_protrusion_polyline_field`](gallery/intravital_imaging/state_decoded_protrusion_polyline_field.png)
+- **Across cells, how does the posterior probability γ(t) of each decoded state evolve over time?** → [`intravital_imaging.posterior_state_probability_ribbons`](gallery/intravital_imaging/posterior_state_probability_ribbons.png)
+- **What are the per-step (or per-switch) transition probabilities between decoded latent states?** → [`intravital_imaging.state_transition_kernel_matrix`](gallery/intravital_imaging/state_transition_kernel_matrix.png)
+- **Per condition, how does the cohort-level state-occupancy fraction evolve over time?** → [`intravital_imaging.state_occupancy_stacked_area`](gallery/intravital_imaging/state_occupancy_stacked_area.png)
+- **Per cell, when do entries and exits between decoded states happen, and which cells dominate which state?** → [`intravital_imaging.state_entry_exit_raster`](gallery/intravital_imaging/state_entry_exit_raster.png)
+- **Per decoded state, what is the tip MSD(τ) computed over same-state epochs, and what is the diffusion exponent α?** → [`intravital_imaging.state_conditional_tip_msd`](gallery/intravital_imaging/state_conditional_tip_msd.png)
+- **How long does a freshly nucleated protrusion take to commit?** → [`intravital_imaging.launch_to_commitment_latency`](gallery/intravital_imaging/launch_to_commitment_latency.png)
+- **How long after cue onset does a cell's heading first align with the cue direction?** → [`intravital_imaging.cue_to_reorientation_latency`](gallery/intravital_imaging/cue_to_reorientation_latency.png)
+- **How long after cue onset does the cell's net projected displacement along the cue exceed a threshold?** → [`intravital_imaging.cue_to_net_displacement_latency`](gallery/intravital_imaging/cue_to_net_displacement_latency.png)
+- **Across the three canonical latencies and conditions, which latency is the chemotaxis bottleneck?** → [`intravital_imaging.latency_decomposition_forest`](gallery/intravital_imaging/latency_decomposition_forest.png)
+
 ## Intravital-imaging beta-pack Wave 1 additions (v1.3.0-beta-intravital_imaging-w1)
 
 - **Per decoded latent state, how are sojourn dwells distributed, and are they consistent with the HMM geometric assumption?** → [`intravital_imaging.dwell_time_distribution_per_state`](gallery/intravital_imaging/dwell_time_distribution_per_state.png)

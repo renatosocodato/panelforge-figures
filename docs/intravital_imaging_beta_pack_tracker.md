@@ -35,8 +35,8 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
-| w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **review** | `beta-intravital-imaging-w1` | — | 5 recipes + 3 visual-QA fit-ups landed; awaiting PR merge |
-| w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | pending | — | — | Depends on w1 |
+| w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **merged** | `beta-intravital-imaging-w1` | — (squash-merged PR #33; commit `384bf88`); polish PR #34 (`c8851d0`) added contemporary palette + emission gremlin fix | 5 recipes + 3 visual-QA fit-ups (Wave 1) + 2 polish fix-ups (palette + gremlin); CI green |
+| w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | **gap-analysis** | `beta-intravital-imaging-w2` | — | Wave 2 gap analysis in review |
 | w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 | pending | — | — | Depends on w2; ships GAM utility (Wave 3 footnote in plan §3) |
 | w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | pending | — | — | Depends on w3; closes pack |
 
@@ -107,6 +107,75 @@ Per pack governance, demos use seeded RNG and ship a fully-populated contract:
 5. `pytest tests/test_hmm_decoding_utility.py` and `tests/test_km_survival_utility.py` — new.
 6. Gallery regenerate `intravital_imaging/` — 20 PNGs.
 7. Eyeball each new panel for collisions, clipped text, legend overflow.
+
+## Wave 2 — decoding products + latency primitives (+11)
+
+**Why next.** Wave 1 shipped the substrate (decoding utilities + 5
+diagnostics that decide HMM-vs-HSMM). Wave 2 turns decoded states
+into *visual* primitives: tip-track + polyline fields coloured by
+state, posterior ribbons over time, transition matrices, occupancy
+stacked-area, entry/exit rasters, and state-conditional MSD. It also
+lands the *headline* of any chemotaxis figure — the four-component
+latency forest (B.4 / B.5 / B.6 / B.7).
+
+### Recipe roster (Wave 2)
+
+| ID | Recipe | Family | Required fields | Precedent to mirror |
+|---|---|---|---|---|
+| A.1 | `state_decoded_tip_track_field` | `scatter_collapse` | `tip_tracks: list[TipTrack]`, `decoded: list[DecodedStateSeries]` | `intravital_imaging/cell_track_trajectory_field.py` (alpha) — but with state-coloured segments via `LineCollection` |
+| A.2 | `state_decoded_protrusion_polyline_field` | `scatter_collapse` | `polylines: list[ProtrusionPolylineWithTime]`, `decoded` | new — polyline overlays coloured by parent-cell decoded state |
+| A.3 | `posterior_state_probability_ribbons` | `timecourse_hierarchical_ci` | `decoded: list[DecodedStateSeries]` (must have posterior_prob), `states: list[str]` | new — stacked γ(t) ribbons; small-multiples-by-cell variant if `aggregate="per_cell"` |
+| A.7 | `state_transition_kernel_matrix` | `matrix` | `decoded: list[DecodedStateSeries]`, `states: list[str]` | `meta_and_diagnostic/data_quality_heatmap.py` (annotated heatmap) |
+| A.9 | `state_occupancy_stacked_area` | `timecourse_hierarchical_ci` | `decoded`, `condition_by_cell: dict[str, str]` | new — per-condition stacked area of occupancy fractions |
+| A.11 | `state_entry_exit_raster` | `matrix` | `decoded: list[DecodedStateSeries]` | new — rows = cells, x = time, coloured bars per state with switch-tick markers |
+| A.12 | `state_conditional_tip_msd` | `timecourse_hierarchical_ci` | `tracks: list[TipTrack]`, `decoded`, `states` | `intravital_imaging/msd_curve_by_state.py` (alpha) — but with τ restricted to same-state epochs and per-state α-fit |
+| B.4 | `launch_to_commitment_latency` | `split_violin` | `latencies: list[LatencyDistribution]` (label="τ_commit") | `intravital_imaging/velocity_distribution_by_state.py` |
+| B.5 | `cue_to_reorientation_latency` | `split_violin` | `latencies` (label="τ_reorient") | same |
+| B.6 | `cue_to_net_displacement_latency` | `split_violin` | `latencies` (label="τ_drift") | same |
+| B.7 | `latency_decomposition_forest` | `coef_forest` | `latencies` × labels {τ_reorient, τ_commit, τ_drift} × conditions | `meta_and_diagnostic/heterogeneity_forest.py` — headline panel of any chemotaxis figure |
+
+### Family-rule satisfaction checklist
+
+- **A.1, A.2** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — satisfied by per-track scatter + state-coloured connecting line segments via `LineCollection` (counts as `ax.collections`).
+- **A.3, A.9, A.12** (`timecourse_hierarchical_ci` ≥1 CI band + ≥1 mean line) — A.3 satisfied by stacked posterior ribbons + per-state mean γ; A.9 by stacked area + per-condition mean line; A.12 by MSD per state with bootstrap CI.
+- **A.7, A.11** (`matrix` ≥1 imshow OR ≥4 cell patches) — A.7 satisfied by N×N transition `imshow`; A.11 by per-(cell, state-segment) rectangle patches (≥4 satisfied trivially).
+- **B.4, B.5, B.6** (`split_violin` ≥2 violin bodies + ≥1 median marker) — satisfied by per-condition violins with median markers.
+- **B.7** (`coef_forest` ≥3 markers + ≥1 reference line) — ≥3 latency × condition rows + the median(τ_reorient) of control reference.
+
+### Demo seed convention
+
+All Wave 2 demos use the same `microglia_states` semantic palette via the Wave 1 `_demo_state_palette()` helper. Specifically:
+- A.1, A.2: 6 cells × 60-frame trajectories with per-cell decoded state segments (homeostatic / surveillant / activated). Tip-track demo uses synthetic random walks with state-dependent step sizes; polyline demo uses synthetic radial growth-and-retraction.
+- A.3: 4-cell × 80-frame γ(t) where states transition smoothly so ribbons show coherent shifts.
+- A.7: 3×3 transition matrix with diagonal-dominant probabilities (HMM-style sticky chains).
+- A.9: 2 conditions × 80 cells × 60 frames with cohort-distinct occupancy patterns.
+- A.11: 12 cells × 60 frames with decoded segments visible as raster bars.
+- A.12: 6 cells × 30 lag bins with state-conditional MSD curves; activated-state α > 1 (super-diffusive), homeostatic α < 1 (sub-diffusive).
+- B.4, B.5, B.6: 2 conditions × 50–80 latency values per recipe with cohort-distinct medians; 5–10 % censoring.
+- B.7: 3 latencies × 2 conditions = 6 rows; control-median(τ_reorient) reference.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| A.1 / A.2 / A.11 LineCollection-on-scatter family rule (LineCollection lives on `ax.collections`, scatter lives on `ax.collections` too — but the rule expects ≥1 fit-line) | Reuse the biophysics_scaling pattern: add an invisible `ax.plot([], [], color="none", lw=0.5, alpha=0.0)` proxy line so the rule sees ≥1 line on `ax.get_lines()`. |
+| A.3 stacked posterior ribbons collide visually when 5 states with similar γ(t) — overlapping ribbons hard to read | Use `stackplot` with the contemporary palette (slate / teal / coral / purple / amber); legend below axes; per-state median annotation on the right margin. |
+| A.7 transition matrix labels (state names like "homeostatic") too long for 3×3 cell width — collide with cell numeric annotations | Use 4-letter slugs (`home`/`surv`/`acti`) for axis tick labels; full names in legend. |
+| A.9 stacked area legend duplication (per-condition × per-state) blows up legend size | Single shared state legend below all condition panels; condition labels as panel titles. |
+| A.11 raster sort_by parameter: cells sorted by total time-in-state vs n_switches gives different visual stories | Default to `total_time_in_state` (manuscript convention); user override available. |
+| A.12 MSD restricted to same-state epochs may have very few points per state for short epochs — α fit unstable | Require ≥ 8 frames per epoch; degrade to "MSD shown but α not fit" if not met; show dashed reference α=1. |
+| B.4/B.5/B.6 violin tail issues for heavily-skewed latency distributions | Use log-y where median > 5×IQR ratio; otherwise linear. |
+| B.7 forest with 3 latency types × 2 conditions: 6-row layout could feel cramped | Tight figure (5.6×3.6"); colour-code by latency type (teal / coral / amber from the palette). |
+| Style-drift ratchet at 20/20 | Reuse Wave 1 literals exclusively. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 1853 still pass.
+2. `pytest tests/test_recipes_smoke.py -k intravital_imaging` — 31 demos render headlessly (20 alpha+W1 + 11 new).
+3. `pytest tests/test_recipes_quality.py -k intravital_imaging` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet held at 20/20.
+5. Gallery regenerate — 31 intravital_imaging PNGs.
+6. Eyeball each new panel; estimate 5–8 visual-QA fit-ups for this wave.
 
 ## Out of scope for this pack
 

@@ -15,8 +15,21 @@ project follows semantic versioning.
   for the full pack plan. Heavy-deps strategy: **Option D (Mixed)** —
   `hmmlearn` and `umap-learn` added as required deps; KM survival /
   HSMM duration / GAM logistic implemented as inline `core/` shims.
-- **Wave 1** implementation landed (+5 recipes; intravital_imaging
-  15 → 20). **Waves 2–4 pending.**
+- **Wave 1** merged via PR #33; polish PR #34 added contemporary
+  `microglia_states` palette + emission inset-gremlin fix
+  (intravital_imaging 15 → 20).
+- **Wave 2** gap-analysis in review (+11 recipes: A.1
+  `state_decoded_tip_track_field`, A.2
+  `state_decoded_protrusion_polyline_field`, A.3
+  `posterior_state_probability_ribbons`, A.7
+  `state_transition_kernel_matrix`, A.9
+  `state_occupancy_stacked_area`, A.11 `state_entry_exit_raster`,
+  A.12 `state_conditional_tip_msd` + B.4
+  `launch_to_commitment_latency`, B.5
+  `cue_to_reorientation_latency`, B.6
+  `cue_to_net_displacement_latency`, B.7
+  `latency_decomposition_forest`). intravital_imaging will expand
+  20 → 31; total catalog 355 → 366. **Waves 3–4 pending.**
 
 ## [1.3.0-beta-intravital_imaging-w1] — 2026-04-26
 

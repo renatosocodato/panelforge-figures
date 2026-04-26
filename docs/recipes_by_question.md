@@ -10,6 +10,14 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Intravital-imaging beta-pack Wave 1 additions (v1.3.0-beta-intravital_imaging-w1)
+
+- **Per decoded latent state, how are sojourn dwells distributed, and are they consistent with the HMM geometric assumption?** → [`intravital_imaging.dwell_time_distribution_per_state`](gallery/intravital_imaging/dwell_time_distribution_per_state.png)
+- **Per decoded state, how does the sojourn survival S(tau) behave, and is it consistent with HMM (geometric / log-linear)?** → [`intravital_imaging.sojourn_survival_per_state`](gallery/intravital_imaging/sojourn_survival_per_state.png)
+- **Per decoded state, does the switch-out hazard depend on age-in-state (ramp / peak = HSMM) or is it flat (HMM-compatible)?** → [`intravital_imaging.hazard_rate_per_state`](gallery/intravital_imaging/hazard_rate_per_state.png)
+- **Per decoded state, what kinematic signature (velocity, length-rate, curvature, turning-angle, …) characterises the state?** → [`intravital_imaging.emission_distribution_per_state`](gallery/intravital_imaging/emission_distribution_per_state.png)
+- **Across strata, does HSMM (semi-Markov, age-dependent dwell) beat HMM (Markov, geometric dwell) by AIC / BIC / CV log-lik?** → [`intravital_imaging.hmm_vs_hsmm_model_comparison`](gallery/intravital_imaging/hmm_vs_hsmm_model_comparison.png)
+
 ## Biophysics-scaling beta-pack Wave 4 additions (v1.2.0-beta-biophysics_scaling-w4)
 
 - **Does the regime classification at this phase corner hold across a local perturbation neighborhood of simulation parameters?** → [`biophysics_scaling.robustness_neighborhood_phase_corner`](gallery/biophysics_scaling/robustness_neighborhood_phase_corner.png)

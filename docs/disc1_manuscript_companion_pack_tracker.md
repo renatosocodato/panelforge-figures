@@ -51,8 +51,8 @@ Per governance §9, no new modalities. The 31 recipes scatter as:
 
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
-| w1 | Universal QA + diagnostic primitives (+6): PCA loadings, per-cell audit, hypothesis exclusion, residual panels, RF confusion, parameterization lineage. All in `meta_and_diagnostic`. Pioneers `meta_and_diagnostic/_shared.py`. | **review** | `beta-disc1-companion-w1` | — (PR open) | 3 commits, 2 visual-QA fit-ups (W1.5 cividis off-diagonal text colour threshold inverted; W1.6 title-vs-headers overlap), 5 sub-contracts pioneered, total tests 2056 → 2086 |
-| w2 | Cell territory + multiscale presentation (+7): F1A territory-zone overlay, F1B dual-scale lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-network overlay, F2B zone-fraction Sankey, F2C colocalization raincloud. Pioneers `actin_microtubule_morphometry/_shared.py`. | pending | — | — | Depends on w1 |
+| w1 | Universal QA + diagnostic primitives (+6): PCA loadings, per-cell audit, hypothesis exclusion, residual panels, RF confusion, parameterization lineage. All in `meta_and_diagnostic`. Pioneers `meta_and_diagnostic/_shared.py`. | **merged** | `beta-disc1-companion-w1` | — (squash-merged PR #39; commit `2267ba0`) | 3 commits, 2 visual-QA fit-ups (W1.5 cividis off-diagonal text colour threshold inverted; W1.6 title-vs-headers overlap), 5 sub-contracts pioneered, total tests 2056 → 2086; CI green |
+| w2 | Cell territory + multiscale presentation (+7): F1A territory-zone overlay, F1B dual-scale lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-network overlay, F2B zone-fraction Sankey, F2C colocalization raincloud. Pioneers `actin_microtubule_morphometry/_shared.py`. | **review** | `beta-disc1-companion-w2` | — (PR open) | 3 commits, 4 visual-QA fit-ups (W2.1 sort-mutation bug, W2.2 ellipse-not-line family rule, W2.6 fontsize ratchet snap, W2.6 box-label truncation widened columns), 7 sub-contracts pioneered, total tests 2086 → 2121 |
 | w3 | Cytoskeleton geometry + statistics (+9): F2D angle rose, F2E Cleveland, F3B censoring waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B z-span vs width. | pending | — | — | Depends on w2 |
 | w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack. | pending | — | — | Depends on w3; closes pack |
 
@@ -63,7 +63,7 @@ Status legend:
 - **review** — PR open, awaiting merge
 - **merged** — squash-merged to `main`, tag pushed
 
-## Wave 1 — universal QA + diagnostic primitives (+6) [gap-analysis]
+## Wave 1 — universal QA + diagnostic primitives (+6) [merged]
 
 **Why first.** All 6 recipes are biology-agnostic primitives that any future pack reuses. They form the substrate for the DISC1 manuscript's reviewer-proof supplementary panels (FS1A loadings, FS3A/FS5A audit, FS4A-C residuals, FS1B confusion) plus the methods-section parameterization lineage (F6A) and the rigorous-design exclusion table (F3C). No biology-specific contracts; pure substrate.
 
@@ -126,30 +126,83 @@ All Wave 1 demos use seeded RNG and the registered `meta_and_diagnostic` palette
 5. Gallery regenerate `meta_and_diagnostic/` — 21 PNGs.
 6. Eyeball each new panel; estimate **3 visual-QA fit-ups** (small wave; conventions already established).
 
-## Wave 2 — cell territory + multiscale presentation (+7) [pending]
+## Wave 2 — cell territory + multiscale presentation (+7) [gap-analysis]
 
-**Why next.** F1 + F2 cluster of cell-level territory + scale-decomposition figures, which set up the manuscript narrative. Builds on Wave 1's QA primitives. Pioneers `actin_microtubule_morphometry/_shared.py` for the territory + colocalization sub-contracts.
+**Why next.** Wave 1 shipped the universal QA primitives. Wave 2
+delivers the F1 + F2 cluster of cell-level territory and scale-
+decomposition figures, which open the manuscript narrative.
+**Pioneers `actin_microtubule_morphometry/_shared.py`** with 6
+nested sub-contracts (territory maps, contact-patch networks,
+colocalization coefficients, protrusion outlines, multi-scale
+significance rows, Airyscan triptych bundles). After this wave,
+two of the three modalities affected by the pack carry their own
+`_shared.py` (the third — `biophysics_scaling` — already had one
+from its earlier pack).
 
 ### Recipe roster (Wave 2)
 
-| ID | Recipe | Modality | Family | Panel |
-|---|---|---|---|---|
-| W2.1 | `dual_scale_significance_lollipop` | biophysics_scaling | coef_forest | F1B |
-| W2.2 | `pca_silhouette_glyph_morphospace` | actin_microtubule_morphometry | scatter_collapse | F1C |
-| W2.3 | `airyscan_to_zone_territory_triptych` | actin_microtubule_morphometry | matrix | F1D |
-| W2.4 | `territory_zone_overlay_intravital` | intravital_imaging | heatmap | F1A |
-| W2.5 | `territory_contact_network_overlay` | actin_microtubule_morphometry | heatmap | F2A |
-| W2.6 | `zone_fraction_alluvial_sankey` | actin_microtubule_morphometry | flow | F2B |
-| W2.7 | `colocalization_raincloud_per_metric` | actin_microtubule_morphometry | split_violin | F2C |
+| ID | Recipe | Modality | Family | Required fields | Panel |
+|---|---|---|---|---|---|
+| W2.1 | `dual_scale_significance_lollipop` | biophysics_scaling | `coef_forest` | `rows: list[MultiScaleSignificanceRow]` (feature × scale × −log₁₀(p) × tier-band) | F1B |
+| W2.2 | `pca_silhouette_glyph_morphospace` | actin_microtubule_morphometry | `scatter_collapse` | `cells: list[CellOutlineWithPCCoord]` (cell_id, pc_coord, condition, outline_xy) + PERMANOVA stats | F1C |
+| W2.3 | `airyscan_to_zone_territory_triptych` | actin_microtubule_morphometry | `matrix` | `bundles: list[AiryscanTriptychBundle]` (raw + skeleton overlay + zone-territory map per cell) | F1D |
+| W2.4 | `territory_zone_overlay_intravital` | intravital_imaging | `heatmap` | `field: MultiChannelField` + `zone_map: ZoneTerritoryMap` | F1A |
+| W2.5 | `territory_contact_network_overlay` | actin_microtubule_morphometry | `heatmap` | `cells: list[CellWithContactNetwork]` (territory map + contact-patch network + ROI polygon) | F2A |
+| W2.6 | `zone_fraction_alluvial_sankey` | actin_microtubule_morphometry | `flow` | `medians_by_condition: dict[str, dict[zone, fraction]]` | F2B |
+| W2.7 | `colocalization_raincloud_per_metric` | actin_microtubule_morphometry | `split_violin` | `coefficients: list[ColocalizationCoefficients]` per cell × condition | F2C |
 
-### Wave 2 sub-contracts (NEW `actin_microtubule_morphometry/_shared.py`)
+### Family-rule satisfaction checklist
 
-- `ZoneTerritoryMap` — per-cell H × W grid + zone label per pixel.
-- `ContactPatchNetwork` — node coords + edge adjacency + cell ROI polygon.
-- `ColocalizationCoefficients` — per-cell {M1, M2, Pearson, Spearman} bundle.
-- `ProtrusionOutlineWithMetrics` — outline polyline + width / erosion-depth scalars.
-- `MultiScaleSignificanceRow` — feature × scale × `-log10(p)` × tier-band.
-- `AirzanZoneTriptychBundle` — raw / skeleton / zone-territory image stack.
+- **W2.1** (`coef_forest` ≥3 markers + ≥1 reference line) — satisfied by per-feature lollipop markers (≥3 metrics × ≥2 scales = ≥6 markers) + dashed reference line at −log₁₀(0.05) significance threshold.
+- **W2.2** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — satisfied by per-cell PC scatter + per-condition confidence-ellipse outlines as the "fit lines"; cell-outline silhouettes are scatter-marker glyphs (custom paths via `matplotlib.path.Path`).
+- **W2.3** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by 3 inset `imshow` panels per cell × ≥2 cells; sentinel imshow on parent ax for layout safety.
+- **W2.4, W2.5** (`heatmap` ≥1 imshow / pcolormesh) — W2.4 satisfied by multi-channel composite `imshow` with zone outlines overlaid; W2.5 by territory-map `imshow` with network drawn as overlay (lines + scatter).
+- **W2.6** (`flow` family) — Sankey-style ribbons drawn via filled `mpatches.PathPatch` between left and right composition columns; mirrors `pathway_flux_streamgraph` precedent.
+- **W2.7** (`split_violin` ≥2 violin bodies + ≥1 median marker) — satisfied by per-metric split violins (control left half / DISC1 right half) × 3 metrics; median ring markers per side.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/recipes/actin_microtubule_morphometry/_shared.py` | **NEW** | 6 nested Pydantic sub-contracts: `ZoneTerritoryMap`, `ContactPatchNetwork`, `ColocalizationCoefficients`, `CellOutlineWithPCCoord`, `MultiScaleSignificanceRow`, `AiryscanTriptychBundle` (+ `CellWithContactNetwork` and `MultiChannelField` composites). Pioneers `_shared.py` for this modality. |
+| `recipes/actin_microtubule_morphometry/__init__.py` | edit | Register 5 new recipes (W2.2, W2.3, W2.5, W2.6, W2.7); modality total 35 → 40 |
+| `recipes/biophysics_scaling/__init__.py` | edit | Register 1 new recipe (W2.1); modality total 37 → 38. **Extends existing `_shared.py`** with `MultiScaleSignificanceRow` if not already present (verify in Phase 1; otherwise pioneer in this modality's _shared.py). Re-export so both modalities can use it. |
+| `recipes/intravital_imaging/__init__.py` | edit | Register 1 new recipe (W2.4); modality total 57 → 58. Reuses existing `_shared.py`. |
+| `tests/test_contracts.py` | edit | Bump per-modality assertions: `actin_microtubule_morphometry` 35 → 40; `biophysics_scaling` 37 → 38; `intravital_imaging` 57 → 58. |
+
+No new top-level deps; no new `core/` shims (the heavy-deps decision §"Heavy-deps decision" remains zero new deps for Wave 2). The contact-network overlay (W2.5) draws nodes + edges as plain `ax.scatter` + `ax.plot` — no `networkx` dependency.
+
+### `_demo()` seed convention (Wave 2)
+
+All Wave 2 demos use seeded RNG (`np.random.default_rng(50X)`) and the registered modality palettes. Demos use the manuscript's WT vs LI condition labels but with biology-agnostic synthetic data so future packs can reuse the recipes:
+
+- **W2.1**: 12 metrics × 2 scales (whole-cell, protrusion-internal) × 3 tier-bands (polymer / network / territory). Network metrics sharpen at protrusion-internal scale; polymer metrics stay below significance at both scales — visible row-band pattern.
+- **W2.2**: 18 cells × 2 conditions; cell-outline silhouettes parameterised as ellipses with per-cell aspect-ratio noise; PERMANOVA R² = 0.32, p = 0.001 in caption.
+- **W2.3**: 2 representative cells (WT_2 and LI_12 per manuscript), each with 3-panel triptych (256 × 256 raw + skeleton overlay + 4-zone territory map: contact / desert / intermediate / far).
+- **W2.4**: 1 multi-channel field (RFP / YFP / DAPI = 3 channels × 256 × 256) with 4-zone territory overlay; cell ROIs labelled.
+- **W2.5**: 2 cells (WT vs LI); WT shows fragmented sparse contact patches (many small components); LI shows denser, more-connected network.
+- **W2.6**: 4 zones (contact / intermediate / desert / far) × 2 conditions; control distribution shifted toward desert + intermediate; LI shifted toward contact + intermediate.
+- **W2.7**: 3 metrics (Manders M1, Pearson r, Spearman ρ) × 2 conditions × 16 cells; LI distributions shifted ~0.18 above control on every metric.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| W2.2 cell-outline silhouette glyphs require custom `Path` per scatter point — easy to introduce per-cell scaling artefacts | Use a normalised glyph size (in axes-fraction) so cells appear at consistent visual scale regardless of outline size; precedent in seaborn's `mpl.markers.MarkerStyle` |
+| W2.3 triptych layout (3 panels × 2 cells = 6 inset axes) — risk of cropped axes per Wave 1 W1.6 / intravital W4 sentinel-pattern issues | Apply the established sentinel pattern (parent `imshow` with off-axis extent + `set_xlim/ylim(0, 1)` + `set_facecolor("none")`) so parent ax stays transparent |
+| W2.4 multi-channel composite + zone overlay — risk of over-saturation when channels are blended | Use the existing `multi_channel_intravital_overlay` precedent for RGB blending; zone outlines as white contour lines on top |
+| W2.5 contact-network drawing without networkx — manual node/edge plotting can crowd visually | Cap demo network at ≤30 nodes per cell; use `linewidth` proportional to `1 / sqrt(n_edges)` to avoid clutter |
+| W2.6 Sankey ribbons — drawing filled `Path` patches requires careful Bezier coordinate math | Use `pathway_flux_streamgraph` as the precedent template (already validated in CI) |
+| W2.1 lollipop layout — multiple metrics × multiple scales = potentially many y-rows | Group rows by tier-band with subtle background banding; `axhspan` for each tier with `alpha=0.06` |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. The 7 recipes need to be disciplined. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 2086 + Wave 2 recipe smoke / quality / contracts (~14 new) = ~2100.
+2. `pytest tests/test_recipes_smoke.py -k 'actin_microtubule_morphometry or biophysics_scaling or intravital_imaging'` — all relevant demos render headlessly.
+3. `pytest tests/test_recipes_quality.py` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
+5. Gallery regenerate per modality. Estimate **5 visual-QA fit-ups** (multi-modality wave with new layout patterns: triptych, Sankey ribbons, contact-network overlay).
 
 ## Wave 3 — cytoskeleton geometry + statistics (+9) [pending]
 

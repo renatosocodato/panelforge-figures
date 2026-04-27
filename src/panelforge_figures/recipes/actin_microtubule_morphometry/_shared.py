@@ -1,0 +1,155 @@
+"""Shared sub-contracts for the `actin_microtubule_morphometry` modality.
+
+Pioneered by the `cytoskeletal_morphometry_companion` Wave 2 pack. The
+sub-contracts here cover **territory-zone analyses**,
+**contact-patch networks**, **colocalization coefficients**,
+**cell outlines as PCA-coord glyphs**, and the
+**Airyscan-to-zone-territory triptych** that opens the
+manuscript narrative. Recipes in this modality (and a few
+cross-modality consumers) import these directly. Future packs
+that extend cytoskeleton morphometry can grow this module.
+"""
+
+from __future__ import annotations
+
+from pydantic import Field
+
+from ...core import RecipeContract
+
+# --- territory atoms -------------------------------------------------------
+
+
+class ZoneTerritoryMap(RecipeContract):
+    """Per-cell H × W zone label grid.
+
+    Used by W2.4 (intravital territory overlay) and W2.5
+    (contact-network overlay). Zone values are integer labels
+    (0 / 1 / 2 / 3) that map to a fixed legend
+    (e.g. contact / desert / intermediate / far per the manuscript).
+    """
+    cell_id: str
+    zone_grid: list[list[int]]                    # n_rows × n_cols, int labels
+    zone_label_map: dict[int, str]                # 0 → "contact" etc.
+    pixel_um: float = 0.5
+
+
+class ContactPatchNetwork(RecipeContract):
+    """Cell territory's contact-patch graph (nodes + edges).
+
+    Used by W2.5. Nodes are placed at contact-patch centroids
+    (xy_um); edges encode connectivity between nearby patches
+    (passed as adjacency-list pairs of node indices). No graph
+    algorithms are computed here — the recipe just plots nodes and
+    edges as `ax.scatter` + `ax.plot` from this contract directly.
+    """
+    cell_id: str
+    node_xy_um: list[list[float]]                 # n_nodes × 2
+    edges: list[list[int]]                        # n_edges × 2 (i, j) indices
+    node_weights: list[float] | None = None       # patch areas / weights
+    roi_polygon_um: list[list[float]] | None = None   # closed polygon
+
+
+class CellWithContactNetwork(RecipeContract):
+    """Composite of a zone-territory map + a contact-patch network.
+
+    Used by W2.5 directly. Bundling the two atoms keeps the recipe
+    contract concise.
+    """
+    territory: ZoneTerritoryMap
+    network: ContactPatchNetwork
+
+
+# --- colocalization atoms --------------------------------------------------
+
+
+class ColocalizationCoefficients(RecipeContract):
+    """Per-cell {Manders M1, Manders M2, Pearson r, Spearman ρ}.
+
+    Used by W2.7. Each cell carries the four canonical coefficients
+    plus a condition label.
+    """
+    cell_id: str
+    condition: str
+    M1: float
+    M2: float
+    pearson_r: float
+    spearman_rho: float
+
+
+# --- PCA-with-glyphs atoms -------------------------------------------------
+
+
+class CellOutlineWithPCCoord(RecipeContract):
+    """One cell's outline polyline + its (PC1, PC2) coordinate.
+
+    Used by W2.2. The outline is plotted as a custom scatter glyph
+    at the cell's PC coord; the outline is a closed polyline
+    (n_points × 2 in cell-local coordinates).
+    """
+    cell_id: str
+    condition: str
+    pc_coord: list[float]                          # length 2: [pc1, pc2]
+    outline_xy: list[list[float]]                  # n_points × 2 (cell-local)
+
+
+# --- Airyscan triptych atom ------------------------------------------------
+
+
+class AiryscanTriptychBundle(RecipeContract):
+    """One cell's three-panel triptych: raw → skeleton → zone map.
+
+    Used by W2.3. The three layers must be H × W with matching
+    extent; the recipe renders them side-by-side per cell.
+    """
+    cell_id: str
+    condition: str
+    raw_image: list[list[float]]                  # H × W (continuous, e.g. F-actin intensity)
+    skeleton_overlay: list[list[float]]           # H × W (binary or graded skeleton mask)
+    zone_map: list[list[int]]                     # H × W (integer zone labels)
+    zone_label_map: dict[int, str]                # 0 → "contact" etc.
+    pixel_um: float = 0.5
+
+
+# --- shared demo palette ---------------------------------------------------
+
+
+def _demo_zone_palette() -> dict[int, str]:
+    """Zone integer → colour mapping for the contact / desert /
+    intermediate / far territory schema used throughout the
+    DISC1 manuscript companion pack. Reuses the existing modality
+    palette colours where possible.
+    """
+    return {
+        0: "#E91E63",   # contact (actin pink)
+        1: "#9E9E9E",   # desert (mid grey)
+        2: "#FFC107",   # intermediate (amber)
+        3: "#37474F",   # far (slate)
+    }
+
+
+def _demo_zone_label_map() -> dict[int, str]:
+    return {0: "contact", 1: "desert", 2: "intermediate", 3: "far"}
+
+
+# --- multi-channel intravital field (used by W2.4 cross-modality) ----------
+
+
+class MultiChannelField(RecipeContract):
+    """One field-of-view's RGB(+) channel stack.
+
+    Used by W2.4 in `intravital_imaging` modality. Lives here
+    because the manuscript's intravital territory-overlay variant
+    explicitly pairs a multi-channel image with the
+    `ZoneTerritoryMap` defined above; centralising the contract
+    here avoids cross-modality circular imports.
+    """
+    field_id: str
+    red_channel: list[list[float]] = Field(...)    # H × W
+    green_channel: list[list[float]] = Field(...)  # H × W
+    blue_channel: list[list[float]] | None = None  # H × W (optional)
+    pixel_um: float = 0.5
+    channel_labels: dict[str, str] = Field(
+        default_factory=lambda: {
+            "red": "RFP", "green": "YFP", "blue": "DAPI",
+        },
+    )

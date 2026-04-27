@@ -7,7 +7,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
-**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 1 landed: 398 recipes** (meta_and_diagnostic +6 universal QA primitives). Pack total: 6/31 recipes; 1/4 waves. See `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
+**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 2 landed: 405 recipes** (cumulative across W1+W2: meta_and_diagnostic +6, actin_microtubule_morphometry +5, biophysics_scaling +1, intravital_imaging +1). Pack total: 13/31 recipes; 2/4 waves. See `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -61,6 +61,40 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 2 (cell territory + multiscale, +7)
+
+Second wave of the cytoskeletal_morphometry_companion beta expansion pack.
+Lands the 7-recipe F1 + F2 cluster — cell-level territory and
+scale-decomposition figures that open the manuscript narrative.
+Pioneers `actin_microtubule_morphometry/_shared.py` with 7 nested
+Pydantic sub-contracts. Catalog 398 → 405.
+
+- **dual_scale_significance_lollipop** (`coef_forest`,
+  biophysics_scaling) — diverging lollipop of -log10(p) at
+  multiple scales, row-banded by polymer / network / territory
+  tier.
+- **pca_silhouette_glyph_morphospace** (`scatter_collapse`,
+  actin_microtubule_morphometry) — per-cell scatter on PC1×PC2
+  with cell-outline `Polygon` glyphs at each point + per-condition
+  2σ confidence ellipses + PERMANOVA caption.
+- **airyscan_to_zone_territory_triptych** (`matrix`,
+  actin_microtubule_morphometry) — three-panel triptych per cell
+  (raw → skeleton overlay → zone-resolved territory) with shared
+  zone legend.
+- **territory_zone_overlay_intravital** (`heatmap`,
+  intravital_imaging) — multi-channel intravital field as RGB
+  composite with per-zone contour outlines.
+- **territory_contact_network_overlay** (`heatmap`,
+  actin_microtubule_morphometry) — territory map with contact-
+  patch graph nodes + edges overlaid (pure matplotlib, no
+  networkx).
+- **zone_fraction_alluvial_sankey** (`flow`,
+  actin_microtubule_morphometry) — alluvial Sankey of
+  zone-fraction redistribution with cubic-Bezier ribbons.
+- **colocalization_raincloud_per_metric** (`split_violin`,
+  actin_microtubule_morphometry) — three side-by-side raincloud
+  panels (M1, Pearson r, Spearman ρ) split by condition.
 
 ## v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 1 (universal QA primitives, +6)
 

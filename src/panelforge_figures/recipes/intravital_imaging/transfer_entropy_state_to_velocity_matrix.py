@@ -19,7 +19,7 @@ from ...core import (
     transfer_entropy,
 )
 from ._aesthetic import AESTHETIC
-from ._shared import KinematicFeatureBundle, DecodedStateSeries
+from ._shared import DecodedStateSeries, KinematicFeatureBundle
 
 
 class TransferEntropyMatrixInput(RecipeContract):

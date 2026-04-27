@@ -46,7 +46,7 @@ def test_embed_2d_two_blobs_recovers_clustering() -> None:
     X = np.vstack([A, B])
     E, _ = embed_2d(X, n_neighbors=8)
     # Compute mean within-blob and between-blob distances in 2-D.
-    from scipy.spatial.distance import pdist, cdist
+    from scipy.spatial.distance import cdist, pdist
     within_a = float(np.mean(pdist(E[:30])))
     within_b = float(np.mean(pdist(E[30:])))
     between = float(np.mean(cdist(E[:30], E[30:])))

@@ -144,7 +144,7 @@ def render(contract: BiosensorActivationFieldInput, ax=None, **_):
         cbar_ax = ax.inset_axes([0.93, pad_bottom, 0.02,
                                  1.0 - pad_bottom - pad_top])
         cbar = ax.figure.colorbar(last_im, cax=cbar_ax)
-        cbar.set_label(f"intensity / baseline", fontsize=6.6)
+        cbar.set_label("intensity / baseline", fontsize=6.6)
         cbar.ax.tick_params(labelsize=6.0)
 
     sensor_label = contract.fields[0].sensor_label if contract.fields else ""

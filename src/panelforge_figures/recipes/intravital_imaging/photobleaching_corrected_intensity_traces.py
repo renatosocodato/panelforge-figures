@@ -160,7 +160,7 @@ def render(contract: PhotobleachInput, ax=None, **_):
         sub.tick_params(labelsize=6.0)
 
     if popt is not None:
-        a1, tau1, a2, tau2 = popt[0], popt[1], popt[2], popt[3]
+        tau1, tau2 = popt[1], popt[3]
         title_bits = (f"tau_fast = {smart_fmt(min(tau1, tau2))} s, "
                       f"tau_slow = {smart_fmt(max(tau1, tau2))} s")
     else:

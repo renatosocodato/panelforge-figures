@@ -12,8 +12,6 @@ from .hmm_decoding_utility import (
 from .km_survival_utility import kaplan_meier
 from .layout import FIGSIZE_PRESETS, make_figure, make_panel_grid
 from .palette import Palette, get_palette, list_palettes, register_palette
-from .spectral_embedding_utility import embed_2d
-from .transfer_entropy_utility import transfer_entropy
 from .primitives import (
     add_halo_label,
     bootstrap_ci,
@@ -34,6 +32,7 @@ from .qa import (
     FigureIntegrityReport,
     check_figure_integrity,
 )
+from .spectral_embedding_utility import embed_2d
 from .style import (
     PF_FONT_SIZES,
     PF_FONT_STACK,
@@ -46,6 +45,7 @@ from .tost_bounds_utility import (
     classify_outcome,
     tost_band_patch,
 )
+from .transfer_entropy_utility import transfer_entropy
 
 __all__ = [
     "FIGSIZE_PRESETS",

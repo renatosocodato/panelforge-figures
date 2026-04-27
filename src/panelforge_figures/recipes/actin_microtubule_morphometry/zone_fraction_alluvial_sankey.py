@@ -122,11 +122,12 @@ def render(contract: ZoneFractionAlluvialInput, ax=None, **_):
     fl_n = {k: fl.get(k, 0) / sl for k in zones}
     fr_n = {k: fr.get(k, 0) / sr for k in zones}
 
-    # Coordinates.
-    x_left_outer = 0.10
-    x_left_inner = 0.18
-    x_right_inner = 0.82
-    x_right_outer = 0.90
+    # Coordinates.  Wider stub columns so multi-syllable zone labels
+    # (e.g. "intermediate") fit inside the boxes without truncation.
+    x_left_outer = 0.05
+    x_left_inner = 0.22
+    x_right_inner = 0.78
+    x_right_outer = 0.95
     y_top = 0.95
     y_bot = 0.05
 

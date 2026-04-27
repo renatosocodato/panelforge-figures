@@ -12,6 +12,8 @@ from .hmm_decoding_utility import (
 from .km_survival_utility import kaplan_meier
 from .layout import FIGSIZE_PRESETS, make_figure, make_panel_grid
 from .palette import Palette, get_palette, list_palettes, register_palette
+from .spectral_embedding_utility import embed_2d
+from .transfer_entropy_utility import transfer_entropy
 from .primitives import (
     add_halo_label,
     bootstrap_ci,
@@ -70,6 +72,7 @@ __all__ = [
     "decode_states",
     "decode_states_semi",
     "density_alpha",
+    "embed_2d",
     "empty_data_guard",
     "export_figure",
     "fit_phase_boundary",
@@ -90,5 +93,6 @@ __all__ = [
     "smart_fmt",
     "smart_place_callout",
     "tost_band_patch",
+    "transfer_entropy",
     "violin_with_ring_markers",
 ]

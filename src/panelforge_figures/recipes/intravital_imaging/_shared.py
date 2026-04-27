@@ -122,6 +122,49 @@ class ModelFitSummary(RecipeContract):
     cv_log_likelihood_sd: float | None = None
 
 
+# --- biosensor + dose-time atoms (Wave 4) -----------------------------------
+
+
+class BiosensorField(RecipeContract):
+    """One cell's spatial biosensor signal at a single timepoint.
+
+    The grid is in cell-local coordinates (rows × cols); the recipe
+    knows about its physical units via `pixel_um`. Used by C.6
+    (`biosensor_activation_field_per_cell`).
+    """
+    cell_id: str
+    sensor_label: str                              # e.g. "ROCK biosensor"
+    intensity_grid: list[list[float]]              # n_rows x n_cols
+    pixel_um: float = 0.5
+    baseline_intensity: float | None = None        # for divergent cmap centring
+
+
+class BiosensorTimeTrace(RecipeContract):
+    """One cell's biosensor signal as a function of time at one dose.
+
+    Used by C.7 (`biosensor_dose_response_curve`).
+    """
+    cell_id: str
+    sensor_label: str
+    dose: float
+    dose_unit: str = "uM"
+    t_s: list[float]
+    intensity: list[float]                         # arbitrary units
+
+
+class DoseTimeResponse(RecipeContract):
+    """One cell's dose × time response surface.
+
+    Used by C.11 (`dose_x_time_response_matrix`).
+    """
+    cell_id: str
+    condition: str
+    dose_grid: list[float]                         # n_doses
+    t_s: list[float]                               # n_t
+    response_grid: list[list[float]]               # n_doses x n_t
+    response_label: str = "response (a.u.)"
+
+
 # --- shared demo palette ----------------------------------------------------
 
 

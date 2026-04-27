@@ -26,15 +26,152 @@ project follows semantic versioning.
   intravital_imaging 20 → 31.
 - **Wave 3** merged via PR #36 (+16 commitment kinetics + biophysics
   axes + GAM utility). intravital_imaging 31 → 47.
-- **Wave 4** gap-analysis in review (+10 translational + reviewer-
-  proof: C.6 biosensor field, C.7 biosensor dose-response, C.8
-  photobleaching correction, C.9 kinematic PSD forest, C.10
-  transfer-entropy matrix, C.11 dose × time response heatmap, C.12
-  state-kinematic spectral embedding, C.13 equivalence-test radar,
-  C.14 cohort-balance matrix, C.15 calibration Brier forest). 2 new
-  inline `core/` utilities (spectral embedding + transfer entropy).
-  intravital_imaging 47 → 57; total catalog 382 → 392 (final).
-  **Closes pack.**
+- **Wave 4** in review via PR #37 (+10 translational + reviewer-
+  proof). intravital_imaging 47 → 57; total catalog 382 → 392
+  (final). **Closes pack.**
+
+## [1.3.0-beta-intravital_imaging-w4] — 2026-04-27
+
+Fourth and final wave of the `intravital_imaging` beta expansion
+pack. Lands the 10 translational + reviewer-proof recipes
+(C.6–C.15) and 2 new inline `core/` utilities, closing the alpha-
+coverage gaps on biosensor / photobleaching / transfer-entropy /
+nonlinear-embedding / PSD / dose × time matrix and adding 3
+reviewer-proof additions (equivalence-TOST radar, cohort-balance
+matrix, calibration Brier forest). `intravital_imaging` expands
+from 47 to 57 recipes; total catalog 382 → 392.
+
+### Decision: revisited `umap-learn` lock-in
+
+Per Wave 4 gap-analysis: dropped the `umap-learn` dep (would have
+pulled `numba` + `scikit-learn`, ~150 MB on disk) in favour of an
+inline ~80 LOC `core/spectral_embedding_utility.py` shim
+(Laplacian eigenmaps via `scipy.sparse.csgraph.laplacian` +
+`scipy.linalg.eigh` on a kNN graph). Renamed C.12 from
+`state_kinematic_umap_embedding` to
+`state_kinematic_spectral_embedding`. This honours Option D's
+inline-shim discipline established by Wave 1's HSMM, KM, and
+Wave 3's GAM utilities. **No new pyproject.toml dependencies.**
+
+### Added (10 recipes)
+
+#### Translational primitives (4)
+
+- `biosensor_activation_field_per_cell` (`heatmap`, C.6) — small-
+  multiples of per-cell H × W intensity grids on a divergent
+  cmap centred on baseline; 4-panel inset layout per Wave 1
+  emission gremlin precedent.
+- `biosensor_dose_response_curve` (`timecourse_hierarchical_ci`,
+  C.7) — per-dose plateau values with bootstrap CI ribbons +
+  Hill-equation fit (4-parameter); EC50 callout when the fit
+  converges, "EC50 not fit" otherwise.
+- `photobleaching_corrected_intensity_traces` (`diagnostic_curve`,
+  C.8) — raw vs corrected per-cell traces with global bi-exponential
+  bleach fit overlay (dashed coral) + corrected-residuals histogram
+  inset; reports tau_fast / tau_slow in title.
+- `kinematic_power_spectral_density` (`coef_forest`, C.9) — forest
+  of dominant frequency f_peak per (decoded state × condition)
+  with bootstrap 95 % CI; circle = control, square = DISC1 marker
+  convention; reference at f = 0 (no oscillation).
+
+#### Orthogonal-axes block continuation (3)
+
+- `transfer_entropy_state_to_velocity_matrix` (`matrix`, C.10) —
+  asymmetric N × N TE heatmap (state ↔ velocity ↔ length-rate)
+  per condition; diagonal masked; uses
+  `core/transfer_entropy_utility.transfer_entropy`.
+- `dose_x_time_response_matrix` (`heatmap`, C.11) — 2-D
+  `pcolormesh` of mean response across (dose, time) per
+  condition with iso-response contours overlaid (0.25 / 0.5 /
+  0.75); per-panel peak callout in title.
+- `state_kinematic_spectral_embedding` (`scatter_collapse`, C.12)
+  — 2-D Laplacian-eigenmap embedding scatter coloured by decoded
+  state; per-state convex hulls drawn as the +1 fit line. Uses
+  `core/spectral_embedding_utility.embed_2d`.
+
+#### Reviewer-proof (3)
+
+- `equivalence_tost_radar_per_condition` (`radar`, C.13) — multi-
+  feature polar plot of |observed effect| vs equivalence margin per
+  feature; condition polygon filled, reference circle = margin;
+  uses `core/tost_bounds_utility.classify_outcome` (shipped in the
+  biophysics_scaling pack); per-condition equiv / total in title.
+  **Closes the +1 radar target from §7.**
+- `cohort_baseline_balance_table_matrix` (`matrix`, C.14) — per-
+  feature standardised mean differences (SMD) between cohorts;
+  cell colour = signed SMD on RdBu_r; |SMD| > 0.1 = "borderline",
+  > 0.2 = "imbalanced" with green/orange/red flag column;
+  reviewer-proof for cohort-comparability claims.
+- `model_calibration_brier_forest` (`coef_forest`, C.15) — per-
+  stratum Brier scores ± 95 % CI vs the perfect-calibration zero
+  reference; circle = logistic, square = GAM marker convention;
+  reviewer-proof for any P(commit) classifier surfaced earlier
+  in the pack.
+
+### Infrastructure
+
+- `core/spectral_embedding_utility.py` (new) — `embed_2d(X,
+  n_neighbors=15) → (E, info)` (~80 LOC). Symmetric kNN graph +
+  Gaussian-kernel weights + symmetric normalised graph Laplacian +
+  `scipy.linalg.eigh` for the 2 smallest non-trivial
+  eigenvectors. Replaces `umap-learn` dep.
+- `core/transfer_entropy_utility.py` (new) — `transfer_entropy(s, t,
+  n_bins=4, lag=1) → float` (~85 LOC). Schreiber (2000) symbolic-
+  binning estimator; reduces a continuous-source / target time-
+  series pair to discrete histograms via quantile binning, then
+  computes the conditional-entropy difference.
+- `core/__init__.py` (edit) — exports `embed_2d`, `transfer_entropy`.
+- `recipes/intravital_imaging/_shared.py` (edit) — adds 3 nested
+  Pydantic sub-contracts: `BiosensorField` (per-cell intensity grid
+  + sensor label + pixel µm + baseline), `BiosensorTimeTrace`
+  (per-cell time-resolved biosensor signal at one dose),
+  `DoseTimeResponse` (per-cell dose × time response surface).
+- `recipes/intravital_imaging/__init__.py` (edit) — registers 10
+  new recipes (imports + `__all__`); modality total 47 → 57.
+
+### Demo conventions
+
+- C.6 biosensor field: 4 cells × 32 × 32 grid; ROCK biosensor signal
+  peaks ~+20 % over baseline in DISC1 protrusion-tip regions.
+- C.7 dose-response: 5 doses × 30 cells × 90 frames; sigmoidal with
+  EC50 ≈ 1.5 µM control / 4 µM DISC1.
+- C.8 photobleach: 8 cells × 200 frames; bi-exponential bleach
+  (τ_1 ≈ 30 s, τ_2 ≈ 200 s); corrected trace flat within ±2 %.
+- C.9 PSD: 3 states × 2 conditions × 8 cells; control PSD peaks at
+  ~0.05 Hz, DISC1 broadband.
+- C.10 TE: 2 conditions × 30 cells; control state→velocity TE > 0.05;
+  DISC1 TE flat in both directions.
+- C.11 dose × time: 6 doses × 30 timepoints × 2 conditions;
+  sustained response in control, transient peak in DISC1.
+- C.12 spectral embedding: 120 cells × 8 features × 3 states;
+  embedding clusters by state are visually separable.
+- C.13 TOST radar: 5 features × 2 conditions; equivalence margin
+  = 0.20; DISC1 polygon escapes the margin on 2/5 axes.
+- C.14 balance matrix: 12 features × 2 cohorts; |SMD| > 0.1 on 4/12
+  (3 imbalanced, 1 borderline).
+- C.15 calibration forest: 4 strata × 2 models; Brier scores
+  0.10–0.18; one stratum CI crosses zero.
+
+### Tests
+
+- Total: **1994 → 2056** (+62: 10 smoke + 10 quality + 6 spectral-
+  embedding-utility + 6 transfer-entropy-utility + ~30 from auto-
+  parametrized contracts and registry).
+- New test files:
+  - `tests/test_spectral_embedding_utility.py` — shape, two-blob
+    cluster preservation, 3-D S-curve neighbour preservation
+    (>30 % overlap), determinism under fixed seed, explicit-sigma
+    handling, too-few-samples error.
+  - `tests/test_transfer_entropy_utility.py` — non-negativity,
+    short-input safety, directed-coupling recovery (TE_X→Y >
+    TE_Y→X on coupled-AR(1) ground truth), independent-streams
+    near-zero, all-constant-streams = 0, n_bins argument.
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- intravital_imaging recipes: **47 → 57** (final).
+- Beta-pack recipes landed: **32 → 42** (final, closes pack).
 
 ## [1.3.0-beta-intravital_imaging-w3] — 2026-04-26
 

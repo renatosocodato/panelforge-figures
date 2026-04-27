@@ -3,6 +3,7 @@
 from .aesthetic_base import AnnotationStyle, InsetConvention, ModalityAesthetic
 from .contract import RecipeContract, RecipeFamily, RecipeMetadata, register_recipe
 from .export import export_figure, multi_format_export
+from .gam_logistic_utility import fit_phase_boundary
 from .hmm_decoding_utility import (
     decode_states,
     decode_states_semi,
@@ -71,6 +72,7 @@ __all__ = [
     "density_alpha",
     "empty_data_guard",
     "export_figure",
+    "fit_phase_boundary",
     "fit_summary",
     "fixed_point_marker",
     "get_palette",

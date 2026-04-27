@@ -6,6 +6,30 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **DISC1 manuscript companion pack**
+  (`[1.4.0-beta-disc1_manuscript_companion]`) — ~31 new recipes
+  scattered across 5 existing modalities, landed across 4 user-
+  gated waves. Closes the gap between manuscript figure needs
+  (`/Users/renatosocodato/actin-mt_biophysics/manuscript/2026_disc1_microglial_cytoskeletal_confinement`)
+  and the 392-recipe catalog after the intravital_imaging pack.
+  See
+  [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
+  for the full pack plan. **Zero new heavy deps** (Option D
+  inline-shim discipline preserved); 1 new `core/` shim
+  (`permanova_null_utility.py`) lands in Wave 4.
+- **Wave 1** gap-analysis in review (+6 universal QA primitives in
+  `meta_and_diagnostic`: PCA loadings, per-cell audit, hypothesis
+  exclusion, residual panels, RF confusion, parameterization
+  lineage). meta_and_diagnostic 15 → 21; total catalog 392 → 398.
+- **Waves 2–4 pending** (+7 cell-territory + multiscale,
+  +9 cytoskeleton geometry, +9 narrative integration).
+  Cumulative final: catalog 392 → 423; intravital_imaging
+  57 → 58 (one extension); actin_microtubule_morphometry
+  35 → 49; biophysics_scaling 37 → 47; spatial_statistics
+  15 → 16; grant_and_conceptual 15 → 16.
+
 ### Completed packs
 
 - **intravital_imaging beta expansion pack
@@ -16,8 +40,8 @@ project follows semantic versioning.
   dependencies** beyond `hmmlearn` (no `umap-learn` / `pyhsmm` /
   `lifelines` / `statsmodels` / `pygam`). Catalog 350 → 392;
   intravital_imaging 15 → 57. Tests 1814 → 2056. PRs #33 → #37
-  (+ #34 polish). See pack-closeout summary at the end of the
-  Wave 1 entry below, and
+  (+ #34 polish, #38 closeout). See pack-closeout summary at the
+  end of the Wave 1 entry below, and
   [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
   for the full pack tracker.
 

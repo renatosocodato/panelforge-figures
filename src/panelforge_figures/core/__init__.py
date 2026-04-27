@@ -32,6 +32,7 @@ from .qa import (
     FigureIntegrityReport,
     check_figure_integrity,
 )
+from .spectral_embedding_utility import embed_2d
 from .style import (
     PF_FONT_SIZES,
     PF_FONT_STACK,
@@ -44,6 +45,7 @@ from .tost_bounds_utility import (
     classify_outcome,
     tost_band_patch,
 )
+from .transfer_entropy_utility import transfer_entropy
 
 __all__ = [
     "FIGSIZE_PRESETS",
@@ -70,6 +72,7 @@ __all__ = [
     "decode_states",
     "decode_states_semi",
     "density_alpha",
+    "embed_2d",
     "empty_data_guard",
     "export_figure",
     "fit_phase_boundary",
@@ -90,5 +93,6 @@ __all__ = [
     "smart_fmt",
     "smart_place_callout",
     "tost_band_patch",
+    "transfer_entropy",
     "violin_with_ring_markers",
 ]

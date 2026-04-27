@@ -10,6 +10,19 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Intravital-imaging beta-pack Wave 4 additions (v1.3.0-beta-intravital_imaging-w4)
+
+- **Where on a cell does the biosensor signal peak above baseline, and does the spatial pattern differ between conditions?** → [`intravital_imaging.biosensor_activation_field_per_cell`](gallery/intravital_imaging/biosensor_activation_field_per_cell.png)
+- **How does the biosensor plateau response scale with cue dose, and what is the EC50 per condition?** → [`intravital_imaging.biosensor_dose_response_curve`](gallery/intravital_imaging/biosensor_dose_response_curve.png)
+- **After bi-exponential photobleach correction, are the biosensor traces flat over the recording duration?** → [`intravital_imaging.photobleaching_corrected_intensity_traces`](gallery/intravital_imaging/photobleaching_corrected_intensity_traces.png)
+- **Per (decoded state, condition), what is the dominant frequency in tip-velocity power spectral density, and does it differ between conditions?** → [`intravital_imaging.kinematic_power_spectral_density`](gallery/intravital_imaging/kinematic_power_spectral_density.png)
+- **Does the decoded state stream Granger-cause velocity (and length-rate), and does the directionality hold per condition?** → [`intravital_imaging.transfer_entropy_state_to_velocity_matrix`](gallery/intravital_imaging/transfer_entropy_state_to_velocity_matrix.png)
+- **Across (dose, time after exposure), how does response evolve, and is the response sustained or transient?** → [`intravital_imaging.dose_x_time_response_matrix`](gallery/intravital_imaging/dose_x_time_response_matrix.png)
+- **Do per-cell kinematic feature vectors cluster by decoded state when projected to 2-D via Laplacian eigenmaps?** → [`intravital_imaging.state_kinematic_spectral_embedding`](gallery/intravital_imaging/state_kinematic_spectral_embedding.png)
+- **Per feature, does the condition pass the equivalence test (observed |effect| < margin), and on which axes does the condition escape equivalence?** → [`intravital_imaging.equivalence_tost_radar_per_condition`](gallery/intravital_imaging/equivalence_tost_radar_per_condition.png)
+- **Are imaging cohorts balanced on baseline characteristics, and on which features does standardised mean difference (SMD) cross the 0.1 / 0.2 reviewer-proof thresholds?** → [`intravital_imaging.cohort_baseline_balance_table_matrix`](gallery/intravital_imaging/cohort_baseline_balance_table_matrix.png)
+- **Per stratum and model, is the P(commit) classifier well calibrated (Brier score with 95 % CI; reliability slope near 1, intercept near 0)?** → [`intravital_imaging.model_calibration_brier_forest`](gallery/intravital_imaging/model_calibration_brier_forest.png)
+
 ## Intravital-imaging beta-pack Wave 3 additions (v1.3.0-beta-intravital_imaging-w3)
 
 - **At time t after launch, what fraction of protrusions remain uncommitted, and how does the curve differ between conditions?** → [`intravital_imaging.protrusion_commitment_survival`](gallery/intravital_imaging/protrusion_commitment_survival.png)

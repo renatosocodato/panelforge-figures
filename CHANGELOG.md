@@ -18,8 +18,141 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #33; polish PR #34 added contemporary
   `microglia_states` palette + emission inset-gremlin fix
   (intravital_imaging 15 → 20).
-- **Wave 2** implementation landed (+11 recipes; intravital_imaging
-  20 → 31). **Waves 3–4 pending.**
+- **Wave 2** merged via PR #35 (+11 recipes; intravital_imaging
+  20 → 31).
+- **Wave 3** in review via PR #36 (+16 recipes; intravital_imaging
+  31 → 47). **Wave 4 pending** (+10 translational + reviewer-proof
+  recipes: C.6–C.15).
+
+## [1.3.0-beta-intravital_imaging-w3] — 2026-04-26
+
+Third wave of the `intravital_imaging` beta expansion pack. Lands
+the 11-recipe commitment-kinetics block (the heart of the
+"committed-vs-bystander" question) plus the first 5 biophysics-axes
+recipes that recast tip-tracking as kinematic / spatial / shape /
+mechanical phenomena. `intravital_imaging` expands from 31 to 47
+recipes; total catalog 366 → 382.
+
+### Added (16 recipes)
+
+#### Commitment-kinetics block (11)
+
+- `protrusion_commitment_survival` (`diagnostic_curve`, B.1) —
+  Kaplan-Meier S(t) per condition with median-T_commit annotations
+  and Greenwood log-log CI ribbons. Reuses `core/km_survival_utility`.
+- `commitment_hazard_with_age` (`timecourse_hierarchical_ci`, B.2)
+  — kernel-smoothed h(τ) per condition with bootstrap CI bands;
+  survival-floor clamping prevents tail divergence in age range
+  where S(τ) < 5 %.
+- `commitment_phase_diagram` (`heatmap`, B.3) — 2-D `pcolormesh` of
+  fitted P(commit | L, v_bar) on log-log axes, with iso-prob
+  contours (0.25 / 0.50 / 0.75) overlaid + per-protrusion scatter
+  (committed = filled coral; not = hollow slate). Uses the new
+  `fit_phase_boundary` shim.
+- `chemotaxis_index_trajectory` (`timecourse_hierarchical_ci`, B.8)
+  — CI(t) = ⟨cos(θ − cue)⟩ per condition aligned to cue onset, with
+  bootstrap CI ribbons; cue-onset dashed reference at t=0.
+- `directional_persistence_autocorr`
+  (`timecourse_hierarchical_ci`, B.9) — heading autocorrelation
+  C(τ) per condition with exponential τ_p fit on log-y inset.
+- `ornstein_uhlenbeck_fit_per_state` (`coef_forest`, B.10) — forest
+  of OU (τ, σ) per (decoded state × condition); per-state
+  DISC1/control τ ratio in title; circle = control, square = DISC1
+  marker convention.
+- `speed_commitment_coupling` (`timecourse_hierarchical_ci`, B.11)
+  — cross-correlation between tip velocity and length-rate per
+  condition; peak-lag callout shows whether speed leads or lags
+  length-rate.
+- `commitment_vs_chemotaxis_contingency` (`matrix`, B.12) — per-
+  condition 2×2 contingency panels (committed × aligned) with odds
+  ratio + 95 % CI in panel titles.
+- `protrusion_dominance_race_winner` (`scatter_collapse`, B.13) —
+  per-cell ΔL traces (winner = teal, runner-up = coral) with mean
+  fit lines and endpoint scatter; median winning margin in title.
+- `cue_response_dose_latency` (`timecourse_hierarchical_ci`, B.14)
+  — τ vs dose with bootstrap CI + power-law fit per condition.
+- `aligned_vs_unaligned_velocity_split` (`split_violin`, B.15) —
+  velocity violins split by alignment (aligned vs not); per-
+  condition median ratio in title.
+
+#### Biophysics-axes block (5)
+
+- `tip_ripleys_k_in_window` (`diagnostic_curve`, C.1) — polygon-
+  clipped K(r) on tip centroid snapshots with CSR Monte Carlo
+  envelope; window-conditional variant of the
+  `spatial_statistics/ripley_l_function` (intravital-specific).
+- `tip_pair_correlation_in_window`
+  (`timecourse_hierarchical_ci`, C.2) — window-conditional g(r)
+  per condition; CSR-baseline = 1 reference; clustering / repulsion
+  callout in title.
+- `branch_order_topology_per_cell` (`split_violin`, C.3) — per-cell
+  branch-order distribution (root, primary, secondary, …) split by
+  condition.
+- `curvature_along_protrusion_kymograph` (`heatmap`, C.4) — κ(s, t)
+  kymograph per cell with white max-κ ridge overlay (tracks the
+  curvature crest as it migrates along arclength).
+- `viscous_drag_tip_force_map` (`scatter_collapse`, C.5) — tip XY
+  scatter coloured by F = 6π η r v Stokes lower-bound estimate;
+  data-driven colour limits + caveat banner ("ignores substrate
+  adhesion + matrix coupling").
+
+### Infrastructure
+
+- `core/gam_logistic_utility.py` (new) — `fit_phase_boundary(x, y,
+  committed, ...)` ~80 LOC. Gaussian RBF basis (`n_basis` on each
+  axis) + IRLS-fit logistic regression. Returns
+  `(X_grid, Y_grid, P_grid)` for direct `pcolormesh` consumption.
+  Replaces a `pygam` / `statsmodels` GAM dep — keeps Option D's
+  inline-shim discipline.
+- `core/__init__.py` (edit) — exports `fit_phase_boundary`.
+
+### Visual-QA polish (3 fit-ups)
+
+- B.3 (`commitment_phase_diagram`): legend was overlapping the iso-
+  prob contour labels in the upper-left. Moved to a centred
+  bbox-anchored slot below the axes (2-column horizontal layout) so
+  it never collides with contours regardless of where the iso-prob
+  curves end up.
+- B.12 (`commitment_vs_chemotaxis_contingency`): per-panel OR + 95 %
+  CI titles were running together (gap too narrow + single-line
+  format). Widened panel gap (0.06 → 0.16), broke titles to two
+  lines (`{cond}\nOR = … [lo, hi]`), and suppressed y-tick labels on
+  non-leftmost panels (they were overlapping the previous panel's
+  cell values).
+- C.5 (`viscous_drag_tip_force_map`): hard-coded `vmax = max(1.0,
+  P95)` floor was forcing all dots to the dark end of the magma
+  palette for typical sub-pN Stokes-lower-bound values. Switched to
+  data-driven `vmin = P5`, `vmax = P95` so the full palette is
+  visible at any force scale.
+
+### Demo conventions
+
+- Survival demos (B.1 / B.2): control survives longer than DISC1 by
+  a factor of ~2 in median commitment time — visible immediately
+  in the KM step curves and in the hazard ribbons.
+- Phase-diagram demo (B.3): commitment probability follows
+  `sigmoid(log(L · v_bar) − log(30))` so the fitted iso-prob
+  contours form a clean diagonal in (L, v_bar) log-log space.
+- B.13 dominance race: winner cumulates ΔL = 8 µm by t=60 s while
+  runner-up retracts to ΔL ≈ −2 µm — clean separation.
+- C.4 curvature kymograph: ridge migrates from arclength s ≈ 0.1 to
+  s ≈ 0.65 over 30 s, simulating a propagating curvature wave.
+
+### Tests
+
+- Total: **1908 → 1994** (+86: 16 smoke + 16 quality + 6 GAM-
+  utility + ~48 from auto-parametrized contracts and registry).
+- New test file `tests/test_gam_logistic_utility.py` (6 tests):
+  shape, range bounded by [0, 1], monotone trend (relaxed P-gap
+  threshold to 0.20 — Gaussian RBF basis flattens the response
+  ceiling), determinism under fixed `np.random` seed, log-axes
+  toggle, edge cases (all-zero / all-one labels).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- intravital_imaging recipes: **31 → 47** (+16).
+- Beta-pack recipes landed: **16 → 32** (Wave 3 of 4).
 
 ## [1.3.0-beta-intravital_imaging-w2] — 2026-04-26
 

@@ -10,6 +10,25 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## Intravital-imaging beta-pack Wave 3 additions (v1.3.0-beta-intravital_imaging-w3)
+
+- **At time t after launch, what fraction of protrusions remain uncommitted, and how does the curve differ between conditions?** → [`intravital_imaging.protrusion_commitment_survival`](gallery/intravital_imaging/protrusion_commitment_survival.png)
+- **Per condition, how does the commitment hazard h(τ) depend on age-in-state (τ since launch)?** → [`intravital_imaging.commitment_hazard_with_age`](gallery/intravital_imaging/commitment_hazard_with_age.png)
+- **Where on (length L, mean velocity v_bar) phase space does protrusion commitment happen, and what is the fitted iso-prob boundary?** → [`intravital_imaging.commitment_phase_diagram`](gallery/intravital_imaging/commitment_phase_diagram.png)
+- **After cue onset, how does the chemotaxis index CI(t) = ⟨cos(θ − cue)⟩ evolve per condition?** → [`intravital_imaging.chemotaxis_index_trajectory`](gallery/intravital_imaging/chemotaxis_index_trajectory.png)
+- **What is the directional persistence time τ_p of cell heading, computed via heading autocorrelation C(τ)?** → [`intravital_imaging.directional_persistence_autocorr`](gallery/intravital_imaging/directional_persistence_autocorr.png)
+- **Per (decoded state, condition) cell, what are the OU heading dynamics parameters (τ, σ)?** → [`intravital_imaging.ornstein_uhlenbeck_fit_per_state`](gallery/intravital_imaging/ornstein_uhlenbeck_fit_per_state.png)
+- **Does protrusion length-rate lead or lag tip velocity, and does the relationship differ between conditions?** → [`intravital_imaging.speed_commitment_coupling`](gallery/intravital_imaging/speed_commitment_coupling.png)
+- **Are committed protrusions cue-aligned, and does the association strength differ between conditions?** → [`intravital_imaging.commitment_vs_chemotaxis_contingency`](gallery/intravital_imaging/commitment_vs_chemotaxis_contingency.png)
+- **When two protrusions emerge concurrently, what is the winner-vs-runner-up dynamic and the winning margin?** → [`intravital_imaging.protrusion_dominance_race_winner`](gallery/intravital_imaging/protrusion_dominance_race_winner.png)
+- **How does the cue-response latency τ scale with cue dose, and does the dose-response differ between conditions?** → [`intravital_imaging.cue_response_dose_latency`](gallery/intravital_imaging/cue_response_dose_latency.png)
+- **For protrusions whose heading aligns with the cue vs not, how do their tip velocity distributions differ?** → [`intravital_imaging.aligned_vs_unaligned_velocity_split`](gallery/intravital_imaging/aligned_vs_unaligned_velocity_split.png)
+- **Within a cell ROI window, does the tip-centroid pattern cluster, repel, or follow CSR (Ripley K with edge correction)?** → [`intravital_imaging.tip_ripleys_k_in_window`](gallery/intravital_imaging/tip_ripleys_k_in_window.png)
+- **Within a cell ROI window, what is the pair correlation g(r) of tip centroids vs the CSR baseline g(r) = 1?** → [`intravital_imaging.tip_pair_correlation_in_window`](gallery/intravital_imaging/tip_pair_correlation_in_window.png)
+- **Per cell, how is branch-order distributed (root, primary, secondary, …), and does the topology differ between conditions?** → [`intravital_imaging.branch_order_topology_per_cell`](gallery/intravital_imaging/branch_order_topology_per_cell.png)
+- **Along a protrusion, how does curvature κ(s, t) propagate over time (does the max-κ ridge migrate)?** → [`intravital_imaging.curvature_along_protrusion_kymograph`](gallery/intravital_imaging/curvature_along_protrusion_kymograph.png)
+- **Where do tips push hardest, given an order-of-magnitude Stokes drag estimate F = 6π η r v?** → [`intravital_imaging.viscous_drag_tip_force_map`](gallery/intravital_imaging/viscous_drag_tip_force_map.png)
+
 ## Intravital-imaging beta-pack Wave 2 additions (v1.3.0-beta-intravital_imaging-w2)
 
 - **Where do tips travel, and how do their decoded states map onto the spatial trajectory?** → [`intravital_imaging.state_decoded_tip_track_field`](gallery/intravital_imaging/state_decoded_tip_track_field.png)

@@ -10,6 +10,16 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## DISC1-manuscript-companion beta-pack Wave 2 additions (v1.4.0-beta-disc1_manuscript_companion-w2)
+
+- **Across multiple scales (whole-cell vs protrusion-internal) and tier-bands (polymer / network / territory), where do metrics sharpen significance?** → [`biophysics_scaling.dual_scale_significance_lollipop`](gallery/biophysics_scaling/dual_scale_significance_lollipop.png)
+- **On a PC1 / PC2 morphospace, do per-cell silhouette glyphs cluster by condition, and is the multivariate separation significant by PERMANOVA?** → [`actin_microtubule_morphometry.pca_silhouette_glyph_morphospace`](gallery/actin_microtubule_morphometry/pca_silhouette_glyph_morphospace.png)
+- **Per representative cell, what is the multiscale workflow from raw Airyscan intensity, through skeleton overlay, to the zone-resolved territory map?** → [`actin_microtubule_morphometry.airyscan_to_zone_territory_triptych`](gallery/actin_microtubule_morphometry/airyscan_to_zone_territory_triptych.png)
+- **Across an intravital field, how do multi-channel cell signals overlay onto territory zones?** → [`intravital_imaging.territory_zone_overlay_intravital`](gallery/intravital_imaging/territory_zone_overlay_intravital.png)
+- **Per cell, how do contact patches and their connectivity edges overlay on the zone-resolved territory map, and does network density differ between conditions?** → [`actin_microtubule_morphometry.territory_contact_network_overlay`](gallery/actin_microtubule_morphometry/territory_contact_network_overlay.png)
+- **Between two conditions, how does the territory zone-fraction composition redistribute (which zones grow vs shrink)?** → [`actin_microtubule_morphometry.zone_fraction_alluvial_sankey`](gallery/actin_microtubule_morphometry/zone_fraction_alluvial_sankey.png)
+- **Per colocalization metric (Manders M1, Pearson r, Spearman ρ), how does the per-cell distribution shift between conditions?** → [`actin_microtubule_morphometry.colocalization_raincloud_per_metric`](gallery/actin_microtubule_morphometry/colocalization_raincloud_per_metric.png)
+
 ## DISC1-manuscript-companion beta-pack Wave 1 additions (v1.4.0-beta-disc1_manuscript_companion-w1)
 
 - **Which input features dominate each principal component, and how much variance does each PC explain?** → [`meta_and_diagnostic.pca_loadings_heatmap`](gallery/meta_and_diagnostic/pca_loadings_heatmap.png)

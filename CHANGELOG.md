@@ -19,15 +19,19 @@ project follows semantic versioning.
   for the full pack plan. **Zero new heavy deps** (Option D
   inline-shim discipline preserved); 1 new `core/` shim
   (`permanova_null_utility.py`) lands in Wave 4.
-- **Wave 1** in review via PR (+6 universal QA primitives in
+- **Wave 1** merged via PR #39 (+6 universal QA primitives in
   `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
   catalog 392 → 398.
-- **Waves 2–4 pending** (+7 cell-territory + multiscale,
-  +9 cytoskeleton geometry, +9 narrative integration).
-  Cumulative final: catalog 392 → 423; intravital_imaging
-  57 → 58 (one extension); actin_microtubule_morphometry
-  35 → 49; biophysics_scaling 37 → 47; spatial_statistics
-  15 → 16; grant_and_conceptual 15 → 16.
+- **Wave 2** gap-analysis in review (+7 cell-territory +
+  multiscale: F1A territory-zone overlay, F1B dual-scale
+  lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-
+  network overlay, F2B zone-fraction Sankey, F2C colocalization
+  raincloud). Pioneers `actin_microtubule_morphometry/_shared.py`
+  with 6 nested sub-contracts. After Wave 2: catalog 398 → 405;
+  actin_microtubule_morphometry 35 → 40; biophysics_scaling
+  37 → 38; intravital_imaging 57 → 58.
+- **Waves 3–4 pending** (+9 cytoskeleton geometry, +9 narrative
+  integration). Cumulative final: catalog 392 → 423.
 
 ## [1.4.0-beta-disc1_manuscript_companion-w1] — 2026-04-27
 

@@ -22,16 +22,135 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #39 (+6 universal QA primitives in
   `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
   catalog 392 → 398.
-- **Wave 2** gap-analysis in review (+7 cell-territory +
-  multiscale: F1A territory-zone overlay, F1B dual-scale
-  lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-
-  network overlay, F2B zone-fraction Sankey, F2C colocalization
-  raincloud). Pioneers `actin_microtubule_morphometry/_shared.py`
-  with 6 nested sub-contracts. After Wave 2: catalog 398 → 405;
-  actin_microtubule_morphometry 35 → 40; biophysics_scaling
-  37 → 38; intravital_imaging 57 → 58.
+- **Wave 2** in review via PR (+7 cell-territory + multiscale).
+  After Wave 2: catalog 398 → 405; actin_microtubule_morphometry
+  35 → 40; biophysics_scaling 37 → 38; intravital_imaging
+  57 → 58.
 - **Waves 3–4 pending** (+9 cytoskeleton geometry, +9 narrative
   integration). Cumulative final: catalog 392 → 423.
+
+## [1.4.0-beta-disc1_manuscript_companion-w2] — 2026-04-27
+
+Second wave of the `disc1_manuscript_companion` beta expansion
+pack. Lands the 7-recipe F1 + F2 cluster — cell-level territory
+and scale-decomposition figures that open the manuscript narrative.
+Pioneers `actin_microtubule_morphometry/_shared.py` with 6 nested
+Pydantic sub-contracts. Catalog 398 → 405.
+
+### Added (7 recipes)
+
+- `dual_scale_significance_lollipop` (`coef_forest`,
+  biophysics_scaling, W2.1) — diverging lollipop of -log10(p) at
+  multiple scales (whole-cell vs protrusion-internal) per metric,
+  row-banded by domain tier (polymer / network / territory).
+  **Closes manuscript panel F1B.**
+- `pca_silhouette_glyph_morphospace` (`scatter_collapse`,
+  actin_microtubule_morphometry, W2.2) — per-cell scatter on
+  (PC1, PC2) with cell-outline `Polygon` glyphs at each point;
+  per-condition 2σ confidence ellipses; PERMANOVA R² + p caption.
+  **Closes manuscript panel F1C.**
+- `airyscan_to_zone_territory_triptych` (`matrix`,
+  actin_microtubule_morphometry, W2.3) — three-panel triptych per
+  representative cell (raw Airyscan → skeleton overlay →
+  zone-resolved territory map); shared zone legend strip below.
+  **Closes manuscript panel F1D.**
+- `territory_zone_overlay_intravital` (`heatmap`,
+  intravital_imaging, W2.4) — multi-channel intravital field
+  rendered as RGB composite with per-zone contour outlines drawn
+  on top; channel + zone legends.
+  **Closes manuscript panel F1A.**
+- `territory_contact_network_overlay` (`heatmap`,
+  actin_microtubule_morphometry, W2.5) — per-cell territory map
+  with contact-patch graph (nodes at centroids + edges as
+  connectivity lines) overlaid; per-cell network density + edge
+  count callout. **Pure matplotlib `ax.scatter` + `ax.plot`; no
+  `networkx` dependency.** **Closes manuscript panel F2A.**
+- `zone_fraction_alluvial_sankey` (`flow`,
+  actin_microtubule_morphometry, W2.6) — alluvial Sankey of
+  zone-fraction redistribution between two conditions; pure
+  matplotlib `PathPatch` ribbons (cubic Bezier curves); largest-
+  shift callout in title. **Closes manuscript panel F2B.**
+- `colocalization_raincloud_per_metric` (`split_violin`,
+  actin_microtubule_morphometry, W2.7) — three side-by-side
+  raincloud panels (Manders M1, Pearson r, Spearman ρ); each
+  panel split-violin by condition with median ring markers and
+  per-cell jitter dots. **Closes manuscript panel F2C.**
+
+### Infrastructure
+
+- `recipes/actin_microtubule_morphometry/_shared.py` (new) —
+  7 nested Pydantic sub-contracts: `ZoneTerritoryMap`,
+  `ContactPatchNetwork`, `CellWithContactNetwork`,
+  `ColocalizationCoefficients`, `CellOutlineWithPCCoord`,
+  `AiryscanTriptychBundle`, `MultiChannelField`. Plus
+  `_demo_zone_palette()` and `_demo_zone_label_map()` helpers
+  for the contact / desert / intermediate / far territory
+  schema. Pioneers `_shared.py` for this modality.
+- `recipes/biophysics_scaling/_shared.py` (edit) — adds
+  `MultiScaleSignificanceRow` for W2.1.
+- `recipes/actin_microtubule_morphometry/__init__.py` (edit) —
+  registers W2.2, W2.3, W2.5, W2.6, W2.7 (5 new recipes);
+  modality total 35 → 40.
+- `recipes/biophysics_scaling/__init__.py` (edit) — registers
+  W2.1; modality total 37 → 38.
+- `recipes/intravital_imaging/__init__.py` (edit) — registers
+  W2.4; modality total 57 → 58.
+
+### Demo conventions
+
+All 7 demos use seeded RNG (`np.random.default_rng(50X)`) and the
+manuscript's WT vs LI condition labels with biology-agnostic
+synthetic data:
+
+- W2.1: 12 metrics × 2 scales × 3 tier-bands; territory metrics
+  significant at both scales, network metrics sharpen sharply at
+  protrusion-internal scale, polymer metrics stay below
+  threshold at both scales.
+- W2.2: 18 cells × 2 conditions; WT cluster centred at (-1.5, 0.6)
+  with rounder outlines, LI at (1.4, -0.5) with elongated
+  outlines; PERMANOVA R² = 0.32, p = 0.001.
+- W2.3: 2 representative cells (WT_2 and LI_12) × 96 × 96
+  triptychs (raw Airyscan + thinned skeleton + 4-zone territory
+  map).
+- W2.4: 1 multi-channel field with 3 cells (RFP / YFP / DAPI =
+  3 channels × 128 × 128) with 4-zone territory contours
+  overlaid; channel + zone legends.
+- W2.5: 2 cells (WT 8 nodes / 8% edge prob = sparse;
+  LI 14 nodes / 40% edge prob = dense).
+- W2.6: 4 zones × 2 conditions; WT-to-LI shift moves contact
+  +24 pp, desert -16 pp.
+- W2.7: 3 metrics × 2 conditions × 16 cells; LI shifted ~+0.18
+  on every metric.
+
+### Visual-QA polish during authoring (3 fit-ups)
+
+- W2.1 `dual_scale_significance_lollipop` — first-pass `sort()`
+  used `features_in_order.index(k)` as the secondary key, which
+  fails because the list is being mutated during sort; fixed by
+  capturing `insertion_rank` mapping BEFORE sort.
+- W2.2 `pca_silhouette_glyph_morphospace` — confidence ellipses
+  are matplotlib `Ellipse` patches, not `Line2D` lines; the
+  `scatter_collapse` family rule requires ≥1 line. Added an
+  invisible `ax.plot([], [])` sentinel.
+- W2.6 `zone_fraction_alluvial_sankey` — `fontsize=8.0` for
+  column headers snapped to existing `8.2` to keep the
+  style-drift ratchet at 20/20.
+
+### Tests
+
+- Total: **2086 → 2121** (+35: 7 smoke + 7 quality + ~21 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- actin_microtubule_morphometry recipes: **35 → 40** (+5).
+- biophysics_scaling recipes: **37 → 38** (+1).
+- intravital_imaging recipes: **57 → 58** (+1).
+- disc1_manuscript_companion pack recipes landed: **6 → 13**
+  (Wave 2 of 4).
+- New `_shared.py` modules pioneered: **1 → 2**
+  (`actin_microtubule_morphometry`).
 
 ## [1.4.0-beta-disc1_manuscript_companion-w1] — 2026-04-27
 

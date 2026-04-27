@@ -181,6 +181,25 @@ class PSDCurve(RecipeContract):
     active_gel_band_hz: tuple[float, float] | None = None
 
 
+# --- dual-scale significance row (Wave 2 of disc1_manuscript_companion) ----
+
+
+class MultiScaleSignificanceRow(RecipeContract):
+    """One feature × one scale × one −log₁₀(p) value × tier-band.
+
+    Used by `dual_scale_significance_lollipop` (W2.1 of the
+    disc1_manuscript_companion pack). The recipe groups rows by
+    `tier` (polymer / network / territory / geometry), arranges
+    metrics within each tier as y-rows, and plots one diverging
+    lollipop per (metric × scale) combination.
+    """
+    feature: str
+    scale: str                   # "whole_cell" | "protrusion_internal" | other
+    neg_log10_p: float
+    tier: str                    # "polymer" | "network" | "territory" | ...
+    direction: str = "neutral"   # "up" | "down" | "neutral" (sign of effect)
+
+
 # --- outcome palette (local fallback) ---------------------------------------
 
 

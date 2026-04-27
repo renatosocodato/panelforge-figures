@@ -27,9 +27,12 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 
 | Metric | Start | After W1 | After W2 | After W3 | After W4 |
 |---|---|---|---|---|---|
-| intravital_imaging recipes | 15 | 20 | 31 | 47 | **57 (final)** |
-| Total catalog recipes | 350 | 355 | 366 | 382 | **392 (final)** |
-| Beta-pack recipes landed | 0 | 5 | 16 | 32 | **42 (final)** |
+| intravital_imaging recipes | 15 | 20 | 31 | 47 | **57** ✅ |
+| Total catalog recipes | 350 | 355 | 366 | 382 | **392** ✅ |
+| Beta-pack recipes landed | 0 | 5 | 16 | 32 | **42** ✅ |
+
+**Pack status: COMPLETE.** Tag `v1.3.0-beta-intravital_imaging`
+points to the pack-closeout commit on `main`.
 
 ## Per-wave status
 
@@ -38,7 +41,7 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 | w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **merged** | `beta-intravital-imaging-w1` | — (squash-merged PR #33; commit `384bf88`); polish PR #34 (`c8851d0`) added contemporary palette + emission gremlin fix | 5 recipes + 3 visual-QA fit-ups (Wave 1) + 2 polish fix-ups (palette + gremlin); CI green |
 | w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | **merged** | `beta-intravital-imaging-w2` | — (squash-merged PR #35; commit `c0b65e5`) | 3 commits, 3 visual-QA fit-ups; CI green |
 | w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 + GAM utility | **merged** | `beta-intravital-imaging-w3` | — (squash-merged PR #36; commit `05cce3c`) | 3 commits, 3 visual-QA fit-ups (B.3 legend, B.12 panel-title spacing + tick-label suppression, C.5 colorbar range), 6 GAM-utility tests, total tests 1908 → 1994; CI green |
-| w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | **review** | `beta-intravital-imaging-w4` | — (PR #37 open) | 3 commits, 4 visual-QA fit-ups (C.6/C.10/C.11 parent-axis backgrounds, C.11 dose-axis range, C.9/C.15 legend bbox, C.12 demo connectivity), 12 utility tests, total tests 1994 → 2056; **closes pack** |
+| w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | **merged** | `beta-intravital-imaging-w4` | — (squash-merged PR #37; commit `3debab7`) | 4 commits (incl. lint-fix), 4 visual-QA fit-ups (C.6/C.10/C.11 parent-axis backgrounds, C.11 dose-axis range, C.9/C.15 legend bbox, C.12 demo connectivity), 12 utility tests, total tests 1994 → 2056; CI green; **closes pack at 42/42** |
 
 Status legend:
 - **pending** — not yet started

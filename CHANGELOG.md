@@ -6,29 +6,20 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
-### In planning
+### Completed packs
 
-- **intravital_imaging beta expansion pack** (`[1.3.0-beta-intravital_imaging]`) —
-  42 new recipes + shared sub-contract module + 2–3 new `core/` utilities,
-  landed across 4 user-gated waves. See
+- **intravital_imaging beta expansion pack
+  `[1.3.0-beta-intravital_imaging]` — COMPLETE.** 4 waves, 42 new
+  recipes, 5 new `core/` inline shims (HMM/HSMM, KM, GAM, spectral
+  embedding, transfer entropy), 11 new nested sub-contracts,
+  `microglia_states` semantic-palette polish. **Zero new heavy
+  dependencies** beyond `hmmlearn` (no `umap-learn` / `pyhsmm` /
+  `lifelines` / `statsmodels` / `pygam`). Catalog 350 → 392;
+  intravital_imaging 15 → 57. Tests 1814 → 2056. PRs #33 → #37
+  (+ #34 polish). See pack-closeout summary at the end of the
+  Wave 1 entry below, and
   [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
-  for the full pack plan. Heavy-deps strategy: **Option D (Mixed)** —
-  `hmmlearn` added as required dep; KM survival, HSMM duration, GAM
-  logistic implemented as inline `core/` shims. **Wave 4 proposes
-  revisiting the `umap-learn` lock-in** in favour of an inline
-  `core/spectral_embedding_utility.py` shim (Laplacian eigenmaps,
-  ~50 LOC) — closes the alpha-coverage gap on nonlinear-embedding
-  without doubling install footprint (numba + scikit-learn).
-- **Wave 1** merged via PR #33 (+5); polish PR #34 added contemporary
-  `microglia_states` palette + emission inset-gremlin fix.
-  intravital_imaging 15 → 20.
-- **Wave 2** merged via PR #35 (+11 decoding products + latency).
-  intravital_imaging 20 → 31.
-- **Wave 3** merged via PR #36 (+16 commitment kinetics + biophysics
-  axes + GAM utility). intravital_imaging 31 → 47.
-- **Wave 4** in review via PR #37 (+10 translational + reviewer-
-  proof). intravital_imaging 47 → 57; total catalog 382 → 392
-  (final). **Closes pack.**
+  for the full pack tracker.
 
 ## [1.3.0-beta-intravital_imaging-w4] — 2026-04-27
 
@@ -498,6 +489,54 @@ from 15 to 20 recipes; total catalog 350 → 355.
 - Beta-pack recipes landed: **0 → 5** (Wave 1 of 4).
 - Sub-contract module + HMM / HSMM / KM utilities available for
   consumption by Waves 2–4.
+
+### intravital_imaging beta expansion pack — COMPLETE
+
+The 4-wave pack closes at **42 new recipes** across 4 waves, plus
+1 contemporary-palette polish PR. Final catalog: **350 → 392**
+(`intravital_imaging` **15 → 57**; +42). Pack tag candidate:
+`v1.3.0-beta-intravital_imaging`.
+
+Cumulative summary across PRs #33, #34, #35, #36, and #37:
+
+| Wave | Scope | PR | intravital_imaging | Δ |
+|---|---|---|---|---|
+| w1 | substrate (HMM/HSMM/KM utilities + 5 decoding-diagnostic recipes) | #33 | 15 → 20 | +5 |
+| polish | contemporary `microglia_states` palette + emission inset gremlin fix | #34 | 20 → 20 | (palette / fixes only) |
+| w2 | decoding products + latency primitives (7 + 4) | #35 | 20 → 31 | +11 |
+| w3 | commitment kinetics + biophysics axes (11 + 5) + GAM utility | #36 | 31 → 47 | +16 |
+| w4 | translational + reviewer-proof (4 + 3 + 3) + spectral embedding + transfer entropy utilities | #37 | 47 → 57 | +10 |
+
+Three new `core/` inline shims landed (Option D heavy-deps
+discipline preserved end-to-end — **zero `umap-learn` /
+`pyhsmm` / `lifelines` / `statsmodels` / `pygam` deps**, only
+`hmmlearn`):
+
+- `core/hmm_decoding_utility.py` (W1) — hmmlearn wrapper +
+  inline EM HSMM with Weibull duration distributions.
+- `core/km_survival_utility.py` (W1) — Kaplan-Meier with
+  Greenwood log-log CI.
+- `core/gam_logistic_utility.py` (W3) — Gaussian-RBF basis +
+  IRLS-fit logistic regression (B.3 phase boundary).
+- `core/spectral_embedding_utility.py` (W4) — Laplacian
+  eigenmaps via scipy on a kNN graph (C.12 nonlinear
+  embedding).
+- `core/transfer_entropy_utility.py` (W4) — Schreiber (2000)
+  symbolic-binning estimator (C.10 directionality matrix).
+
+Plus 11 new nested Pydantic sub-contracts in
+`recipes/intravital_imaging/_shared.py` (TipTrack /
+ProtrusionPolyline / ProtrusionPolylineWithTime /
+KinematicFeatureBundle / TipCentroidSnapshot /
+LatencyDistribution / DecodedStateSeries / ModelFitSummary /
+BiosensorField / BiosensorTimeTrace / DoseTimeResponse) and a
+shared `_demo_state_palette()` helper sourcing from the
+registered `microglia_states` semantic palette.
+
+Tests: 1814 → 2056 (+242 across the 4 waves: 42 recipe smoke +
+42 quality + 25 utility-specific + ~133 auto-parametrized
+contracts / registry). Style-drift ratchet: held at 20/20
+throughout. Helvetica-safe typography: enforced in every recipe.
 
 ### biophysics_scaling beta expansion pack — COMPLETE
 

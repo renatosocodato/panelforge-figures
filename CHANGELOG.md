@@ -13,16 +13,28 @@ project follows semantic versioning.
   landed across 4 user-gated waves. See
   [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
   for the full pack plan. Heavy-deps strategy: **Option D (Mixed)** —
-  `hmmlearn` and `umap-learn` added as required deps; KM survival /
-  HSMM duration / GAM logistic implemented as inline `core/` shims.
-- **Wave 1** merged via PR #33; polish PR #34 added contemporary
-  `microglia_states` palette + emission inset-gremlin fix
-  (intravital_imaging 15 → 20).
-- **Wave 2** merged via PR #35 (+11 recipes; intravital_imaging
-  20 → 31).
-- **Wave 3** in review via PR #36 (+16 recipes; intravital_imaging
-  31 → 47). **Wave 4 pending** (+10 translational + reviewer-proof
-  recipes: C.6–C.15).
+  `hmmlearn` added as required dep; KM survival, HSMM duration, GAM
+  logistic implemented as inline `core/` shims. **Wave 4 proposes
+  revisiting the `umap-learn` lock-in** in favour of an inline
+  `core/spectral_embedding_utility.py` shim (Laplacian eigenmaps,
+  ~50 LOC) — closes the alpha-coverage gap on nonlinear-embedding
+  without doubling install footprint (numba + scikit-learn).
+- **Wave 1** merged via PR #33 (+5); polish PR #34 added contemporary
+  `microglia_states` palette + emission inset-gremlin fix.
+  intravital_imaging 15 → 20.
+- **Wave 2** merged via PR #35 (+11 decoding products + latency).
+  intravital_imaging 20 → 31.
+- **Wave 3** merged via PR #36 (+16 commitment kinetics + biophysics
+  axes + GAM utility). intravital_imaging 31 → 47.
+- **Wave 4** gap-analysis in review (+10 translational + reviewer-
+  proof: C.6 biosensor field, C.7 biosensor dose-response, C.8
+  photobleaching correction, C.9 kinematic PSD forest, C.10
+  transfer-entropy matrix, C.11 dose × time response heatmap, C.12
+  state-kinematic spectral embedding, C.13 equivalence-test radar,
+  C.14 cohort-balance matrix, C.15 calibration Brier forest). 2 new
+  inline `core/` utilities (spectral embedding + transfer entropy).
+  intravital_imaging 47 → 57; total catalog 382 → 392 (final).
+  **Closes pack.**
 
 ## [1.3.0-beta-intravital_imaging-w3] — 2026-04-26
 

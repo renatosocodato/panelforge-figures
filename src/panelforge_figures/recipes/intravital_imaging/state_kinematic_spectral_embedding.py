@@ -43,18 +43,22 @@ def _demo() -> StateKinematicEmbeddingInput:
         "velocity", "length_rate", "curvature", "turning_angle",
         "directionality", "msd_alpha", "biosensor_ratio", "n_branches",
     ]
+    # Centroids deliberately overlap (per-feature spread comparable
+    # to inter-centroid distance) so the kNN graph stays connected
+    # across all three clusters; with disjoint clusters Laplacian
+    # eigenmaps collapse each component to a single point.
     centres = {
         "homeostatic": np.array([0.5, 0.3, 0.2, 0.4, 0.2, 0.5,
-                                 1.0, 1.5]),
-        "surveillant": np.array([1.5, 1.0, 0.4, 0.3, 0.6, 0.8,
-                                 1.05, 3.0]),
-        "activated": np.array([3.0, 2.5, 0.7, 0.8, 0.4, 1.2,
-                               1.20, 5.0]),
+                                 1.00, 1.5]),
+        "surveillant": np.array([1.0, 0.7, 0.3, 0.4, 0.4, 0.7,
+                                 1.03, 2.2]),
+        "activated":   np.array([1.6, 1.2, 0.45, 0.55, 0.35, 0.9,
+                                 1.07, 2.9]),
     }
     rows: list[CellFeatureRow] = []
     for state in states:
         for k in range(40):
-            v = centres[state] + rng.normal(0, 0.18, len(feature_names))
+            v = centres[state] + rng.normal(0, 0.30, len(feature_names))
             rows.append(CellFeatureRow(
                 cell_id=f"{state}_C{k:02d}", state=state,
                 features=v.tolist(),

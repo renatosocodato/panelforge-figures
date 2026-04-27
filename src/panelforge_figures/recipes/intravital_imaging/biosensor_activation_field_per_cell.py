@@ -86,9 +86,13 @@ def render(contract: BiosensorActivationFieldInput, ax=None, **_):
     n_rows = (n_panels + n_cols - 1) // n_cols
 
     # Sentinel imshow on parent ax so heatmap family rule sees a
-    # mesh (data lives on insets).
+    # mesh; parked off-axes so it never paints the parent's
+    # display area.
     ax.imshow(np.zeros((1, 1)), extent=(-99, -98, -99, -98),
               cmap=contract.cmap, aspect="auto", zorder=0)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_facecolor("none")
     for side in ("top", "right", "left", "bottom"):
         ax.spines[side].set_visible(False)
     ax.set_xticks([])

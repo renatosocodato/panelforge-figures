@@ -101,9 +101,13 @@ def render(contract: TransferEntropyMatrixInput, ax=None, **_):
         _, ax = plt.subplots(figsize=(6.4, 3.6))
     AESTHETIC.apply_to_ax(ax)
 
-    # Sentinel imshow on parent ax for matrix family rule.
+    # Sentinel imshow on parent ax for matrix family rule; parked
+    # off-axes so it never paints the parent's display area.
     ax.imshow(np.zeros((1, 1)), extent=(-99, -98, -99, -98),
               cmap="cividis", aspect="auto", zorder=0)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_facecolor("none")
     for side in ("top", "right", "left", "bottom"):
         ax.spines[side].set_visible(False)
     ax.set_xticks([])

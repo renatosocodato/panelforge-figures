@@ -132,7 +132,7 @@ def render(contract: CalibrationBrierForestInput, ax=None, **_):
     handles.append(Line2D([0], [0], color="#888888", ls="--", lw=0.7,
                           label="perfect calibration"))
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="upper center", bbox_to_anchor=(0.5, -0.10),
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
               ncols=min(len(handles), 4), handlelength=1.0)
 
     # Median Brier per model in title.

@@ -152,6 +152,33 @@ Wave 3's GAM utilities. **No new pyproject.toml dependencies.**
 - C.15 calibration forest: 4 strata × 2 models; Brier scores
   0.10–0.18; one stratum CI crosses zero.
 
+### Visual-QA polish (4 fit-ups)
+
+- C.6 (`biosensor_activation_field_per_cell`), C.10
+  (`transfer_entropy_state_to_velocity_matrix`), C.11
+  (`dose_x_time_response_matrix`): the off-screen sentinel
+  `imshow(extent=(-99,-98,-99,-98))` was paining the parent axis's
+  full visible area in the cmap's value-0 colour because the parent
+  axis autoscaled to the sentinel's extent. Fix: explicitly
+  `set_xlim(0, 1)` / `set_ylim(0, 1)` and `set_facecolor("none")`
+  on the parent axis after the sentinel imshow so the parent
+  display area stays transparent and only the inset panels paint.
+- C.11 (`dose_x_time_response_matrix`): per-panel `set_yscale("log")`
+  was autoscaling the dose axis down to ~10^-15 even though demo
+  doses are 0.1–30 µM. Added explicit `sub.set_ylim(doses.min(),
+  doses.max())` clamp so log-axis tick range matches the actual
+  data.
+- C.9 (`kinematic_power_spectral_density`), C.15
+  (`model_calibration_brier_forest`): below-axes legend
+  `bbox_to_anchor=(0.5, -0.10)` was colliding with the x-axis label;
+  pushed to `(0.5, -0.16)`.
+- C.12 (`state_kinematic_spectral_embedding`): with well-separated
+  cluster centroids the kNN graph fragmented into disconnected
+  components and Laplacian eigenmaps collapsed each to a single
+  point. Fix: tightened demo centroids and widened per-feature
+  noise so the kNN graph stays connected — recipe API unchanged,
+  demo data only.
+
 ### Tests
 
 - Total: **1994 → 2056** (+62: 10 smoke + 10 quality + 6 spectral-

@@ -86,9 +86,13 @@ def render(contract: DoseTimeResponseInput, ax=None, **_):
     conditions = list(dict.fromkeys(r.condition for r in contract.responses))
     n_conds = len(conditions)
 
-    # Sentinel imshow on parent ax for heatmap family rule.
+    # Sentinel imshow on parent ax for heatmap family rule; parked
+    # off-axes so it never paints the parent's display area.
     ax.imshow(np.zeros((1, 1)), extent=(-99, -98, -99, -98),
               cmap=contract.cmap, aspect="auto", zorder=0)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_facecolor("none")
     for side in ("top", "right", "left", "bottom"):
         ax.spines[side].set_visible(False)
     ax.set_xticks([])
@@ -137,12 +141,16 @@ def render(contract: DoseTimeResponseInput, ax=None, **_):
                          colors="#222222", linewidths=0.7, zorder=4)
         sub.clabel(cs, inline=True, fontsize=6.0, fmt="%.2f")
         sub.set_yscale("log")
+        # Clamp y-axis to the actual dose range; pcolormesh shading
+        # otherwise spills below the smallest dose under log scaling.
+        sub.set_ylim(float(doses.min()), float(doses.max()))
+        sub.set_xlim(float(ts.min()), float(ts.max()))
         sub.set_xlabel("time (s)", fontsize=6.8)
         if ci == 0:
             sub.set_ylabel("dose", fontsize=6.8)
         else:
             sub.set_yticklabels([])
-        sub.set_title(cond, fontsize=7.4, pad=2)
+        sub.set_title(cond, fontsize=7.4, pad=6)
         sub.tick_params(labelsize=6.4)
         peak = float(mean_grid.max())
         bits.append(f"{cond}: peak = {smart_fmt(peak)}")

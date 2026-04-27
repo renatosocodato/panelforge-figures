@@ -164,7 +164,7 @@ def render(contract: KinematicPSDInput, ax=None, **_):
                label="f = 0"),
     ]
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="upper center", bbox_to_anchor=(0.5, -0.10),
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
               ncols=3, handlelength=1.0)
 
     bits = []

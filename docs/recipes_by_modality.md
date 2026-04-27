@@ -5,7 +5,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.2.0-beta-biophysics_scaling — COMPLETE: 350 recipes** (biophysics_scaling +22 cumulative across all 4 waves). Pack total: 22/23 recipes (C.9 absorbed the 23rd); 4/4 waves; pack tag candidate `v1.2.0-beta-biophysics_scaling`. See `docs/biophysics_scaling_beta_pack_tracker.md`.
 
-**v1.3.0-beta-intravital_imaging — Wave 3 landed: 382 recipes** (intravital_imaging +32 cumulative across Waves 1–3). Pack total: 32/42 recipes; 3/4 waves. See `docs/intravital_imaging_beta_pack_tracker.md`.
+**v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -59,6 +59,61 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.3.0-beta-intravital_imaging — Wave 4 (translational + reviewer-proof, +10)
+
+Final wave of the intravital_imaging beta expansion pack. Lands the
+10 translational + reviewer-proof recipes (C.6–C.15) and 2 new
+inline `core/` utilities. intravital_imaging expands from 47 to 57
+recipes; total catalog 382 → 392 (final).
+
+Translational primitives (4):
+
+- **biosensor_activation_field_per_cell** (`heatmap`) — small-
+  multiples of per-cell H × W intensity grids on divergent cmap
+  centred on baseline.
+- **biosensor_dose_response_curve** (`timecourse_hierarchical_ci`)
+  — per-dose plateau values + bootstrap CI + Hill EC50 fit.
+- **photobleaching_corrected_intensity_traces** (`diagnostic_curve`)
+  — raw vs corrected traces + bi-exponential fit overlay +
+  residuals histogram inset.
+- **kinematic_power_spectral_density** (`coef_forest`) — dominant
+  frequency f_peak per (state × condition) ± 95 % CI.
+
+Orthogonal-axes block continuation (3):
+
+- **transfer_entropy_state_to_velocity_matrix** (`matrix`) — N × N
+  asymmetric TE heatmap (state ↔ velocity ↔ length-rate) per
+  condition, diagonal masked.
+- **dose_x_time_response_matrix** (`heatmap`) — 2-D `pcolormesh` of
+  mean response across (dose, time) per condition, iso-response
+  contours overlaid.
+- **state_kinematic_spectral_embedding** (`scatter_collapse`) — 2-D
+  Laplacian-eigenmap embedding scatter coloured by state, per-state
+  convex hulls.
+
+Reviewer-proof (3):
+
+- **equivalence_tost_radar_per_condition** (`radar`) — multi-feature
+  TOST polar plot, equivalence-margin reference circle, per-
+  condition equiv / total in title. Closes the +1 radar target.
+- **cohort_baseline_balance_table_matrix** (`matrix`) — per-feature
+  SMD between cohorts, RdBu_r heat, balanced / borderline /
+  imbalanced flag column.
+- **model_calibration_brier_forest** (`coef_forest`) — per-stratum
+  Brier scores ± 95 % CI vs perfect-calibration zero reference.
+
+New `core/` utilities:
+
+- **`spectral_embedding_utility.py`** — `embed_2d(X, n_neighbors=15)
+  → (E, info)` Laplacian eigenmaps via scipy. **Replaces the
+  umap-learn dep** (Option D inline-shim discipline).
+- **`transfer_entropy_utility.py`** — `transfer_entropy(s, t,
+  n_bins=4, lag=1) → float` Schreiber (2000) symbolic-binning
+  estimator.
+
+Pack-closeout: intravital_imaging beta expansion pack is COMPLETE
+at 42/42 recipes across 4 waves.
 
 ## v1.3.0-beta-intravital_imaging — Wave 3 (commitment kinetics + biophysics axes, +16)
 

@@ -37,8 +37,8 @@ Per user-gated decision: C.1 / C.2 are recast as **intravital-specific tip-windo
 |---|---|---|---|---|---|
 | w1 | Substrate (+5): A.4 dwell-time, A.5 sojourn-survival, A.6 hazard-rate, A.8 emission-distribution, A.10 HMM-vs-HSMM model-comparison + shared contracts + HMM/HSMM/KM utilities | **merged** | `beta-intravital-imaging-w1` | — (squash-merged PR #33; commit `384bf88`); polish PR #34 (`c8851d0`) added contemporary palette + emission gremlin fix | 5 recipes + 3 visual-QA fit-ups (Wave 1) + 2 polish fix-ups (palette + gremlin); CI green |
 | w2 | Decoding products + latency primitives (+11): A.1, A.2, A.3, A.7, A.9, A.11, A.12 + B.4, B.5, B.6, B.7 | **merged** | `beta-intravital-imaging-w2` | — (squash-merged PR #35; commit `c0b65e5`) | 3 commits, 3 visual-QA fit-ups; CI green |
-| w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 + GAM utility | **review** | `beta-intravital-imaging-w3` | — (PR #36 open) | 3 commits, 3 visual-QA fit-ups (B.3 legend, B.12 panel-title spacing + tick-label suppression, C.5 colorbar range), 6 GAM-utility tests, total tests 1908 → 1994 |
-| w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | pending | — | — | Depends on w3; closes pack |
+| w3 | Commitment kinetics + biophysics block (+16): B.1, B.2, B.3, B.8–B.15 + C.1, C.2, C.3, C.4, C.5 + GAM utility | **merged** | `beta-intravital-imaging-w3` | — (squash-merged PR #36; commit `05cce3c`) | 3 commits, 3 visual-QA fit-ups (B.3 legend, B.12 panel-title spacing + tick-label suppression, C.5 colorbar range), 6 GAM-utility tests, total tests 1908 → 1994; CI green |
+| w4 | Translational + reviewer-proof (+10): C.6, C.7, C.8, C.9, C.10, C.11, C.12, C.13, C.14, C.15 | **review** | `beta-intravital-imaging-w4` | — (PR #37 open) | 3 commits, 4 visual-QA fit-ups (C.6/C.10/C.11 parent-axis backgrounds, C.11 dose-axis range, C.9/C.15 legend bbox, C.12 demo connectivity), 12 utility tests, total tests 1994 → 2056; **closes pack** |
 
 Status legend:
 - **pending** — not yet started
@@ -271,6 +271,142 @@ All Wave 3 demos use seeded RNG and the contemporary palette (slate / teal / cor
 5. `pytest tests/test_gam_logistic_utility.py` — boundary recovery on synthetic data > 80 %.
 6. Gallery regenerate `intravital_imaging/` — 47 PNGs.
 7. Eyeball each new panel; estimate 5–8 visual-QA fit-ups (16 recipes is the largest wave so far for this pack).
+
+## Wave 4 — translational + reviewer-proof (+10) [gap-analysis]
+
+**Why last (closes pack).** Waves 1–3 shipped the decision layer (HMM/HSMM substrate + decoded-state visualisations + latency
+forest), the commitment-kinetics block (survival, hazard, phase
+diagram, persistence, OU, contingency, dominance race), and the
+first 5 biophysics-axes recipes. Wave 4 closes the alpha-coverage
+gap (biosensor / photobleaching / transfer-entropy / dim-reduction
+/ PSD / dose×time matrix) and adds 3 **reviewer-proof** recipes
+(equivalence-test radar, cohort-balance matrix, calibration
+forest). After this wave intravital_imaging is **57 recipes**;
+total catalog is **392**.
+
+### Pre-wave decision: revisit `umap-learn` lock-in
+
+Per pack governance §13, `umap-learn` was promised as a required
+dep "(cannot fake without coarse fallback; backbone of C.12)".
+Two reasons to revisit before Commit 2:
+
+1. **Install-footprint blast radius.** `umap-learn` pulls
+   `numba` (LLVM JIT, requires C-toolchain) and `scikit-learn`
+   (~150 MB on disk). The pack so far has been zero-additional-
+   weight outside `hmmlearn` and the inline shims. Adding
+   `umap-learn` would more than double install cost.
+2. **Option D inline-shim discipline.** Wave 1's HSMM, KM, and
+   Wave 3's GAM utilities established the precedent that any
+   non-numpy/scipy fittable algorithm can ship as a ~80 LOC
+   inline shim. A 2-D **spectral embedding** (Laplacian
+   eigenmaps via `scipy.sparse.csgraph.laplacian` +
+   `scipy.linalg.eigh` on a kNN graph) is ~50 LOC, gives
+   visually similar manifold structure to UMAP for the kinematic-
+   feature distances at issue, and matches the shim discipline.
+
+**Recommendation:** revise the Option D commitment — drop
+`umap-learn`, add `core/spectral_embedding_utility.py`
+(`embed_2d(X, n_neighbors=15) -> (E, info)`), and rename C.12 to
+`state_kinematic_spectral_embedding`. This keeps the alpha-gap
+fill ("no nonlinear-embedding of state-feature vectors found in
+alpha") while honouring the inline-shim pattern.
+
+If the user prefers to honour the original lock-in, the alternative
+is keep `state_kinematic_umap_embedding` and add `umap-learn>=0.5`
+to `[project.dependencies]`. **Plan commits to inline-shim path
+unless gated otherwise.**
+
+### Recipe roster (Wave 4)
+
+| ID | Recipe | Family | Required fields | Notes |
+|---|---|---|---|---|
+| C.6 | `biosensor_activation_field_per_cell` | `heatmap` | `fields: list[BiosensorField]` (per-cell H×W intensity grid) + `condition_by_cell` | 4-panel small-multiples (per-cell intensity field, e.g. ROCK/Rho biosensor); divergent cmap centred on baseline |
+| C.7 | `biosensor_dose_response_curve` | `timecourse_hierarchical_ci` | `traces: list[BiosensorTimeTrace]` keyed by dose + `condition_by_cell` | Per-dose mean trace + bootstrap CI ribbon; EC50 callout when fit converges |
+| C.8 | `photobleaching_corrected_intensity_traces` | `diagnostic_curve` | `pre_correction_intensity[t]` + `corrected_intensity[t]` + `bleach_fit_params` | Two curves (raw + corrected) + dashed bi-exp fit reference; per-cell residual histogram inset |
+| C.9 | `kinematic_power_spectral_density` | `coef_forest` | `bundles: list[KinematicFeatureBundle]` + `condition_by_cell` + (optional) decoded states | Forest of dominant frequency f_peak per (state × condition) ± 95 % CI; reference at f = 0 |
+| C.10 | `transfer_entropy_state_to_velocity_matrix` | `matrix` | `bundles` + decoded states; symbolic-binning TE inline | N×N TE matrix (state↔velocity↔length-rate) per condition; row/col directionality |
+| C.11 | `dose_x_time_response_matrix` | `heatmap` | `responses: list[DoseTimeResponse]` (dose × time grid) per condition | 2-D `pcolormesh` with iso-response contours; one panel per condition |
+| C.12 | `state_kinematic_spectral_embedding` | `scatter_collapse` | `bundles` + decoded states; reduces per-cell feature vectors to 2-D | 2-D embedding scatter coloured by decoded state; per-state convex hull as the ≥1 fit line |
+| C.13 | `equivalence_tost_radar_per_condition` | `radar` | per-feature TOST bounds (lower / upper / observed) | Reuses `core/tost_bounds_utility.classify_outcome`; polygon vertices = features; filled polygon = condition; reference circle at equivalence margin |
+| C.14 | `cohort_baseline_balance_table_matrix` | `matrix` | per-cohort feature means + standardised-mean-differences (SMD) | CONSORT-style balance grid; cell colour = SMD; flagged when |SMD| > 0.1 |
+| C.15 | `model_calibration_brier_forest` | `coef_forest` | per-stratum Brier scores + 95 % CI + reliability-curve auxiliary stats | Forest of Brier per stratum; reference at perfect-calibration zero; reviewer-proof for any P(commit) classifier surfaced earlier in the pack |
+
+### Family-rule satisfaction checklist
+
+- **C.6, C.11** (`heatmap` ≥1 imshow / pcolormesh) — satisfied by per-cell biosensor field (C.6) and dose × time response surface (C.11), both via `pcolormesh`.
+- **C.7** (`timecourse_hierarchical_ci` ≥1 CI band + ≥1 mean line) — satisfied by per-dose mean trace + bootstrap CI ribbon.
+- **C.8** (`diagnostic_curve` ≥2 curves + ≥1 legend) — satisfied by raw + corrected curves + bi-exp fit dashed reference + legend.
+- **C.9, C.15** (`coef_forest` ≥3 markers + ≥1 reference line) — satisfied by ≥3 (state × condition) PSD-peak markers (C.9) / ≥3 stratum Brier markers (C.15) + zero / perfect-calibration reference.
+- **C.10, C.14** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by N×N TE heatmap (C.10) and balance-grid `pcolormesh` (C.14).
+- **C.12** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — satisfied by 2-D embedding scatter + per-state convex-hull boundary as the "fit line".
+- **C.13** (`radar` ≥1 polar axis + ≥1 filled polygon) — satisfied by `subplot(projection='polar')` with the per-condition filled polygon + reference circle at equivalence margin (precedent: `meta_and_diagnostic/qc_metric_radar`, `dose_response_pharmacology/polypharmacology_radar`).
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/core/spectral_embedding_utility.py` | **NEW** (if recommended path) | `embed_2d(X, n_neighbors=15, sigma=None) -> (E, info)` — kNN-graph + symmetric Laplacian + smallest-non-zero eigenvectors via `scipy.linalg.eigh`. ~50 LOC. Used by C.12. |
+| `src/panelforge_figures/core/transfer_entropy_utility.py` | **NEW** | `transfer_entropy(source, target, n_bins=4, lag=1) -> float` — symbolic binning + Shannon-entropy decomposition. ~60 LOC. Used by C.10. |
+| `src/panelforge_figures/core/__init__.py` | edit | Export the two new functions. |
+| 10 new recipe modules under `src/panelforge_figures/recipes/intravital_imaging/` | **NEW** | One per recipe |
+| `src/panelforge_figures/recipes/intravital_imaging/__init__.py` | edit | Register 10 new recipes (imports + `__all__`); bumps total to 57 |
+| `src/panelforge_figures/recipes/intravital_imaging/_shared.py` | edit | Add 3 nested sub-contracts: `BiosensorField`, `BiosensorTimeTrace`, `DoseTimeResponse` |
+| `tests/test_spectral_embedding_utility.py` | **NEW** | Manifold-recovery on synthetic ring + S-curve (≥80 % neighbour preservation) |
+| `tests/test_transfer_entropy_utility.py` | **NEW** | TE recovery on a coupled-AR(1) ground truth (TE_X→Y > 0, TE_Y→X ≈ 0) |
+| `pyproject.toml` | **no edit** if recommended path; else add `umap-learn>=0.5` | — |
+
+(If the user gates the original lock-in path, swap `spectral_embedding_utility` for `umap-learn` dep + skip the corresponding test file.)
+
+### Demo seed convention (Wave 4)
+
+All Wave 4 demos use seeded RNG and the contemporary palette
+(slate / teal / coral / purple / amber for states; slate / coral
+for control / DISC1 conditions; cividis / viridis / magma for
+heatmap-family panels per Wave 3 lock-in).
+
+- **C.6**: 4 cells × 32×32 grid; ROCK biosensor signal peaks at +20 % over baseline in DISC1 protrusion-tip regions.
+- **C.7**: 5 doses × 30 cells × 90 frames; sigmoidal dose-response with EC50 ≈ 1.5 µM in control / 4 µM in DISC1.
+- **C.8**: 8 cells × 200 frames; bi-exponential bleach (fast τ_1 ≈ 30 s, slow τ_2 ≈ 200 s); corrected trace flat within ±2 %.
+- **C.9**: 3 states × 2 conditions × 30 cells; control PSD peak at ~0.05 Hz; DISC1 broadband (no clean peak).
+- **C.10**: 3 streams (state, velocity, length-rate) × 2 conditions × 60 cells; control TE(state→velocity) ≈ 0.4, reverse direction ≈ 0.05; DISC1 TE flat ≈ 0.1 in both directions.
+- **C.11**: 6 doses × 30 timepoints × 2 conditions; sustained response in control, transient peak in DISC1.
+- **C.12**: 200 cells × 8 features × 3 states; embedding clusters by state are visually separable.
+- **C.13**: 5 features × 2 conditions; equivalence margin = 0.2; DISC1 polygon escapes the margin on 2/5 axes.
+- **C.14**: 12 features × 2 cohorts; |SMD| > 0.1 on 3/12 (flagged in red).
+- **C.15**: 4 strata × 2 models; Brier scores 0.10–0.18; one stratum CI crosses zero (uncalibrated).
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| Spectral-embedding utility correctness (eigenvector-sign ambiguity, kNN-graph density choice) | Hand-test on synthetic ring + S-curve; require ≥80 % neighbour preservation versus brute-force pairwise distance ranking. |
+| C.10 transfer-entropy is sensitive to bin count and time-lag choice | Default `n_bins=4`, `lag=1`; expose both as contract fields; demo seed values produce visible asymmetry between TE(X→Y) and TE(Y→X). |
+| C.13 radar polygon collapse when all features land inside equivalence margin | Reference circle at the margin is plotted regardless; legend explicitly says "shaded region inside circle = within margin". |
+| C.14 cohort balance — |SMD| threshold (0.1 vs 0.2) is field-dependent | Both 0.1 and 0.2 reference circles drawn; cell colour interpolates linearly; user can read off via colourbar. |
+| C.6 4-panel inset layout (small-multiples) — risk of cropped axes per Wave 1 emission gremlin | Use `inset_axes` with `gridspec_kw={'wspace': 0.35}`; sentinel patches on parent ax for family rule. |
+| C.7 EC50 fit fails for non-monotonic dose-responses | Fit only when monotone; otherwise report "EC50 not fit" in title. |
+| C.8 bi-exp fit can lock onto a single τ when one exponential dominates | Default-initialise τ_1 < τ_2 with order-of-magnitude separation; report fit residual. |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. The 10 recipes need to be disciplined. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 1994 still pass + new utility tests.
+2. `pytest tests/test_recipes_smoke.py -k intravital_imaging` — 57 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k intravital_imaging` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet held at 20/20.
+5. `pytest tests/test_spectral_embedding_utility.py` — neighbour preservation > 80 %.
+6. `pytest tests/test_transfer_entropy_utility.py` — coupled-AR(1) ground-truth recovery TE_X→Y > TE_Y→X.
+7. Gallery regenerate `intravital_imaging/` — 57 PNGs.
+8. Eyeball each new panel; estimate 3–5 visual-QA fit-ups (Wave 4 is smaller than Wave 3 but introduces new families: radar + UMAP-style scatter).
+
+### Pack-closeout deliverables (after Commit 3 of Wave 4)
+
+After Wave 4 ships, run pack-closeout in a follow-up commit (same pattern as biophysics_scaling pack's PR #32):
+
+1. Bump tracker w4 row `review` → `merged`; add Summary-section "After W4" column to ✅.
+2. CHANGELOG roll-up `[1.3.0-beta-intravital_imaging] — 2026-04-XX` (full pack release notes summing 4 waves).
+3. Tag `v1.3.0-beta-intravital_imaging`, push, GitHub release with per-wave delta table.
+4. `docs/recipes_by_modality.md` headline badge: catalog 392 recipes; intravital_imaging 57.
 
 ## Out of scope for this pack
 

@@ -10,6 +10,15 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## DISC1-manuscript-companion beta-pack Wave 1 additions (v1.4.0-beta-disc1_manuscript_companion-w1)
+
+- **Which input features dominate each principal component, and how much variance does each PC explain?** → [`meta_and_diagnostic.pca_loadings_heatmap`](gallery/meta_and_diagnostic/pca_loadings_heatmap.png)
+- **Per cell, which measurements pass / fail QA, and what is the row-level verdict flag?** → [`meta_and_diagnostic.per_cell_audit_table_with_qa_flags`](gallery/meta_and_diagnostic/per_cell_audit_table_with_qa_flags.png)
+- **Across alternative interpretations, which criteria rule out which hypotheses, and what is the overall verdict for each alternative?** → [`meta_and_diagnostic.alternative_hypothesis_exclusion_table`](gallery/meta_and_diagnostic/alternative_hypothesis_exclusion_table.png)
+- **Across competing model specifications, which fit's residuals are tightest and most homoscedastic?** → [`meta_and_diagnostic.competing_model_residual_panels`](gallery/meta_and_diagnostic/competing_model_residual_panels.png)
+- **Under leave-one-out cross-validation, which classes does the random-forest classifier confuse, and what is the macro-F1 / accuracy?** → [`meta_and_diagnostic.random_forest_confusion_loocv`](gallery/meta_and_diagnostic/random_forest_confusion_loocv.png)
+- **For each modeled input, what empirical measurement constrains it, and how is the measurement transformed into the model parameter?** → [`meta_and_diagnostic.model_parameterization_lineage_panel`](gallery/meta_and_diagnostic/model_parameterization_lineage_panel.png)
+
 ## Intravital-imaging beta-pack Wave 4 additions (v1.3.0-beta-intravital_imaging-w4)
 
 - **Where on a cell does the biosensor signal peak above baseline, and does the spatial pattern differ between conditions?** → [`intravital_imaging.biosensor_activation_field_per_cell`](gallery/intravital_imaging/biosensor_activation_field_per_cell.png)

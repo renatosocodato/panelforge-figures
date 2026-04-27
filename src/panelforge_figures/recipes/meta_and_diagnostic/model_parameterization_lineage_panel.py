@@ -99,9 +99,12 @@ def render(contract: ParameterLineageInput, ax=None, **_):
     AESTHETIC.apply_to_ax(ax)
 
     n = len(contract.edges)
-    # Vertical layout: row i spans y in [i, i+0.85], top = 0, bottom = n.
-    y_top = -0.5
-    y_bot = n - 0.5
+    # Vertical layout: reserve a header row above the first edge
+    # so the column headers and the title can co-exist without
+    # overlap.
+    header_y = -1.0
+    y_top = -1.4
+    y_bot = n - 0.3
     box_h = 0.7
     left_x = 0.05
     right_x = 0.65
@@ -114,14 +117,14 @@ def render(contract: ParameterLineageInput, ax=None, **_):
     for side in ("top", "right", "left", "bottom"):
         ax.spines[side].set_visible(False)
 
-    # Headers.
-    ax.text(left_x + box_w / 2, y_top - 0.18,
+    # Headers (parked at header_y, well below the title).
+    ax.text(left_x + box_w / 2, header_y,
             contract.left_header,
-            ha="center", va="bottom", fontsize=7.6,
+            ha="center", va="center", fontsize=7.6,
             color="#222222", fontweight="bold")
-    ax.text(right_x + box_w / 2, y_top - 0.18,
+    ax.text(right_x + box_w / 2, header_y,
             contract.right_header,
-            ha="center", va="bottom", fontsize=7.6,
+            ha="center", va="center", fontsize=7.6,
             color="#222222", fontweight="bold")
 
     # Per-edge boxes + arrow.

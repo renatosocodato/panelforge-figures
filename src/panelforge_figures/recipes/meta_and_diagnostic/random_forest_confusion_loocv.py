@@ -95,12 +95,18 @@ def render(contract: RandomForestConfusionInput, ax=None, **_):
     cbar.set_label("row-normalised fraction", fontsize=6.6)
     cbar.ax.tick_params(labelsize=6.0)
 
-    # Annotate counts (and row-fraction in parentheses).
+    # Annotate counts (and row-fraction in parentheses).  Cividis
+    # is monotone-luminance so cells render as either dark navy
+    # (low fraction) or bright yellow (high fraction); white text
+    # is legible on the dark navy region (frac < 0.35) AND on the
+    # bright yellow region only with bold + outline.  Use a
+    # dual-bracket: white text on dark cells (low frac), black on
+    # mid-and-bright cells.
     for i in range(n):
         for j in range(n):
             count = int(M[i, j])
             frac = float(row_norm[i, j])
-            text_color = "white" if frac > 0.55 else "#222222"
+            text_color = "white" if frac < 0.35 else "#222222"
             ax.text(j, i,
                     f"{count}\n({smart_fmt(frac * 100)}%)",
                     ha="center", va="center", fontsize=6.6,

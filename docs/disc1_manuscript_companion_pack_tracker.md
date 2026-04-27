@@ -1,0 +1,183 @@
+# DISC1 manuscript companion pack tracker
+
+**Version label:** `[1.4.0-beta-cytoskeletal_morphometry_companion]` (sub-tags `-w1` … `-w4`)
+**Scope:** ~31 new recipes scattered across 5 existing modalities + 1 new `core/` shim, landed across 4 user-gated waves. Pack pattern inherited from `[1.3.0-beta-intravital_imaging]` (PRs #33–#38; tag `v1.3.0-beta-intravital_imaging`).
+**Anchor manuscript:** `<project_root>` — DISC1-linked microglial cytoskeletal confinement (in-vivo intravital + fixed-cell Airyscan + forward simulation).
+**Plan file:** `~/.claude/plans/shimmying-mapping-hammock.md`
+
+## Why this pack
+
+The just-shipped `intravital_imaging` pack covered the manuscript's **decision-layer / commitment-kinetics / biosensor / reviewer-proof** needs (42 recipes). Cross-referencing the manuscript's full figure inventory (28 main panels in F1–F6 + 26 supplementary panels in FS1–FS7) against the resulting **392-recipe catalog** identifies a remaining gap of:
+
+- **11 genuinely-missing high-end primitives** — universal QA tools (PCA loadings, per-cell audit tables, hypothesis-exclusion tables, model-residual panels) plus DISC1-specific narrative pieces (territory contact-network overlay, zone-fraction alluvial Sankey, narrative cascade river).
+- **17 near-match variants** — existing recipes (e.g. `colocalization_coefficient_matrix`, `airyscan_segmentation_mosaic`) that need new variants because the manuscript's framing is different (raincloud not matrix; triptych not mosaic; etc.). Per the repo's additive governance, these become **new recipes** rather than in-place extensions of the existing ones.
+
+**Total: ~31 new recipes**, suitable for a 4-wave companion pack. Catalog grows 392 → ~423.
+
+## Heavy-deps decision: zero new top-level deps
+
+Inherits the Option D inline-shim discipline established by `intravital_imaging`. No `networkx`, `scikit-bio`, or other new heavy deps:
+
+- F2A `territory_contact_network_overlay` — pure matplotlib (just plot nodes at coords + edges as lines from an adjacency-list passed in the contract; no graph algorithms needed for layout).
+- F2B `zone_fraction_alluvial_sankey` — reuse the `flow` family layout primitives already used by `pathway_flux_streamgraph`.
+- FS1A `pca_loadings_heatmap` — pure numpy SVD + `pcolormesh`.
+- FS1C `permanova_null_distribution` — single new `core/permanova_null_utility.py` shim (~40 LOC, pure numpy) that replaces a `scikit-bio` dep; modest footprint matching `core/km_survival_utility.py`.
+- All other recipes: numpy / scipy / matplotlib only.
+
+## Modality-boundary distribution: scatter across 5 existing modalities
+
+Per governance §9, no new modalities. The 31 recipes scatter as:
+
+| Modality | Δ (this pack) | Pre-pack | After w4 |
+|---|---|---|---|
+| `meta_and_diagnostic` | +6 | 15 | **21** |
+| `actin_microtubule_morphometry` | +14 | 35 | **49** |
+| `biophysics_scaling` | +10 | 37 | **47** |
+| `spatial_statistics` | +1 | 15 | **16** |
+| `grant_and_conceptual` | +1 | 15 | **16** |
+| `intravital_imaging` | +1 (extension) | 57 | **58** |
+| Total catalog | **+31** | 392 | **423** |
+
+## Summary
+
+| Metric | Start | After W1 | After W2 | After W3 | After W4 |
+|---|---|---|---|---|---|
+| Pack recipes landed | 0 | 6 | 13 | 22 | **31 (final)** |
+| Total catalog recipes | 392 | 398 | 405 | 414 | **423 (final)** |
+| New `_shared.py` modules | 0 | 1 | 2 | 2 | **2 (final)** |
+| New `core/` shims | 0 | 0 | 0 | 1 | **1 (final)** |
+
+## Per-wave status
+
+| Wave | Scope | Status | Branch | Merged tag | Notes |
+|---|---|---|---|---|---|
+| w1 | Universal QA + diagnostic primitives (+6): PCA loadings, per-cell audit, hypothesis exclusion, residual panels, RF confusion, parameterization lineage. All in `meta_and_diagnostic`. Pioneers `meta_and_diagnostic/_shared.py`. | **review** | `beta-disc1-companion-w1` | — (PR open) | 3 commits, 2 visual-QA fit-ups (W1.5 cividis off-diagonal text colour threshold inverted; W1.6 title-vs-headers overlap), 5 sub-contracts pioneered, total tests 2056 → 2086 |
+| w2 | Cell territory + multiscale presentation (+7): F1A territory-zone overlay, F1B dual-scale lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-network overlay, F2B zone-fraction Sankey, F2C colocalization raincloud. Pioneers `actin_microtubule_morphometry/_shared.py`. | pending | — | — | Depends on w1 |
+| w3 | Cytoskeleton geometry + statistics (+9): F2D angle rose, F2E Cleveland, F3B censoring waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B z-span vs width. | pending | — | — | Depends on w2 |
+| w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack. | pending | — | — | Depends on w3; closes pack |
+
+Status legend:
+- **pending** — not yet started
+- **gap-analysis** — Commit 1 landed, awaiting user approval
+- **implementation** — recipes being authored (Commit 2)
+- **review** — PR open, awaiting merge
+- **merged** — squash-merged to `main`, tag pushed
+
+## Wave 1 — universal QA + diagnostic primitives (+6) [gap-analysis]
+
+**Why first.** All 6 recipes are biology-agnostic primitives that any future pack reuses. They form the substrate for the DISC1 manuscript's reviewer-proof supplementary panels (FS1A loadings, FS3A/FS5A audit, FS4A-C residuals, FS1B confusion) plus the methods-section parameterization lineage (F6A) and the rigorous-design exclusion table (F3C). No biology-specific contracts; pure substrate.
+
+### Recipe roster (Wave 1)
+
+| ID | Recipe | Family | Required fields | Precedent to mirror |
+|---|---|---|---|---|
+| W1.1 | `pca_loadings_heatmap` | `heatmap` | `loadings: ndarray`, `feature_names: list[str]`, `component_labels: list[str]` | new — variables × PC `pcolormesh` on diverging cmap |
+| W1.2 | `per_cell_audit_table_with_qa_flags` | `matrix` | `rows: list[CellAuditRow]` (per-cell metric + R² + flag status) | extends pattern from `cohort_baseline_balance_table_matrix` (intravital_imaging Wave 4) |
+| W1.3 | `alternative_hypothesis_exclusion_table` | `matrix` | `hypotheses: list[ExclusionRow]` (alternative + criterion + verdict) | new — visual table with ✓/✗ marks; reuses `tost_bounds_utility.classify_outcome` framing |
+| W1.4 | `competing_model_residual_panels` | `scatter_collapse` | `models: list[CompetingModelFit]` (predicted, observed, residuals per model) | new — multi-panel residual structure for ≥2 model fits |
+| W1.5 | `random_forest_confusion_loocv` | `matrix` | `confusion_matrix: ndarray`, `class_labels: list[str]`, `cv_metadata` | new — LOOCV confusion matrix with misclassification rates |
+| W1.6 | `model_parameterization_lineage_panel` | `conceptual` | `lineage: list[ParameterLineageEdge]` (modeled-input → measured-readout) | new — methods-section staple; pure matplotlib arrows + boxes |
+
+### Family-rule satisfaction checklist
+
+- **W1.1** (`heatmap` ≥1 imshow / pcolormesh) — satisfied by the loadings `pcolormesh`.
+- **W1.2, W1.3, W1.5** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by per-row colour `pcolormesh` (W1.2 + W1.5) or annotated cell patches (W1.3).
+- **W1.4** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — satisfied by per-model residual scatter + zero-residual reference line.
+- **W1.6** (`conceptual` — no strict family quality rule) — pure matplotlib annotation.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/recipes/meta_and_diagnostic/_shared.py` | **NEW** | 5 nested Pydantic sub-contracts: `CellAuditRow`, `ExclusionRow`, `CompetingModelFit`, `ParameterLineageEdge`, `LoadingsBundle`. Pioneers `_shared.py` for this modality. |
+| 6 new recipe modules under `recipes/meta_and_diagnostic/` | **NEW** | One per recipe |
+| `recipes/meta_and_diagnostic/__init__.py` | edit | Register 6 new recipes (imports + `__all__`); bumps total to 21 |
+| `CHANGELOG.md` | edit | "In planning" pointer rolled to cytoskeletal_morphometry_companion |
+| `docs/cytoskeletal_morphometry_companion_pack_tracker.md` | **NEW** | This file |
+
+No new top-level deps; no changes to other modalities.
+
+### `_demo()` seed convention (Wave 1)
+
+All Wave 1 demos use seeded RNG and the registered `meta_and_diagnostic` palette (already in `_aesthetic.py`). Demo data is biology-agnostic so the recipes can be reused outside the DISC1 pack:
+
+- W1.1: 12 features × 5 PCs; explained-variance bars under heatmap; mock features `feature_01..12`.
+- W1.2: 24 cells × 6 audit columns (Lp_actin, Lp_mt, fit_R², n_segments, censoring_flag, qa_pass); 4 cells flagged.
+- W1.3: 5 alternative hypotheses × 3 criteria; one hypothesis ruled out on all three, two equivocal.
+- W1.4: 2 competing models (`width_only` vs `interaction`) × 80 observations; interaction model has tighter residuals.
+- W1.5: 3-class confusion (WT / LI / mixed) with 5 % off-diagonal LOOCV misclassification.
+- W1.6: 4 modeled inputs (width, alpha, segment_length, persistence_length) lineage-mapped to 4 measurements.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| W1.6 `conceptual` family has no strict quality rule, so it can be visually inconsistent across recipes | Use existing `methods_pipeline_flow` (grant_and_conceptual) as reference for box / arrow style. |
+| W1.3 hypothesis-exclusion ✓/✗ glyphs need to be Helvetica-safe | Use ASCII `Y` / `N` or coloured circles instead of unicode checkmarks. |
+| W1.2 per-cell audit can have many rows in real data | Default-paginate at 30 rows; demo uses 24. |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 2056 + Wave 1 recipe smoke / quality / contracts (~12 new) = ~2068.
+2. `pytest tests/test_recipes_smoke.py -k meta_and_diagnostic` — 21 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k meta_and_diagnostic` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
+5. Gallery regenerate `meta_and_diagnostic/` — 21 PNGs.
+6. Eyeball each new panel; estimate **3 visual-QA fit-ups** (small wave; conventions already established).
+
+## Wave 2 — cell territory + multiscale presentation (+7) [pending]
+
+**Why next.** F1 + F2 cluster of cell-level territory + scale-decomposition figures, which set up the manuscript narrative. Builds on Wave 1's QA primitives. Pioneers `actin_microtubule_morphometry/_shared.py` for the territory + colocalization sub-contracts.
+
+### Recipe roster (Wave 2)
+
+| ID | Recipe | Modality | Family | Panel |
+|---|---|---|---|---|
+| W2.1 | `dual_scale_significance_lollipop` | biophysics_scaling | coef_forest | F1B |
+| W2.2 | `pca_silhouette_glyph_morphospace` | actin_microtubule_morphometry | scatter_collapse | F1C |
+| W2.3 | `airyscan_to_zone_territory_triptych` | actin_microtubule_morphometry | matrix | F1D |
+| W2.4 | `territory_zone_overlay_intravital` | intravital_imaging | heatmap | F1A |
+| W2.5 | `territory_contact_network_overlay` | actin_microtubule_morphometry | heatmap | F2A |
+| W2.6 | `zone_fraction_alluvial_sankey` | actin_microtubule_morphometry | flow | F2B |
+| W2.7 | `colocalization_raincloud_per_metric` | actin_microtubule_morphometry | split_violin | F2C |
+
+### Wave 2 sub-contracts (NEW `actin_microtubule_morphometry/_shared.py`)
+
+- `ZoneTerritoryMap` — per-cell H × W grid + zone label per pixel.
+- `ContactPatchNetwork` — node coords + edge adjacency + cell ROI polygon.
+- `ColocalizationCoefficients` — per-cell {M1, M2, Pearson, Spearman} bundle.
+- `ProtrusionOutlineWithMetrics` — outline polyline + width / erosion-depth scalars.
+- `MultiScaleSignificanceRow` — feature × scale × `-log10(p)` × tier-band.
+- `AirzanZoneTriptychBundle` — raw / skeleton / zone-territory image stack.
+
+## Wave 3 — cytoskeleton geometry + statistics (+9) [pending]
+
+F2D / F2E / F3 / F4 + foundational supplements (FS2 + FS4 + FS5 partial). Geometry-and-statistics cluster — Cleveland summaries, censoring waterfalls, gauge plots, Kinhom corrections, mesh-density compartment compares. Extends both `actin_microtubule_morphometry/_shared.py` and `biophysics_scaling/_shared.py` with new sub-contracts.
+
+(Detail filled in when Wave 3 gap analysis is gated.)
+
+## Wave 4 — narrative integration + final supplements (+9) [pending]
+
+F5 / F6 narrative-integration panels + FS5–FS7 final supplements. Closes the pack. Includes the headline `narrative_cascade_river` (synthesis-figure primitive) plus the new `core/permanova_null_utility.py` shim.
+
+(Detail filled in when Wave 4 gap analysis is gated.)
+
+## Pack-closeout deliverables (after Commit 3 of Wave 4)
+
+After Wave 4 ships, run pack-closeout in a follow-up PR (same pattern as biophysics_scaling pack PR #32 + intravital_imaging pack PR #38):
+
+1. Bump tracker w4 row `review` → `merged`; mark Summary "After W4" column ✅.
+2. CHANGELOG roll-up `[1.4.0-beta-cytoskeletal_morphometry_companion]` (full pack release notes summing 4 waves).
+3. Tag `v1.4.0-beta-cytoskeletal_morphometry_companion`, push, GitHub release with per-wave delta table.
+4. `docs/recipes_by_modality.md` headline badge: catalog 423 recipes; per-modality counts updated.
+
+## Out of scope for this pack
+
+- New modality (additive governance — all recipes go into existing modalities).
+- Cytosim / Monte-Carlo simulation engines (those live outside panelforge; only their visual outputs are in scope, and those map to existing biophysics_scaling forward-validation recipes).
+- Interactive / live-imaging variants.
+- Tables S1–S9 (auto-generated from data, not figure recipes).
+- SI text boxes (prose, not figures).
+- Manuscript-LaTeX integration.
+- Sex- / genotype-stratified layout templates — figure-composition concern.

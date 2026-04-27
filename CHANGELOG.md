@@ -6,6 +6,135 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **DISC1 manuscript companion pack**
+  (`[1.4.0-beta-disc1_manuscript_companion]`) — ~31 new recipes
+  scattered across 5 existing modalities, landed across 4 user-
+  gated waves. Closes the gap between manuscript figure needs
+  (`/Users/renatosocodato/actin-mt_biophysics/manuscript/2026_disc1_microglial_cytoskeletal_confinement`)
+  and the 392-recipe catalog after the intravital_imaging pack.
+  See
+  [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
+  for the full pack plan. **Zero new heavy deps** (Option D
+  inline-shim discipline preserved); 1 new `core/` shim
+  (`permanova_null_utility.py`) lands in Wave 4.
+- **Wave 1** in review via PR (+6 universal QA primitives in
+  `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
+  catalog 392 → 398.
+- **Waves 2–4 pending** (+7 cell-territory + multiscale,
+  +9 cytoskeleton geometry, +9 narrative integration).
+  Cumulative final: catalog 392 → 423; intravital_imaging
+  57 → 58 (one extension); actin_microtubule_morphometry
+  35 → 49; biophysics_scaling 37 → 47; spatial_statistics
+  15 → 16; grant_and_conceptual 15 → 16.
+
+## [1.4.0-beta-disc1_manuscript_companion-w1] — 2026-04-27
+
+First wave of the `disc1_manuscript_companion` beta expansion
+pack. Lands the 6 universal QA + diagnostic primitives in
+`meta_and_diagnostic`, biology-agnostic and reusable beyond the
+DISC1 manuscript. Pioneers `meta_and_diagnostic/_shared.py` with
+5 nested Pydantic sub-contracts. `meta_and_diagnostic` expands
+from 15 to 21 recipes; total catalog 392 → 398.
+
+### Added (6 recipes)
+
+- `pca_loadings_heatmap` (`heatmap`, W1.1) — variables ×
+  principal-components signed loadings on a diverging RdBu_r
+  cmap; explained-variance bar above each column inset on
+  axes-fraction. Annotates large-magnitude loadings (≥ 55 % of
+  v_abs) with white-on-saturated text. **Closes manuscript
+  panel FS1A** (PCA loading structure heatmap).
+- `per_cell_audit_table_with_qa_flags` (`matrix`, W1.2) — per-row
+  metric values column-wise z-score-coloured (RdBu_r) plus a
+  flag column (`pass` / `borderline` / `flag` / `fail`) coloured
+  by verdict. Verdict tally in title. **Closes manuscript panels
+  FS3A and FS5A** (per-cell Lp / z-span audits with quality
+  flags).
+- `alternative_hypothesis_exclusion_table` (`matrix`, W1.3) —
+  hypotheses on rows × evaluation criteria on columns; cell
+  glyphs `Y` / `N` / `~` (Helvetica-safe ASCII) coloured by
+  whether the criterion supports / rules-out / is equivocal-on
+  each alternative; per-row overall verdict in a right-most
+  column with explicit colour coding. Cell-patch background
+  matches the matrix family rule. **Closes manuscript panel
+  F3C** (exclusion / constraint table).
+- `competing_model_residual_panels` (`scatter_collapse`, W1.4) —
+  multi-panel residuals vs predicted for ≥2 competing model
+  fits; per-panel zero-residual reference dashed line + LOWESS-
+  like running mean (visual residual structure); per-model RMSE
+  / AIC / BIC callouts in panel titles. **Closes manuscript
+  panels FS4A-C** (residual structure plots for competing
+  width-only vs interaction-surface models).
+- `random_forest_confusion_loocv` (`matrix`, W1.5) — square
+  confusion matrix on cividis cmap, row-normalised; cell
+  annotations show count + row-fraction; macro-F1 + accuracy in
+  title. **Closes manuscript panel FS1B** (LOOCV confusion
+  matrix with misclassification rates).
+- `model_parameterization_lineage_panel` (`conceptual`, W1.6) —
+  two-column box-and-arrow diagram linking each modeled-input
+  (slate left box) to its empirical measurement (teal right
+  box); per-edge transformation note above arrow; pure
+  matplotlib FancyBboxPatch + FancyArrowPatch primitives.
+  **Closes manuscript panel F6A** (parameterization summary
+  linking modeled inputs back to measured cellular readouts).
+
+### Infrastructure
+
+- `recipes/meta_and_diagnostic/_shared.py` (new) — 5 nested
+  Pydantic sub-contracts: `LoadingsBundle`, `CellAuditRow`,
+  `ExclusionRow`, `CompetingModelFit`, `ParameterLineageEdge`.
+  Pioneers `_shared.py` for this modality. Biology-agnostic;
+  any future reviewer-proof / diagnostic recipe can extend it.
+- `recipes/meta_and_diagnostic/__init__.py` (edit) — register
+  6 new recipes (imports + `__all__`); modality total 15 → 21.
+
+### Demo conventions
+
+All 6 demos use seeded RNG (`np.random.default_rng(40X)`) and
+biology-agnostic data so the recipes are immediately reusable
+outside the DISC1 pack:
+
+- W1.1: 12 features × 5 PCs; territory features dominate PC1,
+  network features dominate PC2, polymer features dominate PC3
+  — visible immediately in the loadings heatmap.
+- W1.2: 20 cells × 5 audit columns (`Lp_actin`, `Lp_mt`,
+  `fit_R²`, `n_segments`, `censored`); 2 fails / 3 borderlines
+  / 1 flag.
+- W1.3: 4 alternative hypotheses × 3 criteria; 2 ruled out, 1
+  equivocal, 1 consistent.
+- W1.4: 2 competing models (`width_only` vs `interaction`) × 80
+  observations; interaction-model residuals tighter and less
+  trended.
+- W1.5: 3 classes (`WT` / `LI` / `het`) × 97 cells; ~92 %
+  accuracy with realistic off-diagonal structure.
+- W1.6: 6 parameterization edges (width / Lp_actin / Lp_mt /
+  area / segment-length / alpha) linked to their measurements.
+
+### Tests
+
+- Total: **2056 → 2086** (+30: 6 smoke + 6 quality + ~18 from
+  auto-parametrized contracts and registry).
+- `tests/test_contracts.py` per-modality assertion bumped:
+  `counts["meta_and_diagnostic"] == 15` → `21`.
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Visual-QA polish during authoring (2 fit-ups)
+
+- W1.3 `fontsize=10.0` for Y/N/~ glyphs snapped to existing
+  `9.6` to keep style-drift ratchet at 20/20.
+- W1.6 unused `numpy` import removed (was only a no-op
+  `_ = np.zeros(1)` — cleaner without).
+
+### Progress
+
+- meta_and_diagnostic recipes: **15 → 21** (+6).
+- disc1_manuscript_companion pack recipes landed: **0 → 6**
+  (Wave 1 of 4).
+- New `_shared.py` modules pioneered: **0 → 1** (will reach
+  2 after Wave 2 pioneers `actin_microtubule_morphometry/_shared.py`).
+
 ### Completed packs
 
 - **intravital_imaging beta expansion pack
@@ -16,8 +145,8 @@ project follows semantic versioning.
   dependencies** beyond `hmmlearn` (no `umap-learn` / `pyhsmm` /
   `lifelines` / `statsmodels` / `pygam`). Catalog 350 → 392;
   intravital_imaging 15 → 57. Tests 1814 → 2056. PRs #33 → #37
-  (+ #34 polish). See pack-closeout summary at the end of the
-  Wave 1 entry below, and
+  (+ #34 polish, #38 closeout). See pack-closeout summary at the
+  end of the Wave 1 entry below, and
   [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
   for the full pack tracker.
 

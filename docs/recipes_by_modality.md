@@ -7,6 +7,8 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
+**v1.4.0-beta-disc1_manuscript_companion — Wave 1 landed: 398 recipes** (meta_and_diagnostic +6 universal QA primitives). Pack total: 6/31 recipes; 1/4 waves. See `docs/disc1_manuscript_companion_pack_tracker.md`.
+
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
 - **grant_and_conceptual** (6): executive summaries, Gantts, WP flows,
@@ -59,6 +61,33 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.4.0-beta-disc1_manuscript_companion — Wave 1 (universal QA primitives, +6)
+
+First wave of the disc1_manuscript_companion beta expansion pack.
+Lands the 6 universal QA + diagnostic primitives in
+`meta_and_diagnostic`, biology-agnostic and reusable beyond the
+DISC1 manuscript. Pioneers `meta_and_diagnostic/_shared.py` with
+5 nested Pydantic sub-contracts. meta_and_diagnostic expands from
+15 to 21 recipes; total catalog 392 → 398.
+
+- **pca_loadings_heatmap** (`heatmap`) — variables × PC signed
+  loadings on diverging cmap with explained-variance bar inset.
+- **per_cell_audit_table_with_qa_flags** (`matrix`) — per-row
+  metric values + flag column (pass / borderline / flag / fail)
+  with verdict tally in title.
+- **alternative_hypothesis_exclusion_table** (`matrix`) —
+  hypotheses × criteria grid with Y/N/~ glyphs (Helvetica-safe
+  ASCII) and per-row verdict column.
+- **competing_model_residual_panels** (`scatter_collapse`) —
+  multi-panel residuals vs predicted with zero-residual reference
+  + LOWESS-like running mean + per-model RMSE/AIC/BIC callouts.
+- **random_forest_confusion_loocv** (`matrix`) — square
+  row-normalised confusion matrix on cividis with macro-F1 and
+  accuracy in title.
+- **model_parameterization_lineage_panel** (`conceptual`) —
+  two-column box-and-arrow diagram linking modeled inputs to
+  empirical measurements with per-edge transformation notes.
 
 ## v1.3.0-beta-intravital_imaging — Wave 4 (translational + reviewer-proof, +10)
 

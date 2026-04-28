@@ -6,6 +6,31 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **CDC42 factorial companion pack**
+  (`[1.5.0-beta-cdc42_factorial_companion]`) — ~25 new recipes
+  scattered across 6 existing modalities, landed across 4 user-
+  gated waves. Closes the gap between the cdc42_fxm manuscript's
+  Bayes-factor / multiverse / multi-omic-concordance / 2 × 2
+  factorial / pathway-support primitives and the 423-recipe
+  catalog after the disc1_manuscript_companion pack. See
+  [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+  for the full pack plan. **Zero new heavy deps** (Option D
+  inline-shim discipline preserved); 2 new `core/` shims
+  (`bayes_factor_utility`, `multiverse_specification_utility`)
+  land in Wave 1.
+- **Wave 1** gap-analysis in review (+6 universal robustness
+  primitives in `meta_and_diagnostic`: Bayes-factor arrow plot,
+  panel-provenance ledger, cross-contrast correlation matrix,
+  multiverse robustness classification, multiverse specification
+  curve, proxy-alignment in-vs-LOOCV forest).
+  meta_and_diagnostic 21 → 27; total catalog 423 → 429.
+- **Waves 2–4 pending** (+6 multi-omic integration, +7 factorial
+  statistics + sex-stratified validation, +6 energetic /
+  thermodynamic + narrative integration). Cumulative final:
+  catalog 423 → 448.
+
 ### Completed packs
 
 - **DISC1 manuscript companion pack
@@ -18,8 +43,8 @@ project follows semantic versioning.
   `grant_and_conceptual`) plus extensions to `biophysics_scaling`.
   **Zero new heavy dependencies** (no `scikit-bio` /
   `networkx` / `pysankey`). Catalog 392 → 423; 6 modalities
-  touched. Tests 2056 → 2218. PRs #39 → #42. See pack-closeout
-  summary at the end of the Wave 1 entry below, and
+  touched. Tests 2056 → 2218. PRs #39 → #42 (+ #43 closeout).
+  Tag `v1.4.0-beta-disc1_manuscript_companion`. See
   [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
   for the full pack tracker.
 

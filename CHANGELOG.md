@@ -6,6 +6,139 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
+### In planning
+
+- **CDC42 factorial companion pack**
+  (`[1.5.0-beta-cdc42_factorial_companion]`) — ~25 new recipes
+  scattered across 6 existing modalities, landed across 4 user-
+  gated waves. Closes the gap between the cdc42_fxm manuscript's
+  Bayes-factor / multiverse / multi-omic-concordance / 2 × 2
+  factorial / pathway-support primitives and the 423-recipe
+  catalog after the disc1_manuscript_companion pack. See
+  [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+  for the full pack plan. **Zero new heavy deps** (Option D
+  inline-shim discipline preserved); 2 new `core/` shims
+  (`bayes_factor_utility`, `multiverse_specification_utility`)
+  land in Wave 1.
+- **Wave 1** in review via PR (+6 universal robustness primitives
+  in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
+  catalog 423 → 429.
+- **Waves 2–4 pending** (+6 multi-omic integration, +7 factorial
+  statistics + sex-stratified validation, +6 energetic /
+  thermodynamic + narrative integration). Cumulative final:
+  catalog 423 → 448.
+
+## [1.5.0-beta-cdc42_factorial_companion-w1] — 2026-04-28
+
+First wave of the `cdc42_factorial_companion` beta expansion
+pack. Lands the 6 universal robustness + provenance primitives
+in `meta_and_diagnostic`, biology-agnostic and reusable beyond
+the cdc42_fxm manuscript. Pioneers 2 new `core/` shims
+(`bayes_factor_utility`, `multiverse_specification_utility`).
+`meta_and_diagnostic` expands from 21 to 27 recipes; total
+catalog 423 → 429.
+
+### Added (6 recipes)
+
+- `bayes_factor_arrow_plot` (`coef_forest`, W1.1) — per-row
+  arrow markers showing BF₀₁ on log-x with Wagenmakers /
+  Kass-Raftery threshold zones (favours_alt / anecdotal /
+  moderate / strong / decisive); reference at BF=1; n-decisive
+  callout in title. Uses `core/bayes_factor_utility`.
+  **Closes manuscript panel F2J.**
+- `panel_provenance_ledger_table` (`matrix`, W1.2) — per-panel
+  ledger with dataset layer, n_mice, n_obs, support class on
+  diverging cmap (main_inference / support / constraint /
+  discovery / limitation); per-class tally in title.
+  **Closes Supp Table R1 visual surrogate.**
+- `cross_contrast_correlation_matrix` (`matrix`, W1.3) — N × N
+  RdBu_r heatmap with diagonal masked; mean off-diagonal r in
+  title. **Closes manuscript panel SF4D.**
+- `multiverse_robustness_classification_bar` (`matrix`, W1.4) —
+  per-spec coloured cell strip + stacked composition bar
+  showing ROBUST / FRAGILE / NON_SIG fractions.
+  **Closes manuscript panel SF4B.**
+- `multiverse_specification_curve` (`scatter_collapse`, W1.5) —
+  sorted-effect scatter with shaded ROPE band + zero reference;
+  per-spec coloured by classification; CI segments per spec.
+  **Closes manuscript panel SF2G.**
+- `proxy_alignment_in_vs_loocv_forest` (`coef_forest`, W1.6) —
+  paired in-sample (filled) vs LOOCV (hollow) R² markers per
+  proxy; OVERFIT flag for negative-LOOCV rows.
+  **Closes manuscript panel F4D.**
+
+### Infrastructure
+
+- `core/bayes_factor_utility.py` (new, ~85 LOC) — `bf_from_bic(
+  bic_alt, bic_null) → BF₀₁` (Wagenmakers 2007 BIC approximation)
+  + `classify_bf_threshold(bf)` for Kass-Raftery tier mapping
+  (favours_alt / anecdotal / moderate / strong / decisive).
+  Replaces a `BayesFactor` (R) / `JASP` dep.
+- `core/multiverse_specification_utility.py` (new, ~95 LOC) —
+  `multiverse_audit(effect_sizes, ci_lo=None, ci_hi=None,
+  threshold=0.10, rope=(-0.10, 0.10)) → (classifications,
+  sort_order)`. Pure-numpy specification-curve sensitivity
+  analysis (Steegen 2016, Simonsohn 2020). Replaces a
+  `multiverse-r` dep.
+- `core/__init__.py` (edit) — exports `bf_from_bic`,
+  `classify_bf_threshold`, `BF_THRESHOLDS`, `multiverse_audit`,
+  `MULTIVERSE_OUTCOME_CLASSES`.
+- `tests/test_bayes_factor_utility.py` (new, 6 tests) — equal
+  BICs → BF=1; alt-better → BF<1; null-better → BF>1; extreme
+  delta clamps finite; threshold tier classification; boundary-
+  inclusive lower-tier semantics.
+- `tests/test_multiverse_specification_utility.py` (new, 7
+  tests) — shape, class labels in official set, sub-threshold
+  classified NON_SIG, CI-excludes-ROPE → ROBUST, CI-overlaps-
+  ROPE → FRAGILE, sort-order ascending, no-CI fragile-collapse.
+- `recipes/meta_and_diagnostic/_shared.py` (edit) — adds 5
+  sub-contracts: `BayesFactorRow`, `PanelProvenanceRow`,
+  `CrossContrastEntry`, `MultiverseSpec`, `ProxyAlignmentEntry`.
+- `recipes/meta_and_diagnostic/__init__.py` (edit) — registers
+  6 new recipes; modality 21 → 27.
+- `tests/test_contracts.py` per-modality assertion bumped:
+  `counts["meta_and_diagnostic"] == 21` → `27`.
+
+### Demo conventions
+
+All 6 demos use seeded RNG (`np.random.default_rng(80X)`) and
+biology-agnostic synthetic data so the recipes are immediately
+reusable outside the cdc42 pack:
+
+- W1.1: 4 secondary descriptors with BFs spanning anecdotal
+  → strong (one favouring alt with BF<1).
+- W1.2: 12 panel rows with 3 main_inference / 5 support /
+  1 constraint / 1 discovery / 1 limitation classes; mixed
+  main + supp dataset layers.
+- W1.3: 5×5 between-contrast correlation; off-diagonal mean
+  r ≈ 0.20 (independent contrasts).
+- W1.4: 12 specs (7 ROBUST / 3 FRAGILE / 2 NON_SIG) showing
+  composition bar + per-spec strip.
+- W1.5: 25 specs sorted by effect size; cluster crossings into
+  ROPE band; CI segments per spec.
+- W1.6: 4 proxies (vel_sd well-aligned, mean_velocity overfit
+  with negative LOOCV); OVERFIT flag visible on the
+  mean_velocity row.
+
+### Visual-QA polish during authoring (1 fit-up)
+
+- W1.2 `fontsize=8.0` snapped to existing `8.2` to keep the
+  style-drift ratchet at 20/20.
+
+### Tests
+
+- Total: **2218 → 2261** (+43: 6 smoke + 6 quality + 13 utility
+  + ~18 from auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- meta_and_diagnostic recipes: **21 → 27** (+6).
+- cdc42_factorial_companion pack recipes landed: **0 → 6**
+  (Wave 1 of 4).
+- New `core/` shims: **0 → 2** (`bayes_factor_utility`,
+  `multiverse_specification_utility`).
+
 ### Completed packs
 
 - **DISC1 manuscript companion pack
@@ -18,8 +151,8 @@ project follows semantic versioning.
   `grant_and_conceptual`) plus extensions to `biophysics_scaling`.
   **Zero new heavy dependencies** (no `scikit-bio` /
   `networkx` / `pysankey`). Catalog 392 → 423; 6 modalities
-  touched. Tests 2056 → 2218. PRs #39 → #42. See pack-closeout
-  summary at the end of the Wave 1 entry below, and
+  touched. Tests 2056 → 2218. PRs #39 → #42 (+ #43 closeout).
+  Tag `v1.4.0-beta-disc1_manuscript_companion`. See
   [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
   for the full pack tracker.
 

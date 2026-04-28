@@ -1,6 +1,11 @@
 """Core layer — style, palette, primitives, layout, export, contracts, QA."""
 
 from .aesthetic_base import AnnotationStyle, InsetConvention, ModalityAesthetic
+from .bayes_factor_utility import (
+    BF_THRESHOLDS,
+    bf_from_bic,
+    classify_bf_threshold,
+)
 from .contract import RecipeContract, RecipeFamily, RecipeMetadata, register_recipe
 from .export import export_figure, multi_format_export
 from .gam_logistic_utility import fit_phase_boundary
@@ -11,6 +16,10 @@ from .hmm_decoding_utility import (
 )
 from .km_survival_utility import kaplan_meier
 from .layout import FIGSIZE_PRESETS, make_figure, make_panel_grid
+from .multiverse_specification_utility import (
+    MULTIVERSE_OUTCOME_CLASSES,
+    multiverse_audit,
+)
 from .palette import Palette, get_palette, list_palettes, register_palette
 from .permanova_null_utility import permanova_null_distribution
 from .primitives import (
@@ -49,9 +58,11 @@ from .tost_bounds_utility import (
 from .transfer_entropy_utility import transfer_entropy
 
 __all__ = [
+    "BF_THRESHOLDS",
     "FIGSIZE_PRESETS",
     "FigureIntegrityIssue",
     "FigureIntegrityReport",
+    "MULTIVERSE_OUTCOME_CLASSES",
     "PF_FONT_SIZES",
     "PF_FONT_STACK",
     "PF_LINE_WIDTHS",
@@ -64,9 +75,11 @@ __all__ = [
     "RecipeMetadata",
     "add_halo_label",
     "apply_base_style",
+    "bf_from_bic",
     "bootstrap_ci",
     "callout_box",
     "check_figure_integrity",
+    "classify_bf_threshold",
     "classify_outcome",
     "colored_bracket",
     "current_theme",
@@ -86,6 +99,7 @@ __all__ = [
     "make_figure",
     "make_panel_grid",
     "multi_format_export",
+    "multiverse_audit",
     "permanova_null_distribution",
     "register_palette",
     "register_recipe",

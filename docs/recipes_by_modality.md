@@ -7,7 +7,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
-**v1.4.0-beta-disc1_manuscript_companion — Wave 3 landed: 414 recipes** (cumulative across W1+W2+W3: meta_and_diagnostic +6, actin_microtubule_morphometry +10, biophysics_scaling +4, spatial_statistics +1, intravital_imaging +1). Pack total: 22/31 recipes; 3/4 waves. See `docs/disc1_manuscript_companion_pack_tracker.md`.
+**v1.4.0-beta-disc1_manuscript_companion — Wave 4 landed: 423 recipes** (cumulative across all 4 waves: meta_and_diagnostic +6, actin_microtubule_morphometry +12, biophysics_scaling +10, spatial_statistics +1, intravital_imaging +1, grant_and_conceptual +1). Pack total: 31/31 recipes; 4/4 waves; pack tag candidate `v1.4.0-beta-disc1_manuscript_companion`. See `docs/disc1_manuscript_companion_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -61,6 +61,56 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.4.0-beta-disc1_manuscript_companion — Wave 4 (narrative integration + final supplements, +9)
+
+Final wave of the disc1_manuscript_companion beta expansion pack.
+Lands the 9-recipe F5 / F6 narrative-integration cluster + FS1C /
+FS3D / FS5C / FS5D / FS6E-F / FS7B-D supplementary panels.
+Pioneers `grant_and_conceptual/_shared.py` for the headline
+narrative-cascade synthesis-figure primitive. Adds 1 new `core/`
+shim. **Closes the pack at 31/31 recipes.** Catalog 414 → 423.
+
+- **pseudotime_thumbnail_strip** (`matrix`,
+  actin_microtubule_morphometry) — per-cell thumbnails along the
+  Actin Drive Index pseudotime axis + stand-off divergence below.
+- **narrative_cascade_river_with_xrefs** (`conceptual`,
+  grant_and_conceptual) — multi-stage causal river with figure
+  cross-references and inline statistics. Headline synthesis-
+  figure primitive.
+- **split_mirror_measured_vs_simulated** (`split_violin`,
+  biophysics_scaling) — three side-by-side panels, measured (left
+  half) vs simulated (right half) split violins per condition.
+- **permanova_null_distribution** (`diagnostic_curve`,
+  biophysics_scaling) — null-distribution histogram + observed R²
+  vertical reference + tail shading. Uses new
+  `core/permanova_null_utility.py` shim.
+- **overlap_juxtaposition_quantification** (`scatter_collapse`,
+  actin_microtubule_morphometry) — polymer-overlap × territory-
+  juxtaposition shared-manifold scatter with per-condition
+  running-median fits.
+- **force_budget_schematic_with_data** (`conceptual`,
+  biophysics_scaling) — methods-style schematic with measured
+  per-term values + 95% CI bars.
+- **confinement_ratio_distribution_by_genotype** (`split_violin`,
+  biophysics_scaling) — split-violin of confinement ratio
+  (z-span / Euler L_crit) per genotype with reference at
+  ratio = 1.0.
+- **splay_taper_polarity_displacement_compound** (`coef_forest`,
+  biophysics_scaling) — three frontier-architecture readouts ×
+  conditions × CI markers + zero-effect reference.
+- **sensitivity_sweep_alpha_width_seed_compound**
+  (`timecourse_hierarchical_ci`, biophysics_scaling) — three side-
+  by-side panels showing per-condition mean output vs swept
+  parameter with bootstrap CI ribbons.
+
+New `core/` shim: **`permanova_null_utility.py`** —
+`permanova_null_distribution(X, labels, n_perms=999, seed=0) →
+(R2_obs, R2_null, p_perm)` (~85 LOC, pure numpy). Replaces a
+`scikit-bio` dep.
+
+Pack-closeout: disc1_manuscript_companion beta expansion pack is
+COMPLETE at 31/31 recipes across 4 waves.
 
 ## v1.4.0-beta-disc1_manuscript_companion — Wave 3 (cytoskeleton geometry + statistics, +9)
 

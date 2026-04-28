@@ -165,7 +165,10 @@ def render(contract: SplitMirrorInput, ax=None, **_):
         sub.set_xlim(-0.6, len(cond_pairs) - 0.4)
         sub.set_xticks(x_centres)
         sub.set_xticklabels(x_labels, fontsize=6.6)
-        sub.set_ylabel(metric, fontsize=6.8)
+        # Each panel has its own y-scale, so keep tick labels but
+        # suppress the redundant axis label (metric name lives in
+        # the panel title and would otherwise crowd the violins
+        # when panels are narrow).
         sub.tick_params(axis="y", labelsize=6.0)
         sub.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
         sub.set_axisbelow(True)
@@ -181,11 +184,10 @@ def render(contract: SplitMirrorInput, ax=None, **_):
         max_rel = float(max(rel_errs)) if rel_errs else 0.0
         bits.append(f"{metric}: max rel-err = "
                     f"{smart_fmt(max_rel * 100)}%")
-        sub.set_title(
-            f"{metric}  ·  rel-err <= "
-            f"{smart_fmt(max_rel * 100)}%",
-            fontsize=7.0, pad=2,
-        )
+        # Per-panel title is just the metric name — relative-error
+        # callout already lives in the figure title; repeating it
+        # per panel forces narrow titles to overflow into neighbours.
+        sub.set_title(metric, fontsize=7.0, pad=2)
 
     # Single shared legend below figure.
     from matplotlib.lines import Line2D

@@ -22,12 +22,19 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #39 (+6 universal QA primitives in
   `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
   catalog 392 → 398.
-- **Wave 2** in review via PR (+7 cell-territory + multiscale).
+- **Wave 2** merged via PR #40 (+7 cell-territory + multiscale).
   After Wave 2: catalog 398 → 405; actin_microtubule_morphometry
   35 → 40; biophysics_scaling 37 → 38; intravital_imaging
   57 → 58.
-- **Waves 3–4 pending** (+9 cytoskeleton geometry, +9 narrative
-  integration). Cumulative final: catalog 392 → 423.
+- **Wave 3** gap-analysis in review (+9 cytoskeleton geometry +
+  statistics: F2D angle rose, F2E Cleveland, F3B censoring
+  waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-
+  gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B
+  z-span vs width). After Wave 3: catalog 405 → 414;
+  actin_microtubule_morphometry 40 → 45; biophysics_scaling
+  38 → 41; spatial_statistics 15 → 16.
+- **Wave 4 pending** (+9 narrative integration). Cumulative
+  final: catalog 392 → 423.
 
 ## [1.4.0-beta-disc1_manuscript_companion-w2] — 2026-04-27
 

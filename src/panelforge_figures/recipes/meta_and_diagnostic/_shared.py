@@ -103,3 +103,93 @@ class ParameterLineageEdge(RecipeContract):
     measurement: str
     transformation_note: str | None = None
     units: str | None = None
+
+
+# --- Wave 1 (factorial_design_companion) sub-contracts ----------------------
+
+
+class BayesFactorRow(RecipeContract):
+    """One null-acceptance audit row with BIC-derived BF_01.
+
+    Used by `bayes_factor_arrow_plot`. Each row carries a label
+    (descriptor name), the BIC values for null + alternative
+    models, and a derived BF_01 + threshold class.
+    """
+    label: str
+    bic_alt: float
+    bic_null: float
+    bf_01: float                                     # = exp((bic_alt - bic_null) / 2)
+    threshold_class: str = Field(
+        "anecdotal",
+        description="'favours_alt' | 'anecdotal' | 'moderate' | "
+                    "'strong' | 'decisive'",
+    )
+
+
+class PanelProvenanceRow(RecipeContract):
+    """One panel's provenance ledger entry.
+
+    Used by `panel_provenance_ledger_table`. Each row covers one
+    main-text or supplementary panel with its dataset layer,
+    sample-composition counts, support class, and manuscript
+    status.
+    """
+    panel_id: str                                    # e.g. "Fig 1A"
+    dataset_layer: str                               # "main" | "supp" | "methods"
+    n_mice: int
+    n_observations: int
+    support_class: str = Field(
+        "support_layer",
+        description="'main_inference' | 'support_layer' | "
+                    "'constraint_layer' | 'discovery_layer' | "
+                    "'limitation_only'",
+    )
+    manuscript_status: str = "current"               # "current" | "revised" | ...
+    note: str | None = None
+
+
+class CrossContrastEntry(RecipeContract):
+    """One cell of a cross-contrast correlation matrix.
+
+    Used by `cross_contrast_correlation_matrix`. Each entry stores
+    a single (row_contrast, col_contrast, correlation) triple; the
+    recipe assembles these into the full N × N matrix.
+    """
+    row_contrast: str
+    col_contrast: str
+    correlation: float
+
+
+class MultiverseSpec(RecipeContract):
+    """One specification in a multiverse robustness audit.
+
+    Used by `multiverse_specification_curve` and
+    `multiverse_robustness_classification_bar`. Each spec carries
+    the analytical-choice tuple (preprocessing × model × censoring),
+    the resulting effect size, optional 95 % CI bounds, and a
+    classification tier.
+    """
+    spec_id: str                                     # short id
+    spec_label: str                                  # human-readable
+    effect_size: float
+    ci_lo: float | None = None
+    ci_hi: float | None = None
+    classification: str = Field(
+        "NON_SIG",
+        description="'ROBUST' | 'FRAGILE' | 'NON_SIG'",
+    )
+
+
+class ProxyAlignmentEntry(RecipeContract):
+    """One in-sample vs LOOCV alignment row.
+
+    Used by `proxy_alignment_in_vs_loocv_forest`. Each entry
+    captures a proxy / readout name, its in-sample R² (full-fit),
+    and the leave-one-out cross-validated R²; the gap between the
+    two diagnoses overfit / generalisation.
+    """
+    proxy: str                                       # e.g. "vel_sd"
+    in_sample_R2: float
+    loocv_R2: float
+    p_value: float | None = None
+    n_units: int | None = None

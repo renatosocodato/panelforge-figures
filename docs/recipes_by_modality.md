@@ -7,7 +7,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
-**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 2 landed: 405 recipes** (cumulative across W1+W2: meta_and_diagnostic +6, actin_microtubule_morphometry +5, biophysics_scaling +1, intravital_imaging +1). Pack total: 13/31 recipes; 2/4 waves. See `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
+**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 3 landed: 414 recipes** (cumulative across W1+W2+W3: meta_and_diagnostic +6, actin_microtubule_morphometry +10, biophysics_scaling +4, spatial_statistics +1, intravital_imaging +1). Pack total: 22/31 recipes; 3/4 waves. See `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -61,6 +61,47 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 3 (cytoskeleton geometry + statistics, +9)
+
+Third wave of the cytoskeletal_morphometry_companion beta expansion pack.
+Lands the 9-recipe F2D / F2E / F3 / F4 + supplementary geometry-
+and-statistics cluster. Extends both
+`actin_microtubule_morphometry/_shared.py` (+5) and
+`biophysics_scaling/_shared.py` (+3) with new sub-contracts.
+Catalog 405 → 414.
+
+- **actin_mt_angle_rose_with_distance_inset** (`radar`,
+  actin_microtubule_morphometry) — polar rose plots of actin-MT
+  angle distributions per condition + Cartesian NN-distance inset.
+- **protrusion_outline_with_cleveland_summary**
+  (`scatter_collapse`, actin_microtubule_morphometry) — left-side
+  representative-protrusion outlines + right-side Cleveland strip
+  of width and erosion-depth per cell.
+- **censoring_mode_waterfall_cascade** (`coef_forest`,
+  biophysics_scaling) — per-feature estimate ± 95% CI cascading
+  across pre-registered censoring modes; direction-stable
+  headline.
+- **confinement_energy_gauge_per_genotype** (`coef_forest`,
+  biophysics_scaling) — semicircular gauge arcs per genotype
+  with per-cell tick marks; buffered → unbuffered threshold
+  drawn as a coloured boundary.
+- **kinhom_inhomogeneous_isotropy** (`diagnostic_curve`,
+  spatial_statistics) — edge-corrected Kinhom(r) per condition vs
+  CSR Monte Carlo envelope and Kpois(r) = πr² reference.
+- **edge_gradient_intensity_profile**
+  (`timecourse_hierarchical_ci`, actin_microtubule_morphometry) —
+  per-channel mean intensity vs signed distance from cell edge,
+  bootstrap CI ribbons.
+- **cortex_composite_zone_descriptors** (`matrix`,
+  actin_microtubule_morphometry) — zone × descriptor heatmap with
+  z-score colouring and flag column for crossings.
+- **mt_mesh_density_compartment_compare** (`heatmap`,
+  actin_microtubule_morphometry) — side-by-side imshow panels per
+  cell × compartment with shared colour scale.
+- **z_span_vs_width_with_euler_threshold** (`scatter_collapse`,
+  biophysics_scaling) — z-span vs width scatter with Euler
+  critical-length curve as dashed reference.
 
 ## v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 2 (cell territory + multiscale, +7)
 

@@ -131,6 +131,79 @@ def _demo_zone_label_map() -> dict[int, str]:
     return {0: "contact", 1: "desert", 2: "intermediate", 3: "far"}
 
 
+# --- Wave 3: cytoskeleton geometry + statistics atoms ----------------------
+
+
+class BranchOrderEdge(RecipeContract):
+    """One actin-to-MT angle observation + one nearest-neighbour distance.
+
+    Used by W3.1 (`actin_mt_angle_rose_with_distance_inset`).
+    The angle is in degrees (0 = parallel filaments).
+    """
+    cell_id: str
+    condition: str
+    angle_deg: float
+    nn_distance_um: float
+
+
+class ProtrusionOutlineWithCleveland(RecipeContract):
+    """Per-protrusion outline + Cleveland-summary scalars.
+
+    Used by W3.2 (`protrusion_outline_with_cleveland_summary`).
+    Each cell carries a representative outline polyline and the
+    paired width / erosion-depth scalars used in the Cleveland
+    strip on the right of the panel.
+    """
+    cell_id: str
+    condition: str
+    outline_xy: list[list[float]]                 # n_points × 2
+    width_um: float
+    erosion_depth_um: float
+
+
+class EdgeIntensityProfile(RecipeContract):
+    """One per-cell intensity profile vs signed distance from cell edge.
+
+    Used by W3.6 (`edge_gradient_intensity_profile`). Convention:
+    positive `signed_distance_um` = inside the cell, negative =
+    outside. `intensity` is the channel signal at each
+    distance bin.
+    """
+    cell_id: str
+    condition: str
+    channel: str                                  # e.g. "F-actin" | "MT"
+    signed_distance_um: list[float]
+    intensity: list[float]
+
+
+class CortexZoneDescriptor(RecipeContract):
+    """One zone × descriptor × condition cell value with z-score colour.
+
+    Used by W3.7 (`cortex_composite_zone_descriptors`). Each row is
+    one (zone, descriptor, condition) triple with the per-cell
+    population mean.
+    """
+    zone: str                                     # "contact" | "desert" | ...
+    descriptor: str                               # e.g. "intensity_F-actin"
+    condition: str
+    value: float
+    z_score: float                                # signed; > +0.5 = flagged
+    flag: bool = False
+
+
+class MTMeshDensitySnapshot(RecipeContract):
+    """One cell's MT mesh-density grid in one compartment.
+
+    Used by W3.8 (`mt_mesh_density_compartment_compare`).
+    The grid carries per-pixel MT density (filaments per µm²).
+    """
+    cell_id: str
+    condition: str
+    compartment: str                              # "whole_cell" | "protrusion_internal"
+    density_grid: list[list[float]]               # H × W
+    pixel_um: float = 0.5
+
+
 # --- multi-channel intravital field (used by W2.4 cross-modality) ----------
 
 

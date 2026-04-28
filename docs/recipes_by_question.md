@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## DISC1-manuscript-companion beta-pack Wave 3 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w3)
+
+- **Per condition, how is the actin-to-microtubule angle distributed (parallel vs orthogonal), and how does nearest-neighbour inter-filament distance differ?** → [`actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset`](gallery/actin_microtubule_morphometry/actin_mt_angle_rose_with_distance_inset.png)
+- **Per condition, how do representative protrusion outlines differ, and how do per-cell width / erosion-depth scalars distribute on a Cleveland strip plot?** → [`actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary`](gallery/actin_microtubule_morphometry/protrusion_outline_with_cleveland_summary.png)
+- **Across pre-registered censoring modes, does the per-feature effect estimate retain its sign and magnitude, or does it collapse under stricter rules?** → [`biophysics_scaling.censoring_mode_waterfall_cascade`](gallery/biophysics_scaling/censoring_mode_waterfall_cascade.png)
+- **Per genotype, where do per-cell Odijk-confinement free energies sit on the buffered → unbuffered gauge?** → [`biophysics_scaling.confinement_energy_gauge_per_genotype`](gallery/biophysics_scaling/confinement_energy_gauge_per_genotype.png)
+- **Per condition, does the inhomogeneous Ripley Kinhom(r) curve exceed CSR's Kpois(r) = π·r² (clustering) or sit inside the Monte-Carlo envelope (consistent with random)?** → [`spatial_statistics.kinhom_inhomogeneous_isotropy`](gallery/spatial_statistics/kinhom_inhomogeneous_isotropy.png)
+- **How does per-channel intensity (F-actin, MT) vary with signed distance from cell edge, and does the cortical enrichment differ between conditions?** → [`actin_microtubule_morphometry.edge_gradient_intensity_profile`](gallery/actin_microtubule_morphometry/edge_gradient_intensity_profile.png)
+- **Across territory zones and descriptor families, which (zone, descriptor) combinations show the largest condition-dependent shifts (|z| > 0.5)?** → [`actin_microtubule_morphometry.cortex_composite_zone_descriptors`](gallery/actin_microtubule_morphometry/cortex_composite_zone_descriptors.png)
+- **Per cell × compartment, how does microtubule mesh-density differ between whole-cell and protrusion-internal scales, and across genotypes?** → [`actin_microtubule_morphometry.mt_mesh_density_compartment_compare`](gallery/actin_microtubule_morphometry/mt_mesh_density_compartment_compare.png)
+- **Per cell, how does out-of-plane deflection (z-span) scale with protrusion width, and which cells exceed the Euler critical-length threshold (supercritical)?** → [`biophysics_scaling.z_span_vs_width_with_euler_threshold`](gallery/biophysics_scaling/z_span_vs_width_with_euler_threshold.png)
+
 ## DISC1-manuscript-companion beta-pack Wave 2 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w2)
 
 - **Across multiple scales (whole-cell vs protrusion-internal) and tier-bands (polymer / network / territory), where do metrics sharpen significance?** → [`biophysics_scaling.dual_scale_significance_lollipop`](gallery/biophysics_scaling/dual_scale_significance_lollipop.png)

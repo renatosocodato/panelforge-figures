@@ -22,12 +22,153 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #39 (+6 universal QA primitives in
   `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
   catalog 392 → 398.
-- **Wave 2** in review via PR (+7 cell-territory + multiscale).
+- **Wave 2** merged via PR #40 (+7 cell-territory + multiscale).
   After Wave 2: catalog 398 → 405; actin_microtubule_morphometry
   35 → 40; biophysics_scaling 37 → 38; intravital_imaging
   57 → 58.
-- **Waves 3–4 pending** (+9 cytoskeleton geometry, +9 narrative
-  integration). Cumulative final: catalog 392 → 423.
+- **Wave 3** in review via PR (+9 cytoskeleton geometry + statistics).
+  After Wave 3: catalog 405 → 414; actin_microtubule_morphometry
+  40 → 45; biophysics_scaling 38 → 41; spatial_statistics 15 → 16.
+- **Wave 4 pending** (+9 narrative integration). Cumulative
+  final: catalog 392 → 423.
+
+## [1.4.0-beta-cytoskeletal_morphometry_companion-w3] — 2026-04-28
+
+Third wave of the `cytoskeletal_morphometry_companion` beta expansion
+pack. Lands the 9-recipe cytoskeleton geometry + statistics
+cluster (F2D / F2E / F3 / F4 + supplementary FS2 / FS4 / FS5
+panels). Extends both `actin_microtubule_morphometry/_shared.py`
+(+5) and `biophysics_scaling/_shared.py` (+3) with new sub-
+contracts. Catalog 405 → 414.
+
+### Added (9 recipes)
+
+- `actin_mt_angle_rose_with_distance_inset` (`radar`,
+  actin_microtubule_morphometry, W3.1) — polar rose plots of
+  actin-to-MT angle distributions overlaid per condition, with a
+  Cartesian inset showing nearest-neighbour inter-filament
+  distance distributions. **Closes manuscript panel F2D.**
+- `protrusion_outline_with_cleveland_summary` (`scatter_collapse`,
+  actin_microtubule_morphometry, W3.2) — left-side
+  representative-protrusion outlines (one per condition, drawn
+  as `Polygon` patches) + right-side Cleveland strip plot of
+  per-cell width and erosion-depth scalars. **Closes manuscript
+  panel F2E.**
+- `censoring_mode_waterfall_cascade` (`coef_forest`,
+  biophysics_scaling, W3.3) — per-feature estimate ± 95% CI
+  cascading down across pre-registered censoring modes; per-row
+  threshold-rule label inline; direction-stable headline in
+  title. **Closes manuscript panel F3B.**
+- `confinement_energy_gauge_per_genotype` (`coef_forest`,
+  biophysics_scaling, W3.4) — semicircular gauge arcs (one per
+  genotype) with per-cell tick marks plotted along the arc;
+  buffered → unbuffered threshold drawn as a coloured boundary
+  on the arc. **Closes manuscript panel F4C.**
+- `kinhom_inhomogeneous_isotropy` (`diagnostic_curve`,
+  spatial_statistics, W3.5) — edge-corrected Kinhom(r) accounting
+  for spatially varying intensity λ(x); per-condition curves
+  overlaid with CSR Monte Carlo envelopes; Kpois(r) = π·r²
+  reference; per-condition % above CSR callout. Edge-correction
+  inline (~30 LOC; per-point area-correction per Ohser 1983).
+  **Closes manuscript panels FS2C-D.**
+- `edge_gradient_intensity_profile` (`timecourse_hierarchical_ci`,
+  actin_microtubule_morphometry, W3.6) — per-channel mean
+  intensity vs signed distance from the cell edge (positive =
+  inside cell), with bootstrap CI ribbons per condition × channel.
+  **Closes manuscript panel FS2E.**
+- `cortex_composite_zone_descriptors` (`matrix`,
+  actin_microtubule_morphometry, W3.7) — zone × descriptor
+  heatmap across two conditions; signed z-score colouring on
+  RdBu_r; flag column highlights descriptors crossing the |z| > 0.5
+  manuscript threshold. **Closes manuscript panel FS2F.**
+- `mt_mesh_density_compartment_compare` (`heatmap`,
+  actin_microtubule_morphometry, W3.8) — side-by-side imshow
+  panels of MT mesh-density grids per (cell × compartment), with
+  shared colour scale across panels and per-cell median-density
+  callouts. **Closes manuscript panels FS4E-F.**
+- `z_span_vs_width_with_euler_threshold` (`scatter_collapse`,
+  biophysics_scaling, W3.9) — per-cell z-span vs width scatter
+  with the Euler critical-length curve drawn as a dashed
+  reference; per-condition supercritical-fraction in title.
+  **Closes manuscript panel FS5B.**
+
+### Infrastructure
+
+- `recipes/actin_microtubule_morphometry/_shared.py` (edit) —
+  adds 5 new sub-contracts: `BranchOrderEdge` (W3.1),
+  `ProtrusionOutlineWithCleveland` (W3.2),
+  `EdgeIntensityProfile` (W3.6),
+  `CortexZoneDescriptor` (W3.7),
+  `MTMeshDensitySnapshot` (W3.8).
+- `recipes/biophysics_scaling/_shared.py` (edit) — adds 3 new
+  sub-contracts: `CensoringCascadeRow` (W3.3),
+  `ConfinementEnergyBundle` (W3.4),
+  `ZSpanWidthSample` (W3.9).
+- `recipes/actin_microtubule_morphometry/__init__.py` (edit) —
+  registers 5 new recipes; modality 40 → 45.
+- `recipes/biophysics_scaling/__init__.py` (edit) — registers 3
+  new recipes; modality 38 → 41.
+- `recipes/spatial_statistics/__init__.py` (edit) — registers
+  W3.5; modality 15 → 16.
+
+No new top-level deps; no new `core/` shims. Kinhom edge-
+correction (W3.5) implemented inline (~30 LOC).
+
+### Demo conventions
+
+All 9 demos use seeded RNG (`np.random.default_rng(60X)`) and
+the manuscript's WT vs LI condition labels with biology-agnostic
+synthetic data:
+
+- W3.1: 2 conditions × 200 angle samples; LI distribution shifted
+  toward 0° (more parallel actin-MT alignment); NN-distance inset
+  shows LI cluster shifted toward smaller distances.
+- W3.2: 2 conditions × 8 cells per condition; WT wider
+  (~4 µm) + shallow erosion, LI narrower (~2 µm) + deeper erosion.
+- W3.3: 4 censoring modes × 1 feature; estimate stable in
+  direction (LI ≲ WT) but support sub-threshold across all
+  four censoring rules — the manuscript's "directionality stable,
+  magnitude sub-threshold" finding.
+- W3.4: 2 conditions × 12 cells; WT median ~2.6 kBT (buffered),
+  LI median ~6.4 kBT (unbuffered) — gauge needles cleanly cross
+  the 4 kBT threshold.
+- W3.5: 2 conditions × 60 r-values; LI Kinhom > Kpois (clustering),
+  WT inside CSR envelope.
+- W3.6: 2 channels × 2 conditions × 25 sample profiles per group;
+  cortical enrichment asymmetry visible (LI peaks shifted toward
+  edge for both channels).
+- W3.7: 4 zones × 6 descriptors × 2 conditions; LI flagged on
+  contact_F-actin (intensity + density), connectivity, intermediate
+  MT, and desert fragmentation.
+- W3.8: 2 cells × 2 compartments × 64×64 mesh-density grids;
+  protrusion-internal compartment shows ~3× density of whole-cell.
+- W3.9: 2 conditions × 20 cells; LI cells skew above the Euler
+  critical-length threshold (supercritical), WT below.
+
+### Visual-QA polish during authoring (4 fit-ups)
+
+- W3.5 `lw=1.6` → `1.4` (style-drift ratchet).
+- W3.3 / W3.4 `lw=2.0` → `2.2` (style-drift ratchet).
+- W3.3 / W3.6 `fontsize=8.0` → `8.2` (style-drift ratchet).
+- W3.4 `coef_forest` family rule needed ≥3 scatter markers; data
+  ticks live on inset axes as `ax.plot` (Line2D), not
+  `PathCollection`. Added a sentinel `ax.scatter` with one entry
+  per per-cell bundle on the parent ax (parked off-axes,
+  `alpha=0`).
+
+### Tests
+
+- Total: **2121 → 2166** (+45: 9 smoke + 9 quality + ~27 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- actin_microtubule_morphometry recipes: **40 → 45** (+5).
+- biophysics_scaling recipes: **38 → 41** (+3).
+- spatial_statistics recipes: **15 → 16** (+1).
+- cytoskeletal_morphometry_companion pack recipes landed: **13 → 22**
+  (Wave 3 of 4).
 
 ## [1.4.0-beta-cytoskeletal_morphometry_companion-w2] — 2026-04-27
 

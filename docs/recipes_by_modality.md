@@ -9,6 +9,8 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.4.0-beta-disc1_manuscript_companion — Wave 4 landed: 423 recipes** (cumulative across all 4 waves: meta_and_diagnostic +6, actin_microtubule_morphometry +12, biophysics_scaling +10, spatial_statistics +1, intravital_imaging +1, grant_and_conceptual +1). Pack total: 31/31 recipes; 4/4 waves; pack tag candidate `v1.4.0-beta-disc1_manuscript_companion`. See `docs/disc1_manuscript_companion_pack_tracker.md`.
 
+**v1.5.0-beta-cdc42_factorial_companion — Wave 1 landed: 429 recipes** (meta_and_diagnostic +6 universal robustness primitives). Pack total: 6/25 recipes; 1/4 waves. See `docs/cdc42_factorial_companion_pack_tracker.md`.
+
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
 - **grant_and_conceptual** (6): executive summaries, Gantts, WP flows,
@@ -61,6 +63,42 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.5.0-beta-cdc42_factorial_companion — Wave 1 (universal robustness primitives, +6)
+
+First wave of the cdc42_factorial_companion beta expansion pack.
+Lands the 6 universal robustness + provenance primitives in
+`meta_and_diagnostic`, biology-agnostic and reusable beyond the
+cdc42_fxm manuscript. Pioneers 2 new `core/` shims
+(`bayes_factor_utility`, `multiverse_specification_utility`).
+meta_and_diagnostic expands from 21 to 27 recipes; total catalog
+423 → 429.
+
+- **bayes_factor_arrow_plot** (`coef_forest`) — per-row arrow
+  markers showing BF₀₁ on log-x with Wagenmakers / Kass-Raftery
+  threshold zones; reference at BF=1.
+- **panel_provenance_ledger_table** (`matrix`) — per-panel ledger
+  with dataset layer, sample composition, and support-class
+  verdict on diverging cmap.
+- **cross_contrast_correlation_matrix** (`matrix`) — N × N
+  pairwise contrast correlation with diagonal masked.
+- **multiverse_robustness_classification_bar** (`matrix`) —
+  per-spec coloured strip + stacked composition bar showing
+  ROBUST / FRAGILE / NON_SIG fractions.
+- **multiverse_specification_curve** (`scatter_collapse`) —
+  sorted-effect-size scatter with shaded ROPE band + zero
+  reference.
+- **proxy_alignment_in_vs_loocv_forest** (`coef_forest`) — paired
+  in-sample (filled) vs LOOCV (hollow) R² markers per proxy with
+  OVERFIT flag for negative-LOOCV rows.
+
+New `core/` shims (2):
+- **`core/bayes_factor_utility.py`** — `bf_from_bic(bic_alt,
+  bic_null) → BF₀₁` (Wagenmakers 2007 BIC approximation) +
+  `classify_bf_threshold(bf)` for Kass-Raftery tier mapping.
+- **`core/multiverse_specification_utility.py`** —
+  `multiverse_audit(...) → (classifications, sort_order)` for
+  specification-curve sensitivity (Steegen 2016, Simonsohn 2020).
 
 ## v1.4.0-beta-disc1_manuscript_companion — Wave 4 (narrative integration + final supplements, +9)
 

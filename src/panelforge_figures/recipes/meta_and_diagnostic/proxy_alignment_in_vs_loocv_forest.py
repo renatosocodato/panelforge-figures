@@ -110,10 +110,13 @@ def render(contract: ProxyAlignmentInput, ax=None, **_):
                    s=54, marker="s",
                    facecolor="white", edgecolor="#37474F",
                    linewidth=1.4, zorder=5)
-        # Overfit flag.
+        # Overfit flag — placed to the right of the rightmost
+        # marker so it never overlaps the y-tick label area, even
+        # when LOOCV R^2 is strongly negative.
         if e.loocv_R2 < 0:
-            ax.text(e.loocv_R2 - 0.05, yi, "OVERFIT",
-                    ha="right", va="center", fontsize=6.0,
+            x_flag = max(e.in_sample_R2, e.loocv_R2) + 0.06
+            ax.text(x_flag, yi, "OVERFIT",
+                    ha="left", va="center", fontsize=6.0,
                     color="#C62828", fontweight="bold", zorder=6)
 
     tick_labels = []

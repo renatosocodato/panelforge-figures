@@ -10,6 +10,15 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## CDC42-factorial-companion beta-pack Wave 1 additions (v1.5.0-beta-cdc42_factorial_companion-w1)
+
+- **Per descriptor, how strong is the Bayes-factor evidence for the null hypothesis vs the alternative, and which Wagenmakers / Kass-Raftery threshold tier does it cross?** → [`meta_and_diagnostic.bayes_factor_arrow_plot`](gallery/meta_and_diagnostic/bayes_factor_arrow_plot.png)
+- **Per panel in a manuscript, what is the dataset layer, sample composition, and support-class verdict that documents the panel's epistemic role?** → [`meta_and_diagnostic.panel_provenance_ledger_table`](gallery/meta_and_diagnostic/panel_provenance_ledger_table.png)
+- **Across pairwise contrasts, how correlated are the per-feature effect-size estimates, and where in the grid do contrasts converge or remain independent?** → [`meta_and_diagnostic.cross_contrast_correlation_matrix`](gallery/meta_and_diagnostic/cross_contrast_correlation_matrix.png)
+- **Across analytical specifications, what fraction are ROBUST / FRAGILE / NON_SIG, and how does the verdict stack up as a single composition bar?** → [`meta_and_diagnostic.multiverse_robustness_classification_bar`](gallery/meta_and_diagnostic/multiverse_robustness_classification_bar.png)
+- **Across analytical specifications, how does the per-spec effect-size estimate evolve when sorted by magnitude, and where does the curve cross the ROPE band?** → [`meta_and_diagnostic.multiverse_specification_curve`](gallery/meta_and_diagnostic/multiverse_specification_curve.png)
+- **Per proxy / readout, how does in-sample R² compare to leave-one-out cross-validated R², and which proxies show the strongest alignment vs the strongest overfit?** → [`meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest`](gallery/meta_and_diagnostic/proxy_alignment_in_vs_loocv_forest.png)
+
 ## DISC1-manuscript-companion beta-pack Wave 4 additions (v1.4.0-beta-disc1_manuscript_companion-w4)
 
 - **Along the pseudotime axis (resting → extended), how does cell morphology evolve, and where do WT vs LI stand-off trajectories diverge?** → [`actin_microtubule_morphometry.pseudotime_thumbnail_strip`](gallery/actin_microtubule_morphometry/pseudotime_thumbnail_strip.png)

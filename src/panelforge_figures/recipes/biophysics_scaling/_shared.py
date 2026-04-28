@@ -248,6 +248,78 @@ class ZSpanWidthSample(RecipeContract):
     euler_l_crit_um: float
 
 
+# --- Wave 4 (narrative integration) sub-contracts --------------------------
+
+
+class MeasuredSimulatedPair(RecipeContract):
+    """Per-condition + per-metric measured + simulated quartile bundle.
+
+    Used by W4.3 (`split_mirror_measured_vs_simulated`). Carries
+    quartile-style summaries for both measured and simulated
+    distributions; the recipe renders them as half-violins facing
+    each other.
+    """
+    metric: str                                  # e.g. "coherency"
+    condition: str
+    measured_values: list[float]
+    simulated_values: list[float]
+
+
+class ForceBudgetTerm(RecipeContract):
+    """One term in the protrusion force budget.
+
+    Used by W4.6 (`force_budget_schematic_with_data`). Each term
+    has a value with optional CI bounds and a sign convention
+    (drag opposes motion, active pushes forward, etc.).
+    """
+    term: str                                    # e.g. "drag"
+    value_pN: float
+    ci_lo: float | None = None
+    ci_hi: float | None = None
+    sign: str = "+"                              # "+" | "-"
+
+
+class ConfinementRatioSample(RecipeContract):
+    """Per-cell confinement ratio (z-span / Euler L_crit).
+
+    Used by W4.7 (`confinement_ratio_distribution_by_genotype`).
+    Ratio > 1 means supercritical (confinement-driven buckling
+    plausible), ≤ 1 means subcritical (buffered).
+    """
+    cell_id: str
+    condition: str
+    ratio: float                                 # z_span_um / euler_l_crit_um
+
+
+class CompoundReadoutRow(RecipeContract):
+    """One readout × one condition row of compound-forest values.
+
+    Used by W4.8 (`splay_taper_polarity_displacement_compound`).
+    Each row carries the per-cell distribution for one readout
+    (splay-taper, polarity-displacement, ...) under one condition.
+    """
+    readout: str                                 # e.g. "splay_to_taper"
+    condition: str
+    values: list[float]
+    ci_lo: float
+    ci_hi: float
+
+
+class SensitivitySweepCurve(RecipeContract):
+    """One parameter-sweep curve per condition.
+
+    Used by W4.9 (`sensitivity_sweep_alpha_width_seed_compound`).
+    Each curve carries the parameter axis (e.g. alpha values),
+    the per-condition mean response, and bootstrap CI ribbons.
+    """
+    parameter: str                               # e.g. "alpha"
+    condition: str
+    parameter_grid: list[float]
+    mean_response: list[float]
+    ci_lo: list[float]
+    ci_hi: list[float]
+
+
 # --- outcome palette (local fallback) ---------------------------------------
 
 

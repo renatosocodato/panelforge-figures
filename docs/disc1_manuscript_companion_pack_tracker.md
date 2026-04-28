@@ -53,8 +53,8 @@ Per governance §9, no new modalities. The 31 recipes scatter as:
 |---|---|---|---|---|---|
 | w1 | Universal QA + diagnostic primitives (+6): PCA loadings, per-cell audit, hypothesis exclusion, residual panels, RF confusion, parameterization lineage. All in `meta_and_diagnostic`. Pioneers `meta_and_diagnostic/_shared.py`. | **merged** | `beta-disc1-companion-w1` | — (squash-merged PR #39; commit `2267ba0`) | 3 commits, 2 visual-QA fit-ups (W1.5 cividis off-diagonal text colour threshold inverted; W1.6 title-vs-headers overlap), 5 sub-contracts pioneered, total tests 2056 → 2086; CI green |
 | w2 | Cell territory + multiscale presentation (+7): F1A territory-zone overlay, F1B dual-scale lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-network overlay, F2B zone-fraction Sankey, F2C colocalization raincloud. Pioneers `actin_microtubule_morphometry/_shared.py`. | **merged** | `beta-disc1-companion-w2` | — (squash-merged PR #40; commit `f918dfb`) | 3 commits, 4 visual-QA fit-ups (W2.1 sort-mutation bug, W2.2 ellipse-not-line family rule, W2.6 fontsize ratchet snap, W2.6 box-label truncation widened columns), 7 sub-contracts pioneered, total tests 2086 → 2121; CI green |
-| w3 | Cytoskeleton geometry + statistics (+9): F2D angle rose, F2E Cleveland, F3B censoring waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B z-span vs width. | **review** | `beta-disc1-companion-w3` | — (PR open) | 3 commits, 5 visual-QA fit-ups (W3.5 lw=1.6→1.4, W3.3+W3.4 lw=2.0→2.2, W3.3+W3.6 fontsize=8.0→8.2, W3.4 sentinel scatter for coef_forest family rule, W3.1 NN inset + legend repositioning), 8 sub-contracts added, total tests 2121 → 2166 |
-| w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack. | pending | — | — | Depends on w3; closes pack |
+| w3 | Cytoskeleton geometry + statistics (+9): F2D angle rose, F2E Cleveland, F3B censoring waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B z-span vs width. | **merged** | `beta-disc1-companion-w3` | — (squash-merged PR #41; commit `06ed7a8`) | 3 commits, 5 visual-QA fit-ups, 8 sub-contracts added, total tests 2121 → 2166; CI green |
+| w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack at 31/31. | **review** | `beta-disc1-companion-w4` | — (PR open) | 3 commits, 2 visual-QA fit-ups (W4.3 sub-panel titles trimmed, W4.3 redundant ylabel suppressed), 7 sub-contracts added + 2 pioneered, 1 new core/ shim (permanova_null_utility, ~85 LOC), 7 new utility tests, total tests 2166 → 2218 |
 
 Status legend:
 - **pending** — not yet started
@@ -296,11 +296,133 @@ All Wave 3 demos use seeded RNG (`np.random.default_rng(60X)`) and the manuscrip
 4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
 5. Gallery regenerate per modality. Estimate **5 visual-QA fit-ups** (multi-modality wave with non-trivial geometry: polar inset, gauge arcs, waterfall cascade, Euler curve overlay).
 
-## Wave 4 — narrative integration + final supplements (+9) [pending]
+## Wave 4 — narrative integration + final supplements (+9) [gap-analysis]
 
-F5 / F6 narrative-integration panels + FS5–FS7 final supplements. Closes the pack. Includes the headline `narrative_cascade_river` (synthesis-figure primitive) plus the new `core/permanova_null_utility.py` shim.
+**Why last (closes pack).** Waves 1–3 shipped the universal QA
+primitives, the cell-territory + multiscale cluster, and the
+cytoskeleton geometry + statistics block. Wave 4 closes the pack
+with the **F5 + F6 narrative-integration cluster** (pseudotime
+ordering, the headline narrative-cascade river, forward-validation
+split-mirror) plus the **FS1C / FS3D / FS5C / FS5D / FS6E-F /
+FS7B-D supplementary panels** that round out the manuscript's
+methods + sensitivity story.
 
-(Detail filled in when Wave 4 gap analysis is gated.)
+**Headline:** `narrative_cascade_river_with_xrefs` (W4.2) is a
+synthesis-figure primitive that any future manuscript can reuse —
+multi-stage causal river with figure cross-references and inline
+statistics.
+
+**New `core/` shim:** `core/permanova_null_utility.py` (~40 LOC)
+ships in this wave to back W4.4. Pure-numpy permutation-shuffle
+estimator that replaces a `scikit-bio` dependency. Modest
+footprint matching the established Option D inline-shim pattern
+(`km_survival_utility`, `gam_logistic_utility`,
+`spectral_embedding_utility`, `transfer_entropy_utility`).
+
+### Recipe roster (Wave 4)
+
+| ID | Recipe | Modality | Family | Required fields | Panel |
+|---|---|---|---|---|---|
+| W4.1 | `pseudotime_thumbnail_strip` | actin_microtubule_morphometry | `matrix` | `cells: list[PseudotimeOrderedCell]` (per-cell thumbnail + Actin Drive Index pseudotime coord) | F5C |
+| W4.2 | `narrative_cascade_river_with_xrefs` | grant_and_conceptual | `conceptual` | `stages: list[CascadeStage]` (label, figure_xref, p_value, summary) + `transitions: list[CascadeTransition]` | F5E |
+| W4.3 | `split_mirror_measured_vs_simulated` | biophysics_scaling | `split_violin` | `comparisons: list[MeasuredSimulatedPair]` (3 metrics × 2 conditions × measured + simulated quartile bundles) | F6C |
+| W4.4 | `permanova_null_distribution` | biophysics_scaling | `diagnostic_curve` | `null_R2: list[float]` + `observed_R2: float` + `p_perm: float` | FS1C |
+| W4.5 | `overlap_juxtaposition_quantification` | actin_microtubule_morphometry | `scatter_collapse` | `cells: list[OverlapJuxtapositionCell]` (per-cell polymer-overlap × territory-juxtaposition pair + condition) | FS3D |
+| W4.6 | `force_budget_schematic_with_data` | biophysics_scaling | `conceptual` | `terms: list[ForceBudgetTerm]` (term, value, ci_lo, ci_hi, sign) + schematic arrow geometry | FS5C |
+| W4.7 | `confinement_ratio_distribution_by_genotype` | biophysics_scaling | `split_violin` | `samples: list[ConfinementRatioSample]` (per-cell confinement ratio z-span / Euler L_crit + condition) | FS5D |
+| W4.8 | `splay_taper_polarity_displacement_compound` | biophysics_scaling | `coef_forest` | `rows: list[CompoundReadoutRow]` (3 readouts × 2 conditions × per-cell distributions) | FS6E-F |
+| W4.9 | `sensitivity_sweep_alpha_width_seed_compound` | biophysics_scaling | `timecourse_hierarchical_ci` | `sweeps: list[SensitivitySweepCurve]` (parameter axis × output curve per condition) | FS7B-D |
+
+### Family-rule satisfaction checklist
+
+- **W4.1** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by ≥4 thumbnail panels (one per cell at its pseudotime coord) drawn as `imshow` insets; pseudotime axis annotation strip below.
+- **W4.2** (`conceptual` — no strict family rule) — pure matplotlib `FancyBboxPatch` boxes + `FancyArrowPatch` arrows; cross-reference and inline-statistics text annotations.
+- **W4.3, W4.7** (`split_violin` ≥2 violin bodies + ≥1 median marker) — W4.3 satisfied by per-metric measured vs simulated split-violin pairs (one half measured, one half simulated) per condition; W4.7 by per-condition split-violins of confinement ratio with median ring markers.
+- **W4.4** (`diagnostic_curve` ≥2 curves + ≥1 legend) — satisfied by null-distribution histogram outline + observed R² vertical reference + percentile-band shading.
+- **W4.5** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — per-cell polymer-overlap × territory-juxtaposition scatter + per-condition LOWESS fit lines.
+- **W4.6** (`conceptual`) — pure matplotlib annotation; force-balance schematic with measured-data overlay text.
+- **W4.8** (`coef_forest` ≥3 markers + ≥1 reference line) — per-readout × per-condition CI markers (3 × 2 = 6 markers minimum) + zero-effect reference.
+- **W4.9** (`timecourse_hierarchical_ci` ≥1 CI band + ≥1 mean line) — per-parameter mean response curve + bootstrap CI ribbon per condition.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/core/permanova_null_utility.py` | **NEW** | `permanova_null_distribution(X, labels, n_perms=999) -> (R2_obs, R2_null, p_perm)` (~40 LOC, pure numpy). Replaces a `scikit-bio` dep. |
+| `src/panelforge_figures/core/__init__.py` | edit | Export `permanova_null_distribution`. |
+| `tests/test_permanova_null_utility.py` | **NEW** | 6 tests: shape, R²-bounds, deterministic-under-seed, null-distribution-mean ≈ chance, p-value bounds, edge cases. |
+| `recipes/actin_microtubule_morphometry/_shared.py` | edit | Adds 2 new sub-contracts: `PseudotimeOrderedCell` (W4.1), `OverlapJuxtapositionCell` (W4.5). |
+| `recipes/biophysics_scaling/_shared.py` | edit | Adds 5 new sub-contracts: `MeasuredSimulatedPair` (W4.3), `ForceBudgetTerm` (W4.6), `ConfinementRatioSample` (W4.7), `CompoundReadoutRow` (W4.8), `SensitivitySweepCurve` (W4.9). |
+| `recipes/grant_and_conceptual/_shared.py` | **NEW** | Pioneers `_shared.py` for this modality with `CascadeStage` + `CascadeTransition` (used by W4.2). |
+| 2 new modules in `recipes/actin_microtubule_morphometry/` | **NEW** | W4.1, W4.5 |
+| 6 new modules in `recipes/biophysics_scaling/` | **NEW** | W4.3, W4.4, W4.6, W4.7, W4.8, W4.9 |
+| 1 new module in `recipes/grant_and_conceptual/` | **NEW** | W4.2 |
+| `recipes/actin_microtubule_morphometry/__init__.py` | edit | Register 2 new recipes; modality 45 → 47 |
+| `recipes/biophysics_scaling/__init__.py` | edit | Register 6 new recipes; modality 41 → 47 |
+| `recipes/grant_and_conceptual/__init__.py` | edit | Register 1 new recipe; modality 15 → 16 |
+
+No new top-level deps (`permanova_null_utility` is the only new
+`core/` shim and is pure numpy). Two new `_shared.py` modules
+(`grant_and_conceptual` pioneers its own; total `_shared.py`
+modules across pack: **3 → 4**).
+
+### `_demo()` seed convention (Wave 4)
+
+All Wave 4 demos use seeded RNG (`np.random.default_rng(70X)`)
+and the manuscript's WT vs LI condition labels with biology-
+agnostic synthetic data:
+
+- **W4.1**: 12 cells × 1 thumbnail per cell (32 × 32 cell-shape
+  rasters); pseudotime coord ranges over [0, 1] from
+  resting → extended along the Actin Drive Index axis.
+- **W4.2**: 5 cascade stages (genotype → territory change →
+  protrusion narrowing → checkpoint crossing → buffered vs
+  confinement-facing regime → outputs); each stage carries an
+  inline figure cross-reference (`Fig 2A`, `Fig 4C`, etc.) and
+  a p-value summary.
+- **W4.3**: 3 validation metrics (coherency, z-span, tapered-tip
+  fraction) × 2 conditions (WT, LI); measured + simulated
+  quartile-style distributions are matched.
+- **W4.4**: 999-permutation null with observed R² = 0.32 → p_perm
+  ≈ 0.001; histogram of null distribution + observed-R² vertical
+  reference + 95th-percentile band shading.
+- **W4.5**: 2 conditions × 23 cells; LI shifted up-and-right of
+  WT on the polymer-overlap × territory-juxtaposition plane.
+- **W4.6**: 4 force-budget terms (drag, elastic restoring,
+  active stress, viscoelastic dissipation) with measured values
+  and 95% CI bars; schematic arrow geometry.
+- **W4.7**: 2 conditions × 30 cells; WT confinement-ratio centred
+  at 0.5 (subcritical), LI at 1.6 (supercritical); reference at
+  ratio = 1.0.
+- **W4.8**: 3 readouts (splay-taper, polarity-displacement, splay-
+  to-taper transition) × 2 conditions; LI elevated on all three
+  readouts.
+- **W4.9**: 3 sweep parameters (alpha, width, seed) × 2 conditions;
+  WT vs LI separation persists across all parameter values.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| W4.1 thumbnail strip — 12 thumbnails laid linearly along pseudotime axis can crowd | Use `inset_axes` with axes-fraction slot per thumbnail; cap demo at 12 cells; keep thumbnail size ≤ 0.10 × axes-fraction |
+| W4.2 narrative cascade — synthesizing 5 stages + cross-references + p-values is content-dense | Vertical layout with one row per stage; inline `[Fig 2A]` cross-reference annotations in italics; statistical summaries below each stage label |
+| W4.3 measured vs simulated split — risk of confusion about which half is which | Use distinct colours: measured = solid coral, simulated = hatched slate; legend + per-panel column header |
+| W4.4 null distribution — empty axis area between observed R² and tail can look sparse | Shade the right tail (≥ observed) explicitly so the p-value visually reads off the area |
+| W4.5 LOWESS fit risk: stochastic per-condition fits are noisy | Use windowed-median running statistic with ≥ 5-cell windows |
+| W4.6 force-budget schematic — non-trivial arrow geometry | Use precedent from `methods_pipeline_flow` (grant_and_conceptual); per-term arrow length ∝ value magnitude |
+| W4.7 split violin with reference line at ratio = 1.0 — risk that the reference line is below the data range | Always extend y-axis to include 1.0; draw reference dashed |
+| W4.8 compound forest — risk of marker crowding when 3 readouts × 2 conditions × per-cell scatter | Separate marker shape (circle vs square) per condition + faint horizontal banding by readout |
+| W4.9 sensitivity sweeps — 3 parameters in one figure is busy | Three side-by-side `inset_axes` panels (one per parameter); shared y-axis label |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. The 9 recipes need to be disciplined. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 2166 + Wave 4 recipe smoke / quality / contracts (~24 new) = ~2190.
+2. `pytest tests/test_permanova_null_utility.py` — 6 new utility tests.
+3. `pytest tests/test_recipes_smoke.py -k 'actin_microtubule_morphometry or biophysics_scaling or grant_and_conceptual'` — all relevant demos render headlessly.
+4. `pytest tests/test_recipes_quality.py` — each new recipe satisfies its family rule.
+5. `pytest tests/test_style_drift.py` — ratchet at 20/20.
+6. Gallery regenerate per modality. Estimate **5 visual-QA fit-ups** (narrative-cascade is the riskiest — content-dense conceptual figure with many text annotations).
 
 ## Pack-closeout deliverables (after Commit 3 of Wave 4)
 

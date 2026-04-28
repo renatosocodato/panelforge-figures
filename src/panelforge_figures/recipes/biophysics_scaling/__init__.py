@@ -20,9 +20,11 @@ register_modality(
 
 from . import (  # noqa: E402,F401
     buckling_critical_force_plot,
+    censoring_mode_waterfall_cascade,
     characteristic_time_vs_control,
     compartment_paired_delta_scatter,
     compartment_split_curvature_crosscorr,
+    confinement_energy_gauge_per_genotype,
     confinement_free_energy_vs_width_curve,
     crossover_scaling_diagnostic,
     dual_scale_significance_lollipop,
@@ -57,14 +59,17 @@ from . import (  # noqa: E402,F401
     width_alignment_buffered_unbuffered_interaction,
     width_alpha_regime_phase_map,
     xz_microtubule_bowing_z_span,
+    z_span_vs_width_with_euler_threshold,
 )
 
 __all__ = [
     "AESTHETIC",
     "buckling_critical_force_plot",
+    "censoring_mode_waterfall_cascade",
     "characteristic_time_vs_control",
     "compartment_paired_delta_scatter",
     "compartment_split_curvature_crosscorr",
+    "confinement_energy_gauge_per_genotype",
     "confinement_free_energy_vs_width_curve",
     "crossover_scaling_diagnostic",
     "dual_scale_significance_lollipop",
@@ -99,4 +104,5 @@ __all__ = [
     "width_alignment_buffered_unbuffered_interaction",
     "width_alpha_regime_phase_map",
     "xz_microtubule_bowing_z_span",
+    "z_span_vs_width_with_euler_threshold",
 ]

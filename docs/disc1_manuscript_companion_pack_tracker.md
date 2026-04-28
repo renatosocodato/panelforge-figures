@@ -42,10 +42,13 @@ Per governance §9, no new modalities. The 31 recipes scatter as:
 
 | Metric | Start | After W1 | After W2 | After W3 | After W4 |
 |---|---|---|---|---|---|
-| Pack recipes landed | 0 | 6 | 13 | 22 | **31 (final)** |
-| Total catalog recipes | 392 | 398 | 405 | 414 | **423 (final)** |
-| New `_shared.py` modules | 0 | 1 | 2 | 2 | **2 (final)** |
-| New `core/` shims | 0 | 0 | 0 | 1 | **1 (final)** |
+| Pack recipes landed | 0 | 6 | 13 | 22 | **31** ✅ |
+| Total catalog recipes | 392 | 398 | 405 | 414 | **423** ✅ |
+| New `_shared.py` modules pioneered | 0 | 1 | 2 | 2 | **3** ✅ |
+| New `core/` shims | 0 | 0 | 0 | 0 | **1** ✅ |
+
+**Pack status: COMPLETE.** Tag `v1.4.0-beta-disc1_manuscript_companion`
+points to the pack-closeout commit on `main`.
 
 ## Per-wave status
 
@@ -54,7 +57,7 @@ Per governance §9, no new modalities. The 31 recipes scatter as:
 | w1 | Universal QA + diagnostic primitives (+6): PCA loadings, per-cell audit, hypothesis exclusion, residual panels, RF confusion, parameterization lineage. All in `meta_and_diagnostic`. Pioneers `meta_and_diagnostic/_shared.py`. | **merged** | `beta-disc1-companion-w1` | — (squash-merged PR #39; commit `2267ba0`) | 3 commits, 2 visual-QA fit-ups (W1.5 cividis off-diagonal text colour threshold inverted; W1.6 title-vs-headers overlap), 5 sub-contracts pioneered, total tests 2056 → 2086; CI green |
 | w2 | Cell territory + multiscale presentation (+7): F1A territory-zone overlay, F1B dual-scale lollipop, F1C PCA-silhouette, F1D triptych, F2A contact-network overlay, F2B zone-fraction Sankey, F2C colocalization raincloud. Pioneers `actin_microtubule_morphometry/_shared.py`. | **merged** | `beta-disc1-companion-w2` | — (squash-merged PR #40; commit `f918dfb`) | 3 commits, 4 visual-QA fit-ups (W2.1 sort-mutation bug, W2.2 ellipse-not-line family rule, W2.6 fontsize ratchet snap, W2.6 box-label truncation widened columns), 7 sub-contracts pioneered, total tests 2086 → 2121; CI green |
 | w3 | Cytoskeleton geometry + statistics (+9): F2D angle rose, F2E Cleveland, F3B censoring waterfall, F4C confinement gauge, FS2C-D Kinhom, FS2E edge-gradient, FS2F cortex composite, FS4E-F mesh-density, FS5B z-span vs width. | **merged** | `beta-disc1-companion-w3` | — (squash-merged PR #41; commit `06ed7a8`) | 3 commits, 5 visual-QA fit-ups, 8 sub-contracts added, total tests 2121 → 2166; CI green |
-| w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack at 31/31. | **review** | `beta-disc1-companion-w4` | — (PR open) | 3 commits, 2 visual-QA fit-ups (W4.3 sub-panel titles trimmed, W4.3 redundant ylabel suppressed), 7 sub-contracts added + 2 pioneered, 1 new core/ shim (permanova_null_utility, ~85 LOC), 7 new utility tests, total tests 2166 → 2218 |
+| w4 | Narrative integration + final supplements (+9): F5C pseudotime strip, F5E narrative cascade, F6C split-mirror, FS1C PERMANOVA null + new `core/permanova_null_utility.py`, FS3D overlap-juxtaposition, FS5C force-budget, FS5D confinement-ratio, FS6E-F splay-taper-polarity, FS7B-D sensitivity sweeps. Closes pack at 31/31. | **merged** | `beta-disc1-companion-w4` | — (squash-merged PR #42; commit `da3a9a7`) | 3 commits, 2 visual-QA fit-ups, 7 sub-contracts added + 2 pioneered, 1 new core/ shim (permanova_null_utility, ~85 LOC), 7 new utility tests, total tests 2166 → 2218; CI green; **closes pack at 31/31** |
 
 Status legend:
 - **pending** — not yet started

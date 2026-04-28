@@ -10,6 +10,18 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## DISC1-manuscript-companion beta-pack Wave 4 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w4)
+
+- **Along the pseudotime axis (resting → extended), how does cell morphology evolve, and where do WT vs LI stand-off trajectories diverge?** → [`actin_microtubule_morphometry.pseudotime_thumbnail_strip`](gallery/actin_microtubule_morphometry/pseudotime_thumbnail_strip.png)
+- **Across multi-stage manuscript narrative, how does each step connect to the next, with figure cross-references and inline statistics?** → [`grant_and_conceptual.narrative_cascade_river_with_xrefs`](gallery/grant_and_conceptual/narrative_cascade_river_with_xrefs.png)
+- **Per validation metric, do measured and forward-simulated distributions agree, and does the agreement hold for both conditions?** → [`biophysics_scaling.split_mirror_measured_vs_simulated`](gallery/biophysics_scaling/split_mirror_measured_vs_simulated.png)
+- **Where does the observed PERMANOVA R² sit relative to the permutation-shuffle null distribution, and what is the empirical p-value?** → [`biophysics_scaling.permanova_null_distribution`](gallery/biophysics_scaling/permanova_null_distribution.png)
+- **Per cell, do polymer-overlap and territory-juxtaposition co-vary on a shared condition-independent manifold, or do conditions occupy distinct regions?** → [`actin_microtubule_morphometry.overlap_juxtaposition_quantification`](gallery/actin_microtubule_morphometry/overlap_juxtaposition_quantification.png)
+- **Across the protrusion force budget (active, elastic, drag, confinement), what are the measured per-term magnitudes and signs?** → [`biophysics_scaling.force_budget_schematic_with_data`](gallery/biophysics_scaling/force_budget_schematic_with_data.png)
+- **Per genotype, how is the confinement ratio (z-span / Euler L_crit) distributed, and what fraction of cells exceed the supercritical threshold?** → [`biophysics_scaling.confinement_ratio_distribution_by_genotype`](gallery/biophysics_scaling/confinement_ratio_distribution_by_genotype.png)
+- **Across three frontier-architecture readouts, how do per-condition estimates compare against the zero-effect reference?** → [`biophysics_scaling.splay_taper_polarity_displacement_compound`](gallery/biophysics_scaling/splay_taper_polarity_displacement_compound.png)
+- **Across three swept parameters (alpha / width / seed), does the WT-vs-LI separation persist across the local perturbation neighbourhood?** → [`biophysics_scaling.sensitivity_sweep_alpha_width_seed_compound`](gallery/biophysics_scaling/sensitivity_sweep_alpha_width_seed_compound.png)
+
 ## DISC1-manuscript-companion beta-pack Wave 3 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w3)
 
 - **Per condition, how is the actin-to-microtubule angle distributed (parallel vs orthogonal), and how does nearest-neighbour inter-filament distance differ?** → [`actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset`](gallery/actin_microtubule_morphometry/actin_mt_angle_rose_with_distance_inset.png)

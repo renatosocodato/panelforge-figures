@@ -12,6 +12,7 @@ from .hmm_decoding_utility import (
 from .km_survival_utility import kaplan_meier
 from .layout import FIGSIZE_PRESETS, make_figure, make_panel_grid
 from .palette import Palette, get_palette, list_palettes, register_palette
+from .permanova_null_utility import permanova_null_distribution
 from .primitives import (
     add_halo_label,
     bootstrap_ci,
@@ -85,6 +86,7 @@ __all__ = [
     "make_figure",
     "make_panel_grid",
     "multi_format_export",
+    "permanova_null_distribution",
     "register_palette",
     "register_recipe",
     "right_of_ci_label",

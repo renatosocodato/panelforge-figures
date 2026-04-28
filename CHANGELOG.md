@@ -20,13 +20,18 @@ project follows semantic versioning.
   inline-shim discipline preserved); 2 new `core/` shims
   (`bayes_factor_utility`, `multiverse_specification_utility`)
   land in Wave 1.
-- **Wave 1** in review via PR (+6 universal robustness primitives
+- **Wave 1** merged via PR #44 (+6 universal robustness primitives
   in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
   catalog 423 → 429.
-- **Waves 2–4 pending** (+6 multi-omic integration, +7 factorial
-  statistics + sex-stratified validation, +6 energetic /
-  thermodynamic + narrative integration). Cumulative final:
-  catalog 423 → 448.
+- **Wave 2** gap-analysis in review (+6 multi-omic integration in
+  `omics_differential`: proteome × phospho concordance, module
+  concordance, pathway-space triangulation, pathway-space bridge,
+  GGE permutation bar, sign-concordance heatmap). Pioneers
+  `omics_differential/_shared.py`. After Wave 2: catalog 429 → 435;
+  omics_differential 16 → 22.
+- **Waves 3–4 pending** (+7 factorial statistics + sex-stratified
+  validation, +6 energetic / thermodynamic + narrative
+  integration). Cumulative final: catalog 423 → 448.
 
 ## [1.5.0-beta-cdc42_factorial_companion-w1] — 2026-04-28
 

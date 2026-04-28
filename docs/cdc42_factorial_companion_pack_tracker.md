@@ -50,8 +50,8 @@ Per governance §9, no new modalities. The 25 recipes scatter as:
 
 | Wave | Scope | Status | Branch | Merged tag | Notes |
 |---|---|---|---|---|---|
-| w1 | Universal robustness primitives + provenance (+6 in `meta_and_diagnostic`): Bayes-factor arrow plot, panel provenance ledger, cross-contrast correlation, multiverse classification, multiverse spec curve, proxy-alignment forest. Pioneers 2 new `core/` shims (`bayes_factor_utility`, `multiverse_specification_utility`). | **review** | `beta-cdc42-companion-w1` | — (PR open) | 3 commits, 1 visual-QA fit-up (W1.6 OVERFIT label moved right of in-sample marker; W1.2 fontsize 8.0 → 8.2 ratchet snap), 5 sub-contracts added, 13 new utility tests, total tests 2218 → 2261 |
-| w2 | Multi-omic integration (+6 in `omics_differential`): proteome × phospho concordance, module concordance, pathway-space triangulation, pathway-space bridge, GGE permutation bar, sign-concordance heatmap. | pending | — | — | Depends on w1 |
+| w1 | Universal robustness primitives + provenance (+6 in `meta_and_diagnostic`): Bayes-factor arrow plot, panel provenance ledger, cross-contrast correlation, multiverse classification, multiverse spec curve, proxy-alignment forest. Pioneers 2 new `core/` shims (`bayes_factor_utility`, `multiverse_specification_utility`). | **merged** | `beta-cdc42-companion-w1` | — (squash-merged PR #44; commit `c51965d`) | 3 commits, 2 visual-QA fit-ups (W1.2 fontsize 8.0 → 8.2 ratchet snap; W1.6 OVERFIT label moved right of in-sample marker), 5 sub-contracts added, 13 new utility tests, total tests 2218 → 2261; CI green |
+| w2 | Multi-omic integration (+6 in `omics_differential`): proteome × phospho concordance, module concordance, pathway-space triangulation, pathway-space bridge, GGE permutation bar, sign-concordance heatmap. Pioneers `omics_differential/_shared.py`. | **gap-analysis** | `beta-cdc42-companion-w2` | — | Wave 2 gap analysis in review |
 | w3 | Factorial statistics + sex-stratified validation (+7): two-way ANOVA, sex-stratified ROC, mediation slope, pre/post slope by module, Sholl radial histogram, fingerprint trio composite, switch-callout extension. | pending | — | — | Depends on w2 |
 | w4 | Energetic / thermodynamic + narrative integration (+6): quartile stacked bar, route-geometry screen, resilience index bar, dissipation-quartile PCA ellipses, transition-matrix DD callout, residence-time KM with KS overlay. Closes pack at 25/25. | pending | — | — | Depends on w3; closes pack |
 
@@ -62,7 +62,7 @@ Status legend:
 - **review** — PR open, awaiting merge
 - **merged** — squash-merged to `main`, tag pushed
 
-## Wave 1 — universal robustness primitives + provenance (+5+1 = 6) [gap-analysis]
+## Wave 1 — universal robustness primitives + provenance (+6) [merged]
 
 **Why first.** All 6 recipes are biology-agnostic primitives reusable across any future rigorous-design / multiverse / multi-omic manuscript. They form the substrate for the cdc42_fxm manuscript's reviewer-proof supplementary panels (SF2G multiverse, SF4B robustness classification, SF4D cross-contrast correlation) plus the methods-section panel-provenance ledger (Supp Table R1) and the F2J Bayes factor arrow plot. The proxy-alignment forest (F4D) belongs here too because it generalises across any multi-readout in-sample-vs-LOOCV audit.
 
@@ -128,9 +128,74 @@ All Wave 1 demos use seeded RNG (`np.random.default_rng(80X)`) and biology-agnos
 6. Gallery regenerate `meta_and_diagnostic/` — 27 PNGs.
 7. Eyeball each new panel; estimate **3–5 visual-QA fit-ups**.
 
-## Wave 2 — multi-omic integration (+6) [pending]
+## Wave 2 — multi-omic integration (+6) [gap-analysis]
 
-(Detail filled in when Wave 2 gap analysis is gated.)
+**Why next.** Wave 1 shipped the universal-robustness primitives.
+Wave 2 lands the **F4 multi-omic integration cluster** (proteome
+× phosphoproteome concordance, GEF/GAP/Effector module
+concordance, GGE branch-selectivity permutation, pathway-space
+triangulation/bridge, sign-concordance overlay) — the manuscript's
+Figure 4 + Figure 5K-L narrative around how proteome and
+phosphoproteome capture **independent** dimensions of sex biology.
+**Pioneers `omics_differential/_shared.py`** with 5 nested
+sub-contracts (no `_shared.py` exists for this modality yet).
+
+### Recipe roster (Wave 2)
+
+| ID | Recipe | Modality | Family | Required fields | Panel |
+|---|---|---|---|---|---|
+| W2.1 | `proteome_phosphoproteome_pathway_scatter` | omics_differential | `scatter_collapse` | `pairs: list[ProteomePhosphoConcordanceRow]` (pathway × proteome score × phospho score) | F4B |
+| W2.2 | `module_concordance_signed_heatmap` | omics_differential | `matrix` | `cells: list[ModuleConcordanceCell]` (module × condition × signed score) | F4C |
+| W2.3 | `pathway_space_triangulation_heatmap` | omics_differential | `matrix` | `layers: list[PathwaySupportLayer]` (theme × match-tier × support score) | F5K |
+| W2.4 | `pathway_space_bridge_summary_heatmap` | omics_differential | `matrix` | `layers: list[PathwaySupportLayer]` summarised at theme level | F5L |
+| W2.5 | `gge_branch_selectivity_permutation_bar` | omics_differential | `coef_forest` | `branches: list[GGEBranchRow]` + `null: PermutationNullBundle` | F4F |
+| W2.6 | `pathway_module_activity_with_sign_concordance` | omics_differential | `matrix` | `cells: list[ModuleConcordanceCell]` (sex × genotype × module + sign-concordance overlay) | F4G |
+
+### Family-rule satisfaction checklist
+
+- **W2.1** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — satisfied by per-pathway scatter + zero-correlation reference / OLS fit line through origin.
+- **W2.2, W2.3, W2.4, W2.6** (`matrix` ≥1 imshow OR ≥4 cell patches) — satisfied by `pcolormesh` heatmap (W2.2 + W2.3 + W2.4) or annotated cell patches (W2.6).
+- **W2.5** (`coef_forest` ≥3 markers + ≥1 reference line) — satisfied by per-pathway markers (≥3 GGE-enriched + ≥3 non-GGE rows) + zero-effect reference line; permutation null draws as faint grey markers behind.
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `src/panelforge_figures/recipes/omics_differential/_shared.py` | **NEW** | 5 nested Pydantic sub-contracts: `ProteomePhosphoConcordanceRow`, `ModuleConcordanceCell`, `PathwaySupportLayer`, `GGEBranchRow`, `PermutationNullBundle`. Pioneers `_shared.py` for this modality. |
+| 6 new recipe modules under `recipes/omics_differential/` | **NEW** | One per recipe |
+| `recipes/omics_differential/__init__.py` | edit | Register 6 new recipes; modality 16 → 22 |
+
+No new top-level deps; no new `core/` shims (Bayes factor and multiverse utilities from W1 cover the statistical needs; permutation-null computation for W2.5 is inline numpy, ~20 LOC).
+
+### `_demo()` seed convention (Wave 2)
+
+All Wave 2 demos use seeded RNG (`np.random.default_rng(81X)`) and biology-agnostic synthetic data so the recipes are reusable beyond the cdc42 pack:
+
+- W2.1: 430 pathways × proteome score × phospho score; near-zero Spearman ρ to mirror the manuscript's "independent dimensions" finding.
+- W2.2: 12 modules × 2 conditions × signed score; 5/12 sign-concordant (~42%) per the manuscript.
+- W2.3: 5 themes × 3 match-tiers (matched / analog / internal) × support level; cytoskeletal/Rho strongest joint support.
+- W2.4: 5 themes × 3 layers (matched / surrogate / internal) summarised — bridge summary; CYTO theme strongest.
+- W2.5: 30 pathways split into 12 GGE + 18 non-GGE; 60% GGE Male>Female phospho vs 30% non-GGE; permutation p<0.001.
+- W2.6: 12 modules × {WT-CTL, WT-CKO, M-CTL, M-CKO} × signed score; sign-concordance overlay (✓/✗) per cell.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| W2.1 near-zero correlation makes the scatter look unstructured by design — risk that the reader doesn't recognise that's the point | Annotate "Spearman ρ = ..." callout; draw an explicit dashed zero-line plus the OLS fit; legend explicit about expected near-zero. |
+| W2.2/W2.6 sign-concordance grids — risk that the sign overlay glyph clashes with the cell colour | Use ASCII '+'/'−' marks (Helvetica-safe) + bold black on light-coloured cells, white on saturated cells. |
+| W2.3 / W2.4 multi-layer pathway support — three nested levels can crowd | Stack as horizontal panels with shared y-axis (theme); each layer occupies one column. |
+| W2.5 permutation null — risk of confusion between observed bars and null distribution | Draw observed bars solid, null draws as faint grey jitter behind; explicit p-value annotation per bar. |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively. |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 2261 + Wave 2 recipe smoke / quality / contracts (~12 new) ≈ 2273.
+2. `pytest tests/test_recipes_smoke.py -k omics_differential` — 22 demos render headlessly.
+3. `pytest tests/test_recipes_quality.py -k omics_differential` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
+5. Gallery regenerate `omics_differential/` — 22 PNGs.
+6. Eyeball each new panel; estimate **3 visual-QA fit-ups** (heatmap-heavy wave; signed cmap discipline established by disc1 W2 cohort-balance recipe).
 
 ## Wave 3 — factorial statistics + sex-stratified validation (+7) [pending]
 

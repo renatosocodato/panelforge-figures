@@ -132,8 +132,10 @@ def render(contract: ActinMTAngleRoseInput, ax=None, **_):
     ax.tick_params(axis="y", labelsize=6.0)
     ax.grid(color="#DDDDDD", lw=0.5)
 
-    # NN-distance inset (Cartesian, lower-right, axes-fraction).
-    inset = ax.inset_axes([0.62, -0.02, 0.36, 0.24])
+    # NN-distance inset (Cartesian, lower-left, axes-fraction
+    # outside the rose's upper-right quadrant so it doesn't overlap
+    # the petals).
+    inset = ax.inset_axes([-0.18, -0.18, 0.40, 0.30])
     AESTHETIC.apply_to_ax(inset)
     nn_max = 0.0
     for cond in conditions:
@@ -160,8 +162,8 @@ def render(contract: ActinMTAngleRoseInput, ax=None, **_):
     inset.set_title("NN distance inset", fontsize=6.2, pad=2)
 
     ax.legend(fontsize=6.6, frameon=False,
-              loc="upper right", bbox_to_anchor=(1.30, 1.05),
-              handlelength=1.2)
+              loc="upper center", bbox_to_anchor=(0.5, -0.20),
+              ncols=2, handlelength=1.2)
     ax.set_title(
         f"{contract.title}  ·  " + "   ".join(bits),
         fontsize=8.4, pad=14,

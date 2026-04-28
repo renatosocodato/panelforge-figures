@@ -30,16 +30,162 @@ project follows semantic versioning.
   statistics). After Wave 3: catalog 405 → 414;
   actin_microtubule_morphometry 40 → 45; biophysics_scaling
   38 → 41; spatial_statistics 15 → 16.
-- **Wave 4** gap-analysis in review (+9 narrative integration +
-  final supplements: F5C pseudotime strip, F5E narrative cascade
-  river, F6C split-mirror measured vs simulated, FS1C PERMANOVA
-  null + new `core/permanova_null_utility.py` shim, FS3D
-  overlap-juxtaposition, FS5C force-budget schematic, FS5D
-  confinement ratio, FS6E-F splay-taper-polarity compound, FS7B-D
-  sensitivity sweeps). After Wave 4: catalog 414 → 423;
+- **Wave 4** in review via PR (+9 narrative integration + final
+  supplements). After Wave 4: catalog 414 → 423;
   actin_microtubule_morphometry 45 → 47; biophysics_scaling
   41 → 47; grant_and_conceptual 15 → 16. Pioneers
   `grant_and_conceptual/_shared.py`. **Closes pack at 31/31.**
+
+## [1.4.0-beta-disc1_manuscript_companion-w4] — 2026-04-28
+
+Final wave of the `disc1_manuscript_companion` beta expansion
+pack. Lands the 9-recipe F5 / F6 narrative-integration cluster +
+FS1C / FS3D / FS5C / FS5D / FS6E-F / FS7B-D supplementary panels.
+Pioneers `grant_and_conceptual/_shared.py` for the headline
+`narrative_cascade_river_with_xrefs` synthesis-figure primitive.
+Adds 1 new `core/` shim (`permanova_null_utility.py`). **Closes
+the pack at 31/31 recipes.** Catalog 414 → 423.
+
+### Added (9 recipes)
+
+- `pseudotime_thumbnail_strip` (`matrix`,
+  actin_microtubule_morphometry, W4.1) — per-cell thumbnail
+  panels arranged along the Actin Drive Index pseudotime axis;
+  per-condition stand-off-vs-pseudotime trace below shows
+  checkpoint-bifurcation. **Closes manuscript panel F5C.**
+- `narrative_cascade_river_with_xrefs` (`conceptual`,
+  grant_and_conceptual, W4.2) — multi-stage causal river
+  integrating manuscript-level findings with figure cross-
+  references and inline statistics; **headline synthesis-figure
+  primitive** reusable beyond the DISC1 pack.
+  **Closes manuscript panel F5E.**
+- `split_mirror_measured_vs_simulated` (`split_violin`,
+  biophysics_scaling, W4.3) — three side-by-side panels (one per
+  validation metric) with measured (left, solid) and simulated
+  (right, hatched) split-violins per condition; per-panel max-
+  rel-err in title. **Closes manuscript panel F6C.**
+- `permanova_null_distribution` (`diagnostic_curve`,
+  biophysics_scaling, W4.4) — histogram of permutation-shuffle
+  null R² with observed R² as a vertical reference and p-value
+  tail-shaded for visual percentile read-off. Uses new
+  `core/permanova_null_utility.py` shim.
+  **Closes manuscript panel FS1C.**
+- `overlap_juxtaposition_quantification` (`scatter_collapse`,
+  actin_microtubule_morphometry, W4.5) — per-cell scatter linking
+  polymer-overlap to territory-juxtaposition; per-condition
+  windowed-median fit lines highlight the shared manifold.
+  **Closes manuscript panel FS3D.**
+- `force_budget_schematic_with_data` (`conceptual`,
+  biophysics_scaling, W4.6) — methods-style schematic of the
+  protrusion force budget (4 terms) with measured per-term
+  values + 95% CI bars on the right; sign convention coloured
+  green (+) / red (-); net-force in title.
+  **Closes manuscript panel FS5C.**
+- `confinement_ratio_distribution_by_genotype` (`split_violin`,
+  biophysics_scaling, W4.7) — split-violin distribution of
+  per-cell confinement ratio (z-span / Euler L_crit) per
+  genotype; horizontal reference at ratio = 1.0; per-genotype
+  supercritical fraction in title.
+  **Closes manuscript panel FS5D.**
+- `splay_taper_polarity_displacement_compound` (`coef_forest`,
+  biophysics_scaling, W4.8) — three frontier-architecture
+  readouts (splay-taper transition, polarity-displacement
+  offset, splay symmetry) compound forest with per-condition
+  CI markers + zero-effect reference.
+  **Closes manuscript panels FS6E-F.**
+- `sensitivity_sweep_alpha_width_seed_compound`
+  (`timecourse_hierarchical_ci`, biophysics_scaling, W4.9) —
+  three side-by-side panels showing per-condition mean output
+  curve + bootstrap CI ribbon as alpha / width / seed are
+  swept; per-panel min-condition-gap callout shows separation
+  persists. **Closes manuscript panels FS7B-D.**
+
+### Infrastructure
+
+- `core/permanova_null_utility.py` (new, ~85 LOC) —
+  `permanova_null_distribution(X, labels, n_perms=999, seed=0) →
+  (R2_obs, R2_null, p_perm)`. Pure-numpy permutation-shuffle
+  estimator with squared-Euclidean distance + Phipson-Smyth
+  small-sample p-value correction. Replaces a `scikit-bio` dep;
+  matches Option D inline-shim discipline.
+- `core/__init__.py` (edit) — exports `permanova_null_distribution`.
+- `tests/test_permanova_null_utility.py` (new, 7 tests) — shape,
+  R²-bounds, separated-blob recovery, deterministic-under-seed,
+  random-label sanity, edge cases (too-few-samples, label
+  size mismatch).
+- `recipes/actin_microtubule_morphometry/_shared.py` (edit) —
+  adds 2 sub-contracts: `PseudotimeOrderedCell` (W4.1),
+  `OverlapJuxtapositionCell` (W4.5).
+- `recipes/biophysics_scaling/_shared.py` (edit) — adds 5 sub-
+  contracts: `MeasuredSimulatedPair` (W4.3),
+  `ForceBudgetTerm` (W4.6), `ConfinementRatioSample` (W4.7),
+  `CompoundReadoutRow` (W4.8), `SensitivitySweepCurve` (W4.9).
+- `recipes/grant_and_conceptual/_shared.py` (new) — pioneers
+  `_shared.py` for this modality with `CascadeStage` +
+  `CascadeTransition` (used by W4.2 narrative cascade).
+- `recipes/actin_microtubule_morphometry/__init__.py` (edit) —
+  registers 2 new recipes; modality 45 → 47.
+- `recipes/biophysics_scaling/__init__.py` (edit) — registers
+  6 new recipes; modality 41 → 47.
+- `recipes/grant_and_conceptual/__init__.py` (edit) — registers
+  W4.2; modality 15 → 16.
+- `tests/test_contracts.py` per-modality assertion bumped:
+  `counts["grant_and_conceptual"] == 15` → `16`.
+
+### Demo conventions
+
+All 9 demos use seeded RNG (`np.random.default_rng(70X)`) and
+the manuscript's WT vs LI condition labels with biology-agnostic
+synthetic data:
+
+- W4.1: 12 cells across pseudotime [0.05, 0.95]; thumbnails
+  elongate with pseudotime; LI stand-off diverges past pseudotime
+  ≈ 0.6 (checkpoint).
+- W4.2: 6 cascade stages with figure cross-references and p-
+  values; each stage carries a one-line summary claim.
+- W4.3: 3 metrics (coherency, z-span, tapered-tip fraction) × 2
+  conditions × 30 cells each (measured + simulated pair).
+- W4.4: 2 well-separated blobs (n=60) producing observed R² ≈
+  0.45; 499-perm null distribution; p_perm ≈ 0.002.
+- W4.5: 2 conditions × 12 cells; LI shifted up-and-right of WT
+  on the polymer-overlap × territory-juxtaposition plane.
+- W4.6: 4 force-budget terms (active / elastic / drag /
+  confinement) with realistic ± 95% CI bars; net = +0.4 pN
+  (slightly forward-pushing).
+- W4.7: 2 conditions × 30 cells; WT median ratio ≈ 0.55
+  (subcritical), LI ≈ 1.55 (supercritical).
+- W4.8: 3 readouts × 2 conditions; LI elevated on all three
+  readouts vs WT.
+- W4.9: 3 sweep parameters × 2 conditions × 12 grid points each;
+  WT-vs-LI separation persists across the entire sweep range.
+
+### Visual-QA polish during authoring (0 fit-ups)
+
+All 9 recipes passed family-rule and style-drift ratchet checks
+on first authoring; no fit-ups needed during tests. Visual audit
+fit-ups are tracked separately in Commit 3.
+
+### Tests
+
+- Total: **2166 → 2218** (+52: 9 smoke + 9 quality + 7 utility
+  + ~27 from auto-parametrized contracts and registry).
+- New test file `tests/test_permanova_null_utility.py` (7 tests).
+- `tests/test_contracts.py` `grant_and_conceptual` per-modality
+  assertion bumped 15 → 16.
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- actin_microtubule_morphometry recipes: **45 → 47** (+2).
+- biophysics_scaling recipes: **41 → 47** (+6).
+- grant_and_conceptual recipes: **15 → 16** (+1).
+- disc1_manuscript_companion pack recipes landed: **22 → 31**
+  (Wave 4 of 4 — **closes pack at 31/31**).
+- New `_shared.py` modules pioneered: **3 → 4**
+  (`grant_and_conceptual` joins
+  `meta_and_diagnostic` /
+  `actin_microtubule_morphometry`, plus the existing
+  `biophysics_scaling`).
 
 ## [1.4.0-beta-disc1_manuscript_companion-w3] — 2026-04-28
 

@@ -204,6 +204,36 @@ class MTMeshDensitySnapshot(RecipeContract):
     pixel_um: float = 0.5
 
 
+# --- Wave 4: narrative-integration atoms -----------------------------------
+
+
+class PseudotimeOrderedCell(RecipeContract):
+    """One cell's representative thumbnail + its pseudotime coord.
+
+    Used by W4.1 (`pseudotime_thumbnail_strip`). The thumbnail is
+    a small H × W cell-shape raster (intensity grid), and the
+    pseudotime coord lives on a 1-D axis (typically [0, 1] from
+    resting → extended along the Actin Drive Index).
+    """
+    cell_id: str
+    condition: str
+    pseudotime: float                              # axis coord (e.g. [0, 1])
+    thumbnail_grid: list[list[float]]              # H × W (intensity)
+
+
+class OverlapJuxtapositionCell(RecipeContract):
+    """One cell's polymer-overlap × territory-juxtaposition coord.
+
+    Used by W4.5 (`overlap_juxtaposition_quantification`).
+    `polymer_overlap` quantifies actin-MT colocalization; `territory_
+    juxtaposition` quantifies how closely territory zones abut.
+    """
+    cell_id: str
+    condition: str
+    polymer_overlap: float
+    territory_juxtaposition: float
+
+
 # --- multi-channel intravital field (used by W2.4 cross-modality) ----------
 
 

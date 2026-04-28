@@ -6,35 +6,35 @@ project follows semantic versioning.
 
 ## [Unreleased]
 
-### In planning
+### Completed packs
 
-- **DISC1 manuscript companion pack**
-  (`[1.4.0-beta-disc1_manuscript_companion]`) — ~31 new recipes
-  scattered across 5 existing modalities, landed across 4 user-
-  gated waves. Closes the gap between manuscript figure needs
-  (`/Users/renatosocodato/actin-mt_biophysics/manuscript/2026_disc1_microglial_cytoskeletal_confinement`)
-  and the 392-recipe catalog after the intravital_imaging pack.
-  See
+- **DISC1 manuscript companion pack
+  `[1.4.0-beta-disc1_manuscript_companion]` — COMPLETE.** 4 waves,
+  31 new recipes scattered across 6 existing modalities (no new
+  modality), 1 new `core/` inline shim
+  (`permanova_null_utility`), 14 new nested sub-contracts across
+  3 newly-pioneered `_shared.py` modules
+  (`meta_and_diagnostic`, `actin_microtubule_morphometry`,
+  `grant_and_conceptual`) plus extensions to `biophysics_scaling`.
+  **Zero new heavy dependencies** (no `scikit-bio` /
+  `networkx` / `pysankey`). Catalog 392 → 423; 6 modalities
+  touched. Tests 2056 → 2218. PRs #39 → #42. See pack-closeout
+  summary at the end of the Wave 1 entry below, and
   [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
-  for the full pack plan. **Zero new heavy deps** (Option D
-  inline-shim discipline preserved); 1 new `core/` shim
-  (`permanova_null_utility.py`) lands in Wave 4.
-- **Wave 1** merged via PR #39 (+6 universal QA primitives in
-  `meta_and_diagnostic`). meta_and_diagnostic 15 → 21; total
-  catalog 392 → 398.
-- **Wave 2** merged via PR #40 (+7 cell-territory + multiscale).
-  After Wave 2: catalog 398 → 405; actin_microtubule_morphometry
-  35 → 40; biophysics_scaling 37 → 38; intravital_imaging
-  57 → 58.
-- **Wave 3** merged via PR #41 (+9 cytoskeleton geometry +
-  statistics). After Wave 3: catalog 405 → 414;
-  actin_microtubule_morphometry 40 → 45; biophysics_scaling
-  38 → 41; spatial_statistics 15 → 16.
-- **Wave 4** in review via PR (+9 narrative integration + final
-  supplements). After Wave 4: catalog 414 → 423;
-  actin_microtubule_morphometry 45 → 47; biophysics_scaling
-  41 → 47; grant_and_conceptual 15 → 16. Pioneers
-  `grant_and_conceptual/_shared.py`. **Closes pack at 31/31.**
+  for the full pack tracker.
+
+- **intravital_imaging beta expansion pack
+  `[1.3.0-beta-intravital_imaging]` — COMPLETE.** 4 waves, 42 new
+  recipes, 5 new `core/` inline shims (HMM/HSMM, KM, GAM, spectral
+  embedding, transfer entropy), 11 new nested sub-contracts,
+  `microglia_states` semantic-palette polish. **Zero new heavy
+  dependencies** beyond `hmmlearn` (no `umap-learn` / `pyhsmm` /
+  `lifelines` / `statsmodels` / `pygam`). Catalog 350 → 392;
+  intravital_imaging 15 → 57. Tests 1814 → 2056. PRs #33 → #37
+  (+ #34 polish, #38 closeout). See pack-closeout summary at the
+  end of its Wave 1 entry below, and
+  [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
+  for the full pack tracker.
 
 ## [1.4.0-beta-disc1_manuscript_companion-w4] — 2026-04-28
 
@@ -554,20 +554,70 @@ outside the DISC1 pack:
 - New `_shared.py` modules pioneered: **0 → 1** (will reach
   2 after Wave 2 pioneers `actin_microtubule_morphometry/_shared.py`).
 
-### Completed packs
+### disc1_manuscript_companion beta expansion pack — COMPLETE
 
-- **intravital_imaging beta expansion pack
-  `[1.3.0-beta-intravital_imaging]` — COMPLETE.** 4 waves, 42 new
-  recipes, 5 new `core/` inline shims (HMM/HSMM, KM, GAM, spectral
-  embedding, transfer entropy), 11 new nested sub-contracts,
-  `microglia_states` semantic-palette polish. **Zero new heavy
-  dependencies** beyond `hmmlearn` (no `umap-learn` / `pyhsmm` /
-  `lifelines` / `statsmodels` / `pygam`). Catalog 350 → 392;
-  intravital_imaging 15 → 57. Tests 1814 → 2056. PRs #33 → #37
-  (+ #34 polish, #38 closeout). See pack-closeout summary at the
-  end of the Wave 1 entry below, and
-  [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
-  for the full pack tracker.
+The 4-wave pack closes at **31 new recipes** across 4 waves. Final
+catalog: **392 → 423** (across 6 modalities). Pack tag candidate:
+`v1.4.0-beta-disc1_manuscript_companion`.
+
+Cumulative summary across PRs #39, #40, #41, #42, and (this) closeout:
+
+| Wave | Scope | PR | Δ recipes | Catalog |
+|---|---|---|---|---|
+| w1 | universal QA + diagnostic primitives (6 in `meta_and_diagnostic`) | #39 | +6 | 392 → 398 |
+| w2 | cell territory + multiscale presentation (5 actin_mt + 1 biophysics + 1 intravital) | #40 | +7 | 398 → 405 |
+| w3 | cytoskeleton geometry + statistics (5 actin_mt + 3 biophysics + 1 spatial_stats) | #41 | +9 | 405 → 414 |
+| w4 | narrative integration + final supplements (2 actin_mt + 6 biophysics + 1 grant_and_conceptual) | #42 | +9 | 414 → 423 |
+| closeout | tracker bump + CHANGELOG rollup + tag | (this PR) | — | — |
+
+One new `core/` inline shim landed (Option D heavy-deps
+discipline preserved end-to-end — **zero `scikit-bio` /
+`networkx` / `pysankey` deps**):
+
+- `core/permanova_null_utility.py` (W4) —
+  `permanova_null_distribution(X, labels, n_perms=999, seed=0) →
+  (R2_obs, R2_null, p_perm)`. Pure-numpy permutation-shuffle
+  estimator with squared-Euclidean distance + Phipson-Smyth
+  small-sample p-value correction. Replaces a `scikit-bio` dep.
+
+Three new `_shared.py` modules pioneered:
+
+- `recipes/meta_and_diagnostic/_shared.py` (W1) — 5 sub-contracts
+  (`LoadingsBundle`, `CellAuditRow`, `ExclusionRow`,
+  `CompetingModelFit`, `ParameterLineageEdge`).
+- `recipes/actin_microtubule_morphometry/_shared.py` (W2 + W3
+  + W4 extensions) — 14 sub-contracts spanning territory atoms,
+  contact-patch networks, colocalization coefficients,
+  Airyscan triptychs, Cleveland summaries, edge-gradient
+  profiles, mesh-density snapshots, pseudotime cells, overlap-
+  juxtaposition cells.
+- `recipes/grant_and_conceptual/_shared.py` (W4) — 2 sub-
+  contracts (`CascadeStage`, `CascadeTransition`) for the
+  headline narrative-cascade synthesis primitive.
+
+Plus 8 sub-contracts added across the 4 waves to
+`recipes/biophysics_scaling/_shared.py` (which already existed
+from the biophysics_scaling pack): `MultiScaleSignificanceRow`
+(W2), `CensoringCascadeRow` / `ConfinementEnergyBundle` /
+`ZSpanWidthSample` (W3), and `MeasuredSimulatedPair` /
+`ForceBudgetTerm` / `ConfinementRatioSample` /
+`CompoundReadoutRow` / `SensitivitySweepCurve` (W4).
+
+**Modality footprint (6 modalities touched, no new modality):**
+
+| Modality | Δ | Pre-pack | Post-pack |
+|---|---|---|---|
+| `meta_and_diagnostic` | +6 | 15 | **21** |
+| `actin_microtubule_morphometry` | +12 | 35 | **47** |
+| `biophysics_scaling` | +10 | 37 | **47** |
+| `intravital_imaging` | +1 | 57 | **58** |
+| `spatial_statistics` | +1 | 15 | **16** |
+| `grant_and_conceptual` | +1 | 15 | **16** |
+
+Tests: 2056 → 2218 (+162 across 4 waves: 31 recipe smoke + 31
+quality + 7 utility-specific + ~93 auto-parametrized contracts /
+registry). Style-drift ratchet: held at 20/20 throughout.
+Helvetica-safe typography: enforced in every recipe.
 
 ## [1.3.0-beta-intravital_imaging-w4] — 2026-04-27
 

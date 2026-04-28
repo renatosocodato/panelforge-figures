@@ -26,11 +26,20 @@ project follows semantic versioning.
   After Wave 2: catalog 398 → 405; actin_microtubule_morphometry
   35 → 40; biophysics_scaling 37 → 38; intravital_imaging
   57 → 58.
-- **Wave 3** in review via PR (+9 cytoskeleton geometry + statistics).
-  After Wave 3: catalog 405 → 414; actin_microtubule_morphometry
-  40 → 45; biophysics_scaling 38 → 41; spatial_statistics 15 → 16.
-- **Wave 4 pending** (+9 narrative integration). Cumulative
-  final: catalog 392 → 423.
+- **Wave 3** merged via PR #41 (+9 cytoskeleton geometry +
+  statistics). After Wave 3: catalog 405 → 414;
+  actin_microtubule_morphometry 40 → 45; biophysics_scaling
+  38 → 41; spatial_statistics 15 → 16.
+- **Wave 4** gap-analysis in review (+9 narrative integration +
+  final supplements: F5C pseudotime strip, F5E narrative cascade
+  river, F6C split-mirror measured vs simulated, FS1C PERMANOVA
+  null + new `core/permanova_null_utility.py` shim, FS3D
+  overlap-juxtaposition, FS5C force-budget schematic, FS5D
+  confinement ratio, FS6E-F splay-taper-polarity compound, FS7B-D
+  sensitivity sweeps). After Wave 4: catalog 414 → 423;
+  actin_microtubule_morphometry 45 → 47; biophysics_scaling
+  41 → 47; grant_and_conceptual 15 → 16. Pioneers
+  `grant_and_conceptual/_shared.py`. **Closes pack at 31/31.**
 
 ## [1.4.0-beta-disc1_manuscript_companion-w3] — 2026-04-28
 

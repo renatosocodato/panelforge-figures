@@ -200,6 +200,54 @@ class MultiScaleSignificanceRow(RecipeContract):
     direction: str = "neutral"   # "up" | "down" | "neutral" (sign of effect)
 
 
+# --- Wave 3 (geometry + statistics) sub-contracts --------------------------
+
+
+class CensoringCascadeRow(RecipeContract):
+    """One (censoring rule × threshold) audit point.
+
+    Used by W3.3 (`censoring_mode_waterfall_cascade`). Each row
+    captures the per-feature estimate + CI under one of the
+    pre-registered censoring modes. The waterfall layout offsets
+    rows down-and-right so the cascade shape is visible.
+    """
+    feature: str
+    censoring_mode: str                   # e.g. "default" | "loose" | "strict_R2" | "strict_n"
+    threshold_label: str                  # e.g. "R^2 > 0.7" | "n_segments >= 60"
+    estimate: float                       # signed point estimate
+    ci_lo: float
+    ci_hi: float
+
+
+class ConfinementEnergyBundle(RecipeContract):
+    """Per-cell Odijk-confinement free energy + per-genotype gauge bounds.
+
+    Used by W3.4 (`confinement_energy_gauge_per_genotype`). Each
+    cell carries the free-energy estimate (in k_B T units); the
+    recipe's contract also exposes the buffered → unbuffered
+    threshold so the gauge needle has a reference.
+    """
+    cell_id: str
+    genotype: str
+    free_energy_kBT: float
+    width_um: float
+    persistence_length_um: float
+
+
+class ZSpanWidthSample(RecipeContract):
+    """Per-cell z-span + width + Euler critical-length threshold.
+
+    Used by W3.9 (`z_span_vs_width_with_euler_threshold`). The
+    Euler threshold is a function of the per-cell persistence
+    length and is computed by the producer, not the recipe.
+    """
+    cell_id: str
+    condition: str
+    width_um: float
+    z_span_um: float
+    euler_l_crit_um: float
+
+
 # --- outcome palette (local fallback) ---------------------------------------
 
 

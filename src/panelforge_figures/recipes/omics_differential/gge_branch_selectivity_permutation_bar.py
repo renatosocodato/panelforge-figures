@@ -103,11 +103,20 @@ def render(contract: GGEBranchPermutationInput, ax=None, **_):
         ax.scatter([b.observed], [yi], s=66, marker="o",
                    facecolor=colour, edgecolor="white",
                    linewidth=0.6, zorder=6)
-        # Inline observed-fraction + n callout.
-        ax.text(b.observed + 0.02, yi,
-                f"{smart_fmt(b.observed * 100)}%  ·  n={b.n_pathways}",
-                ha="left", va="center", fontsize=6.4,
-                color=colour, fontweight="bold", zorder=7)
+        # Inline observed-fraction + n callout — placed on the
+        # opposite side of the marker from the bar so it never
+        # overlaps the lollipop line.  Right of marker when
+        # observed >= chance, left otherwise.
+        if b.observed >= chance:
+            ax.text(b.observed + 0.02, yi,
+                    f"{smart_fmt(b.observed * 100)}%  ·  n={b.n_pathways}",
+                    ha="left", va="center", fontsize=6.4,
+                    color=colour, fontweight="bold", zorder=7)
+        else:
+            ax.text(b.observed - 0.02, yi,
+                    f"{smart_fmt(b.observed * 100)}%  ·  n={b.n_pathways}",
+                    ha="right", va="center", fontsize=6.4,
+                    color=colour, fontweight="bold", zorder=7)
 
     ax.set_yticks(y)
     ax.set_yticklabels([b.branch for b in branches], fontsize=6.8)

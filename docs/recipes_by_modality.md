@@ -9,7 +9,7 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.4.0-beta-disc1_manuscript_companion — Wave 4 landed: 423 recipes** (cumulative across all 4 waves: meta_and_diagnostic +6, actin_microtubule_morphometry +12, biophysics_scaling +10, spatial_statistics +1, intravital_imaging +1, grant_and_conceptual +1). Pack total: 31/31 recipes; 4/4 waves; pack tag candidate `v1.4.0-beta-disc1_manuscript_companion`. See `docs/disc1_manuscript_companion_pack_tracker.md`.
 
-**v1.5.0-beta-cdc42_factorial_companion — Wave 1 landed: 429 recipes** (meta_and_diagnostic +6 universal robustness primitives). Pack total: 6/25 recipes; 1/4 waves. See `docs/cdc42_factorial_companion_pack_tracker.md`.
+**v1.5.0-beta-cdc42_factorial_companion — Wave 2 landed: 435 recipes** (cumulative across W1+W2: meta_and_diagnostic +6, omics_differential +6). Pack total: 12/25 recipes; 2/4 waves. See `docs/cdc42_factorial_companion_pack_tracker.md`.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -63,6 +63,35 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 - **actin_microtubule_morphometry** (6): filament orientation, branch-point
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
+
+## v1.5.0-beta-cdc42_factorial_companion — Wave 2 (multi-omic integration, +6)
+
+Second wave of the cdc42_factorial_companion beta expansion pack.
+Lands the 6-recipe F4 multi-omic integration cluster — proteome
+× phospho concordance, GEF/GAP/Effector module concordance, GGE
+branch-selectivity permutation, pathway-space triangulation /
+bridge, sign-concordance overlay. Pioneers
+`omics_differential/_shared.py`. omics_differential expands from
+16 to 22 recipes; total catalog 429 → 435.
+
+- **proteome_phosphoproteome_pathway_scatter**
+  (`scatter_collapse`) — pathway-level Spearman ρ scatter with
+  GGE-flagged pathways highlighted; OLS fit through near-zero.
+- **module_concordance_signed_heatmap** (`matrix`) — module ×
+  condition signed-score `imshow` on RdBu_r with `+` / `−`
+  sign-concordance corner glyphs (Helvetica-safe ASCII).
+- **pathway_space_triangulation_heatmap** (`matrix`) — theme ×
+  match-tier support-level grid on viridis with strongest-theme
+  callout.
+- **pathway_space_bridge_summary_heatmap** (`matrix`) — compressed
+  theme-level bridge with matched / surrogate / internal layers
+  + aggregate column separated by white separator.
+- **gge_branch_selectivity_permutation_bar** (`coef_forest`) —
+  observed branch fractions with permutation null jitter behind;
+  empirical p annotation; opposite-side callouts.
+- **pathway_module_activity_with_sign_concordance** (`matrix`) —
+  manuscript Fig 4G layout (sex × genotype × module signed
+  score) with sign-concordance corner glyphs on -CKO columns.
 
 ## v1.5.0-beta-cdc42_factorial_companion — Wave 1 (universal robustness primitives, +6)
 

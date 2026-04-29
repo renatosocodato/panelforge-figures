@@ -20,13 +20,117 @@ project follows semantic versioning.
   inline-shim discipline preserved); 2 new `core/` shims
   (`bayes_factor_utility`, `multiverse_specification_utility`)
   land in Wave 1.
-- **Wave 1** in review via PR (+6 universal robustness primitives
+- **Wave 1** merged via PR #44 (+6 universal robustness primitives
   in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
   catalog 423 → 429.
-- **Waves 2–4 pending** (+6 multi-omic integration, +7 factorial
-  statistics + sex-stratified validation, +6 energetic /
-  thermodynamic + narrative integration). Cumulative final:
-  catalog 423 → 448.
+- **Wave 2** in review via PR (+6 multi-omic integration in
+  `omics_differential`). After Wave 2: catalog 429 → 435;
+  omics_differential 16 → 22. Pioneers
+  `omics_differential/_shared.py`.
+- **Waves 3–4 pending** (+7 factorial statistics + sex-stratified
+  validation, +6 energetic / thermodynamic + narrative
+  integration). Cumulative final: catalog 423 → 448.
+
+## [1.5.0-beta-factorial_design_companion-w2] — 2026-04-28
+
+Second wave of the `factorial_design_companion` beta expansion
+pack. Lands the 6-recipe F4 multi-omic integration cluster —
+proteome × phospho concordance, GEF/GAP/Effector module
+concordance, GGE branch-selectivity permutation, pathway-space
+triangulation / bridge, sign-concordance overlay. Pioneers
+`omics_differential/_shared.py` with 5 nested Pydantic
+sub-contracts (no `_shared.py` existed for this modality before).
+Catalog 429 → 435.
+
+### Added (6 recipes)
+
+- `proteome_phosphoproteome_pathway_scatter`
+  (`scatter_collapse`, W2.1) — pathway-level proteome × phospho
+  scatter with Spearman ρ + OLS fit and zero reference axes.
+  GGE-flagged pathways drawn on top in teal; non-GGE in faint
+  grey. Spearman ρ + p in title. **Closes manuscript panel F4B.**
+- `module_concordance_signed_heatmap` (`matrix`, W2.2) — module
+  × condition signed-score `imshow` on RdBu_r with sign-
+  concordance glyphs (`+` / `−`, Helvetica-safe ASCII) overlaid
+  in cell corners; n-concordant tally in title.
+  **Closes manuscript panel F4C.**
+- `pathway_space_triangulation_heatmap` (`matrix`, W2.3) —
+  theme × match-tier support-level grid on viridis with
+  per-cell numeric annotations and strongest-theme callout.
+  **Closes manuscript panel F5K.**
+- `pathway_space_bridge_summary_heatmap` (`matrix`, W2.4) —
+  compressed theme-level bridge view (matched / surrogate /
+  internal + aggregate column) with white separator before
+  aggregate. **Closes manuscript panel F5L.**
+- `gge_branch_selectivity_permutation_bar` (`coef_forest`,
+  W2.5) — observed branch fractions with permutation null jitter
+  drawn as faint grey scatter behind; per-bar callouts;
+  `chance` reference at 0.5; permutation p in title.
+  **Closes manuscript panel F4F.**
+- `pathway_module_activity_with_sign_concordance` (`matrix`,
+  W2.6) — manuscript Fig 4G layout (sex × genotype × module
+  signed score) with sign-concordance corner glyphs marking
+  CKO sign agreement; n-agree / n-disagree tally in title.
+  **Closes manuscript panel F4G.**
+
+### Infrastructure
+
+- `recipes/omics_differential/_shared.py` (new) — pioneers
+  `_shared.py` for this modality with 5 nested Pydantic
+  sub-contracts: `ProteomePhosphoConcordanceRow`,
+  `ModuleConcordanceCell`, `PathwaySupportLayer`, `GGEBranchRow`,
+  `PermutationNullBundle`. Reusable across any future multi-omic
+  pack.
+- `recipes/omics_differential/__init__.py` (edit) — registers 6
+  new recipes; modality 16 → 22.
+
+No new top-level deps; no new `core/` shims (W1's Bayes-factor
+and multiverse utilities cover the statistical needs;
+permutation-null computation for W2.5 is inline numpy ~20 LOC).
+
+### Demo conventions
+
+All 6 demos use seeded RNG (`np.random.default_rng(81X)`) and
+biology-agnostic synthetic data with manuscript-anchored values
+where possible:
+
+- W2.1: 430 pathways × proteome × phospho scores; near-zero
+  Spearman ρ by design (matches the manuscript's "independent
+  dimensions" finding).
+- W2.2: 12 modules × 2 conditions; 5/12 sign-concordant (~42%
+  per the manuscript).
+- W2.3: 5 themes × 3 match-tiers; cytoskeletal/Rho strongest
+  joint support.
+- W2.4: 5 themes × 3 layers (matched / surrogate / internal +
+  aggregate); cytoskeletal/Rho strongest.
+- W2.5: 3 branches (GGE-enriched 60.5 %, non-GGE 30.1 %, random
+  49.8 %) with 200 permutation null draws; p_perm = 0.001.
+- W2.6: 7 modules × 4 conditions (F-CTL / F-CKO / M-CTL / M-CKO)
+  with manuscript-anchored values (CDC42_GEF F-CKO = -2.22,
+  RAC_GEF F-CKO = +1.58, ARP2/3 M-CKO = +2.88).
+
+### Visual-QA polish during authoring (3 fit-ups)
+
+- W2.1 unused `r_pearson` / `p_pearson` from `linregress` removed
+  — Spearman ρ is the manuscript's headline statistic.
+- W2.5 `lw=2.0` snapped to `2.2` (style-drift ratchet); W2.4
+  `lw=2.0` separator likewise.
+- All W2 recipes `fontsize=8.0` snapped to existing `8.2` (style-
+  drift ratchet at 20/20).
+
+### Tests
+
+- Total: **2261 → 2291** (+30: 6 smoke + 6 quality + ~18 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- omics_differential recipes: **16 → 22** (+6).
+- factorial_design_companion pack recipes landed: **6 → 12**
+  (Wave 2 of 4).
+- New `_shared.py` modules pioneered (cumulative): **1 → 2**
+  (`omics_differential` joins `meta_and_diagnostic`).
 
 ## [1.5.0-beta-factorial_design_companion-w1] — 2026-04-28
 

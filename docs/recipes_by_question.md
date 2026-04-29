@@ -10,6 +10,15 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## CDC42-factorial-companion beta-pack Wave 2 additions (v1.5.0-beta-cdc42_factorial_companion-w2)
+
+- **At pathway level, how concordant are proteome and phosphoproteome sex-effect scores, and is the relationship consistent with independent biological dimensions?** → [`omics_differential.proteome_phosphoproteome_pathway_scatter`](gallery/omics_differential/proteome_phosphoproteome_pathway_scatter.png)
+- **Across GEF / GAP / Effector modules and CKO conditions, which modules show sign-concordance between proteome and phosphoproteome layers?** → [`omics_differential.module_concordance_signed_heatmap`](gallery/omics_differential/module_concordance_signed_heatmap.png)
+- **Across themes and match-tiers, where does external pathway-space support converge with internal imaging-derived modules?** → [`omics_differential.pathway_space_triangulation_heatmap`](gallery/omics_differential/pathway_space_triangulation_heatmap.png)
+- **At theme level, which manuscript themes retain joint support across matched / surrogate / internal layers?** → [`omics_differential.pathway_space_bridge_summary_heatmap`](gallery/omics_differential/pathway_space_bridge_summary_heatmap.png)
+- **Across pathway branches, what fraction of GGE-enriched vs non-GGE pathways show male-biased phospho scores, and is the difference larger than the permutation null?** → [`omics_differential.gge_branch_selectivity_permutation_bar`](gallery/omics_differential/gge_branch_selectivity_permutation_bar.png)
+- **Across sex × genotype conditions and modules, where do CKO conditions show sign-concordant remodelling vs sex-asymmetric divergence?** → [`omics_differential.pathway_module_activity_with_sign_concordance`](gallery/omics_differential/pathway_module_activity_with_sign_concordance.png)
+
 ## CDC42-factorial-companion beta-pack Wave 1 additions (v1.5.0-beta-cdc42_factorial_companion-w1)
 
 - **Per descriptor, how strong is the Bayes-factor evidence for the null hypothesis vs the alternative, and which Wagenmakers / Kass-Raftery threshold tier does it cross?** → [`meta_and_diagnostic.bayes_factor_arrow_plot`](gallery/meta_and_diagnostic/bayes_factor_arrow_plot.png)

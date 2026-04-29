@@ -23,12 +23,20 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #44 (+6 universal robustness primitives
   in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
   catalog 423 → 429.
-- **Wave 2** in review via PR (+6 multi-omic integration in
+- **Wave 2** merged via PR #45 (+6 multi-omic integration in
   `omics_differential`). After Wave 2: catalog 429 → 435;
-  omics_differential 16 → 22. Pioneers
+  omics_differential 16 → 22. Pioneered
   `omics_differential/_shared.py`.
-- **Waves 3–4 pending** (+7 factorial statistics + sex-stratified
-  validation, +6 energetic / thermodynamic + narrative
+- **Wave 3** gap-analysis in review (+7 factorial statistics +
+  sex-stratified validation: two-way ANOVA, sex-stratified ROC,
+  mediation slope, pre/post slope by module, Sholl radial
+  histogram, fingerprint trio composite, switch-callout
+  extension). Pioneers `mixed_effects_models/_shared.py`; extends
+  `actin_microtubule_morphometry/_shared.py` and
+  `intravital_imaging/_shared.py`. After Wave 3: catalog 435 → 442;
+  mixed_effects_models 16 → 20; actin_microtubule_morphometry
+  47 → 49; intravital_imaging 58 → 59.
+- **Wave 4 pending** (+6 energetic / thermodynamic + narrative
   integration). Cumulative final: catalog 423 → 448.
 
 ## [1.5.0-beta-cdc42_factorial_companion-w2] — 2026-04-28

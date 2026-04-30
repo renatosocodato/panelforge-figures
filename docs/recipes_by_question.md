@@ -10,6 +10,16 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## CDC42-factorial-companion beta-pack Wave 3 additions (v1.5.0-beta-factorial_design_companion-w3)
+
+- **In a 2 × 2 factorial design, which of {sex, genotype, sex × genotype interaction} is detectable, with what F, p, and partial η² effect size?** → [`mixed_effects_models.two_way_anova_summary_plot`](gallery/mixed_effects_models/two_way_anova_summary_plot.png)
+- **How well does a classifier separate phenotypes per sex stratum under leave-one-out cross-validation, and how does the AUC compare across strata?** → [`mixed_effects_models.sex_stratified_roc_loocv`](gallery/mixed_effects_models/sex_stratified_roc_loocv.png)
+- **Per stratum, how is the total treatment effect partitioned into a direct and an indirect (mediated) component, and how stable is that partition across strata?** → [`mixed_effects_models.mediation_decomposition_slope_chart`](gallery/mixed_effects_models/mediation_decomposition_slope_chart.png)
+- **Across pathway modules, which respond strongly to the intervention (pre vs post), and how does the response differ between strata?** → [`mixed_effects_models.pre_post_slope_chart_by_module`](gallery/mixed_effects_models/pre_post_slope_chart_by_module.png)
+- **How does the per-condition Sholl intersection density vary with distance from the soma, and how do the per-condition peak amplitudes compare?** → [`actin_microtubule_morphometry.sholl_intersections_radial_histogram`](gallery/actin_microtubule_morphometry/sholl_intersections_radial_histogram.png)
+- **Per condition, what does the cell-behavior fingerprint look like across (i) representative velocity traces, (ii) summary violin distributions, and (iii) cv-velocity vs extension-fraction scatter?** → [`actin_microtubule_morphometry.behavioral_fingerprint_trio_composite`](gallery/actin_microtubule_morphometry/behavioral_fingerprint_trio_composite.png)
+- **Per cell, when do entries and exits between decoded states happen, and which cells stand out as high-switch-rate outliers above the 75th percentile?** → [`intravital_imaging.state_entry_exit_with_switch_callout`](gallery/intravital_imaging/state_entry_exit_with_switch_callout.png)
+
 ## CDC42-factorial-companion beta-pack Wave 2 additions (v1.5.0-beta-factorial_design_companion-w2)
 
 - **At pathway level, how concordant are proteome and phosphoproteome sex-effect scores, and is the relationship consistent with independent biological dimensions?** → [`omics_differential.proteome_phosphoproteome_pathway_scatter`](gallery/omics_differential/proteome_phosphoproteome_pathway_scatter.png)

@@ -138,7 +138,7 @@ def render(contract: PrePostSlopeInput, ax=None, **_):
     if sig_rows:
         y_min, y_max = min(all_y), max(all_y)
         y_span = max(y_max - y_min, 0.10)
-        min_gap = 0.045 * y_span                 # min vertical separation
+        min_gap = 0.060 * y_span                 # min vertical separation
         label_y = [r.post_score for r in sig_rows]
         # Greedy top-down adjustment so adjacent labels don't overlap.
         for i in range(1, len(label_y)):

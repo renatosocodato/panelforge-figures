@@ -222,7 +222,7 @@ def render(contract: ZoneFractionAlluvialInput, ax=None, **_):
                 xytext=(x_left_inner + 0.005, 0.02),
                 arrowprops=dict(arrowstyle="->", color="#888888",
                                 lw=1.0))
-    ax.text(0.5, 0.02, f"{cond_left} -> {cond_right}",
+    ax.text(0.5, 0.02, f"{cond_left}     {cond_right}",
             ha="center", va="bottom", fontsize=6.4,
             color="#666666", zorder=4)
 

@@ -125,7 +125,7 @@ def render(contract: TrackPolarInput, ax=None, **_):
 
     # Callout.
     callout_deg = np.degrees(theta_bar)
-    ax.figure.text(0.02, 0.02,
+    ax.figure.text(0.02, -0.03,
                    f"N = {len(angles)}   Rayleigh r = {smart_fmt(R)}   "
                    f"mean dir ≈ {smart_fmt(callout_deg)}°",
                    ha="left", va="bottom", fontsize=6.6, color="#333333",

@@ -117,7 +117,9 @@ def render(contract: NormalizedEC50Input, ax=None, **_):
     # Right-of-marker numeric label.
     xmax = float(fold.max()) * 2.5
     for yi, f in zip(y, fold):
-        ax.text(f * 1.10, yi, f"×{smart_fmt(float(f))}",
-                va="center", ha="left", fontsize=6.2, color="#222222")
+        ax.annotate(f"×{smart_fmt(float(f))}",
+                    xy=(f, yi), xytext=(6, 0),
+                    textcoords="offset points",
+                    ha="left", va="center", fontsize=6.4, color="#222222")
     ax.set_xlim(max(fold.min() * 0.6, 0.5), xmax)
     return ax

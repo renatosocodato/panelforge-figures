@@ -116,16 +116,16 @@ def render(contract: ForceBudgetInput, ax=None, **_):
         return bar_zero_x + (value / v_max) * (bar_x_hi - bar_x_lo) * 0.45
 
     # Zero reference line.
-    ax.plot([bar_zero_x, bar_zero_x], [-0.5, n - 0.5],
+    ax.plot([bar_zero_x, bar_zero_x], [-0.30, n - 0.5],
             color="#888888", lw=0.7, ls="--", zorder=2)
-    ax.text(bar_zero_x, -0.65, "0 pN", ha="center", va="top",
+    ax.text(bar_zero_x, -0.55, "0 pN", ha="center", va="top",
             fontsize=6.4, color="#666666", style="italic")
 
     # Headers.
-    ax.text((schematic_x + schematic_w / 2), -0.5,
+    ax.text((schematic_x + schematic_w / 2), -0.78,
             "force budget term", ha="center", va="bottom",
             fontsize=7.6, color="#222222", fontweight="bold")
-    ax.text((bar_x_lo + bar_x_hi) / 2, -0.5,
+    ax.text((bar_x_lo + bar_x_hi) / 2, -0.78,
             "measured value (pN)  ±  95% CI",
             ha="center", va="bottom", fontsize=7.6,
             color="#222222", fontweight="bold")

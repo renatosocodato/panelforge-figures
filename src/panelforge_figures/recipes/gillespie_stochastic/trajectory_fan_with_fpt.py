@@ -102,12 +102,15 @@ def render(contract: TrajectoryFanInput, ax=None, **_):
                    edgecolor="white", linewidth=0.5, zorder=6)
         mean_fpt = float(np.mean(contract.fpt_times))
         ax.axvline(mean_fpt, color="#D32F2F", lw=0.5, ls=":", zorder=3)
-        ax.text(mean_fpt, ax.get_ylim()[1],
-                rf"$\langle$FPT$\rangle$ = {smart_fmt(mean_fpt)}",
-                ha="center", va="top", fontsize=6.6, color="#D32F2F",
-                bbox=dict(boxstyle="round,pad=0.18", fc="white",
-                          ec="none", alpha=0.92),
-                zorder=7)
+        ax.annotate(rf"$\langle$FPT$\rangle$ = {smart_fmt(mean_fpt)}",
+                    xy=(mean_fpt, 0.0),
+                    xycoords=("data", "axes fraction"),
+                    xytext=(0, 4), textcoords="offset points",
+                    ha="center", va="bottom",
+                    fontsize=6.6, color="#D32F2F",
+                    bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                              ec="none", alpha=0.92),
+                    zorder=7)
 
     ax.set_xlabel("time")
     ax.set_ylabel("state")

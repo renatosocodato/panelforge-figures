@@ -163,15 +163,15 @@ def render(contract: TerritoryContactNetworkInput, ax=None, **_):
         nodes = np.asarray(cell.network.node_xy_um, float)
         n_edges = len(cell.network.edges)
         # Edge linewidth shrinks with edge count to avoid clutter.
-        edge_lw = max(0.4, 1.4 / max(np.sqrt(max(n_edges, 1)), 1))
+        edge_lw = min(0.5, max(0.4, 1.4 / max(np.sqrt(max(n_edges, 1)), 1)))
         for (a, b) in cell.network.edges:
             sub.plot([nodes[a, 0], nodes[b, 0]],
                      [nodes[a, 1], nodes[b, 1]],
-                     color="#FFFFFF", lw=edge_lw, alpha=0.9, zorder=4)
+                     color="#FFFFFF", lw=edge_lw, alpha=0.40, zorder=3)
             sub.plot([nodes[a, 0], nodes[b, 0]],
                      [nodes[a, 1], nodes[b, 1]],
-                     color="#222222", lw=edge_lw * 0.5, alpha=0.85,
-                     zorder=5)
+                     color="#222222", lw=edge_lw * 0.5, alpha=0.40,
+                     zorder=3)
 
         # Nodes on top.
         node_sizes = (np.asarray(cell.network.node_weights, float) * 6.0

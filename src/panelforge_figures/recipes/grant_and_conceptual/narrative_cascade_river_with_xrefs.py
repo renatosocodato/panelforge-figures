@@ -107,8 +107,8 @@ def render(contract: NarrativeCascadeInput, ax=None, **_):
 
     n = len(contract.stages)
     # Vertical layout: row i is stage i; cascade flows top-to-bottom.
-    box_h = 0.48
-    box_w = 0.62
+    box_h = 0.62
+    box_w = 0.74
     box_x = 0.18
     y_top = -0.5
     y_bot = n - 0.3
@@ -132,27 +132,36 @@ def render(contract: NarrativeCascadeInput, ax=None, **_):
             facecolor=colour, edgecolor="white",
             linewidth=0.7, alpha=0.85, zorder=4,
         ))
-        # Stage label (bold, top of box).
-        ax.text(box_x + 0.02, cy - 0.10, stg.label,
+        # 3-row interior layout to keep summary and p-value on
+        # separate lines (avoids horizontal collisions in narrow boxes):
+        #   Row 1 (cy - 0.14): label (left)              [Fig X] (right)
+        #   Row 2 (cy + 0.04): summary (left, italic)
+        #   Row 3 (cy + 0.18):                            p = ... (right)
+        # Stage label (bold, row 1 left).
+        ax.text(box_x + 0.02, cy - 0.14, stg.label,
                 ha="left", va="center", fontsize=7.6,
                 color="white", fontweight="bold", zorder=5)
-        # Summary (italic, below label).
-        if stg.summary:
-            ax.text(box_x + 0.02, cy + 0.10, stg.summary,
-                    ha="left", va="center", fontsize=6.4,
-                    color="white", style="italic", zorder=5)
-        # Figure cross-reference (right side, top).
+        # Figure cross-reference (row 1 right).
         if stg.figure_xref:
-            ax.text(box_x + box_w - 0.02, cy - 0.10,
+            ax.text(box_x + box_w - 0.02, cy - 0.14,
                     f"[{stg.figure_xref}]",
                     ha="right", va="center", fontsize=6.4,
                     color="white", zorder=5)
-        # P-value (right side, bottom).
+        # Summary on its own line (row 2, italic), truncated to fit box_w.
+        if stg.summary:
+            # Coarse character budget tuned to box_w = 0.74 at fontsize 6.4.
+            max_chars = 52
+            summary_text = (stg.summary if len(stg.summary) <= max_chars
+                            else stg.summary[:max_chars - 1].rstrip() + "…")
+            ax.text(box_x + 0.02, cy + 0.04, summary_text,
+                    ha="left", va="center", fontsize=6.4,
+                    color="white", style="italic", zorder=5)
+        # P-value on its own line below xref (row 3 right).
         if stg.p_value is not None:
             p_str = (f"p = {smart_fmt(stg.p_value)}"
                      if stg.p_value >= 1e-4
                      else "p < 1e-4")
-            ax.text(box_x + box_w - 0.02, cy + 0.10, p_str,
+            ax.text(box_x + box_w - 0.02, cy + 0.18, p_str,
                     ha="right", va="center", fontsize=6.4,
                     color="white", zorder=5)
 

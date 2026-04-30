@@ -128,9 +128,9 @@ def render(contract: ScalingForestInput, ax=None, **_):
     between = float(np.var(hat_s, ddof=1))
     within = float(np.mean(((hi_s - lo_s) / (2 * 1.96)) ** 2))
     heterogeneity = between / max(between + within, 1e-12)
-    ax.text(0.02, 0.97,
+    ax.text(0.02, 0.04,
             f"n = {len(names_s)}  heterogeneity = {smart_fmt(heterogeneity)}",
-            transform=ax.transAxes, ha="left", va="top",
+            transform=ax.transAxes, ha="left", va="bottom",
             fontsize=6.4, color="#333333",
             bbox=dict(boxstyle="round,pad=0.22", fc="white",
                       ec="#BBBBBB", lw=0.5, alpha=0.92),

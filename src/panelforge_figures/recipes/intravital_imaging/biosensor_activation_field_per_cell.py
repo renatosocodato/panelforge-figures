@@ -134,9 +134,8 @@ def render(contract: BiosensorActivationFieldInput, ax=None, **_):
         last_im = im
         sub.set_xticks([])
         sub.set_yticks([])
-        cond = contract.condition_by_cell.get(field.cell_id, "")
         sub.set_title(
-            f"{field.cell_id}" + (f"  ({cond})" if cond else ""),
+            f"{field.cell_id}",
             fontsize=6.6, pad=2,
         )
 

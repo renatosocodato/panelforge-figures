@@ -191,8 +191,8 @@ def render(contract: HierarchicalEffectSizeLadderInput, ax=None, **_):
     import matplotlib.transforms as mtrans
     trans = mtrans.blended_transform_factory(ax.transAxes, ax.transData)
     row_idx = 0
-    x_hi = max(1.1, float(max(
-        (e.ci_hi for _, _, e in rows), default=1.0)) + 0.15)
+    x_hi = max(1.30, float(max(
+        (e.ci_hi for _, _, e in rows), default=1.0)) + 0.30)
     for scale in contract.scale_order:
         features_in_scale = {e.feature for e in by_scale[scale]}
         n_unique = len(features_in_scale)

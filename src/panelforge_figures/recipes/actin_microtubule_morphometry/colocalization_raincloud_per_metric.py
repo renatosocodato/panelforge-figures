@@ -121,7 +121,7 @@ def render(contract: ColocalizationRaincloudInput, ax=None, **_):
     pad_right = 0.04
     pad_bottom = 0.16
     pad_top = 0.18
-    gap = 0.04
+    gap = 0.07
     panel_w = (1.0 - pad_left - pad_right - gap * (n_metrics - 1)) \
         / n_metrics
     panel_h = 1.0 - pad_bottom - pad_top

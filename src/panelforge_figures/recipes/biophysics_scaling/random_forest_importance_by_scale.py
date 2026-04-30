@@ -165,7 +165,8 @@ def render(contract: RFImportanceByScaleInput, ax=None, **_):
     handles.append(Line2D([0], [0], color="#888888", ls="--", lw=0.6,
                           label="null threshold"))
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="lower right", handlelength=1.2)
+              loc="upper left", bbox_to_anchor=(1.02, 1.0),
+              borderaxespad=0.0, handlelength=1.2)
 
     oob_bit = (f"  ·  OOB = {smart_fmt(contract.oob_score)}"
                if contract.oob_score is not None else "")

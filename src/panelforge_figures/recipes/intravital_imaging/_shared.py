@@ -165,6 +165,23 @@ class DoseTimeResponse(RecipeContract):
     response_label: str = "response (a.u.)"
 
 
+# --- cdc42_factorial_companion Wave 3 atoms --------------------------------
+
+
+class StateSwitchSummary(RecipeContract):
+    """Per-cell switching-frequency callout atom.
+
+    Used by W3.7 (`state_entry_exit_with_switch_callout`). Bundles the
+    decoded series with a precomputed switch rate (switches per minute),
+    so the recipe can render a left-margin lollipop-style callout
+    per cell row without recomputing transitions during render.
+    """
+    cell_id: str
+    n_switches: int
+    duration_min: float
+    switch_rate_per_min: float
+
+
 # --- shared demo palette ----------------------------------------------------
 
 

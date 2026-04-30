@@ -234,6 +234,44 @@ class OverlapJuxtapositionCell(RecipeContract):
     territory_juxtaposition: float
 
 
+# --- cdc42_factorial_companion Wave 3 atoms --------------------------------
+
+
+class ShollProfile(RecipeContract):
+    """One cell's Sholl analysis intersection profile.
+
+    Used by W3.5 (`sholl_intersections_radial_histogram`). Each cell
+    carries an array of intersection counts at concentric radii
+    measured from the soma centroid; the radii are in micrometres.
+    `condition` is typically a sex × genotype label; the recipe
+    aggregates to per-condition mean + bootstrap CI ribbons.
+    """
+    cell_id: str
+    condition: str                                # e.g. "female · CTL"
+    radii_um: list[float]                          # ascending, length n_radii
+    intersections: list[float]                     # length n_radii (>= 0)
+
+
+class BehavioralFingerprintRow(RecipeContract):
+    """One cell's three-panel fingerprint atoms (trace + violin + scatter).
+
+    Used by W3.6 (`behavioral_fingerprint_trio_composite`). The recipe
+    composes three sub-panels per condition: (i) representative
+    velocity trace with state-shaded background, (ii) a violin
+    distribution of a scalar summary (e.g. mean velocity), and
+    (iii) a scatter of (cv-velocity, extension-fraction). Each row
+    carries the atoms needed for one cell.
+    """
+    cell_id: str
+    condition: str                                 # e.g. "female · CTL"
+    trace_t_s: list[float]                         # representative track time
+    trace_velocity_um_per_min: list[float]
+    trace_state: list[str] | None = None           # optional state-shading
+    summary_value: float                           # scalar for the violin
+    cv_velocity: float                             # scatter x
+    extension_fraction: float                      # scatter y
+
+
 # --- multi-channel intravital field (used by W2.4 cross-modality) ----------
 
 

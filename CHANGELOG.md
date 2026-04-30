@@ -23,13 +23,150 @@ project follows semantic versioning.
 - **Wave 1** merged via PR #44 (+6 universal robustness primitives
   in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
   catalog 423 → 429.
-- **Wave 2** in review via PR (+6 multi-omic integration in
+- **Wave 2** merged via PR #45 (+6 multi-omic integration in
   `omics_differential`). After Wave 2: catalog 429 → 435;
-  omics_differential 16 → 22. Pioneers
+  omics_differential 16 → 22. Pioneered
   `omics_differential/_shared.py`.
-- **Waves 3–4 pending** (+7 factorial statistics + sex-stratified
-  validation, +6 energetic / thermodynamic + narrative
+- **Wave 3** merged via PR #46 (+7 factorial statistics +
+  sex-stratified validation in `mixed_effects_models` /
+  `actin_microtubule_morphometry` / `intravital_imaging`). After
+  Wave 3: catalog 435 → 442; mixed_effects_models 16 → 20;
+  actin_microtubule_morphometry 47 → 49; intravital_imaging
+  58 → 59. Pioneered `mixed_effects_models/_shared.py`.
+- **Wave 4 pending** (+6 energetic / thermodynamic + narrative
   integration). Cumulative final: catalog 423 → 448.
+
+## [1.5.0-beta-cdc42_factorial_companion-w3] — 2026-04-28
+
+Third wave of the `cdc42_factorial_companion` beta expansion pack.
+Lands the 7-recipe factorial-statistics + sex-stratified-validation
+cluster — two-way ANOVA summary, sex-stratified ROC under LOOCV,
+mediation decomposition, pre/post slope by module, Sholl radial
+histogram, behavioral fingerprint trio composite, and
+state-entry/exit raster with switch-rate callout. Pioneers
+`mixed_effects_models/_shared.py` (no `_shared.py` existed for that
+modality before) and extends two existing `_shared.py` modules.
+Catalog 435 → 442.
+
+### Added (7 recipes)
+
+- `two_way_anova_summary_plot` (`coef_forest`, W3.1) — three-term
+  factorial-design forest (sex / genotype / sex × genotype
+  interaction) anchored on the partial η² scale with F-stat +
+  p-value annotations, zero-effect dashed reference, α=0.05 ladder
+  reference, interaction-row highlight at higher line weight.
+  **Closes manuscript panel F5H.**
+- `sex_stratified_roc_loocv` (`scatter_collapse`, W3.2) — per-
+  stratum ROC scatter (1-specificity, sensitivity) under leave-one-
+  out cross-validation + smoothed monotonic fit + diagonal chance
+  line; AUC + 95% CI + n_subjects per legend entry.
+  **Closes manuscript panel F3G.**
+- `mediation_decomposition_slope_chart` (`scatter_collapse`, W3.3)
+  — per-stratum direct + indirect effect markers (paired solid /
+  dashed) with CI whiskers, connecting slope, zero-effect
+  reference, proportion-mediated annotation in right margin.
+  **Closes manuscript panels F4H + F4I.**
+- `pre_post_slope_chart_by_module` (`scatter_collapse`, W3.4) —
+  parallel-coordinate slope chart with per-module pre/post
+  endpoint markers, per-condition mean-slope overlay (lw=2.2),
+  significant-module label callouts; per-condition Δ in legend.
+  **Extends manuscript panels F4H + F4I (module-level view).**
+- `sholl_intersections_radial_histogram`
+  (`timecourse_hierarchical_ci`, W3.5) — per-condition mean
+  intersection-count curve vs distance from soma + bootstrap 95%
+  CI ribbons + faint per-cell traces; peak amplitude + radius
+  callouts in title.
+  **Closes manuscript panel F4A.**
+- `behavioral_fingerprint_trio_composite` (`scatter_collapse`,
+  W3.6) — three side-by-side `inset_axes` sub-panels in a single
+  recipe (representative trace, summary violin, cv-velocity ×
+  extension-fraction scatter with per-condition trend) with shared
+  per-condition colour palette and parent-ax sentinel artists for
+  family-rule satisfaction.
+  **Closes manuscript panel F1F.**
+- `state_entry_exit_with_switch_callout` (`matrix`, W3.7) —
+  variant of `state_entry_exit_raster` with a left-margin lollipop-
+  style per-cell switch-rate callout (amber if switch-rate ≥ Q75
+  across cells, slate otherwise) + vertical separator + percentile-
+  legend in caption.
+  **Extends manuscript panel F2D (per-cell switching variability).**
+
+### Infrastructure
+
+- `recipes/mixed_effects_models/_shared.py` (new) — pioneers
+  `_shared.py` for this modality with 4 reusable Pydantic sub-
+  contracts: `TwoWayANOVATerm` + `TwoWayANOVAResult`,
+  `LOOCVAUCEntry`, `MediationPath`, `PrePostSlopeRow`. Reusable
+  across any future factorial-design / mediation pack.
+- `recipes/actin_microtubule_morphometry/_shared.py` (extend) —
+  adds `ShollProfile` + `BehavioralFingerprintRow`.
+- `recipes/intravital_imaging/_shared.py` (extend) — adds
+  `StateSwitchSummary`.
+- `recipes/mixed_effects_models/__init__.py` (edit) — registers
+  4 new recipes; modality 16 → 20.
+- `recipes/actin_microtubule_morphometry/__init__.py` (edit) —
+  registers 2 new recipes; modality 47 → 49.
+- `recipes/intravital_imaging/__init__.py` (edit) — registers
+  1 new recipe; modality 58 → 59.
+
+No new top-level deps; no new `core/` shims (`numpy.polyfit` and
+inline bootstrap-percentile aggregation cover the per-recipe
+statistics; W3 stays within the catalog's existing utilities).
+
+### Demo conventions
+
+All 7 demos use seeded RNG (`np.random.default_rng(82X)`) and
+biology-agnostic synthetic data with manuscript-anchored values
+where available:
+
+- W3.1: 3 ANOVA terms with manuscript Fig 5H values — sex
+  F=1.59 p=0.233; genotype F=1.17 p=0.302; interaction F=1.37
+  p=0.266; partial η² reconstructed from F · df_num /
+  (F · df_num + df_den).
+- W3.2: 2 strata with manuscript Fig 3G values — female AUC=0.375
+  (n=8 mice), male AUC=0.583 (n=7 mice); 25-point per-fold ROC.
+- W3.3: 4 strata × {direct, indirect} effect estimates with
+  illustrative proportion-mediated values.
+- W3.4: 12 modules × 2 conditions (female · CTL / male · CKO);
+  significant modules > 0.45 |Δ|.
+- W3.5: 60 cells × 2 sexes (female n=30 / male n=30); intersection
+  curves vs distance from soma; female peak ~25.97 vs male ~22.67
+  (manuscript Fig 4A); 200-bootstrap CI ribbons.
+- W3.6: 16 cells × 2 conditions; representative trace + summary
+  violin + (cv-velocity, extension-fraction) scatter with per-
+  condition trend line.
+- W3.7: 12 cells × 60 frames; cell-specific switching probability
+  in [0.05, 0.15]; per-cell switch-rate / min annotation in left
+  margin.
+
+### Visual-QA polish during authoring (3 fit-ups)
+
+- W3.5 `lw=2.0` snapped to existing `2.2` for the per-condition
+  mean line emphasis (style-drift ratchet at 20/20).
+- All W3 recipes `fontsize=8.0` snapped to existing `8.2` for
+  title strings.
+- W3.6 inset-axes layout — chosen `inset_axes` over GridSpec to
+  preserve the single-recipe single-render contract; parent ax
+  carries a single `(scatter, plot)` sentinel pair to satisfy
+  the `scatter_collapse` family rule whose visual content lives
+  in the inset axes.
+
+### Tests
+
+- Total: **2291 → 2326** (+35: 7 smoke + 7 quality + ~21 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- mixed_effects_models recipes: **16 → 20** (+4).
+- actin_microtubule_morphometry recipes: **47 → 49** (+2).
+- intravital_imaging recipes: **58 → 59** (+1).
+- cdc42_factorial_companion pack recipes landed: **12 → 19**
+  (Wave 3 of 4).
+- New `_shared.py` modules pioneered (cumulative): **2 → 3**
+  (`mixed_effects_models` joins `meta_and_diagnostic` +
+  `omics_differential`).
 
 ## [1.5.0-beta-cdc42_factorial_companion-w2] — 2026-04-28
 

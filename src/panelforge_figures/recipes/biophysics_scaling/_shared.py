@@ -320,6 +320,67 @@ class SensitivitySweepCurve(RecipeContract):
     ci_hi: list[float]
 
 
+# --- factorial_design_companion Wave 4 sub-contracts ------------------------
+
+
+class QuartileOccupancyBin(RecipeContract):
+    """One condition × quartile occupancy fraction.
+
+    Used by W4.1 (`quartile_stacked_bar_by_factor`). Each row is one
+    (condition, quartile) cell; `fraction` is the proportion of that
+    condition's cells in that quartile (sums to 1.0 per condition).
+    """
+    condition: str                                 # "female · CTL" | ...
+    quartile: int                                  # 1 (lowest) .. 4 (highest)
+    fraction: float                                # in [0, 1]
+    n_cells: int | None = None                     # for legend annotation
+
+
+class RouteGeometryRow(RecipeContract):
+    """One perturbation × route geometry scalar value.
+
+    Used by W4.2 (`route_geometry_compact_screen`). Each row is one
+    (perturbation, route) cell; `value` is the geometric scalar
+    (e.g. mean route length, mean curvature, mean displacement) and
+    `is_disrupted` flags routes where the perturbation breaks the
+    geometry below a manuscript threshold.
+    """
+    perturbation: str                              # "MR-CKO" | "Vav-KO" | ...
+    route: str                                     # "PIP3" | "Rho" | "Rac" | "Cdc42" | "lipid"
+    value: float                                   # geometric scalar
+    is_disrupted: bool = False                     # below manuscript threshold
+
+
+class ResilienceIndexEntry(RecipeContract):
+    """One condition's molecular resilience index + multiverse stability.
+
+    Used by W4.3 (`molecular_resilience_index_bar`). Each entry carries
+    a single resilience scalar (in [0, 1] or [-1, 1] depending on the
+    manuscript convention) plus a multiverse-stability ribbon
+    (low / high) that quantifies the spread across analytical
+    specifications.
+    """
+    condition: str                                 # "female · CTL" | ...
+    resilience_index: float
+    stability_lo: float                            # multiverse low bound
+    stability_hi: float                            # multiverse high bound
+    is_robust: bool = False                        # passes ROBUST classification
+
+
+class DissipationProxyRow(RecipeContract):
+    """One cell's PCA coords + dissipation quartile + condition.
+
+    Used by W4.4 (`dissipation_quartile_pca_with_ellipses`). Each row
+    is one cell with its PC1, PC2 coordinates in the dissipation-proxy
+    PCA space and the dissipation quartile (1..4) it falls into.
+    """
+    cell_id: str
+    condition: str                                 # "female · CTL" | ...
+    pc1: float
+    pc2: float
+    dissipation_quartile: int                      # 1 (low) .. 4 (high)
+
+
 # --- outcome palette (local fallback) ---------------------------------------
 
 

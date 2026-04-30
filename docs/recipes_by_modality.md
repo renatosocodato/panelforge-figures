@@ -64,6 +64,43 @@ v1.0.0 stable: 20 modalities, 137 recipes.
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
 
+## v1.5.0-beta-factorial_design_companion — Wave 4 (energetic / thermodynamic + narrative integration, +6) [FINAL]
+
+Final wave of the factorial_design_companion beta expansion pack.
+Lands the 6-recipe energetic / thermodynamic + narrative-integration
+cluster across 2 modalities — quartile stacked bar by factor,
+route-geometry compact screen, molecular resilience index bar,
+dissipation-quartile PCA with ellipses, transition-matrix diagonal-
+dominance callout, residence-time KM with KS overlay. Extends
+`biophysics_scaling/_shared.py` (+4 sub-contracts) and
+`intravital_imaging/_shared.py` (+2 sub-contracts). Catalog
+442 → **448 (final)**. **Pack closes at 25 / 25 recipes.**
+
+- **quartile_stacked_bar_by_factor** (`matrix`, biophysics_scaling)
+  — sex × genotype × quartile-occupancy stacked bar with 4-tier
+  viridis quartile palette, inline percent annotations, per-condition
+  n callouts; top-Q4 condition surfaced in title.
+- **route_geometry_compact_screen** (`matrix`, biophysics_scaling)
+  — 6-perturbation × 5-route compact `imshow` heatmap on cividis
+  with per-cell numeric annotations and red-hatched borders flagging
+  cells below the 0.35 disruption threshold.
+- **molecular_resilience_index_bar** (`coef_forest`, biophysics_scaling)
+  — per-condition resilience-index marker with multiverse-stability
+  ribbon behind, ROBUST/fragile classification (teal vs grey),
+  zero-resilience + ROBUST-threshold reference lines.
+- **dissipation_quartile_pca_with_ellipses** (`scatter_collapse`,
+  biophysics_scaling) — per-cell PCA scatter coloured by dissipation
+  quartile, per-quartile 95%-probability covariance ellipse boundary
+  + per-quartile centroid X markers + dotted Q1 → Q4 trajectory.
+- **transition_matrix_diagonal_dominance_callout** (`matrix`,
+  intravital_imaging) — N × N transition-kernel cividis `imshow`
+  with teal border around dominant-state diagonal cells (where
+  A[i,i] − max-off-diag > 0.50); per-state dominance scores in title.
+- **residence_time_kaplan_meier_with_ks_overlay** (`diagnostic_curve`,
+  intravital_imaging) — per-state KM step curves + per-state median-
+  residence vertical reference + 50%-survival horizontal reference;
+  KS p-value vs reference state annotated in title with `*` marker.
+
 ## v1.5.0-beta-factorial_design_companion — Wave 3 (factorial statistics + sex-stratified validation, +7)
 
 Third wave of the factorial_design_companion beta expansion pack.

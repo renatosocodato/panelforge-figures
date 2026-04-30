@@ -10,6 +10,15 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
+## CDC42-factorial-companion beta-pack Wave 4 additions (v1.5.0-beta-factorial_design_companion-w4) [FINAL]
+
+- **Across sex × genotype conditions, what fraction of cells occupies each dissipation / energetic quartile, and where are the top/bottom-quartile shifts strongest?** → [`biophysics_scaling.quartile_stacked_bar_by_factor`](gallery/biophysics_scaling/quartile_stacked_bar_by_factor.png)
+- **Across multiple Cdc42-pathway perturbations and route geometries (PIP3 / Rho / Rac / Cdc42 / lipid), which perturbation × route cells fall below the manuscript disruption threshold?** → [`biophysics_scaling.route_geometry_compact_screen`](gallery/biophysics_scaling/route_geometry_compact_screen.png)
+- **Per condition, what is the molecular resilience index, how stable is it across multiverse specifications, and which conditions are classified as ROBUST?** → [`biophysics_scaling.molecular_resilience_index_bar`](gallery/biophysics_scaling/molecular_resilience_index_bar.png)
+- **In the dissipation-proxy PCA space, how do cells cluster by dissipation quartile, and how do the per-quartile 95% probability ellipses separate?** → [`biophysics_scaling.dissipation_quartile_pca_with_ellipses`](gallery/biophysics_scaling/dissipation_quartile_pca_with_ellipses.png)
+- **What are the per-step transition probabilities between decoded latent states, and which states are statistically sticky (large diagonal-vs-off-diagonal margin)?** → [`intravital_imaging.transition_matrix_diagonal_dominance_callout`](gallery/intravital_imaging/transition_matrix_diagonal_dominance_callout.png)
+- **Per decoded state, what does the Kaplan-Meier residence-time survival curve look like, and which states differ significantly from the reference state's residence-time distribution by KS test?** → [`intravital_imaging.residence_time_kaplan_meier_with_ks_overlay`](gallery/intravital_imaging/residence_time_kaplan_meier_with_ks_overlay.png)
+
 ## CDC42-factorial-companion beta-pack Wave 3 additions (v1.5.0-beta-factorial_design_companion-w3)
 
 - **In a 2 × 2 factorial design, which of {sex, genotype, sex × genotype interaction} is detectable, with what F, p, and partial η² effect size?** → [`mixed_effects_models.two_way_anova_summary_plot`](gallery/mixed_effects_models/two_way_anova_summary_plot.png)

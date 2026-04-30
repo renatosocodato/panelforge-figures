@@ -8,40 +8,86 @@ project follows semantic versioning.
 
 ### In planning
 
-- **CDC42 factorial companion pack**
-  (`[1.5.0-beta-cdc42_factorial_companion]`) — ~25 new recipes
-  scattered across 6 existing modalities, landed across 4 user-
-  gated waves. Closes the gap between the cdc42_fxm manuscript's
-  Bayes-factor / multiverse / multi-omic-concordance / 2 × 2
-  factorial / pathway-support primitives and the 423-recipe
-  catalog after the disc1_manuscript_companion pack. See
-  [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
-  for the full pack plan. **Zero new heavy deps** (Option D
-  inline-shim discipline preserved); 2 new `core/` shims
-  (`bayes_factor_utility`, `multiverse_specification_utility`)
-  land in Wave 1.
-- **Wave 1** merged via PR #44 (+6 universal robustness primitives
-  in `meta_and_diagnostic`). meta_and_diagnostic 21 → 27; total
-  catalog 423 → 429.
-- **Wave 2** merged via PR #45 (+6 multi-omic integration in
-  `omics_differential`). After Wave 2: catalog 429 → 435;
-  omics_differential 16 → 22. Pioneered
-  `omics_differential/_shared.py`.
-- **Wave 3** merged via PR #46 (+7 factorial statistics +
-  sex-stratified validation in `mixed_effects_models` /
-  `actin_microtubule_morphometry` / `intravital_imaging`). After
-  Wave 3: catalog 435 → 442; mixed_effects_models 16 → 20;
-  actin_microtubule_morphometry 47 → 49; intravital_imaging
-  58 → 59. Pioneered `mixed_effects_models/_shared.py`.
-- **Wave 4** gap-analysis in review (+6 energetic / thermodynamic +
-  narrative integration: quartile stacked bar, route-geometry
-  screen, resilience index bar, dissipation-quartile PCA ellipses,
-  transition-matrix diagonal-dominance callout, residence-time KM
-  with KS overlay). Extends `biophysics_scaling/_shared.py` and
-  `intravital_imaging/_shared.py`. After Wave 4: catalog 442 → 448
-  (final); biophysics_scaling 47 → 51; intravital_imaging
-  59 → 61. **Closes the pack at 25/25 recipes.** Pack-closeout
-  follow-up PR will tag `v1.5.0-beta-cdc42_factorial_companion`.
+- (No active beta pack — open for next manuscript-companion or
+  cross-modality primitive batch.)
+
+## [1.5.0-beta-cdc42_factorial_companion] — 2026-04-30 [PACK COMPLETE]
+
+**CDC42 factorial companion pack — COMPLETE.** 4 waves, 25 new
+recipes scattered across 5 existing modalities (no new modality),
+2 new `core/` inline shims (`bayes_factor_utility`,
+`multiverse_specification_utility`), 11 new nested sub-contracts
+across 1 newly-pioneered `_shared.py` module
+(`mixed_effects_models`) plus extensions to `meta_and_diagnostic`,
+`omics_differential`, `actin_microtubule_morphometry`,
+`intravital_imaging`, and `biophysics_scaling`. **Zero new heavy
+dependencies** (no `BayesFactor` R package / `multiverse-r` /
+`scikit-bio` / `networkx`). Catalog **423 → 448**; 5 modalities
+touched. Tests **2218 → 2356** (+138). PRs **#44 → #47**
+(+ #48 closeout). Tag **`v1.5.0-beta-cdc42_factorial_companion`**.
+
+### Per-wave delta
+
+| Wave | Theme | PR | Recipes | Catalog | Cumulative pack |
+|---|---|---|---|---|---|
+| w1 | universal robustness primitives + provenance (6 in `meta_and_diagnostic`); 2 new `core/` shims | #44 | +6 | 423 → 429 | 0 → 6 |
+| w2 | multi-omic integration (6 in `omics_differential`); pioneered `omics_differential/_shared.py` | #45 | +6 | 429 → 435 | 6 → 12 |
+| w3 | factorial statistics + sex-stratified validation (4 mixed_effects_models + 2 actin_mt + 1 intravital); pioneered `mixed_effects_models/_shared.py` | #46 | +7 | 435 → 442 | 12 → 19 |
+| w4 | energetic / thermodynamic + narrative integration (4 biophysics_scaling + 2 intravital_imaging); closes pack at 25/25 | #47 | +6 | 442 → 448 | 19 → 25 |
+
+### Modality footprint
+
+| Modality | Pre-pack | Post-pack | Δ |
+|---|---|---|---|
+| `meta_and_diagnostic` | 21 | **27** | +6 |
+| `omics_differential` | 16 | **22** | +6 |
+| `mixed_effects_models` | 16 | **20** | +4 |
+| `actin_microtubule_morphometry` | 47 | **49** | +2 |
+| `intravital_imaging` | 58 | **61** | +3 |
+| `biophysics_scaling` | 47 | **51** | +4 |
+| **Total catalog** | **423** | **448** | **+25** |
+
+### `core/` shims pioneered (2)
+
+- **`core/bayes_factor_utility.py`** (~85 LOC) — `bf_from_bic(bic_alt,
+  bic_null) → BF₀₁` (Wagenmakers 2007 BIC approximation) +
+  `classify_bf_threshold(bf)` for Kass-Raftery tier mapping.
+  Replaces a `BayesFactor` R-package dep.
+- **`core/multiverse_specification_utility.py`** (~95 LOC) —
+  `multiverse_audit(...) → (classifications, sort_order)` for
+  specification-curve sensitivity (Steegen 2016, Simonsohn 2020).
+
+### Sub-contracts pioneered / extended (16)
+
+- **NEW** `mixed_effects_models/_shared.py` — `TwoWayANOVATerm` +
+  `TwoWayANOVAResult`, `LOOCVAUCEntry`, `MediationPath`,
+  `PrePostSlopeRow` (4).
+- Extended `meta_and_diagnostic/_shared.py` (+5): `BayesFactorRow`,
+  `PanelProvenanceRow`, `CrossContrastEntry`, `MultiverseSpec`,
+  `ProxyAlignmentEntry`.
+- Extended `omics_differential/_shared.py` (pioneered for that
+  modality; +5): `ProteomePhosphoConcordanceRow`,
+  `ModuleConcordanceCell`, `PathwaySupportLayer`, `GGEBranchRow`,
+  `PermutationNullBundle`.
+- Extended `actin_microtubule_morphometry/_shared.py` (+2):
+  `ShollProfile`, `BehavioralFingerprintRow`.
+- Extended `intravital_imaging/_shared.py` (+3): `StateSwitchSummary`,
+  `DiagonalDominanceSummary`, `ResidenceStratum`.
+- Extended `biophysics_scaling/_shared.py` (+4):
+  `QuartileOccupancyBin`, `RouteGeometryRow`, `ResilienceIndexEntry`,
+  `DissipationProxyRow`.
+
+### Manuscript-panel coverage
+
+The pack closes the `cdc42_fxm` manuscript's reviewer-proof
+primitive gap. Manuscript figures **F1F + F2D + F2E + F2H + F2J +
+F3G + F4A + F4B + F4C + F4D + F4F + F4G + F4H + F4I + F4J + F5D +
+F5H + F5J + F5K + F5L + F6E + SF2G + SF4B + SF4D + Supp Table R1**
+all renderable from the catalog as of pack close.
+
+See [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+for the full pack tracker including risks, demo conventions, and
+visual-QA fit-up logs per wave (12 fit-ups total: 2 + 4 + 3 + 3).
 
 ## [1.5.0-beta-cdc42_factorial_companion-w4] — 2026-04-30
 
@@ -494,6 +540,21 @@ reusable outside the cdc42 pack:
   `multiverse_specification_utility`).
 
 ### Completed packs
+
+- **CDC42 factorial companion pack
+  `[1.5.0-beta-cdc42_factorial_companion]` — COMPLETE.** 4 waves,
+  25 new recipes scattered across 5 existing modalities (no new
+  modality), 2 new `core/` inline shims (`bayes_factor_utility`,
+  `multiverse_specification_utility`), 11 new nested sub-contracts
+  across 1 newly-pioneered `_shared.py` module
+  (`mixed_effects_models`) plus extensions to four existing
+  `_shared.py` modules. **Zero new heavy dependencies** (no
+  `BayesFactor` R / `multiverse-r` / `scikit-bio` / `networkx`).
+  Catalog 423 → 448; 5 modalities touched. Tests 2218 → 2356.
+  PRs #44 → #47 (+ #48 closeout). Tag
+  `v1.5.0-beta-cdc42_factorial_companion`. See
+  [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+  for the full pack tracker.
 
 - **DISC1 manuscript companion pack
   `[1.4.0-beta-disc1_manuscript_companion]` — COMPLETE.** 4 waves,

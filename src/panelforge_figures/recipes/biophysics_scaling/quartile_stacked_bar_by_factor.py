@@ -112,7 +112,7 @@ def render(contract: QuartileStackedBarInput, ax=None, **_):
                 linewidth=0.5, alpha=0.92, zorder=3,
             ))
             # Inline percent annotation if segment is wide enough.
-            if b.fraction >= 0.10:
+            if b.fraction >= 0.13:
                 ax.text(x_left + b.fraction / 2, yi,
                         f"{int(round(b.fraction * 100))}%",
                         ha="center", va="center", fontsize=6.4,
@@ -126,7 +126,7 @@ def render(contract: QuartileStackedBarInput, ax=None, **_):
 
     ax.set_yticks(range(n_conds))
     ax.set_yticklabels(cond_names, fontsize=7.0)
-    ax.invert_yaxis()
+    ax.set_ylim(n_conds - 0.55, -0.55)   # invert + explicit margins
     ax.set_xlim(-0.01, 1.16)
     ax.set_xlabel("fraction of cells")
     ax.set_xticks(np.linspace(0, 1, 6))
@@ -158,6 +158,6 @@ def render(contract: QuartileStackedBarInput, ax=None, **_):
     ax.set_title(
         f"{contract.title}  ·  top-Q{q_max}: {cond_q_max} "
         f"({smart_fmt(cond_q_max_frac * 100)}%)",
-        fontsize=8.2, pad=4,
+        fontsize=8.2, pad=10,
     )
     return ax

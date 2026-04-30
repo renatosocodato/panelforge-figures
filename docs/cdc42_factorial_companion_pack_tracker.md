@@ -52,8 +52,8 @@ Per governance §9, no new modalities. The 25 recipes scatter as:
 |---|---|---|---|---|---|
 | w1 | Universal robustness primitives + provenance (+6 in `meta_and_diagnostic`): Bayes-factor arrow plot, panel provenance ledger, cross-contrast correlation, multiverse classification, multiverse spec curve, proxy-alignment forest. Pioneers 2 new `core/` shims (`bayes_factor_utility`, `multiverse_specification_utility`). | **merged** | `beta-cdc42-companion-w1` | — (squash-merged PR #44; commit `c51965d`) | 3 commits, 2 visual-QA fit-ups (W1.2 fontsize 8.0 → 8.2 ratchet snap; W1.6 OVERFIT label moved right of in-sample marker), 5 sub-contracts added, 13 new utility tests, total tests 2218 → 2261; CI green |
 | w2 | Multi-omic integration (+6 in `omics_differential`): proteome × phospho concordance, module concordance, pathway-space triangulation, pathway-space bridge, GGE permutation bar, sign-concordance heatmap. Pioneers `omics_differential/_shared.py`. | **merged** | `beta-cdc42-companion-w2` | — (squash-merged PR #45; commit `31aeaf6`) | 3 commits, 4 visual-QA fit-ups (W2.1 unused linregress vars; W2.4 + W2.5 lw=2.0 → 2.2; all 5 W2 titles fontsize 8.0 → 8.2; W2.5 callout opposite-side placement), 5 sub-contracts pioneered, total tests 2261 → 2291; CI green |
-| w3 | Factorial statistics + sex-stratified validation (+7): two-way ANOVA, sex-stratified ROC, mediation slope, pre/post slope by module, Sholl radial histogram, fingerprint trio composite, switch-callout extension. Pioneers `mixed_effects_models/_shared.py`; extends `actin_microtubule_morphometry/_shared.py` + `intravital_imaging/_shared.py`. | **review** | `beta-cdc42-companion-w3` | — (PR #46 in flight) | 3 commits, 3 visual-QA fit-ups (W3.1 sex/interaction detection bug — `'x' in 'sex'` false positive fixed by requiring `' x '` separator; W3.4 module-label collision resolved with leader-line + staggered y-positions; W3.6 inset-axes layout retuned for label clearance), 7 sub-contracts (4 pioneered + 3 extended), total tests 2291 → 2326; ratchet at 20/20 |
-| w4 | Energetic / thermodynamic + narrative integration (+6): quartile stacked bar, route-geometry screen, resilience index bar, dissipation-quartile PCA ellipses, transition-matrix DD callout, residence-time KM with KS overlay. Closes pack at 25/25. | pending | — | — | Depends on w3; closes pack |
+| w3 | Factorial statistics + sex-stratified validation (+7): two-way ANOVA, sex-stratified ROC, mediation slope, pre/post slope by module, Sholl radial histogram, fingerprint trio composite, switch-callout extension. Pioneers `mixed_effects_models/_shared.py`; extends `actin_microtubule_morphometry/_shared.py` + `intravital_imaging/_shared.py`. | **merged** | `beta-cdc42-companion-w3` | — (squash-merged PR #46; commit `e397a83`) | 3 commits, 3 visual-QA fit-ups (W3.1 sex/interaction detection bug — `'x' in 'sex'` false positive fixed by requiring `' x '` separator; W3.4 module-label collision resolved with leader-line + staggered y-positions; W3.6 inset-axes layout retuned for label clearance), 7 sub-contracts (4 pioneered + 3 extended), total tests 2291 → 2326; CI green |
+| w4 | Energetic / thermodynamic + narrative integration (+6): quartile stacked bar, route-geometry screen, resilience index bar, dissipation-quartile PCA ellipses, transition-matrix DD callout, residence-time KM with KS overlay. Closes pack at 25/25. Extends `biophysics_scaling/_shared.py` + `intravital_imaging/_shared.py`. | **gap-analysis** | `beta-cdc42-companion-w4` | — | Wave 4 gap analysis in review |
 
 Status legend:
 - **pending** — not yet started
@@ -197,7 +197,7 @@ All Wave 2 demos use seeded RNG (`np.random.default_rng(81X)`) and biology-agnos
 5. Gallery regenerate `omics_differential/` — 22 PNGs.
 6. Eyeball each new panel; estimate **3 visual-QA fit-ups** (heatmap-heavy wave; signed cmap discipline established by disc1 W2 cohort-balance recipe).
 
-## Wave 3 — factorial statistics + sex-stratified validation (+7) [gap-analysis]
+## Wave 3 — factorial statistics + sex-stratified validation (+7) [merged]
 
 **Why next.** Wave 1 shipped universal QA primitives. Wave 2 shipped
 multi-omic integration. Wave 3 lands the **F1F + F3 + F4 + F5H + F4H/F4I**
@@ -278,9 +278,82 @@ All Wave 3 demos use seeded RNG (`np.random.default_rng(82X)`) with manuscript-a
 4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
 5. Gallery regenerate per modality. Estimate **4 visual-QA fit-ups** (multi-modality wave with non-trivial layouts: ROC curves, mediation slopes, Sholl curves, fingerprint trio composite).
 
-## Wave 4 — energetic / thermodynamic + narrative integration (+6) [pending]
+## Wave 4 — energetic / thermodynamic + narrative integration (+6) [gap-analysis]
 
-(Detail filled in when Wave 4 gap analysis is gated.)
+**Why last.** Wave 1 shipped universal robustness primitives, Wave 2
+shipped multi-omic integration, Wave 3 shipped factorial-statistics +
+sex-stratified validation. Wave 4 closes the pack with the
+**energetic / thermodynamic + narrative-integration** cluster covering
+manuscript panels **F4J + F5D + F5J + F6E** plus extensions of the
+**F2E + F2H** decoded-state diagnostics. Extends two existing
+`_shared.py` modules (`biophysics_scaling/_shared.py` +
+`intravital_imaging/_shared.py`); pioneers no new modules.
+
+### Recipe roster (Wave 4)
+
+| ID | Recipe | Modality | Family | Required fields | Panel |
+|---|---|---|---|---|---|
+| W4.1 | `quartile_stacked_bar_by_factor` | biophysics_scaling | `matrix` | `bins: list[QuartileOccupancyBin]` (per-condition × quartile fraction) | F5D |
+| W4.2 | `route_geometry_compact_screen` | biophysics_scaling | `matrix` | `rows: list[RouteGeometryRow]` (perturbation × route × scalar) | F6E |
+| W4.3 | `molecular_resilience_index_bar` | biophysics_scaling | `coef_forest` | `entries: list[ResilienceIndexEntry]` (resilience score + multiverse stability ribbon) | F4J |
+| W4.4 | `dissipation_quartile_pca_with_ellipses` | biophysics_scaling | `scatter_collapse` | `points: list[DissipationProxyRow]` (PC1, PC2 per cell + dissipation quartile + condition) | F5J |
+| W4.5 | `transition_matrix_diagonal_dominance_callout` | intravital_imaging | `matrix` | extends `state_transition_kernel_matrix` with `DiagonalDominanceSummary` | F2H extension |
+| W4.6 | `residence_time_kaplan_meier_with_ks_overlay` | intravital_imaging | `diagnostic_curve` | `strata: list[ResidenceStratum]` (per-state KM + paired KS-overlay annotation) | F2E extension |
+
+### Family-rule satisfaction checklist
+
+- **W4.1** (`matrix` ≥1 imshow OR ≥4 cell patches) — quartile × condition stacked-bar Rectangles (≥4 patches always; ≥4 conditions × 4 quartiles = 16 patches in demo).
+- **W4.2** (`matrix` ≥1 imshow OR ≥4 cell patches) — `imshow` of perturbation × route geometry scalar grid.
+- **W4.3** (`coef_forest` ≥3 markers + ≥1 reference line) — ≥3 resilience index markers per condition + zero-effect reference + multiverse-stability ribbon as second reference band.
+- **W4.4** (`scatter_collapse` ≥1 scatter + ≥1 fit line) — per-cell PCA scatter + per-quartile centroid ellipse boundary as the fit line + per-quartile mean line connector.
+- **W4.5** (`matrix` ≥1 imshow OR ≥4 cell patches) — N × N transition kernel `imshow` with diagonal-dominance score callout overlay (sentinel patches retained for matrix family-rule defence).
+- **W4.6** (`diagnostic_curve` ≥1 curve + ≥1 reference) — per-state KM step curves + paired KS-overlay reference (median residence time line + KS p-value annotation).
+
+### Infrastructure deliverables
+
+| File | Kind | Purpose |
+|---|---|---|
+| `recipes/biophysics_scaling/_shared.py` | edit | Adds 4 sub-contracts: `QuartileOccupancyBin`, `RouteGeometryRow`, `ResilienceIndexEntry`, `DissipationProxyRow`. |
+| `recipes/intravital_imaging/_shared.py` | edit | Adds 2 sub-contracts: `DiagonalDominanceSummary` (per-axis stickiness score + p-value), `ResidenceStratum` (per-state residence-time KM atom). |
+| 4 new modules under `recipes/biophysics_scaling/` | **NEW** | W4.1, W4.2, W4.3, W4.4 |
+| 2 new modules under `recipes/intravital_imaging/` | **NEW** | W4.5, W4.6 |
+| `recipes/biophysics_scaling/__init__.py` | edit | Register 4 new recipes; modality 47 → 51 |
+| `recipes/intravital_imaging/__init__.py` | edit | Register 2 new recipes; modality 59 → 61 |
+
+No new top-level deps; no new `core/` shims (`numpy.cov` for the
+quartile-PCA ellipse covariance + inline KS test via `scipy.stats.ks_2samp`
+already a transitive dep in scipy-installed packages, used inline only).
+
+### `_demo()` seed convention (Wave 4)
+
+All Wave 4 demos use seeded RNG (`np.random.default_rng(83X)`) with manuscript-anchored values where available:
+
+- W4.1: 4 quartiles × 4 conditions (F-CTL / F-CKO / M-CTL / M-CKO); F-CTL Q4 = 0.40 (top dissipation surplus); M-CKO Q1 = 0.45 (low surveillance regime).
+- W4.2: 6 perturbations × 5 route geometries (PIP3 / Rho / Rac / Cdc42 / lipid); MR-CKO has weakest geometric signal across all routes (manuscript F6E).
+- W4.3: 6 conditions × 1 resilience index per condition; F-CTL = 0.82, F-CKO = 0.42, M-CTL = 0.65, M-CKO = 0.18 (manuscript F4J).
+- W4.4: 80 cells × 2 PCA coords × 4 quartiles; per-quartile ellipse boundary (95% probability mass).
+- W4.5: 3-state transition kernel; mean diagonal = 0.82 (sticky); off-diagonal max = surveillant→activated 0.09.
+- W4.6: 3 states × per-state residence time KM curves; KS p-value annotation per pair.
+
+### Risks and fit-up budget
+
+| Risk | Mitigation |
+|---|---|
+| W4.1 stacked bar — 4 quartiles per bar can run into legend collisions | Use 4-tier viridis quartile palette + horizontal bar layout + condition label below. |
+| W4.2 compact screen — too many cells (6×5=30) risks micro-text | Use larger cell width (1.0 inch) + minimal annotation (only top-2 strongest cells per row). |
+| W4.3 resilience bar — single value per condition can look bare | Add multiverse-stability ribbon behind each bar + manuscript-anchored numerical callout per row. |
+| W4.4 PCA ellipses — 4 quartile ellipses per group can overlap | Use per-quartile colour + α=0.20 fill; centroid markers above ellipses. |
+| W4.5 diagonal-dominance callout — risk of overlap with kernel cell numerics | Place dominance score in title + small inline marker on the diagonal cells. |
+| W4.6 KM with KS — paired curves + KS annotation needs space | Use horizontal layout with KM on left + KS p-value annotation in right margin. |
+| Style-drift ratchet at 20/20 | Reuse existing literals exclusively (precedents established in W1-W3). |
+
+### Verification after Commit 2 + 3
+
+1. `pytest tests/` — baseline 2326 + Wave 4 recipe smoke / quality / contracts (~12 new) ≈ 2338.
+2. `pytest tests/test_recipes_smoke.py -k 'biophysics_scaling or intravital_imaging'` — all relevant demos render headlessly.
+3. `pytest tests/test_recipes_quality.py` — each new recipe satisfies its family rule.
+4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
+5. Gallery regenerate per modality. Estimate **3 visual-QA fit-ups** (energetic/thermodynamic recipes are pattern-similar to W2/W3 matrices + scatter_collapses; risk concentrated in W4.4 ellipse overlap + W4.6 KM-with-KS layout).
 
 ## Pack-closeout deliverables (after Commit 3 of Wave 4)
 

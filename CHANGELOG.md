@@ -33,8 +33,15 @@ project follows semantic versioning.
   Wave 3: catalog 435 → 442; mixed_effects_models 16 → 20;
   actin_microtubule_morphometry 47 → 49; intravital_imaging
   58 → 59. Pioneered `mixed_effects_models/_shared.py`.
-- **Wave 4 pending** (+6 energetic / thermodynamic + narrative
-  integration). Cumulative final: catalog 423 → 448.
+- **Wave 4** gap-analysis in review (+6 energetic / thermodynamic +
+  narrative integration: quartile stacked bar, route-geometry
+  screen, resilience index bar, dissipation-quartile PCA ellipses,
+  transition-matrix diagonal-dominance callout, residence-time KM
+  with KS overlay). Extends `biophysics_scaling/_shared.py` and
+  `intravital_imaging/_shared.py`. After Wave 4: catalog 442 → 448
+  (final); biophysics_scaling 47 → 51; intravital_imaging
+  59 → 61. **Closes the pack at 25/25 recipes.** Pack-closeout
+  follow-up PR will tag `v1.5.0-beta-cdc42_factorial_companion`.
 
 ## [1.5.0-beta-cdc42_factorial_companion-w3] — 2026-04-28
 

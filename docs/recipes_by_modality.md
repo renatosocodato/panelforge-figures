@@ -64,6 +64,48 @@ v1.0.0 stable: 20 modalities, 137 recipes.
   density, persistence-length fit, protrusion length × velocity,
   cortical thickness by region, skeleton kymograph.
 
+## v1.5.0-beta-cdc42_factorial_companion — Wave 3 (factorial statistics + sex-stratified validation, +7)
+
+Third wave of the cdc42_factorial_companion beta expansion pack.
+Lands the 7-recipe factorial-statistics + sex-stratified-validation
+cluster across 3 modalities — two-way ANOVA summary, sex-stratified
+ROC under LOOCV, mediation decomposition, pre/post slope by module,
+Sholl radial histogram, behavioral fingerprint trio composite, and
+state entry/exit raster with switch-rate callout. Pioneers
+`mixed_effects_models/_shared.py` (3rd `_shared.py` pioneered in
+this pack); extends `actin_microtubule_morphometry/_shared.py`
+and `intravital_imaging/_shared.py`. Catalog 435 → 442.
+
+- **two_way_anova_summary_plot** (`coef_forest`,
+  mixed_effects_models) — three-term factorial-design forest
+  (sex / genotype / sex × genotype) on the partial η² scale with
+  F-stat + p-value annotations; interaction row highlighted.
+- **sex_stratified_roc_loocv** (`scatter_collapse`,
+  mixed_effects_models) — per-stratum ROC scatter + monotonic
+  smooth fit + diagonal chance line; AUC + 95% CI in legend.
+- **mediation_decomposition_slope_chart** (`scatter_collapse`,
+  mixed_effects_models) — per-stratum direct + indirect markers
+  (paired solid/dashed) with CI whiskers, connecting slope,
+  proportion-mediated annotation in right margin.
+- **pre_post_slope_chart_by_module** (`scatter_collapse`,
+  mixed_effects_models) — parallel-coordinate slope chart with
+  per-module pre/post markers + per-condition mean-slope overlay
+  + significant-module label callouts (leader-line staggered).
+- **sholl_intersections_radial_histogram**
+  (`timecourse_hierarchical_ci`, actin_microtubule_morphometry) —
+  per-condition mean intersection-count curve vs distance from
+  soma + bootstrap 95% CI ribbons + faint per-cell traces; peak
+  callouts in title.
+- **behavioral_fingerprint_trio_composite** (`scatter_collapse`,
+  actin_microtubule_morphometry) — three side-by-side `inset_axes`
+  sub-panels in a single recipe (representative trace, summary
+  violin, cv-velocity × extension-fraction scatter with per-
+  condition trend) with shared per-condition palette.
+- **state_entry_exit_with_switch_callout** (`matrix`,
+  intravital_imaging) — variant of `state_entry_exit_raster` with
+  a left-margin lollipop-style per-cell switch-rate callout
+  (amber if rate ≥ Q75 across cells, slate otherwise).
+
 ## v1.5.0-beta-cdc42_factorial_companion — Wave 2 (multi-omic integration, +6)
 
 Second wave of the cdc42_factorial_companion beta expansion pack.

@@ -111,8 +111,8 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
 
     # --- Sub-panel 1: representative trace per condition ----------
     ax_trace = inset_axes(
-        ax, width="32%", height="80%", loc="lower left",
-        bbox_to_anchor=(0.02, 0.10, 1.0, 1.0),
+        ax, width="28%", height="72%", loc="lower left",
+        bbox_to_anchor=(0.04, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_trace)
@@ -133,8 +133,8 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
 
     # --- Sub-panel 2: violin per condition (summary_value) --------
     ax_viol = inset_axes(
-        ax, width="28%", height="80%", loc="lower left",
-        bbox_to_anchor=(0.36, 0.10, 1.0, 1.0),
+        ax, width="22%", height="72%", loc="lower left",
+        bbox_to_anchor=(0.38, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_viol)
@@ -175,8 +175,8 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
 
     # --- Sub-panel 3: scatter (cv_velocity, extension_fraction) ---
     ax_scat = inset_axes(
-        ax, width="28%", height="80%", loc="lower left",
-        bbox_to_anchor=(0.69, 0.10, 1.0, 1.0),
+        ax, width="28%", height="72%", loc="lower left",
+        bbox_to_anchor=(0.66, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_scat)

@@ -108,7 +108,9 @@ def render(contract: TwoWayANOVASummaryInput, ax=None, **_):
     interaction_color = "#C62828"
     main_color = "#37474F"
     for yi, t in zip(y, terms):
-        is_inter = "x" in t.term or ":" in t.term
+        # Interaction detection requires a separator token, not a bare 'x'
+        # (the literal 'x' in "sex" would otherwise false-positive).
+        is_inter = (" x " in t.term) or (":" in t.term) or ("*" in t.term)
         colour = interaction_color if is_inter else main_color
         ci_lo = (
             t.eta_sq_ci_lo

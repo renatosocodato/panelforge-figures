@@ -127,8 +127,31 @@ def render(contract: PrePostSlopeInput, ax=None, **_):
                    s=22 if r.is_significant else 14,
                    facecolor=colour, edgecolor="white",
                    linewidth=0.4, alpha=alpha, zorder=4)
-        if r.is_significant:
-            ax.text(x_post + 0.04, r.post_score, r.module,
+
+    # Right-margin labels for significant modules — staggered with
+    # leader lines to avoid overlap. Sort by post_score (top-down)
+    # and force minimum vertical separation.
+    sig_rows = sorted(
+        [r for r in rows if r.is_significant],
+        key=lambda r: -r.post_score,
+    )
+    if sig_rows:
+        y_min, y_max = min(all_y), max(all_y)
+        y_span = max(y_max - y_min, 0.10)
+        min_gap = 0.045 * y_span                 # min vertical separation
+        label_y = [r.post_score for r in sig_rows]
+        # Greedy top-down adjustment so adjacent labels don't overlap.
+        for i in range(1, len(label_y)):
+            if label_y[i-1] - label_y[i] < min_gap:
+                label_y[i] = label_y[i-1] - min_gap
+        x_label = x_post + 0.10
+        for r, ly in zip(sig_rows, label_y):
+            colour = palette[r.condition]
+            # Leader line: marker → label anchor.
+            ax.plot([x_post + 0.01, x_label - 0.01],
+                    [r.post_score, ly],
+                    color=colour, lw=0.5, alpha=0.55, zorder=4)
+            ax.text(x_label, ly, r.module,
                     ha="left", va="center", fontsize=6.0,
                     color=colour, zorder=5)
 
@@ -144,7 +167,7 @@ def render(contract: PrePostSlopeInput, ax=None, **_):
     ax.set_xticks([x_pre, x_post])
     ax.set_xticklabels([contract.pre_label, contract.post_label],
                        fontsize=7.4)
-    ax.set_xlim(-0.15, x_post + 0.45)
+    ax.set_xlim(-0.15, x_post + 0.65)
     ax.set_ylabel("module score")
     ax.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

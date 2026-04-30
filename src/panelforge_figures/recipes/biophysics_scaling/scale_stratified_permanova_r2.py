@@ -154,8 +154,7 @@ def render(contract: PERMANOVAR2Input, ax=None, **_):
         f"summed R^2 across scales = {smart_fmt(total_r2)}",
         fontsize=8.4, pad=4,
     )
-    # Legend at top-right-above-axes (bbox_to_anchor outside axes),
-    # keeps it clear of the p-value annotations and the data rows.
-    ax.legend(fontsize=6.4, frameon=False, loc="lower right",
-              bbox_to_anchor=(1.0, 1.02), handlelength=1.2)
+    # Legend below xlabel to avoid colliding with title at top.
+    ax.legend(fontsize=6.4, frameon=False, loc="upper right",
+              bbox_to_anchor=(1.0, -0.18), handlelength=1.2)
     return ax

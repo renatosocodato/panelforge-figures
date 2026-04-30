@@ -120,14 +120,16 @@ def render(contract: HubRadialInput, ax=None, **_):
     ax.text(0, 0, contract.hub_name, ha="center", va="center",
             fontsize=7.2, color="white", fontweight="bold", zorder=6)
 
-    # Weight reference rings.
+    # Weight reference rings. Labels parked at the bottom (theta=3π/2)
+    # so they don't collide with neighbour arrowheads on the right rim.
     for r_ref, lab in [(r_min, "min"), (r_max, "max")]:
         ax.add_patch(mpatches.Circle(
             (0, 0), r_ref,
             facecolor="none", edgecolor="#DDDDDD", linewidth=0.5,
             linestyle=":", zorder=1,
         ))
-        ax.text(r_ref, -r_ref * 0.08, f"  {lab}",
+        ax.text(0, -r_ref - 0.05, lab,
+                ha="center", va="top",
                 fontsize=5.6, color="#999999", zorder=1)
 
     # Legend proxies.

@@ -132,7 +132,8 @@ def render(contract: StateKinematicEmbeddingInput, ax=None, **_):
     ax.set_ylabel("eigenmap axis 2")
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
+    ax.legend(fontsize=6.4, frameon=False, loc="upper left",
+              bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0,
               handlelength=1.0)
     sigma = info.get("sigma", 0.0)
     ax.set_title(

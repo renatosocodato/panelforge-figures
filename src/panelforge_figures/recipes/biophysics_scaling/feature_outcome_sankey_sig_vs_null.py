@@ -89,7 +89,7 @@ def render(contract: FeatureOutcomeSankeyInput, ax=None, **_):
     from matplotlib.patches import FancyBboxPatch, Polygon
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(6.2, 3.8))
+        _, ax = plt.subplots(figsize=(7.0, 3.8))
     AESTHETIC.apply_to_ax(ax)
 
     palette = AESTHETIC.outcome_palette or OUTCOME_PALETTE_DEFAULT

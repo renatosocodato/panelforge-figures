@@ -122,7 +122,7 @@ def render(contract: NNTForestInput, ax=None, **_):
     # NNT = ∞ / "no benefit" reference band.
     max_shown = float(hi_s.max()) * 1.4
     ax.axvline(max_shown * 0.95, color="#888888", lw=0.5, ls="--",
-               zorder=2, label="no benefit (NNT -> inf)")
+               zorder=2, label=r"no benefit (NNT $\rightarrow \infty$)")
 
     # Numeric annotations at right-edge.
     for yi, pt, lo_i, hi_i in zip(y, nnt_s, lo_s, hi_s):

@@ -140,7 +140,8 @@ def render(contract: MultiverseClassificationInput, ax=None, **_):
                 f"{cls}\n{tally[cls]}/{n}  "
                 f"({smart_fmt(frac * 100)}%)",
                 transform=ax.transAxes,
-                ha="center", va="center", fontsize=6.4,
+                ha="center", va="center",
+                fontsize=5.6 if block_w < 0.15 else 6.4,
                 color="white", fontweight="bold", zorder=4)
         cur_x += block_w
 

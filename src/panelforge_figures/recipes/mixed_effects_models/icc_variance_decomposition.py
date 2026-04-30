@@ -65,10 +65,11 @@ def render(contract: ICCInput, ax=None, **_):
                 color=color, edgecolor="white", linewidth=0.8, zorder=2,
                 alpha=0.92)
         # Centered label if segment is wide enough.
-        if f > 0.08:
+        if f > 0.04:
+            fs = 5.6 if f < 0.08 else 6.6
             ax.text(left + f / 2, bar_y, f"{lvl}\n{smart_fmt(f*100)}%",
                     ha="center", va="center",
-                    color="white", fontsize=6.6, zorder=3)
+                    color="white", fontsize=fs, zorder=3)
         left += f
 
     ax.set_xlim(0, 1)

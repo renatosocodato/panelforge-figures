@@ -114,12 +114,14 @@ def render(contract: SubgroupForestInput, ax=None, **_):
     # Favours labels.
     ax.annotate(
         "favours treatment",
-        xy=(0.2, -0.12), xycoords="axes fraction",
+        xy=(0.2, -0.22), xycoords="axes fraction",
         ha="left", va="top", fontsize=6.2, color="#2E7D32",
     )
     ax.annotate(
         "favours control",
-        xy=(0.8, -0.12), xycoords="axes fraction",
+        xy=(0.8, -0.22), xycoords="axes fraction",
         ha="right", va="top", fontsize=6.2, color="#D32F2F",
     )
+    if ax.figure is not None:
+        ax.figure.subplots_adjust(bottom=0.18)
     return ax

@@ -166,9 +166,9 @@ def render(contract: DirectedNetworkInput, ax=None, **_):
         ))
         # Only label top-degree nodes to avoid clutter.
         if out_deg[i] >= np.quantile(out_deg, 0.75):
-            ax.text(pos[i, 0], pos[i, 1] + radius + 0.02, nm,
+            ax.text(pos[i, 0], pos[i, 1] + radius + 0.045, nm,
                     ha="center", va="bottom", fontsize=6.2,
-                    color="#111111", zorder=5)
+                    color="#111111", zorder=6)
 
     # Hub callout.
     top_hub_idx = int(np.argmax(out_deg))

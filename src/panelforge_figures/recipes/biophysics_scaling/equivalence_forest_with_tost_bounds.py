@@ -183,7 +183,8 @@ def render(contract: EquivalenceForestInput, ax=None, **_):
         handles.append(Patch(facecolor="#D0D0D0", alpha=0.45,
                              label="TOST zone"))
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="upper right", handlelength=1.2)
+              loc="upper center", bbox_to_anchor=(0.5, -0.16),
+              ncols=3, handlelength=1.2)
 
     ax.set_title(
         f"{contract.title}  ·  "

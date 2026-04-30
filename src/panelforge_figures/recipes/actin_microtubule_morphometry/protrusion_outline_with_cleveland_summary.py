@@ -108,7 +108,7 @@ def render(contract: ProtrusionOutlineClevelandInput, ax=None, **_):
     conditions = list(dict.fromkeys(c.condition for c in contract.cells))
 
     # --- Left third: representative outline icons (one per condition). ---
-    icon_ax = ax.inset_axes([0.02, 0.10, 0.30, 0.80])
+    icon_ax = ax.inset_axes([0.02, 0.10, 0.34, 0.80])
     AESTHETIC.apply_to_ax(icon_ax)
     icon_ax.set_aspect("equal")
     icon_ax.set_xticks([])
@@ -146,10 +146,10 @@ def render(contract: ProtrusionOutlineClevelandInput, ax=None, **_):
         icon_ax.set_xlim(x_lo, x_hi)
         icon_ax.set_ylim(y_offset + 1, 2.0)
     icon_ax.set_title("representative outlines",
-                      fontsize=6.6, pad=2)
+                      fontsize=6.6, pad=8)
 
     # --- Right two-thirds: Cleveland strip for width + erosion depth. ---
-    cleveland_ax = ax.inset_axes([0.40, 0.18, 0.55, 0.72])
+    cleveland_ax = ax.inset_axes([0.46, 0.18, 0.50, 0.72])
     AESTHETIC.apply_to_ax(cleveland_ax)
 
     rows = []

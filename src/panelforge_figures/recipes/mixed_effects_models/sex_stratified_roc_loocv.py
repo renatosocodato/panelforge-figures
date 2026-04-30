@@ -141,7 +141,8 @@ def render(contract: SexStratifiedROCInput, ax=None, **_):
         ax.spines[side].set_visible(False)
 
     ax.legend(fontsize=6.4, frameon=False,
-              loc="lower right", handlelength=1.4)
+              loc="upper center", bbox_to_anchor=(0.5, -0.18),
+              ncols=1, handlelength=1.4)
 
     ax.set_title(contract.title, fontsize=8.2, pad=4)
     return ax

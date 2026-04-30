@@ -97,9 +97,10 @@ def render(contract: SelectivityTornadoInput, ax=None, **_):
         color = selective_color if f >= cliff else unselective_color
         ax.barh(yi, f, height=0.55, color=color, alpha=0.85,
                 edgecolor="white", linewidth=0.5, zorder=3)
-        ax.text(f + xmax * 0.01, yi,
-                f"×{smart_fmt(float(f))}",
-                va="center", ha="left", fontsize=6.8, color=color)
+        ax.annotate(f"×{smart_fmt(float(f))}",
+                    xy=(f, yi), xytext=(4, 0),
+                    textcoords="offset points",
+                    va="center", ha="left", fontsize=6.8, color=color)
 
     # 10× cliff reference.
     ax.axvline(cliff, color="#111111", lw=0.9, ls="--", zorder=4)

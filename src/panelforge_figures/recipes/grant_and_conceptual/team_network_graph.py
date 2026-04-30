@@ -173,7 +173,7 @@ def render(contract: TeamNetworkInput, ax=None, **_):
                 ha="center", va="top", fontsize=6.4,
                 color="#222222", zorder=5)
         if p.role and p.role.strip() != p.name.strip():
-            ax.text(xy[0], xy[1] - r - 0.080, f"({p.role})",
+            ax.text(xy[0], xy[1] - r - 0.110, f"({p.role})",
                     ha="center", va="top", fontsize=5.8,
                     color="#777777", zorder=5)
 

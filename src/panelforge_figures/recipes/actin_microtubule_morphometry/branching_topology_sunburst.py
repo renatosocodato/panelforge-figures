@@ -142,8 +142,8 @@ def render(contract: BranchingSunburstInput, ax=None, **_):
             facecolor=depth_colors[d], edgecolor="white", linewidth=0.3,
         ))
         ax.text(x + swatch_w / 2, legend_y - 0.03,
-                f"d={d}", ha="center", va="top",
-                fontsize=6.2, color="#333333")
+                f" d={d} ", ha="center", va="top",
+                fontsize=5.6, color="#333333")
 
     ax.set_xlim(-total_radius - 0.7, total_radius + 0.7)
     ax.set_ylim(-total_radius - 0.6, total_radius + 0.45)

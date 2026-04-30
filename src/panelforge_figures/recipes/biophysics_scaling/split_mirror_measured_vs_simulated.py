@@ -77,7 +77,7 @@ _META = RecipeMetadata(
 def render(contract: SplitMirrorInput, ax=None, **_):
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(6.4, 3.8))
+        _, ax = plt.subplots(figsize=(5.6, 3.6))
     AESTHETIC.apply_to_ax(ax)
 
     # Sentinel violin bodies + median marker for split_violin family

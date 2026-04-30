@@ -103,7 +103,7 @@ def render(contract: MilestoneRiskInput, ax=None, **_):
         ))
         # Quadrant label in subtle corner text.
         if "high impact" in lab and "high prob" in lab:
-            ax.text(lo_x + 0.48, lo_y + 0.48, "!!",
+            ax.text(lo_x + 0.48, lo_y + 0.43, "!!",
                     ha="right", va="top", fontsize=9.6,
                     color="#C62828", fontweight="bold",
                     alpha=0.5, zorder=2)

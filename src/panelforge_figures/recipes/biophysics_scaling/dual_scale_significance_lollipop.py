@@ -143,11 +143,13 @@ def render(contract: DualScaleSignificanceLollipopInput, ax=None, **_):
         colour = _TIER_PALETTE.get(t, "#888888")
         ax.axhspan(lo - 0.5, hi + 0.5,
                    color=colour, alpha=0.06, zorder=1)
-        # Tier label at right edge.
-        x_label_x = max((-np.log10(0.05)) * 1.5,
-                        max(r.neg_log10_p for r in contract.rows) * 1.05)
-        ax.text(x_label_x, (lo + hi) / 2, t,
-                ha="right", va="center", fontsize=6.4,
+        # Tier label at right edge (axes-fraction outside data zone).
+        y_mid_data = (lo + hi) / 2.0
+        # Inverted axis: data y=-0.5 -> axes y=1.0; data y=n-0.5 -> axes y=0.0
+        y_axes_frac = 1.0 - (y_mid_data + 0.5) / n
+        ax.text(1.005, y_axes_frac, t,
+                transform=ax.transAxes,
+                ha="left", va="center", fontsize=6.4,
                 color=colour, fontweight="bold",
                 style="italic", zorder=3)
 
@@ -167,7 +169,7 @@ def render(contract: DualScaleSignificanceLollipopInput, ax=None, **_):
     ax.set_yticks(range(n))
     ax.set_yticklabels([f for _, f in features_in_order], fontsize=6.6)
     ax.invert_yaxis()
-    ax.set_xlabel("-log10(p)")
+    ax.set_xlabel("-log10(p)", labelpad=4)
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
     ax.set_ylim(n - 0.5, -0.5)
@@ -184,7 +186,7 @@ def render(contract: DualScaleSignificanceLollipopInput, ax=None, **_):
                label=f"p = {smart_fmt(contract.significance_threshold)}"),
     ]
     ax.legend(handles=handles, fontsize=6.4, frameon=False,
-              loc="upper center", bbox_to_anchor=(0.5, -0.10),
+              loc="upper center", bbox_to_anchor=(0.5, -0.18),
               ncols=3, handlelength=1.0)
 
     # Headline: how many features sharpen at protrusion-internal scale.

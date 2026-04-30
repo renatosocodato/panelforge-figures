@@ -174,7 +174,7 @@ def render(contract: HMMvsHSMMComparisonInput, ax=None, **_):
     ax.set_xlabel(
         f"delta-{contract.criterion}  "
         f"({other_model} - {contract.reference_model})  "
-        f"-->  negative = {other_model} wins"
+        f"·  negative = {other_model} wins"
     )
     ax.grid(axis="x", color="#EEEEEE", lw=0.4, zorder=0)
     ax.set_axisbelow(True)

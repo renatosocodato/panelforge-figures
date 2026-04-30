@@ -111,8 +111,9 @@ def render(contract: CurvatureKymographInput, ax=None, **_):
             label="max-kappa ridge")
 
     ax.set_xlabel("time t (s)")
-    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
-              handlelength=1.4)
+    ax.legend(fontsize=6.8, frameon=True, framealpha=0.85,
+              edgecolor="#BBBBBB", facecolor="white",
+              loc="lower right", handlelength=1.4)
 
     max_k = float(curvature.max())
     mean_k = float(curvature.mean())

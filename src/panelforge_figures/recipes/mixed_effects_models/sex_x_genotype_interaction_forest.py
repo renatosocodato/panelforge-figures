@@ -141,7 +141,7 @@ def render(contract: ForestInput, ax=None, **_):
                markerfacecolor=term_color, markersize=6,
                label="main effect"),
     ]
-    ax.legend(handles=proxies, loc="upper right",
+    ax.legend(handles=proxies, loc="lower right",
               fontsize=6.4, frameon=True, framealpha=0.92,
               edgecolor="#BBBBBB", borderpad=0.4, handlelength=1.0)
     ax.grid(axis="x", color="#DDDDDD", lw=0.4, zorder=0)

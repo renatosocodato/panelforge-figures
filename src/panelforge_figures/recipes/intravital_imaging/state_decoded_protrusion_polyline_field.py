@@ -153,8 +153,8 @@ def render(contract: StateDecodedPolylineFieldInput, ax=None, **_):
     bar_y = y_lo + (y_hi - y_lo) * 0.06
     ax.plot([bar_x, bar_x + bar_len], [bar_y, bar_y],
             color="#222222", lw=2.2, zorder=7)
-    ax.text(bar_x + bar_len / 2, bar_y - (y_hi - y_lo) * 0.025,
-            "20 um", ha="center", va="top", fontsize=6.4,
+    ax.text(bar_x + bar_len / 2, bar_y + (y_hi - y_lo) * 0.025,
+            "20 um", ha="center", va="bottom", fontsize=6.4,
             color="#222222")
 
     from matplotlib.lines import Line2D

@@ -43,6 +43,112 @@ project follows semantic versioning.
   59 → 61. **Closes the pack at 25/25 recipes.** Pack-closeout
   follow-up PR will tag `v1.5.0-beta-cdc42_factorial_companion`.
 
+## [1.5.0-beta-cdc42_factorial_companion-w4] — 2026-04-30
+
+Fourth and final wave of the `cdc42_factorial_companion` beta
+expansion pack. Lands the 6-recipe energetic / thermodynamic +
+narrative-integration cluster — quartile stacked bar by factor,
+route-geometry compact screen, molecular resilience index bar,
+dissipation-quartile PCA with ellipses, transition-matrix
+diagonal-dominance callout, residence-time Kaplan-Meier with KS
+overlay. Extends `biophysics_scaling/_shared.py` (+4 sub-contracts)
+and `intravital_imaging/_shared.py` (+2 sub-contracts). Catalog
+442 → **448 (final)**. Pack closes at **25 / 25 recipes**.
+
+### Added (6 recipes)
+
+- `quartile_stacked_bar_by_factor` (`matrix`, W4.1, biophysics_scaling)
+  — sex × genotype × quartile-occupancy stacked bar with 4-tier
+  viridis quartile palette, inline percent annotations, per-condition
+  n callouts; top-Q4 condition surfaced in title.
+  **Closes manuscript panel F5D.**
+- `route_geometry_compact_screen` (`matrix`, W4.2, biophysics_scaling)
+  — 6-perturbation × 5-route compact `imshow` heatmap on cividis
+  with per-cell numeric annotations and red-hatched borders flagging
+  cells below the disruption threshold (0.35).
+  **Closes manuscript panel F6E.**
+- `molecular_resilience_index_bar` (`coef_forest`, W4.3,
+  biophysics_scaling) — per-condition resilience-index marker with
+  multiverse-stability ribbon behind, ROBUST/fragile classification
+  (teal vs grey), zero-resilience + ROBUST-threshold reference lines,
+  inline `[R]` ROBUST-row annotation.
+  **Closes manuscript panel F4J.**
+- `dissipation_quartile_pca_with_ellipses` (`scatter_collapse`, W4.4,
+  biophysics_scaling) — per-cell PCA scatter coloured by dissipation
+  quartile, per-quartile 95%-probability covariance ellipse boundary
+  as the fit line, per-quartile centroid X markers, dotted Q1→Q4
+  centroid trajectory; centroid-separation distance in title.
+  **Closes manuscript panel F5J.**
+- `transition_matrix_diagonal_dominance_callout` (`matrix`, W4.5,
+  intravital_imaging) — N × N transition-kernel cividis `imshow` with
+  per-cell numerics, plus a teal border around dominant-state
+  diagonal cells (where A[i,i] − max-off-diag > 0.50); per-state
+  dominance scores in title.
+  **Extends manuscript panel F2H (per-state stickiness diagnostic).**
+- `residence_time_kaplan_meier_with_ks_overlay` (`diagnostic_curve`,
+  W4.6, intravital_imaging) — per-state KM step curves with
+  per-state median-residence vertical reference + 50%-survival
+  horizontal reference; KS p-value vs reference state annotated in
+  title with `*` significance marker.
+  **Extends manuscript panel F2E (per-state residence-time KM).**
+
+### Infrastructure
+
+- `recipes/biophysics_scaling/_shared.py` (extend) — adds 4 sub-
+  contracts: `QuartileOccupancyBin`, `RouteGeometryRow`,
+  `ResilienceIndexEntry`, `DissipationProxyRow`.
+- `recipes/intravital_imaging/_shared.py` (extend) — adds 2 sub-
+  contracts: `DiagonalDominanceSummary`, `ResidenceStratum`.
+- `recipes/biophysics_scaling/__init__.py` (edit) — registers 4 new
+  recipes; modality 47 → 51.
+- `recipes/intravital_imaging/__init__.py` (edit) — registers 2 new
+  recipes; modality 59 → 61.
+
+No new top-level deps; no new `core/` shims (per-quartile covariance
+ellipse uses `numpy.cov` + `numpy.linalg.eigh`; KM step curves are
+inline ~20 LOC).
+
+### Demo conventions
+
+All 6 demos use seeded RNG (`np.random.default_rng(83X)`) with
+manuscript-anchored values where available:
+
+- W4.1: 4 quartiles × 4 conditions; F-CTL Q4 = 0.40 (top dissipation
+  surplus); M-CKO Q1 = 0.45 (low surveillance regime).
+- W4.2: 6 perturbations × 5 route geometries (PIP3 / Rho / Rac /
+  Cdc42 / lipid); MR-CKO weakest geometric signal across all routes
+  (manuscript F6E).
+- W4.3: 6 conditions × 1 resilience index; F-CTL = 0.82, F-CKO =
+  0.42, M-CTL = 0.65, M-CKO = 0.18 (manuscript F4J).
+- W4.4: 80 cells × 4 quartiles × per-quartile 95% covariance ellipse;
+  Q1 (low) anchors lower-left, Q4 (high) anchors upper-right.
+- W4.5: 3-state transition kernel; mean diagonal ≈ 0.87 (sticky);
+  off-diagonal max surveillant→activated 0.09.
+- W4.6: 3 states × 80 subjects per state; median residence ~12 min
+  (homeostatic), ~6 min (surveillant), ~9 min (activated); KS p
+  surveillant-vs-homeostatic 5.4e-7 (significant).
+
+### Visual-QA polish during authoring (2 fit-ups)
+
+- W4.1 + W4.4 — `cm.get_cmap("viridis", n)` deprecated in matplotlib
+  3.7+; replaced with `mpl.colormaps["viridis"].resampled(n)`.
+- W4.4 — Helvetica-unsafe `→` arrow in title string replaced with
+  ASCII " to " (gallery-regeneration test caught it).
+
+### Tests
+
+- Total: **2326 → 2356** (+30: 6 smoke + 6 quality + ~18 from
+  auto-parametrized contracts and registry).
+- `pytest tests/` passes green; ratchet held at 20/20.
+
+### Progress
+
+- biophysics_scaling recipes: **47 → 51** (+4).
+- intravital_imaging recipes: **59 → 61** (+2).
+- cdc42_factorial_companion pack recipes landed: **19 → 25 (final)**.
+- Pack closes at **25/25 recipes** (Wave 4 of 4).
+- Pack-closeout PR will tag `v1.5.0-beta-cdc42_factorial_companion`.
+
 ## [1.5.0-beta-cdc42_factorial_companion-w3] — 2026-04-28
 
 Third wave of the `cdc42_factorial_companion` beta expansion pack.

@@ -88,7 +88,7 @@ _META = RecipeMetadata(
 def render(contract: SensitivitySweepInput, ax=None, **_):
     if ax is None:
         import matplotlib.pyplot as plt
-        _, ax = plt.subplots(figsize=(6.4, 3.8))
+        _, ax = plt.subplots(figsize=(5.8, 3.6))
     AESTHETIC.apply_to_ax(ax)
 
     # Sentinel CI band + mean line on parent ax for family rule.

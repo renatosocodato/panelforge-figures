@@ -112,7 +112,7 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
     # --- Sub-panel 1: representative trace per condition ----------
     ax_trace = inset_axes(
         ax, width="28%", height="72%", loc="lower left",
-        bbox_to_anchor=(0.04, 0.16, 1.0, 1.0),
+        bbox_to_anchor=(0.06, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_trace)
@@ -133,8 +133,8 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
 
     # --- Sub-panel 2: violin per condition (summary_value) --------
     ax_viol = inset_axes(
-        ax, width="22%", height="72%", loc="lower left",
-        bbox_to_anchor=(0.38, 0.16, 1.0, 1.0),
+        ax, width="26%", height="72%", loc="lower left",
+        bbox_to_anchor=(0.42, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_viol)
@@ -164,19 +164,34 @@ def render(contract: BehavioralFingerprintTrioInput, ax=None, **_):
             edgecolor="white", linewidth=0.3, zorder=3,
         )
     ax_viol.set_xticks(pos)
-    ax_viol.set_xticklabels(conditions, fontsize=6.0, rotation=20, ha="right")
-    ax_viol.set_ylabel("summary score", fontsize=6.4)
-    ax_viol.tick_params(labelsize=6.0)
+    ax_viol.set_xticklabels(conditions, fontsize=6.0, rotation=30, ha="right")
+    # Drop the y-axis entirely on the violin sub-panel — its ticks
+    # would otherwise collide with the trace sub-panel on the left
+    # and the scatter sub-panel on the right.  Inline median values
+    # are annotated at each violin instead.
+    ax_viol.set_yticks([])
+    ax_viol.set_yticklabels([])
+    ax_viol.set_ylabel("")
     ax_viol.grid(axis="y", color="#EEEEEE", lw=0.4, zorder=0)
     ax_viol.set_axisbelow(True)
-    for side in ("top", "right"):
+    for side in ("top", "right", "left"):
         ax_viol.spines[side].set_visible(False)
-    ax_viol.set_title("violin", fontsize=7.0, pad=2)
+    # Per-violin median callouts.
+    for x, c in zip(pos, conditions):
+        vals = np.array(
+            [r.summary_value for r in rows if r.condition == c],
+            float,
+        )
+        med = float(np.median(vals))
+        ax_viol.text(x, med, f"{smart_fmt(med)}",
+                     ha="center", va="bottom", fontsize=6.0,
+                     color="#222222", fontweight="bold", zorder=6)
+    ax_viol.set_title("violin (median labelled)", fontsize=7.0, pad=2)
 
     # --- Sub-panel 3: scatter (cv_velocity, extension_fraction) ---
     ax_scat = inset_axes(
         ax, width="28%", height="72%", loc="lower left",
-        bbox_to_anchor=(0.66, 0.16, 1.0, 1.0),
+        bbox_to_anchor=(0.70, 0.16, 1.0, 1.0),
         bbox_transform=ax.transAxes, borderpad=0,
     )
     AESTHETIC.apply_to_ax(ax_scat)

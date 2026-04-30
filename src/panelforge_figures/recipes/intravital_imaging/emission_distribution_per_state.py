@@ -179,7 +179,8 @@ def render(contract: EmissionDistributionPerStateInput, ax=None, **_):
         # Shorten state labels (3-letter abbreviations) so x-tick
         # text doesn't crowd the now-tighter inset.
         short_labels = [s[:4] if len(s) > 4 else s for s in states]
-        sub.set_xticklabels(short_labels, fontsize=6.6)
+        sub.set_xticklabels(short_labels, fontsize=6.6,
+                            rotation=30, ha="right")
         # Short title — full name truncated so adjacent inset titles
         # don't bleed across panels (4 panels in a 7" wide figure).
         short = feat.replace("_um_per_min", "").replace("_per_um", "") \

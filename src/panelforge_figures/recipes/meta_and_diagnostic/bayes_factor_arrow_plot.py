@@ -122,7 +122,7 @@ def render(contract: BayesFactorArrowInput, ax=None, **_):
                    facecolor=colour, edgecolor="white",
                    linewidth=0.5, zorder=6)
         # Inline BF + tier label.
-        ax.text(bf * 1.15, yi,
+        ax.text(bf * 1.6 if bf < 1.0 else bf * 1.15, yi,
                 f"BF={smart_fmt(bf)}  ·  {r.threshold_class}",
                 ha="left", va="center", fontsize=6.4,
                 color=colour, zorder=7)
@@ -134,7 +134,7 @@ def render(contract: BayesFactorArrowInput, ax=None, **_):
     band_col = ["favours_alt", "anecdotal", "moderate",
                 "strong", "decisive"]
     for x_lab, lab, key in zip(band_x, band_lab, band_col):
-        ax.text(x_lab, n - 0.4, lab,
+        ax.text(x_lab, -0.6, lab,
                 ha="center", va="bottom", fontsize=6.0,
                 color=_TIER_COLOR.get(key, "#888888"),
                 style="italic", zorder=4)
@@ -156,6 +156,6 @@ def render(contract: BayesFactorArrowInput, ax=None, **_):
     ax.set_title(
         f"{contract.title}  ·  {n} descriptors  ·  "
         f"{n_decisive} ≥ strong-null",
-        fontsize=8.4, pad=6,
+        fontsize=8.4, pad=14,
     )
     return ax

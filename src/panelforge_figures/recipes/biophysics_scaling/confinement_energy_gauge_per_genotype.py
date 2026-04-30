@@ -117,10 +117,10 @@ def _draw_gauge(ax, energies: np.ndarray, threshold: float,
     ax.plot([bx * 0.78, bx * 1.02],
             [by * 0.78 + centre_y * 0.22, by * 1.02 - centre_y * 0.02],
             color="#222222", lw=1.2, zorder=5)
-    ax.text(bx * 1.10, by * 1.10 - centre_y * 0.10,
-            f"buffered\n<- {smart_fmt(threshold)} kBT ->\nunbuffered",
-            ha="center", va="center", fontsize=5.6,
-            color="#444444", zorder=5)
+    ax.text(0.0, by * 1.20, f"boundary {smart_fmt(threshold)} kBT",
+            ha="center", va="bottom", fontsize=5.6, color="#444444",
+            zorder=10,
+            bbox=dict(facecolor="white", edgecolor="none", pad=0.5))
 
     # Per-cell tick marks at energy → angle.
     ang_deg = arc_start_deg + (arc_end_deg - arc_start_deg) \
@@ -207,10 +207,10 @@ def render(contract: ConfinementGaugeInput, ax=None, **_):
                     contract.energy_max_kBT,
                     colour=colour, label=g)
         # Energy axis labels on the arc edge.
-        sub.text(1.05, 0.0, "0 kBT", ha="left", va="center",
+        sub.text(1.05, 0.0, "0 kBT (buffered)", ha="left", va="center",
                  fontsize=6.0, color="#666666")
         sub.text(-1.05, 0.0,
-                 f"{smart_fmt(contract.energy_max_kBT)} kBT",
+                 f"{smart_fmt(contract.energy_max_kBT)} kBT (unbuffered)",
                  ha="right", va="center", fontsize=6.0,
                  color="#666666")
 

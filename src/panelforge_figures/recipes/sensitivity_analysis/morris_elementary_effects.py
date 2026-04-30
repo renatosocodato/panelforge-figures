@@ -121,7 +121,7 @@ def render(contract: MorrisEEInput, ax=None, **_):
         transform=ax.transAxes,
     )
     _ = callout_box
-    ax.set_xlabel(r"$\mu^*$ (mean |elementary effect|)", fontsize=7.8)
+    ax.set_xlabel(r"$\mu^*$ (mean absolute elementary effect)", fontsize=7.8)
     ax.set_ylabel(r"$\sigma$ (std elementary effect)", fontsize=7.8)
     ax.set_title("Morris screening", fontsize=9.0, pad=4)
     ax.set_xlim(0, x_hi)

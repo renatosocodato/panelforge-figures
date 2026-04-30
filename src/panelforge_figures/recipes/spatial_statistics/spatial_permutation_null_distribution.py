@@ -131,7 +131,7 @@ def render(contract: PermutationNullInput, ax=None, **_):
     ax.set_yticks([])
     ax.set_xlabel(contract.statistic_name)
     ax.set_title(contract.title, fontsize=9.0, pad=4)
-    ax.legend(fontsize=6.8, frameon=False, loc="upper right",
+    ax.legend(fontsize=6.8, frameon=False, loc="upper left",
               handlelength=1.2)
 
     ax.text(0.02, 0.97,

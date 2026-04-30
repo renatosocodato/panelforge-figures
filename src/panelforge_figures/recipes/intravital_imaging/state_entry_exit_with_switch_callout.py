@@ -178,10 +178,12 @@ def render(
         ax.scatter([x_marker], [yi], s=24, marker="o",
                    facecolor=cb_colour, edgecolor="white",
                    linewidth=0.5, zorder=5)
-        # Inline rate annotation.
-        ax.text(x_lo - 0.5, yi,
+        # Inline rate annotation positioned just above the lollipop
+        # stem so it does not collide with cell-id y-tick labels in
+        # the leftmost margin.
+        ax.text(x_lo + (x_marker - x_lo) / 2, yi - 0.30,
                 f"{smart_fmt(sw.switch_rate_per_min)}/min",
-                ha="right", va="center", fontsize=6.0,
+                ha="center", va="bottom", fontsize=5.6,
                 color=cb_colour, fontweight="bold", zorder=6)
 
     ax.set_yticks(range(len(cells)))

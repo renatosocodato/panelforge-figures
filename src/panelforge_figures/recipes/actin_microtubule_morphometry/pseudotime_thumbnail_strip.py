@@ -146,7 +146,7 @@ def render(contract: PseudotimeThumbnailStripInput, ax=None, **_):
 
     # Pseudotime axis label below the strip.
     ax.text(0.5, thumb_y - 0.02,
-            "pseudotime (Actin Drive Index)  ->",
+            "pseudotime (Actin Drive Index)",
             transform=ax.transAxes,
             ha="center", va="top", fontsize=7.0,
             color="#444444", style="italic")

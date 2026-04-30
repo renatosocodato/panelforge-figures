@@ -145,8 +145,9 @@ def render(contract: ShollHistogramInput, ax=None, **_):
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
 
-    ax.legend(fontsize=6.4, frameon=False,
-              loc="upper right", handlelength=1.6, ncols=1)
+    ax.legend(fontsize=6.4, frameon=True, framealpha=0.92,
+              edgecolor="#BBBBBB", loc="upper right",
+              handlelength=1.2, ncols=2, columnspacing=0.8)
 
     ax.set_title(
         f"{contract.title}  ·  " + "  ·  ".join(peak_summary),

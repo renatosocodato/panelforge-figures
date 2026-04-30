@@ -72,10 +72,10 @@ def render(contract: DrugComboInput, ax=None, **_):
 
     # Cell value labels for readability.
     for (j, i), v in np.ndenumerate(E):
-        color = "white" if v > 0.55 else "#222222"
+        text_color = "white" if v < 0.35 or v > 0.65 else "#1a1a1a"
         ax.text(i, j, smart_fmt(float(v)),
                 ha="center", va="center",
-                fontsize=5.8, color=color)
+                fontsize=5.8, color=text_color)
 
     ax.set_xticks(range(len(a)))
     ax.set_xticklabels([int(v) if v >= 1 else 0 for v in a], fontsize=6.6)

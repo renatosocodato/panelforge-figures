@@ -69,10 +69,10 @@ def render(contract: MigrationRoseInput, ax=None, **_):
     AESTHETIC.apply_to_fig(ax.figure)
     palette = get_palette(AESTHETIC.primary_palette)
 
-    ax.set_theta_zero_location("E")
+    ax.set_theta_zero_location("N")
     ax.set_theta_direction(-1)
     ax.set_xticks(np.linspace(0, 2 * np.pi, 8, endpoint=False))
-    ax.set_xticklabels(["E", "NE", "N", "NW", "W", "SW", "S", "SE"],
+    ax.set_xticklabels(["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
                        fontsize=6.8)
 
     n_bins = contract.n_bins
@@ -82,7 +82,13 @@ def render(contract: MigrationRoseInput, ax=None, **_):
 
     summaries: list[tuple[str, float, float]] = []
     for i, (name, headings) in enumerate(contract.heading_deg_by_condition.items()):
-        h = (np.deg2rad(np.array(headings, dtype=float)) % (2 * np.pi))
+        # Input headings use the standard math convention
+        # (0 deg = East, counter-clockwise positive). Convert to the
+        # compass-display convention (0 deg = North, clockwise positive)
+        # by rotating by +pi/2 and negating, so a 90 deg input heading
+        # ("north" in math convention) renders at the top of the plot.
+        h = ((np.pi / 2.0 - np.deg2rad(np.array(headings, dtype=float)))
+             % (2 * np.pi))
         counts, _ = np.histogram(h, bins=edges)
         density = counts / max(counts.sum(), 1)
         color = palette[i % len(palette.colors)]

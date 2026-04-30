@@ -106,7 +106,8 @@ def render(contract: TrackFieldInput, ax=None, **_):
         f"{contract.title}  ·  N tracks = {len(contract.tracks)}",
         fontsize=9.0, pad=4,
     )
-    ax.legend(fontsize=6.6, frameon=False, loc="upper right",
+    ax.legend(fontsize=6.6, frameon=True, framealpha=0.92,
+              edgecolor="#BBBBBB", loc="upper right",
               handlelength=1.4, title=f"open circle = start; star = end (t ~ {smart_fmt(100)} steps)",
               title_fontsize=5.8)
     return ax

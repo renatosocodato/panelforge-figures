@@ -182,6 +182,40 @@ class StateSwitchSummary(RecipeContract):
     switch_rate_per_min: float
 
 
+# --- cdc42_factorial_companion Wave 4 atoms --------------------------------
+
+
+class DiagonalDominanceSummary(RecipeContract):
+    """Per-state diagonal dominance score for a transition kernel.
+
+    Used by W4.5 (`transition_matrix_diagonal_dominance_callout`).
+    `dominance_score` is `A[i,i] - max(A[i,j!=i])`; positive scores
+    indicate sticky states. Bundled with a permutation-shuffle p-value
+    so the recipe can flag states with statistically significant
+    stickiness in the title and per-cell callout.
+    """
+    state: str                                     # "homeostatic" | ...
+    dominance_score: float                         # A[i,i] - max(off-diag)
+    p_perm: float                                  # permutation-shuffle p-value
+    is_dominant: bool = False                      # passes manuscript threshold
+
+
+class ResidenceStratum(RecipeContract):
+    """Per-state residence-time KM-style atom + paired KS overlay.
+
+    Used by W4.6 (`residence_time_kaplan_meier_with_ks_overlay`).
+    Each entry carries one state's residence-time samples (with
+    censoring), and the KS p-value comparing this stratum against
+    a reference (typically the homeostatic baseline).
+    """
+    state: str                                     # "surveillant" | ...
+    residence_time_min: list[float]
+    censored: list[bool] | None = None             # True if right-censored
+    ks_p_value_vs_reference: float | None = None
+    median_residence_min: float | None = None
+    n_subjects: int | None = None
+
+
 # --- shared demo palette ----------------------------------------------------
 
 

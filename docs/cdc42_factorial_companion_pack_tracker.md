@@ -1,5 +1,7 @@
 # CDC42 factorial companion pack tracker
 
+**Status:** ✅ **PACK COMPLETE** — all 4 waves merged (PRs #44–#47); pack-closeout PR #48 lands the rollup CHANGELOG and tag `v1.5.0-beta-factorial_design_companion`. Catalog 423 → 448 (+25); 5 modalities touched.
+
 **Version label:** `[1.5.0-beta-factorial_design_companion]` (sub-tags `-w1` … `-w4`)
 **Scope:** ~25 new recipes scattered across 6 existing modalities + 2 new `core/` shims, landed across 4 user-gated waves. Pack pattern inherited from `[1.4.0-beta-cytoskeletal_morphometry_companion]` (PRs #39–#43; tag `v1.4.0-beta-cytoskeletal_morphometry_companion`).
 **Anchor manuscript:** `<project_root>` — Cdc42 conditional knockout (CKO) microglial-surveillance paper with **Female × Male × CTL/CKO 2 × 2 factorial** design ("fxm" = Female × Male).
@@ -53,7 +55,7 @@ Per governance §9, no new modalities. The 25 recipes scatter as:
 | w1 | Universal robustness primitives + provenance (+6 in `meta_and_diagnostic`): Bayes-factor arrow plot, panel provenance ledger, cross-contrast correlation, multiverse classification, multiverse spec curve, proxy-alignment forest. Pioneers 2 new `core/` shims (`bayes_factor_utility`, `multiverse_specification_utility`). | **merged** | `beta-cdc42-companion-w1` | — (squash-merged PR #44; commit `c51965d`) | 3 commits, 2 visual-QA fit-ups (W1.2 fontsize 8.0 → 8.2 ratchet snap; W1.6 OVERFIT label moved right of in-sample marker), 5 sub-contracts added, 13 new utility tests, total tests 2218 → 2261; CI green |
 | w2 | Multi-omic integration (+6 in `omics_differential`): proteome × phospho concordance, module concordance, pathway-space triangulation, pathway-space bridge, GGE permutation bar, sign-concordance heatmap. Pioneers `omics_differential/_shared.py`. | **merged** | `beta-cdc42-companion-w2` | — (squash-merged PR #45; commit `31aeaf6`) | 3 commits, 4 visual-QA fit-ups (W2.1 unused linregress vars; W2.4 + W2.5 lw=2.0 → 2.2; all 5 W2 titles fontsize 8.0 → 8.2; W2.5 callout opposite-side placement), 5 sub-contracts pioneered, total tests 2261 → 2291; CI green |
 | w3 | Factorial statistics + sex-stratified validation (+7): two-way ANOVA, sex-stratified ROC, mediation slope, pre/post slope by module, Sholl radial histogram, fingerprint trio composite, switch-callout extension. Pioneers `mixed_effects_models/_shared.py`; extends `actin_microtubule_morphometry/_shared.py` + `intravital_imaging/_shared.py`. | **merged** | `beta-cdc42-companion-w3` | — (squash-merged PR #46; commit `e397a83`) | 3 commits, 3 visual-QA fit-ups (W3.1 sex/interaction detection bug — `'x' in 'sex'` false positive fixed by requiring `' x '` separator; W3.4 module-label collision resolved with leader-line + staggered y-positions; W3.6 inset-axes layout retuned for label clearance), 7 sub-contracts (4 pioneered + 3 extended), total tests 2291 → 2326; CI green |
-| w4 | Energetic / thermodynamic + narrative integration (+6): quartile stacked bar, route-geometry screen, resilience index bar, dissipation-quartile PCA ellipses, transition-matrix DD callout, residence-time KM with KS overlay. Closes pack at 25/25. Extends `biophysics_scaling/_shared.py` + `intravital_imaging/_shared.py`. | **review** | `beta-cdc42-companion-w4` | — (PR #47 in flight) | 3 commits, 3 visual-QA fit-ups (W4.1 + W4.4 `cm.get_cmap` deprecation → `mpl.colormaps[...].resampled(n)`; W4.4 Helvetica-unsafe `→` arrow → ASCII " to "; W4.1 stacked-bar y-axis margins set explicitly via `ax.set_ylim(n - 0.55, -0.55)` to prevent top/bottom-row clipping + percent-annotation threshold raised 0.10 → 0.13 to suppress overflow on narrow segments), 6 sub-contracts extended (4 + 2), total tests 2326 → 2356; ratchet at 20/20 |
+| w4 | Energetic / thermodynamic + narrative integration (+6): quartile stacked bar, route-geometry screen, resilience index bar, dissipation-quartile PCA ellipses, transition-matrix DD callout, residence-time KM with KS overlay. Closes pack at 25/25. Extends `biophysics_scaling/_shared.py` + `intravital_imaging/_shared.py`. | **merged** | `beta-cdc42-companion-w4` | — (squash-merged PR #47; commit `4077859`) | 3 commits, 3 visual-QA fit-ups (W4.1 + W4.4 `cm.get_cmap` deprecation → `mpl.colormaps[...].resampled(n)`; W4.4 Helvetica-unsafe `→` arrow → ASCII " to "; W4.1 stacked-bar y-axis margins set explicitly via `ax.set_ylim(n - 0.55, -0.55)` + percent-annotation threshold raised 0.10 → 0.13), 6 sub-contracts extended (4 + 2), total tests 2326 → 2356; CI green |
 
 Status legend:
 - **pending** — not yet started
@@ -278,7 +280,7 @@ All Wave 3 demos use seeded RNG (`np.random.default_rng(82X)`) with manuscript-a
 4. `pytest tests/test_style_drift.py` — ratchet at 20/20.
 5. Gallery regenerate per modality. Estimate **4 visual-QA fit-ups** (multi-modality wave with non-trivial layouts: ROC curves, mediation slopes, Sholl curves, fingerprint trio composite).
 
-## Wave 4 — energetic / thermodynamic + narrative integration (+6) [review]
+## Wave 4 — energetic / thermodynamic + narrative integration (+6) [merged]
 
 **Why last.** Wave 1 shipped universal robustness primitives, Wave 2
 shipped multi-omic integration, Wave 3 shipped factorial-statistics +

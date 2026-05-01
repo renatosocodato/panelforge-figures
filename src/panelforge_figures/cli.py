@@ -21,7 +21,9 @@ from .core.contract import (
 from .core.palette import list_palettes
 from .manifest import (
     build_catalog,
+    build_index,
     catalog_fingerprint,
+    emit_index_json,
     render_manifest,
     validate_manifest,
     write_catalog_json,
@@ -230,6 +232,122 @@ def stats() -> None:
     click.echo(f"recipes: {total}  modalities: {len(counts)}")
     for mod in sorted(counts):
         click.echo(f"  {mod}: {counts[mod]}")
+
+
+# ─────────────────────────── recipes_index.json ─────────────────────────
+
+@main.group("index")
+def index_group() -> None:
+    """Manage the agent-facing `recipes_index.json` (Wave 1+).
+
+    The index is a single JSON file at the repo root that any CLI agent
+    can fetch via raw GitHub URL without cloning the repo.  See
+    `AGENT_BOOTSTRAP.md` for the agent contract.
+    """
+
+
+@index_group.command("emit")
+@click.option(
+    "--out", type=click.Path(path_type=Path), default=Path("recipes_index.json"),
+    help="Path to write the index (default: repo root).",
+)
+@click.option(
+    "--include-tags", is_flag=True,
+    help=(
+        "Wave-2 mode: emit per-recipe tags + scoring_rubric + "
+        "intake_questions blocks.  Wave 1 callers should leave this off."
+    ),
+)
+def index_emit(out: Path, include_tags: bool) -> None:
+    """Regenerate `recipes_index.json`."""
+    p = emit_index_json(out, include_tags=include_tags)
+    n = sum(len(m["recipes"]) for m in build_index(include_tags=include_tags)["modalities"])
+    click.echo(f"wrote {p}  ({n} recipes)")
+
+
+@index_group.command("validate")
+@click.option(
+    "--path", "index_path", type=click.Path(path_type=Path),
+    default=Path("recipes_index.json"),
+)
+@click.option(
+    "--schema", "schema_path", type=click.Path(path_type=Path),
+    default=Path("docs/recipes_index.schema.json"),
+)
+def index_validate(index_path: Path, schema_path: Path) -> None:
+    """Validate `recipes_index.json` against the JSON-Schema and the registry.
+
+    Checks:
+      1. Index file exists and is valid JSON.
+      2. Schema file exists and is valid JSON-Schema.
+      3. Every recipe in the registry appears in the index.
+      4. Every recipe in the index appears in the registry (no orphans).
+      5. The `index_meta.panelforge_version` matches the installed package.
+    """
+    if not index_path.is_file():
+        click.echo(f"✗ {index_path} not found", err=True)
+        sys.exit(1)
+    try:
+        index = json.loads(index_path.read_text())
+    except json.JSONDecodeError as e:
+        click.echo(f"✗ {index_path} is not valid JSON: {e}", err=True)
+        sys.exit(1)
+
+    # Optional jsonschema dep for full validation; degrade gracefully.
+    if schema_path.is_file():
+        try:
+            import jsonschema  # type: ignore[import-not-found]
+            schema = json.loads(schema_path.read_text())
+            jsonschema.validate(instance=index, schema=schema)
+        except ImportError:
+            click.echo(
+                "ⓘ jsonschema not installed; skipping schema validation "
+                "(install via `pip install jsonschema` for strict checks)",
+                err=True,
+            )
+        except jsonschema.ValidationError as e:  # type: ignore[name-defined]
+            click.echo(f"✗ schema violation: {e.message}", err=True)
+            sys.exit(1)
+
+    # Registry parity.
+    ensure_all_imported()
+    registry_full_names = {f"{e.metadata.modality}.{e.metadata.name}"
+                           for e in list_recipes()}
+    index_full_names = set()
+    for mod in index.get("modalities", []):
+        for rec in mod.get("recipes", []):
+            index_full_names.add(f"{mod['name']}.{rec['name']}")
+
+    missing_in_index = registry_full_names - index_full_names
+    orphan_in_index = index_full_names - registry_full_names
+    if missing_in_index:
+        click.echo(
+            f"✗ {len(missing_in_index)} recipes registered but missing from index:",
+            err=True,
+        )
+        for n in sorted(missing_in_index):
+            click.echo(f"    - {n}", err=True)
+        sys.exit(1)
+    if orphan_in_index:
+        click.echo(
+            f"✗ {len(orphan_in_index)} recipes in index but not registered:",
+            err=True,
+        )
+        for n in sorted(orphan_in_index):
+            click.echo(f"    - {n}", err=True)
+        sys.exit(1)
+
+    pkg_version = index.get("index_meta", {}).get("panelforge_version", "")
+    if pkg_version != __version__:
+        click.echo(
+            f"⚠ index built with panelforge {pkg_version} but installed "
+            f"package is {__version__}",
+            err=True,
+        )
+
+    n = len(index_full_names)
+    click.echo(f"✓ {index_path} valid  ({n} recipes; schema_version "
+               f"{index.get('index_meta', {}).get('schema_version', '?')})")
 
 
 if __name__ == "__main__":

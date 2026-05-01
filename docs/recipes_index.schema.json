@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/renatosocodato/panelforge-figures/docs/recipes_index.schema.json",
+  "title": "panelforge_figures recipes_index.json",
+  "description": "Agent-facing index of all recipes in the panelforge-figures catalog. Wave 1 ships without tags; Wave 2 enables per-recipe `tags` and top-level `scoring_rubric` + `intake_questions` blocks.",
+  "type": "object",
+  "required": [
+    "index_meta",
+    "version",
+    "modalities",
+    "contracts",
+    "themes",
+    "palettes"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "index_meta": {
+      "type": "object",
+      "description": "Build metadata for this index file.",
+      "required": [
+        "schema_version",
+        "panelforge_version",
+        "git_commit",
+        "built_at",
+        "n_recipes",
+        "n_modalities",
+        "tags_enabled"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "description": "Semver of this JSON-Schema; bumped on breaking field changes.",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "panelforge_version": {
+          "type": "string",
+          "description": "Version of the panelforge-figures package that built this index."
+        },
+        "git_commit": {
+          "type": "string",
+          "description": "Full SHA of the commit that built this index, or 'unknown'."
+        },
+        "built_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 UTC timestamp of when the index was built."
+        },
+        "n_recipes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of registered recipes."
+        },
+        "n_modalities": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of registered modalities."
+        },
+        "tags_enabled": {
+          "type": "boolean",
+          "description": "True if Wave-2 tags are populated; False in Wave 1."
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "description": "Catalog format version (mirrors the panelforge package __version__)."
+    },
+    "modalities": {
+      "type": "array",
+      "description": "All registered modalities, sorted by name.",
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "recipes"],
+        "additionalProperties": true,
+        "properties": {
+          "name": {"type": "string"},
+          "description": {"type": ["string", "null"]},
+          "aesthetic": {"type": ["object", "null"]},
+          "n_recipes": {"type": "integer", "minimum": 0},
+          "recipes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "path",
+                "contract",
+                "family",
+                "answers_question",
+                "required_fields",
+                "optional_fields",
+                "alternatives_in_modality",
+                "file_format_hints",
+                "gallery_png",
+                "tags"
+              ],
+              "additionalProperties": true,
+              "properties": {
+                "name": {"type": "string"},
+                "path": {"type": "string"},
+                "contract": {"type": "string"},
+                "family": {"type": "string"},
+                "answers_question": {"type": "string"},
+                "required_fields": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "optional_fields": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "alternatives_in_modality": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "file_format_hints": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "n_points_typical": {"type": "string"},
+                "gallery_png": {"type": "string"},
+                "example_manifest": {"type": ["string", "null"]},
+                "tags": {
+                  "type": "object",
+                  "description": "Wave 2: closed taxonomy tags. Empty in Wave 1.",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "contracts": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "adapters": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "transforms": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "themes": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "palettes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "n_colors"],
+        "additionalProperties": true,
+        "properties": {
+          "name": {"type": "string"},
+          "n_colors": {"type": "integer", "minimum": 1},
+          "semantic_keys": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "description": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "scoring_rubric": {
+      "type": "object",
+      "description": "Wave 2: locked scoring weights and tie-breakers. Absent in Wave 1.",
+      "additionalProperties": true
+    },
+    "intake_questions": {
+      "type": "array",
+      "description": "Wave 2: 8-question intake template. Absent in Wave 1.",
+      "items": {"type": "object"}
+    }
+  }
+}

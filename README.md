@@ -4,6 +4,12 @@ A modality-first, publication-grade figure system for systems biology and
 computational biophysics, with an embedded Claude Code skill for agentic
 bootstrap inside any manuscript repository.
 
+> 🤖 **Are you a CLI agent on first contact with this repo?** Read
+> [`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md) — it tells you how to fetch
+> [`recipes_index.json`](recipes_index.json) from raw GitHub without
+> cloning, locate the recipes you need, and sparse-checkout only the
+> modalities relevant to the user's project.
+
 ## Status
 
 **`v1.1.0` — hydration complete**: 20 modalities, **328 recipes**,

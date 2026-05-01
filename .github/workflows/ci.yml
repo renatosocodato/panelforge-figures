@@ -33,6 +33,21 @@ jobs:
         run: |
           figures catalog --json > /tmp/catalog.json
           python -c "import json, sys; d=json.load(open('/tmp/catalog.json')); n=sum(len(m['recipes']) for m in d['modalities']); print(f'recipes={n}'); assert n >= 107, f'expected >=49, got {n}'"
+      - name: Recipes index drift check
+        env:
+          # Committed `recipes_index.json` uses stable headers so CI diff
+          # is content-only.  Contributors regenerating the index locally
+          # MUST set these env vars (or use `figures index emit`, which
+          # sets them automatically when writing to repo root).
+          PANELFORGE_BUILT_AT: "1970-01-01T00:00:00Z"
+          PANELFORGE_GIT_COMMIT: "committed"
+        run: |
+          figures index emit
+          if ! git diff --exit-code recipes_index.json; then
+            echo "❌ recipes_index.json is stale. Regenerate via 'figures index emit' and commit." >&2
+            exit 1
+          fi
+          figures index validate
       - name: Gallery regeneration
         run: |
           figures gallery regenerate

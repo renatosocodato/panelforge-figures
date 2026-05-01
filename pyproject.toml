@@ -47,6 +47,7 @@ dev = [
     "pytest-cov>=4.1",
     "ruff>=0.4",
     "seaborn>=0.13",
+    "jsonschema>=4.0",
 ]
 
 [project.urls]

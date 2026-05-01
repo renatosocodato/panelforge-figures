@@ -252,17 +252,19 @@ def index_group() -> None:
     help="Path to write the index (default: repo root).",
 )
 @click.option(
-    "--include-tags", is_flag=True,
+    "--no-tags", is_flag=True,
     help=(
-        "Wave-2 mode: emit per-recipe tags + scoring_rubric + "
-        "intake_questions blocks.  Wave 1 callers should leave this off."
+        "Emit Wave-1-shape index without `tags`, `scoring_rubric`, or "
+        "`intake_questions` blocks.  Default is Wave-2 mode (with tags)."
     ),
 )
-def index_emit(out: Path, include_tags: bool) -> None:
+def index_emit(out: Path, no_tags: bool) -> None:
     """Regenerate `recipes_index.json`."""
+    include_tags = not no_tags
     p = emit_index_json(out, include_tags=include_tags)
     n = sum(len(m["recipes"]) for m in build_index(include_tags=include_tags)["modalities"])
-    click.echo(f"wrote {p}  ({n} recipes)")
+    mode = "Wave-2" if include_tags else "Wave-1"
+    click.echo(f"wrote {p}  ({n} recipes; {mode} mode)")
 
 
 @index_group.command("validate")
@@ -348,6 +350,38 @@ def index_validate(index_path: Path, schema_path: Path) -> None:
     n = len(index_full_names)
     click.echo(f"✓ {index_path} valid  ({n} recipes; schema_version "
                f"{index.get('index_meta', {}).get('schema_version', '?')})")
+
+
+# ─────────────────────────── intake (Wave 2) ──────────────────────────
+
+@main.command("intake")
+@click.option(
+    "--out", "out_path", type=click.Path(path_type=Path),
+    default=Path("panelforge_workspace/profile.json"),
+    help="Where to write the assembled ProjectProfile JSON.",
+)
+def intake_cmd(out_path: Path) -> None:
+    """Run the 8-question interactive intake.
+
+    Writes the resulting ProjectProfile to disk.  Use this profile
+    with `figures generate` (Wave 3) to produce a ranked shortlist.
+    """
+    from .core.contract import list_modalities
+    from .manifest import run_intake_interactive
+    ensure_all_imported()
+    available = tuple(list_modalities())
+    profile = run_intake_interactive(
+        available_modalities=available,
+        pre_filled=None,
+        out_path=out_path,
+    )
+    click.echo(f"\n✓ profile written to {out_path}")
+    click.echo(
+        f"  anchor={profile.manuscript_anchor}  "
+        f"factorial={profile.factorial_design}  "
+        f"equivalence={profile.equivalence_claims}  "
+        f"shortlist_size={profile.shortlist_size}"
+    )
 
 
 if __name__ == "__main__":

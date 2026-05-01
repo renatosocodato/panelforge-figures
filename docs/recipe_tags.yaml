@@ -1,0 +1,652 @@
+# docs/recipe_tags.yaml
+#
+# Manual tag overrides for recipes the auto-tagger cannot tag with high
+# confidence. Keys are "{modality}.{name}" (matching the registry's
+# full_name). Values are partial tag dicts; auto-tagger derives the
+# remainder.
+#
+# Sorted by key. CI asserts bidirectional consistency vs the registry
+# (no orphans, no missing recipes).
+#
+# Coverage:
+# - Tier 1: all 25 recipes from v1.5.0-beta-cdc42_factorial_companion (anchor: CDC42, factorial: true)
+# - Tier 1: all 31 recipes from v1.4.0-beta-disc1_manuscript_companion (anchor: DISC1)
+# - Tier 2: remaining biophysics_scaling recipes (anchor: generic, scale_aware: true)
+
+actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.airyscan_to_zone_territory_triptych:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.behavioral_fingerprint_trio_composite:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+actin_microtubule_morphometry.colocalization_raincloud_per_metric:
+  anchor: DISC1
+  factorial: false
+  equivalence: true
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.cortex_composite_zone_descriptors:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.edge_gradient_intensity_profile:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.mt_mesh_density_compartment_compare:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.overlap_juxtaposition_quantification:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.pca_silhouette_glyph_morphospace:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.pseudotime_thumbnail_strip:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  dynamics: ordered_pseudotime
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.sholl_intersections_radial_histogram:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+actin_microtubule_morphometry.territory_contact_network_overlay:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.zone_fraction_alluvial_sankey:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.buckling_critical_force_plot:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.censoring_mode_waterfall_cascade:
+  anchor: DISC1
+  factorial: false
+  equivalence: true
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.characteristic_time_vs_control:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.compartment_paired_delta_scatter:
+  anchor: DISC1
+  factorial: false
+  equivalence: true
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.compartment_split_curvature_crosscorr:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.confinement_energy_gauge_per_genotype:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.confinement_free_energy_vs_width_curve:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.confinement_ratio_distribution_by_genotype:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.crossover_scaling_diagnostic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.dissipation_quartile_pca_with_ellipses:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  scale_aware: true
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+biophysics_scaling.dual_scale_significance_lollipop:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.energy_landscape_1d_cartoon:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dimensionality: 1D
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.equivalence_forest_with_tost_bounds:
+  anchor: generic
+  factorial: false
+  equivalence: true
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.euler_critical_length_crossing_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.feature_outcome_sankey_sig_vs_null:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.force_budget_schematic_with_data:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.force_length_characteristic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.forward_simulation_validation_contract:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.fractal_dimension_scaling:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.geometric_mediation_path_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.hierarchical_effect_size_ladder:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.knudsen_reynolds_regime_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.log_log_scaling_with_slope_box:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.log_log_with_theory_line:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.master_curve_collapse:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.molecular_resilience_index_bar:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  scale_aware: true
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+biophysics_scaling.ordered_trajectory_checkpoint_divergence:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: ordered_pseudotime
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.per_cell_colocalization_parallel_coordinates:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.permanova_null_distribution:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.persistence_length_lp_with_equivalence_bounds:
+  anchor: generic
+  factorial: false
+  equivalence: true
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.pi_group_sensitivity_bar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.power_law_tail_diagnostic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.pre_registered_censoring_mode_grid:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.psd_active_gel_overlay_with_motor_inset:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.quartile_stacked_bar_by_factor:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  scale_aware: true
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+biophysics_scaling.random_forest_importance_by_scale:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.robustness_neighborhood_phase_corner:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.route_geometry_compact_screen:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  scale_aware: true
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+biophysics_scaling.s_state_frontier_tip_raster:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.scale_stratified_permanova_r2:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.scaling_exponent_ci_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.sensitivity_sweep_alpha_width_seed_compound:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.shared_manifold_scatter_with_residuals:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.splay_taper_polarity_displacement_compound:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.split_mirror_measured_vs_simulated:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+biophysics_scaling.stress_strain_regime_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.universality_class_comparison:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.width_alignment_buffered_unbuffered_interaction:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.width_alpha_regime_phase_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.xz_microtubule_bowing_z_span:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.1.0-beta-biophysics_scaling
+
+biophysics_scaling.z_span_vs_width_with_euler_threshold:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  scale_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+grant_and_conceptual.narrative_cascade_river_with_xrefs:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+intravital_imaging.residence_time_kaplan_meier_with_ks_overlay:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  dynamics: live
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+intravital_imaging.state_entry_exit_with_switch_callout:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  dynamics: live
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+intravital_imaging.territory_zone_overlay_intravital:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  dynamics: live
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+intravital_imaging.transition_matrix_diagonal_dominance_callout:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  dynamics: live
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.alternative_hypothesis_exclusion_table:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.bayes_factor_arrow_plot:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.competing_model_residual_panels:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.cross_contrast_correlation_matrix:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.model_parameterization_lineage_panel:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.multiverse_robustness_classification_bar:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.multiverse_specification_curve:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.panel_provenance_ledger_table:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.pca_loadings_heatmap:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.per_cell_audit_table_with_qa_flags:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.random_forest_confusion_loocv:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  wave: v1.4.0-beta-disc1_manuscript_companion
+
+mixed_effects_models.mediation_decomposition_slope_chart:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+mixed_effects_models.pre_post_slope_chart_by_module:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+mixed_effects_models.sex_stratified_roc_loocv:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+mixed_effects_models.two_way_anova_summary_plot:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.gge_branch_selectivity_permutation_bar:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.module_concordance_signed_heatmap:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.pathway_module_activity_with_sign_concordance:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.pathway_space_bridge_summary_heatmap:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.pathway_space_triangulation_heatmap:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.proteome_phosphoproteome_pathway_scatter:
+  anchor: CDC42
+  factorial: true
+  equivalence: false
+  wave: v1.5.0-beta-cdc42_factorial_companion
+
+spatial_statistics.kinhom_inhomogeneous_isotropy:
+  anchor: DISC1
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.4.0-beta-disc1_manuscript_companion

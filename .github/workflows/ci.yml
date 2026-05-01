@@ -32,7 +32,7 @@ jobs:
       - name: Catalog sanity
         run: |
           figures catalog --json > /tmp/catalog.json
-          python -c "import json, sys; d=json.load(open('/tmp/catalog.json')); n=sum(len(m['recipes']) for m in d['modalities']); print(f'recipes={n}'); assert n >= 107, f'expected >=49, got {n}'"
+          python -c "import json, sys; d=json.load(open('/tmp/catalog.json')); n=sum(len(m['recipes']) for m in d['modalities']); print(f'recipes={n}'); assert n >= 107, f'expected >=107, got {n}'"
       - name: Recipes index drift check
         env:
           # Committed `recipes_index.json` uses stable headers so CI diff

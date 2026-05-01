@@ -67,7 +67,7 @@ _META = RecipeMetadata(
     modality="mixed_effects_models",
     family=RecipeFamily.coef_forest,
     answers_question=(
-        "In a 2 x 2 factorial design, which of {sex, genotype, sex x "
+        "In a 2 × 2 factorial design, which of {sex, genotype, sex × "
         "genotype interaction} is detectable, with what F, p, and "
         "partial eta^2 effect size?"
     ),

@@ -34,7 +34,7 @@ Each recipe in `index["modalities"][m]["recipes"]` carries:
 1. Filter `index["modalities"]` by name when the user has indicated a modality.
 2. Within each surviving modality, filter `recipes` by:
    - `family` if the user wants a specific visual primitive (e.g. all `coef_forest` recipes).
-   - Substring match on `answers_question` for keyword search ("DISC1", "Cdc42", "TOST", "factorial").
+   - Substring match on `answers_question` for keyword search. Words actually present in the corpus include **"Cdc42"**, **"TOST"**, **"equivalence"**, **"factorial"**, **"survival"**, **"sex × genotype"** (Unicode `×` is U+00D7; if grepping the raw JSON it appears as `×`). Anchor terms like "DISC1" appear in the per-recipe `tags.anchor` field once Wave 2 enables tags — not in `answers_question` text.
 3. Rank survivors by:
    - Exact match on user's keyword in `answers_question` first;
    - Modality locality (recipes from the modality with most matches above);
@@ -79,7 +79,7 @@ After sparse checkout, install the package locally (`pip install -e .`) and rend
 |---|---|
 | Index unreachable | Fall back to fetching the catalog from the package's own `figures catalog --json` if the user has installed it; otherwise instruct the user to install `pip install panelforge-figures` and rerun. |
 | Index schema mismatch | Refuse to score; report `index_meta.panelforge_version` expected vs found; instruct the user to upgrade or pin to an older index URL. |
-| Stale index (`built_at` > 7 days old) | Warn but proceed. Index drift is bounded — CI rebuilds on every push to main. |
+| Index freshness check | The committed `index_meta.built_at` is intentionally a stable sentinel (`"1970-01-01T00:00:00Z"`) so CI diffs are content-only — **do not interpret it as a real timestamp**. To gauge freshness, hit the GitHub commit history of `recipes_index.json` directly via the GitHub API. |
 | No recipes match the user's keywords | Suggest broadening the search to `family` or another modality; surface the closest match by edit distance. |
 
 ---

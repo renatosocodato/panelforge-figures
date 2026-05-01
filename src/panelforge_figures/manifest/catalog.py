@@ -183,6 +183,48 @@ def _now_iso_utc() -> str:
     )
 
 
+def _load_recipe_tags_yaml(yaml_path: Path | None = None) -> dict[str, dict[str, Any]]:
+    """Load `docs/recipe_tags.yaml` if it exists.  Returns empty dict
+    when the file is absent (Wave 1) or PyYAML is missing (graceful
+    degradation; auto-tagger fills the gap).
+    """
+    if yaml_path is None:
+        yaml_path = (
+            Path(__file__).resolve().parents[3] / "docs" / "recipe_tags.yaml"
+        )
+    if not yaml_path.is_file():
+        return {}
+    try:
+        import yaml  # type: ignore[import-untyped]
+    except ImportError:  # pragma: no cover  pyyaml is in core deps
+        return {}
+    raw = yaml.safe_load(yaml_path.read_text()) or {}
+    if not isinstance(raw, dict):  # pragma: no cover
+        return {}
+    return raw
+
+
+def _merge_tags(
+    auto: dict[str, Any],
+    override: dict[str, Any] | None,
+) -> tuple[dict[str, Any], str]:
+    """Merge auto-tags with YAML override.  Override wins per key.
+
+    Returns `(merged_tags, source)` where `source ∈ {"auto", "override",
+    "merged"}`.  The 8-key closed taxonomy is preserved.
+    """
+    if not override:
+        return dict(auto), "auto"
+    merged: dict[str, Any] = dict(auto)
+    fully_overridden = True
+    for key, val in override.items():
+        # `unknown` sentinels in `auto` get freely overridden.
+        if merged.get(key) != val and merged.get(key) != "unknown":
+            fully_overridden = False
+        merged[key] = val
+    return merged, ("override" if fully_overridden else "merged")
+
+
 def build_index(*, include_tags: bool = False) -> dict[str, Any]:
     """Build the agent-facing `recipes_index.json` content.
 
@@ -190,20 +232,40 @@ def build_index(*, include_tags: bool = False) -> dict[str, Any]:
     with an `index_meta` block (`schema_version`, `panelforge_version`,
     `git_commit`, `built_at`, `n_recipes`, `n_modalities`).
 
-    Wave 2 (`include_tags=True`): adds per-recipe `tags`, top-level
-    `scoring_rubric`, and `intake_questions` blocks.  Wave 1 callers
-    receive an empty `tags: {}` placeholder per recipe so downstream
-    schema can stay forward-compatible.
+    Wave 2 (`include_tags=True`): adds per-recipe `tags` (auto-tagger +
+    `docs/recipe_tags.yaml` override + `tags_source` provenance), top-
+    level `scoring_rubric`, and `intake_questions` blocks.
     """
     catalog = build_catalog()
     counts = registry_counts()
 
-    # Per-recipe tag scaffolding.  Wave 1 emits empty dicts; Wave 2 will
-    # populate from `auto_tag.py` + `docs/recipe_tags.yaml` override.
+    if include_tags:
+        from .auto_tag import auto_tag_recipe
+        overrides = _load_recipe_tags_yaml()
+    else:
+        overrides = {}
+
+    # Per-recipe tag scaffolding.  Wave 1 emits empty dicts; Wave 2 fills
+    # from auto-tagger + YAML override.
     for mod in catalog["modalities"]:
         mod["n_recipes"] = len(mod["recipes"])
         for rec in mod["recipes"]:
-            rec["tags"] = {} if not include_tags else rec.get("tags", {})
+            if not include_tags:
+                rec["tags"] = {}
+                continue
+            full_name = f"{mod['name']}.{rec['name']}"
+            auto_tags = auto_tag_recipe(
+                name=rec["name"],
+                modality=mod["name"],
+                family=rec["family"],
+                answers_question=rec["answers_question"],
+                required_fields=tuple(rec.get("required_fields", ())),
+                optional_fields=tuple(rec.get("optional_fields", ())),
+            )
+            override_tags = overrides.get(full_name)
+            merged, source = _merge_tags(auto_tags, override_tags)
+            rec["tags"] = merged
+            rec["tags_source"] = source
 
     index = {
         "index_meta": {
@@ -224,12 +286,13 @@ def build_index(*, include_tags: bool = False) -> dict[str, Any]:
         "palettes": catalog["palettes"],
     }
 
-    # Wave-2 placeholders surfaced at the top level so JSON-Schema can
-    # reserve the keys today.  Empty dicts in Wave 1; populated in Wave 2.
+    # Wave-2 blocks at the top level — agents read these once at the top
+    # of the index rather than per-recipe.
     if include_tags:
-        # Wave 2 will fill these from `manifest/scoring.py` + `intake.py`.
-        index["scoring_rubric"] = {}
-        index["intake_questions"] = []
+        from .intake import intake_questions_for_index
+        from .scoring import scoring_rubric_dict
+        index["scoring_rubric"] = scoring_rubric_dict()
+        index["intake_questions"] = intake_questions_for_index()
 
     return index
 

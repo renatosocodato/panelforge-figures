@@ -108,7 +108,11 @@ class TestMatchAnchor:
 
 class TestMatchDynamics:
     def test_exact(self) -> None:
-        assert match_dynamics("static", "static") == 1.0
+        # DEFECT-2 fix: static/static lands on the 0.3 baseline branch
+        # (matches RECIPE_SELECTION.md prose intent: "I want static" =
+        # "I have no dynamics signal to discriminate on").
+        assert match_dynamics("static", "static") == 0.3
+        # Non-static exact matches still score 1.0.
         assert match_dynamics("kymograph", "kymograph") == 1.0
 
     def test_profile_mixed_any_match(self) -> None:
@@ -327,19 +331,22 @@ def test_soft_scoring_orders_descending() -> None:
         warnings.simplefilter("ignore", UserWarning)
         out = score_recipes(profile, fixtures)
 
-    # Recompute expected scores to lock the math:
-    # perfect:        0.30 + 0.25 + 0.20 + 0.15 + 0.07 = 0.97
-    # no_anchor:      0.30 + 0.25 + 0.00 + 0.15 + 0.07 = 0.77
-    # no_equiv:       0.30 + 0.00 + 0.20 + 0.15 + 0.07 = 0.72
-    # generic_anchor: 0.30 + 0.25 + 0.10 + 0.15 + 0.07 = 0.87
-    # live_dyn:       0.30 + 0.25 + 0.20 + 0.00 + 0.07 = 0.82  (dynamics=live mismatch → 0)
-    expected_order = ["perfect", "generic_anchor", "live_dyn", "no_anchor", "no_equiv"]
+    # Recompute expected scores post-DEFECT-2-fix (static/static = 0.3,
+    # so dynamics contributes 0.045 in static profiles):
+    # perfect:        0.30 + 0.25 + 0.20 + 0.045 + 0.07 = 0.865
+    # no_anchor:      0.30 + 0.25 + 0.00 + 0.045 + 0.07 = 0.665
+    # no_equiv:       0.30 + 0.00 + 0.20 + 0.045 + 0.07 = 0.615
+    # generic_anchor: 0.30 + 0.25 + 0.10 + 0.045 + 0.07 = 0.765
+    # live_dyn:       0.30 + 0.25 + 0.20 + 0.000 + 0.07 = 0.820
+    #   (dynamics=live with profile=static → 0.0; recipe=live not static
+    #    so no fallback either)
+    expected_order = ["perfect", "live_dyn", "generic_anchor", "no_anchor", "no_equiv"]
     assert [r.name for r in out] == expected_order
-    assert out[0].score == pytest.approx(0.97, abs=1e-4)
-    assert out[1].score == pytest.approx(0.87, abs=1e-4)
-    assert out[2].score == pytest.approx(0.82, abs=1e-4)
-    assert out[3].score == pytest.approx(0.77, abs=1e-4)
-    assert out[4].score == pytest.approx(0.72, abs=1e-4)
+    assert out[0].score == pytest.approx(0.865, abs=1e-4)
+    assert out[1].score == pytest.approx(0.820, abs=1e-4)
+    assert out[2].score == pytest.approx(0.765, abs=1e-4)
+    assert out[3].score == pytest.approx(0.665, abs=1e-4)
+    assert out[4].score == pytest.approx(0.615, abs=1e-4)
 
 
 # ---------------------------------------------------------------------------
@@ -361,13 +368,13 @@ def test_spec_worked_example_top_three() -> None:
     """
     profile = _profile_compartment_aware()
 
-    # Score by hand for these tag profiles (no factorial match, equivalence
-    # match, generic anchor, static, recipe dim 2D under mixed profile):
-    #   0.0 (factorial mismatch) + 0.25 (equiv) + 0.10 (generic anchor)
-    #   + 0.15 (static) + 0.07 (mixed dim) = 0.57
-    # The spec quotes 0.565 as the documented score; our exact rubric yields
-    # 0.57 (rubric-interpretation difference < 1%).  We assert the top-3
-    # cluster and the order, not the spec's literal float.
+    # Score by hand (post Wave-2 polish: DEFECT-2 fix means static/static
+    # lands on the 0.3 baseline, not 1.0):
+    #   0.0 (factorial mismatch) + 0.25 (equiv) + 0.10 (generic anchor 0.5)
+    #   + 0.045 (static-baseline 0.3 × 0.15) + 0.07 (mixed dim 0.7 × 0.10)
+    #   = 0.465
+    # If the fixture used anchor="DISC1" instead of "generic", the score
+    # would match the spec's documented 0.565 exactly.
     spec_top3 = [
         {
             "modality": "biophysics_scaling",
@@ -440,10 +447,10 @@ def test_spec_worked_example_top_three() -> None:
     for r in out:
         assert r.score >= MINIMUM_SCORE_FOR_SHORTLIST
         assert r.score < 1.0
-    # Spec quotes 0.565; our locked rubric yields 0.57 ± a hair.  Allow a
-    # tolerance band that captures both interpretations.
+    # Post-DEFECT-2-fix score = 0.465 (see arithmetic comment above).
+    # Spec's documented 0.565 uses DISC1 anchor; this fixture uses generic.
     for r in out:
-        assert 0.55 <= r.score <= 0.60
+        assert 0.45 <= r.score <= 0.48
 
 
 # ---------------------------------------------------------------------------

@@ -125,13 +125,26 @@ def match_anchor(recipe_anchor: str | None, profile_anchor: str) -> float:
 def match_dynamics(recipe_dyn: str | None, profile_dyn: str) -> float:
     """Dynamics-match heuristic.
 
-    - exact match → 1.0
-    - profile is "mixed" and recipe is non-empty → 0.8 (any-match)
-    - recipe is "static" → 0.3 (baselines always useful)
-    - otherwise → 0.0
+    DEFECT-2 fix (Wave-2 polish): static/static lands on the 0.3
+    baseline branch, NOT 1.0.  This matches the prose arithmetic in
+    ``RECIPE_SELECTION.md`` worked examples (Example 1's static profile
+    contributes 0.045 = 0.15 × 0.3, not 0.15 × 1.0) and reflects the
+    semantic intent that "I want static" = "I have no temporal signal
+    to discriminate on" — so dynamics should never contribute full
+    weight when both sides are static.
+
+    Order of precedence:
+      - both ``static`` → 0.3 (static baseline; carve-out before exact-match)
+      - exact match (non-static) → 1.0
+      - profile is ``mixed`` and recipe is non-empty → 0.8 (any-match)
+      - recipe is ``static`` (and profile is non-static, non-mixed) → 0.3
+      - otherwise → 0.0
     """
     r = (recipe_dyn or "").strip()
     p = (profile_dyn or "").strip()
+    # Carve-out: both static → baseline weight, not exact-match.
+    if r == "static" and p == "static":
+        return 0.3
     if r == p and r != "":
         return 1.0
     if p == "mixed" and r:
@@ -167,13 +180,25 @@ def _passes_hard_filters(
     modality: str,
     profile: ProjectProfile,
 ) -> bool:
-    """Return True iff recipe meets every hard filter."""
+    """Return True iff recipe meets every hard filter.
+
+    DEFECT-1 fix (Wave-2 polish): filter requires the tag value to be
+    *literally* True.  Recipes with ``"unknown"`` sentinels or missing
+    keys are dropped — otherwise ``bool("unknown") is True`` would let
+    untagged recipes silently pass a ``compartment_aware: True`` filter,
+    breaking the documented "narrow 100 → 31" funnel.
+
+    DEFECT-4 fix: the ``factorial_only`` slug from intake is aliased to
+    the ``factorial`` tag key; selecting it requires ``factorial: True``.
+    """
     if profile.modalities_in_scope and modality not in profile.modalities_in_scope:
         return False
     for key, required in profile.hard_filters.items():
         if not required:
             continue                              # only True-valued keys are gates
-        if not bool(tags.get(key, False)):
+        # DEFECT-4 alias: factorial_only → factorial.
+        tag_key = "factorial" if key == "factorial_only" else key
+        if tags.get(tag_key) is not True:
             return False
     return True
 
@@ -336,7 +361,7 @@ def scoring_rubric_dict() -> dict[str, Any]:
         "tie_breakers": [
             "anchor_match_strength",
             "modality_locality",
-            "wave_alphabetical_descending",
+            "wave_oldest_first",
             "recipe_name_alphabetical",
         ],
         "match_functions": {

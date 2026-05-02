@@ -1,0 +1,13 @@
+# panelforge-figures explicit configuration.
+#
+# This file overrides the project_scan inferences for any key listed
+# below.  Keys absent here leave the scan untouched.  Set `autonomy:
+# false` to opt out of the CLAUDE_CODE_AUTONOMOUS.md flow entirely and
+# fall back to AGENT_BOOTSTRAP.md.
+
+anchor: DISC1
+factorial: false
+equivalence: true
+modalities: [actin_microtubule_morphometry, meta_and_diagnostic]
+shortlist_size: 12
+autonomy: true

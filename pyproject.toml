@@ -42,6 +42,7 @@ dependencies = [
 
 [project.optional-dependencies]
 seaborn = ["seaborn>=0.13"]
+claude-autonomous = ["anthropic>=0.34"]
 dev = [
     "pytest>=7.4",
     "pytest-cov>=4.1",

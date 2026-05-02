@@ -384,5 +384,188 @@ def intake_cmd(out_path: Path) -> None:
     )
 
 
+# ─────────────────────────── autonomous flow (Wave 3) ──────────────────
+
+@main.group("profile")
+def profile_group() -> None:
+    """Project-scan + intake helpers for the Claude Code autonomous flow."""
+
+
+@profile_group.command("scan")
+@click.option(
+    "--project-root", "project_root",
+    type=click.Path(path_type=Path, exists=True, file_okay=False),
+    default=Path("."),
+    help="Project directory to scan (default: cwd).",
+)
+@click.option(
+    "--out", "out_path", type=click.Path(path_type=Path),
+    default=Path("panelforge_workspace/profile.json"),
+    help="Where to write the scan-derived ProjectProfile JSON.",
+)
+def profile_scan_cmd(project_root: Path, out_path: Path) -> None:
+    """Scan README/manuscript/data/; pre-fill the 8 intake answers.
+
+    Writes the inferred ProjectProfile + per-answer confidence scores
+    to disk so downstream `figures intake` / `figures bridge` /
+    `figures generate` can consume it.
+    """
+    from .core.contract import list_modalities
+    from .manifest import (
+        run_intake_interactive,
+        scan_project,
+        to_intake_pre_filled,
+    )
+    ensure_all_imported()
+    available = tuple(list_modalities())
+    result = scan_project(project_root, available_modalities=available)
+
+    click.echo(f"scanned {project_root}: {len(result.files_read)} files read")
+    for fname, ans in result.answers.items():
+        click.echo(f"  {ans.label:24s}  {fname}: {ans.value!r:20s} (conf={ans.confidence:.2f})")
+
+    pre_filled = to_intake_pre_filled(result)
+    click.echo(f"\n{len(pre_filled)} of 8 fields meet ≥0.7 confidence; "
+               "passing to intake")
+    profile = run_intake_interactive(
+        available_modalities=available,
+        pre_filled=pre_filled,
+        out_path=out_path,
+    )
+    click.echo(f"\n✓ profile written to {out_path}")
+    click.echo(f"  anchor={profile.manuscript_anchor}  "
+               f"factorial={profile.factorial_design}  "
+               f"shortlist_size={profile.shortlist_size}")
+
+
+@main.command("bridge")
+@click.option(
+    "--profile", "profile_path", type=click.Path(path_type=Path, exists=True),
+    default=Path("panelforge_workspace/profile.json"),
+)
+@click.option(
+    "--data-dir", type=click.Path(path_type=Path), default=Path("data"),
+    help="Directory holding user data files (csv / parquet / npz).",
+)
+@click.option(
+    "--out", "cache_path", type=click.Path(path_type=Path),
+    default=Path("panelforge_workspace/data_bridge_cache.json"),
+)
+@click.option(
+    "--no-llm", is_flag=True,
+    help="Skip Pass-3 LLM fallback (use exact + fuzzy only).",
+)
+def bridge_cmd(
+    profile_path: Path, data_dir: Path, cache_path: Path, no_llm: bool,
+) -> None:
+    """Bind user data columns to recipe contract fields (3-pass).
+
+    Reads `panelforge_workspace/profile.json` for the shortlist
+    derived from `figures profile scan` + `figures intake`, walks
+    `data/`, runs Pass-1 exact → Pass-2 fuzzy → Pass-3 LLM (gated on
+    ANTHROPIC_API_KEY env var; opt out with --no-llm).
+    """
+    from .manifest import (
+        ProjectProfile,
+        bind_shortlist_to_data,
+        build_index,
+        discover_data_files,
+        score_recipes,
+        write_bindings_cache,
+    )
+
+    raw = json.loads(profile_path.read_text())
+    profile = ProjectProfile(
+        manuscript_anchor=raw["manuscript_anchor"],
+        factorial_design=raw["factorial_design"],
+        equivalence_claims=raw["equivalence_claims"],
+        dynamics_needed=raw["dynamics_needed"],
+        dimensionality=raw["dimensionality"],
+        modalities_in_scope=tuple(raw["modalities_in_scope"]),
+        hard_filters=dict(raw["hard_filters"]),
+        shortlist_size=int(raw["shortlist_size"]),
+    )
+
+    ensure_all_imported()
+    idx = build_index(include_tags=True)
+    flat = [
+        {
+            "modality": m["name"], "name": r["name"], "family": r["family"],
+            "answers_question": r["answers_question"], "tags": r["tags"],
+        }
+        for m in idx["modalities"] for r in m["recipes"]
+    ]
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        scored = score_recipes(profile, flat)
+    shortlist = [r.full_name for r in scored]
+    click.echo(f"shortlist of {len(shortlist)} recipes from profile")
+
+    files = discover_data_files(data_dir)
+    click.echo(f"discovered {len(files)} data files in {data_dir}")
+
+    bindings = bind_shortlist_to_data(
+        shortlist=shortlist, data_files=files, use_llm=not no_llm,
+    )
+    n_bound = sum(1 for b in bindings if b.fully_bound)
+    click.echo(f"bound {n_bound}/{len(bindings)} recipes")
+
+    write_bindings_cache(bindings, cache_path)
+    click.echo(f"✓ bindings written to {cache_path}")
+
+
+@main.command("generate")
+@click.option(
+    "--bindings", "bindings_path", type=click.Path(path_type=Path, exists=True),
+    default=Path("panelforge_workspace/data_bridge_cache.json"),
+)
+@click.option(
+    "--data-dir", type=click.Path(path_type=Path), default=Path("data"),
+)
+@click.option(
+    "--out-dir", type=click.Path(path_type=Path), default=Path("figures"),
+)
+def generate_cmd(bindings_path: Path, data_dir: Path, out_dir: Path) -> None:
+    """Render bound recipes; write figures + RENDER_REPORT.md."""
+    from .manifest import (
+        discover_data_files,
+        load_bindings_cache,
+        render_shortlist,
+        to_render_binding,
+        to_render_data_files,
+        write_render_report,
+    )
+
+    cache = load_bindings_cache(bindings_path)
+    # Group by recipe full_name; this stub assumes one binding per recipe.
+    by_recipe: dict[str, list] = {}
+    for (full_name, _field), fb in cache.items():
+        by_recipe.setdefault(full_name, []).append(fb)
+    # Reconstruct RecipeBindings (canonical data_bridge shape).
+    from .manifest.data_bridge import RecipeBinding as _RB
+    rbs = []
+    for fn, fbs in by_recipe.items():
+        all_bound = all(fb.column_name is not None for fb in fbs)
+        rbs.append(_RB(
+            full_name=fn,
+            bindings=tuple(fbs),
+            fully_bound=all_bound,
+            skipped_reason=None if all_bound else "unbound fields",
+        ))
+    files = discover_data_files(data_dir)
+    log = render_shortlist(
+        bindings=[to_render_binding(rb) for rb in rbs],
+        data_files=to_render_data_files(files),
+        out_dir=out_dir,
+    )
+    report_path = write_render_report(log)
+    click.echo(
+        f"\n✓ rendered {log.n_success}/{log.n_attempted} recipes "
+        f"({log.n_skipped} skipped, {log.n_failed} failed)"
+    )
+    click.echo(f"  see {report_path}")
+
+
 if __name__ == "__main__":
     main()

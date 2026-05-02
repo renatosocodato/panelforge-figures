@@ -1,0 +1,17 @@
+feature,scale,compartment,d,ci_lo,ci_hi
+area_um2,cell,soma,-0.08,-0.31,0.18
+area_um2,cell,protrusion,-0.21,-0.45,0.05
+perimeter_um,cell,soma,-0.12,-0.36,0.14
+perimeter_um,cell,protrusion,-0.45,-0.71,-0.18
+branch_order,cell,soma,-0.05,-0.27,0.20
+branch_order,cell,protrusion,-0.62,-0.88,-0.34
+sholl_intersections,cell,soma,-0.10,-0.32,0.15
+sholl_intersections,cell,protrusion,-0.58,-0.84,-0.30
+area_um2,population,soma,-0.07,-0.20,0.08
+area_um2,population,protrusion,-0.19,-0.34,-0.04
+perimeter_um,population,soma,-0.11,-0.24,0.04
+perimeter_um,population,protrusion,-0.42,-0.55,-0.28
+branch_order,population,soma,-0.04,-0.18,0.11
+branch_order,population,protrusion,-0.59,-0.73,-0.43
+sholl_intersections,population,soma,-0.09,-0.22,0.06
+sholl_intersections,population,protrusion,-0.55,-0.69,-0.40

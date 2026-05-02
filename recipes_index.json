@@ -17770,7 +17770,7 @@
     "tie_breakers": [
       "anchor_match_strength",
       "modality_locality",
-      "wave_alphabetical_descending",
+      "wave_oldest_first",
       "recipe_name_alphabetical"
     ],
     "version": "1.0.0",

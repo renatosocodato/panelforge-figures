@@ -253,14 +253,16 @@ Top three by score:
 
 | Dimension | Profile | Recipe tag | Match value | Contribution |
 |---|---|---|---|---|
-| factorial | false | false | 0.0 | **0.000** |
-| equivalence | false | false | 0.0 | **0.000** |
+| factorial | false | false | 0.0 (presence-checked) | **0.000** |
+| equivalence | false | false | 0.0 (presence-checked) | **0.000** |
 | anchor | none | generic | 0.5 (generic credit) | 0.20 × 0.5 = **0.100** |
-| dynamics | static | static | 1.0 (no other signal) | 0.15 × 1.0 = **0.150** |
+| dynamics | static | static | 0.3 (static-baseline rule) | 0.15 × 0.3 = **0.045** |
 | dimensionality | 2D | 2D | 1.0 (exact) | 0.10 × 1.0 = **0.100** |
-| **Total** | | | | **0.350** |
+| **Total** | | | | **0.245** |
 
-**Top score: 0.350 — below the 0.40 threshold.**
+**Top score: 0.245 — below the 0.40 threshold.**
+
+> **DEFECT-2 reconciliation note.** The static-baseline carve-out in §3.4 (static profile + static recipe → 0.3, not 1.0) applies uniformly across all three worked examples. Earlier drafts of this document credited Example 3's dynamics dimension at 1.0 × 0.15 = 0.150 and reported a total of 0.350; that arithmetic was inconsistent with the rule that `dynamics=static` is read as "no temporal signal to discriminate on" rather than as a positive selection criterion. The corrected total is 0.245 — still well below the 0.40 threshold, so the empty-shortlist outcome and recovery message below are unchanged.
 
 **The shortlist is empty.** This is the correct, designed-for outcome: a profile with no factorial, no equivalence, and no anchor commitment carries no orienting signal — the system refuses to recommend, because every recommendation it could make would be an arbitrary pick from the 448-recipe library.
 

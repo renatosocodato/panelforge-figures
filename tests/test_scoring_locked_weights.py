@@ -73,16 +73,24 @@ class TestMatchBool:
         assert match_bool(True, True) == 1.0
 
     def test_both_false(self) -> None:
-        # Symmetric: a False/False is a "match".  No penalty for non-factorial
-        # recipes in non-factorial projects.
-        assert match_bool(False, False) == 1.0
+        # DEFECT-A2 fix: presence-checked semantics — only profile=True
+        # AND recipe=True earns the weight.  Both False = no contribution
+        # (matches RECIPE_SELECTION.md worked-example arithmetic).
+        assert match_bool(False, False) == 0.0
 
     def test_recipe_false_profile_true(self) -> None:
         # Spec note: "no penalty, just no contribution".
         assert match_bool(False, True) == 0.0
 
+    def test_recipe_true_profile_false(self) -> None:
+        # Asymmetric: a factorial-tagged recipe in a non-factorial
+        # project does NOT earn the weight.
+        assert match_bool(True, False) == 0.0
+
     def test_recipe_none_treated_as_false(self) -> None:
-        assert match_bool(None, False) == 1.0
+        # Both "None" and False sides yield 0.0 — only explicit True/True
+        # matches.
+        assert match_bool(None, False) == 0.0
         assert match_bool(None, True) == 0.0
 
 
@@ -331,22 +339,22 @@ def test_soft_scoring_orders_descending() -> None:
         warnings.simplefilter("ignore", UserWarning)
         out = score_recipes(profile, fixtures)
 
-    # Recompute expected scores post-DEFECT-2-fix (static/static = 0.3,
-    # so dynamics contributes 0.045 in static profiles):
-    # perfect:        0.30 + 0.25 + 0.20 + 0.045 + 0.07 = 0.865
-    # no_anchor:      0.30 + 0.25 + 0.00 + 0.045 + 0.07 = 0.665
-    # no_equiv:       0.30 + 0.00 + 0.20 + 0.045 + 0.07 = 0.615
-    # generic_anchor: 0.30 + 0.25 + 0.10 + 0.045 + 0.07 = 0.765
-    # live_dyn:       0.30 + 0.25 + 0.20 + 0.000 + 0.07 = 0.820
-    #   (dynamics=live with profile=static → 0.0; recipe=live not static
-    #    so no fallback either)
-    expected_order = ["perfect", "live_dyn", "generic_anchor", "no_anchor", "no_equiv"]
+    # Recompute expected scores post-DEFECT-A2-fix (presence-checked
+    # match_bool means factorial=False/False contributes 0.0 not 0.30;
+    # match_dim(2D, mixed) = 0.7 always when profile is mixed):
+    # profile is DISC1 + equivalence + static + dim=mixed (factorial=False)
+    # perfect:        0.00 + 0.25 + 0.20 + 0.045 + 0.07 = 0.565
+    # no_anchor:      0.00 + 0.25 + 0.00 + 0.045 + 0.07 = 0.365
+    # no_equiv:       0.00 + 0.00 + 0.20 + 0.045 + 0.07 = 0.315
+    # generic_anchor: 0.00 + 0.25 + 0.10 + 0.045 + 0.07 = 0.465
+    # live_dyn:       0.00 + 0.25 + 0.20 + 0.000 + 0.07 = 0.520
+    #
+    # Threshold (≥0.40) drops no_anchor + no_equiv.  Top-3 survives.
+    expected_order = ["perfect", "live_dyn", "generic_anchor"]
     assert [r.name for r in out] == expected_order
-    assert out[0].score == pytest.approx(0.865, abs=1e-4)
-    assert out[1].score == pytest.approx(0.820, abs=1e-4)
-    assert out[2].score == pytest.approx(0.765, abs=1e-4)
-    assert out[3].score == pytest.approx(0.665, abs=1e-4)
-    assert out[4].score == pytest.approx(0.615, abs=1e-4)
+    assert out[0].score == pytest.approx(0.565, abs=1e-4)
+    assert out[1].score == pytest.approx(0.520, abs=1e-4)
+    assert out[2].score == pytest.approx(0.465, abs=1e-4)
 
 
 # ---------------------------------------------------------------------------
@@ -368,13 +376,15 @@ def test_spec_worked_example_top_three() -> None:
     """
     profile = _profile_compartment_aware()
 
-    # Score by hand (post Wave-2 polish: DEFECT-2 fix means static/static
-    # lands on the 0.3 baseline, not 1.0):
-    #   0.0 (factorial mismatch) + 0.25 (equiv) + 0.10 (generic anchor 0.5)
-    #   + 0.045 (static-baseline 0.3 × 0.15) + 0.07 (mixed dim 0.7 × 0.10)
-    #   = 0.465
-    # If the fixture used anchor="DISC1" instead of "generic", the score
-    # would match the spec's documented 0.565 exactly.
+    # Score by hand (post Wave-3 polish: DEFECT-A2 presence-checked
+    # match_bool + DEFECT-2 static-baseline + match_dim mixed carve-out):
+    #   0.00 (factorial mismatch — presence-checked: profile=False, no credit)
+    #   + 0.25 (equivalence presence-checked: True/True)
+    #   + 0.20 (DISC1 anchor exact)
+    #   + 0.045 (static-baseline 0.3 × 0.15)
+    #   + 0.07 (mixed dim carve-out 0.7 × 0.10)
+    #   = 0.565
+    # This now matches the spec §3.7 documented value EXACTLY.
     spec_top3 = [
         {
             "modality": "biophysics_scaling",
@@ -385,7 +395,7 @@ def test_spec_worked_example_top_three() -> None:
                 "compartment_aware": True,
                 "factorial": True,                # mismatch with profile (False)
                 "equivalence": True,
-                "anchor": "generic",
+                "anchor": "DISC1",
                 "dynamics": "static",
                 "dimensionality": "2D",
                 "wave": "v1.0",
@@ -400,7 +410,7 @@ def test_spec_worked_example_top_three() -> None:
                 "compartment_aware": True,
                 "factorial": True,
                 "equivalence": True,
-                "anchor": "generic",
+                "anchor": "DISC1",
                 "dynamics": "static",
                 "dimensionality": "2D",
                 "wave": "v1.0",
@@ -415,7 +425,7 @@ def test_spec_worked_example_top_three() -> None:
                 "compartment_aware": True,
                 "factorial": True,
                 "equivalence": True,
-                "anchor": "generic",
+                "anchor": "DISC1",
                 "dynamics": "static",
                 "dimensionality": "3D",
                 "wave": "v1.1.0-beta-001",
@@ -447,10 +457,9 @@ def test_spec_worked_example_top_three() -> None:
     for r in out:
         assert r.score >= MINIMUM_SCORE_FOR_SHORTLIST
         assert r.score < 1.0
-    # Post-DEFECT-2-fix score = 0.465 (see arithmetic comment above).
-    # Spec's documented 0.565 uses DISC1 anchor; this fixture uses generic.
+    # Post-DEFECT-A2 fix: scoring now reproduces spec §3.7 exactly.
     for r in out:
-        assert 0.45 <= r.score <= 0.48
+        assert r.score == pytest.approx(0.565, abs=1e-4)
 
 
 # ---------------------------------------------------------------------------
@@ -644,9 +653,11 @@ def test_below_threshold_returns_empty_with_warning() -> None:
 
 
 def test_score_recipes_returns_scored_recipe_dataclasses() -> None:
+    # Use a factorial+DISC1 profile so the recipe scores ≥0.40 under
+    # post-DEFECT-A2 presence-checked semantics.
     profile = ProjectProfile(
-        manuscript_anchor="none",
-        factorial_design=False,
+        manuscript_anchor="DISC1",
+        factorial_design=True,
         equivalence_claims=False,
         dynamics_needed="static",
         dimensionality="2D",
@@ -658,7 +669,7 @@ def test_score_recipes_returns_scored_recipe_dataclasses() -> None:
             "modality": "m1", "name": "r", "family": "f",
             "answers_question": "Q",
             "tags": {
-                "factorial": False, "equivalence": False, "anchor": "generic",
+                "factorial": True, "equivalence": False, "anchor": "DISC1",
                 "dynamics": "static", "dimensionality": "2D",
             },
         },

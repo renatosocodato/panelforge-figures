@@ -1,0 +1,136 @@
+name: recipe_tags_audit
+
+# Weekly audit of the recipe-discovery surface: catches drift between the
+# auto-tagger output, the YAML overrides in `docs/recipe_tags.yaml`, and
+# the committed `recipes_index.json`. Also runs the slow e2e suite that
+# PR runs skip via `-m "not slow"`.
+#
+# Schedule: Mondays 08:00 UTC (weekly).
+# Manual: `workflow_dispatch` from the GitHub UI.
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  audit-tags:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+      - name: Audit tag drift
+        id: audit
+        run: |
+          python - <<'PY' | tee /tmp/audit_report.txt
+          import json
+          import sys
+          from pathlib import Path
+
+          import yaml
+
+          from panelforge_figures.manifest.auto_tag import auto_tag_all
+
+          auto = auto_tag_all()
+          yaml_path = Path("docs/recipe_tags.yaml")
+          overrides = yaml.safe_load(yaml_path.read_text()) or {}
+
+          auto_keys = set(auto.keys())
+          override_keys = set(overrides.keys())
+          merged = auto_keys & override_keys
+          auto_only = auto_keys - override_keys
+          override_only = override_keys - auto_keys
+
+          index = json.loads(Path("recipes_index.json").read_text())
+          index_keys = {
+              f"{m['name']}.{r['name']}"
+              for m in index.get("modalities", [])
+              for r in m.get("recipes", [])
+          }
+
+          # Drift: a YAML override pointing at a recipe that no longer exists.
+          stale_overrides = override_keys - index_keys
+          # Drift: an auto-tagger entry not present in the committed index
+          # (means the tagger sees recipes the index doesn't, or vice versa).
+          missing_in_index = auto_keys - index_keys
+          missing_in_auto = index_keys - auto_keys
+
+          print(f"auto_total={len(auto_keys)}")
+          print(f"override_total={len(override_keys)}")
+          print(f"merged_total={len(merged)}")
+          print(f"auto_only={len(auto_only)}")
+          print(f"override_only={len(override_only)}")
+          print(f"index_total={len(index_keys)}")
+          print(f"stale_overrides={len(stale_overrides)}")
+          print(f"missing_in_index={len(missing_in_index)}")
+          print(f"missing_in_auto={len(missing_in_auto)}")
+
+          if stale_overrides or missing_in_index or missing_in_auto:
+              print("DRIFT_DETECTED=1")
+              if stale_overrides:
+                  print("# Stale overrides (YAML keys not in registry):")
+                  for k in sorted(stale_overrides):
+                      print(f"  - {k}")
+              if missing_in_index:
+                  print("# Auto-tagged recipes missing from recipes_index.json:")
+                  for k in sorted(missing_in_index):
+                      print(f"  - {k}")
+              if missing_in_auto:
+                  print("# Index recipes missing from auto-tagger output:")
+                  for k in sorted(missing_in_auto):
+                      print(f"  - {k}")
+              sys.exit(2)
+          else:
+              print("DRIFT_DETECTED=0")
+          PY
+      - name: Open drift issue
+        if: failure() && steps.audit.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "recipe_tags_audit: drift detected $(date -u +%Y-%m-%d)" \
+            --label "audit,recipe-discovery" \
+            --body-file /tmp/audit_report.txt
+
+  slow-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+      - name: Test (slow suite)
+        # Override pyproject `addopts` default of `-m "not slow"` so we
+        # actually run the slow-marked tests here.
+        run: pytest -o "addopts=-ra --strict-markers --strict-config" -m slow --cov=panelforge_figures --cov-report=xml --cov-report=term-missing
+      - name: Upload coverage
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-slow-${{ github.run_id }}
+          path: coverage.xml
+          if-no-files-found: ignore

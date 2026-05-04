@@ -119,6 +119,13 @@ def _load_yaml(path: Path) -> dict[str, Any]:
         return loaded if isinstance(loaded, dict) else {}
     except ImportError:
         return _parse_yaml_minimal(text)
+    except yaml.YAMLError:                  # type: ignore[name-defined]
+        # DEFECT-A9 fix (Wave-3 polish): malformed panelforge.project.yaml
+        # falls back to the minimal parser instead of propagating
+        # YAMLError out of scan_project.  If the minimal parser also
+        # can't make sense of it, we return {} and the scanner falls
+        # back to text-only inference.
+        return _parse_yaml_minimal(text)
 
 
 def _parse_yaml_minimal(text: str) -> dict[str, Any]:

@@ -11,7 +11,7 @@ project follows semantic versioning.
 - (No active beta pack — open for next manuscript-companion or
   cross-modality primitive batch.)
 
-## [1.6.0-recipe-discovery] — 2026-05-02 [SYSTEM COMPLETE]
+## [1.6.0-recipe-discovery] — 2026-05-04 [SYSTEM COMPLETE]
 
 **Recipe-discovery system — COMPLETE.** 4 waves, ~12 working days,
 multi-agent parallel swarm execution. Lands the end-to-end pipeline
@@ -26,17 +26,18 @@ discovery + intake, not new recipes), but every recipe now carries
 auto-derived tags (`anchor`, `factorial`, `equivalence`,
 `compartment_aware`, `scale_aware`, `wave`, `dimensionality`,
 `dynamics`) plus optional manual overrides via `docs/recipe_tags.yaml`.
-Tests **2356 → ~2600** (+244). PRs **#50 → #54**. Tag
+Tests **2356 → 2552** (+196 unit tests + 2 slow e2e tests). PRs
+**#50 → #53** + system-closeout #54. Tag
 **`v1.6.0-recipe-discovery`**.
 
 ### Per-wave delta
 
-| Wave | Theme | PR | Catalog | Tests Δ |
-|---|---|---|---|---|
-| w1 | machine-readable index — `recipes_index.json` schema, `figures index emit/validate`, raw-GitHub fetch contract, CI drift gate | #50 | 448 | +52 |
-| w2 | auto-tagger + override merge — `manifest/auto_tag.py`, `docs/recipe_tags.yaml`, scoring vector for `(anchor, factorial, equivalence, compartment_aware, scale_aware)` | #51 | 448 | +71 |
-| w3 | intake + scoring + project-scan — `manifest/intake.py` (yes/no/unknown questionnaire), `manifest/scoring.py` (weighted sim across 8 dims), `manifest/project_scan.py` (heuristic anchor/modality detection from manuscript repo) | #52 | 448 | +63 |
-| w4 | autonomous loop + agent docs — `manifest/render_loop.py`, `figures plan/agent` subcommands, `AGENT_BOOTSTRAP.md`, `CLAUDE_CODE_AUTONOMOUS.md`, `docs/AGENT_RECIPES.md`, weekly audit CI | #53, #54 | 448 | +58 |
+| Wave | Theme | PR | Tests Δ |
+|---|---|---|---|
+| w1 | machine-readable index — `recipes_index.json` schema, `figures index emit/validate`, raw-GitHub fetch contract, CI drift gate, `AGENT_BOOTSTRAP.md` | #50 | +25 |
+| w2 | auto-tagger + override merge + intake + scoring — `manifest/auto_tag.py`, `manifest/scoring.py` (locked weights factorial 0.30 / equivalence 0.25 / anchor 0.20 / dynamics 0.15 / dim 0.10), `manifest/intake.py` (8-question Click flow), `docs/recipe_tags.yaml` (93 entries), `docs/RECIPE_SELECTION.md` decision log + Wave-1 polish | #51 | +99 |
+| w3 | autonomous flow — `manifest/project_scan.py` (manuscript + data inference), `manifest/data_bridge.py` (3-pass column→contract mapping with lazy LLM Pass-3), `manifest/render_loop.py` (per-recipe iterate + RENDER_REPORT.md), `CLAUDE_CODE_AUTONOMOUS.md`, sample_project fixture + Wave-2 polish bundle | #52 | +58 |
+| w4 | final polish + e2e + audit — `tests/test_e2e_discovery.py` (full transcript), `docs/AGENT_RECIPES.md` tutorial, `panelforge_workspace/README.md`, weekly `recipe_tags_audit.yml` CI workflow + Wave-3 polish bundle (DEFECT-A2 fix: `match_bool` presence-checked → spec §3.7 reproduces 0.565 exactly) | #53 | +14 |
 
 ### Catalog impact
 
@@ -79,25 +80,22 @@ Tests **2356 → ~2600** (+244). PRs **#50 → #54**. Tag
 
 ### New `manifest/` modules
 
-| Module | Approx. LOC | Role |
-|---|---|---|
-| `manifest/auto_tag.py` | ~360 | Heuristic tag derivation from registry metadata |
-| `manifest/catalog.py` | ~210 | In-memory catalog with merged-tag projection |
-| `manifest/data_bridge.py` | ~140 | Map intake answers → adapter availability checks |
-| `manifest/intake.py` | ~290 | Yes/no/unknown questionnaire + saved transcripts |
-| `manifest/project_scan.py` | ~310 | Heuristic anchor/modality detection from manuscript repo |
-| `manifest/render_loop.py` | ~245 | Autonomous intake → plan → render loop |
-| `manifest/resolver.py` | ~180 | Resolve scored candidates to manifest entries |
-| `manifest/schema.py` | ~120 | Pydantic models for index + intake + plan |
-| `manifest/scoring.py` | ~200 | Weighted similarity across 8 tag dims |
+| Module | Approx. LOC | Role | Wave |
+|---|---|---|---|
+| `manifest/auto_tag.py` | ~380 | Heuristic tag derivation from registry metadata | w2 |
+| `manifest/scoring.py` | ~370 | Locked-weight scorer + funnel + tie-breakers | w2 |
+| `manifest/intake.py` | ~415 | 8-question Click prompts + pre-fill hooks | w2 |
+| `manifest/project_scan.py` | ~430 | Manuscript + data discovery → 6-of-8 intake pre-fill | w3 |
+| `manifest/data_bridge.py` | ~595 | 3-pass column→contract mapping (exact / fuzzy / lazy LLM) | w3 |
+| `manifest/render_loop.py` | ~545 | Per-recipe iterator + RENDER_REPORT.md + error containment | w3 |
 
 ### Test surface
 
-**2356 → ~2600 (+244)** across the 4 waves. Each wave landed unit
-tests for its module plus integration tests against the full 448-
-recipe registry. `slow` marker introduced for the e2e
-`figures agent` loop (skipped on PRs via `-m "not slow"`, run
-weekly in `recipe_tags_audit.yml`).
+**2356 → 2552 (+196)** across the 4 waves, plus 2 slow e2e tests.
+Each wave landed unit tests for its module plus integration tests
+against the full 448-recipe registry. `@pytest.mark.slow` marker
+introduced in Wave 4 for the e2e `figures generate` loop (skipped
+on PRs via `-m "not slow"`, run weekly in `recipe_tags_audit.yml`).
 
 ### Multi-agent swarm execution metrics
 

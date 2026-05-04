@@ -476,13 +476,23 @@ def bind_recipe_to_data(
         )
         bindings.append(binding)
 
-    fully_bound = all(b.data_source is not None for b in bindings if b.is_required)
+    fully_bound = compute_fully_bound(bindings)
     return RecipeBinding(
         full_name=recipe_full_name,
         bindings=tuple(bindings),
         fully_bound=fully_bound,
         skipped_reason=None if fully_bound else "missing required fields",
     )
+
+
+def compute_fully_bound(bindings: Iterable[FieldBinding]) -> bool:
+    """Return ``True`` iff every required field has a non-None data source.
+
+    Single source of truth for the ``fully_bound`` predicate — both
+    :func:`bind_recipe_to_data` and CLI consumers reading from the
+    on-disk cache call into this helper so they cannot diverge.
+    """
+    return all(b.data_source is not None for b in bindings if b.is_required)
 
 
 def bind_shortlist_to_data(
@@ -589,6 +599,12 @@ def to_render_binding(binding: RecipeBinding) -> Any:
     """Convert canonical ``data_bridge.RecipeBinding`` to the flat-shape
     ``render_loop.RenderBinding`` consumed by the render loop.
 
+    Populates ``data_file_per_field`` so multi-source bindings (a recipe
+    whose fields draw from two or more files) are preserved end-to-end.
+    ``data_file_id`` is also set when every field happens to share a
+    single source — kept for back-compat with callers that still read
+    that attribute.
+
     Lazily imports ``render_loop`` to avoid an import cycle.
     """
     from .render_loop import RenderBinding
@@ -597,14 +613,18 @@ def to_render_binding(binding: RecipeBinding) -> Any:
         for fb in binding.bindings
         if fb.column_name is not None
     }
-    sources = {
-        fb.data_source for fb in binding.bindings if fb.data_source is not None
+    data_file_per_field = {
+        fb.contract_field: fb.data_source
+        for fb in binding.bindings
+        if fb.data_source is not None
     }
+    sources = set(data_file_per_field.values())
     data_file_id = str(next(iter(sources))) if len(sources) == 1 else None
     return RenderBinding(
         full_name=binding.full_name,
         fully_bound=binding.fully_bound,
         column_mapping=column_mapping,
+        data_file_per_field=data_file_per_field,
         data_file_id=data_file_id,
         unbound_reason=binding.skipped_reason,
     )
@@ -625,6 +645,7 @@ __all__ = [
     "RecipeBinding",
     "bind_recipe_to_data",
     "bind_shortlist_to_data",
+    "compute_fully_bound",
     "discover_data_files",
     "load_bindings_cache",
     "to_render_binding",

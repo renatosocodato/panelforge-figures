@@ -203,6 +203,19 @@ def test_e2e_project_scan_disc1_fixture() -> None:
     assert result.answers["manuscript_anchor"].value == "DISC1"
     assert result.answers["equivalence_claims"].value is True
 
+    # DEFECT-A1 regression gate (PR #55): the fixture's README says
+    # "Live-cell experiments not yet completed (this manuscript is
+    # fixed-cell only)" — the scanner MUST NOT infer dynamics_needed
+    # = "live" from this negated mention.  Assert the post-fix state.
+    dyn = result.answers["dynamics_needed"]
+    if dyn.confidence >= 0.7:
+        assert dyn.value != "live", (
+            f"DEFECT-A1 regression: scanner inferred dynamics_needed='live' "
+            f"at high confidence ({dyn.confidence:.2f}) for the DISC1 "
+            "fixture, but the README explicitly says live-cell experiments "
+            "are 'not yet completed'.  See PR #55 for the negation/proximity fix."
+        )
+
 
 # ────────────────────────── Step 3 — intake assembly ───────────────────
 

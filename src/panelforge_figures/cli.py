@@ -529,6 +529,7 @@ def bridge_cmd(
 def generate_cmd(bindings_path: Path, data_dir: Path, out_dir: Path) -> None:
     """Render bound recipes; write figures + RENDER_REPORT.md."""
     from .manifest import (
+        compute_fully_bound,
         discover_data_files,
         load_bindings_cache,
         render_shortlist,
@@ -543,15 +544,17 @@ def generate_cmd(bindings_path: Path, data_dir: Path, out_dir: Path) -> None:
     for (full_name, _field), fb in cache.items():
         by_recipe.setdefault(full_name, []).append(fb)
     # Reconstruct RecipeBindings (canonical data_bridge shape).
+    # `fully_bound` MUST be derived via `compute_fully_bound` so the CLI
+    # cannot diverge from `bind_recipe_to_data`'s definition (DEFECT-A7).
     from .manifest.data_bridge import RecipeBinding as _RB
     rbs = []
     for fn, fbs in by_recipe.items():
-        all_bound = all(fb.column_name is not None for fb in fbs)
+        all_bound = compute_fully_bound(fbs)
         rbs.append(_RB(
             full_name=fn,
             bindings=tuple(fbs),
             fully_bound=all_bound,
-            skipped_reason=None if all_bound else "unbound fields",
+            skipped_reason=None if all_bound else "missing required fields",
         ))
     files = discover_data_files(data_dir)
     log = render_shortlist(

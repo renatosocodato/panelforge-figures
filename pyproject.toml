@@ -52,9 +52,10 @@ dev = [
 ]
 
 [project.urls]
+Documentation = "https://github.com/renatosocodato/panelforge-figures/blob/main/AGENT_BOOTSTRAP.md"
 Homepage = "https://github.com/renatosocodato/panelforge-figures"
-Repository = "https://github.com/renatosocodato/panelforge-figures"
 Issues = "https://github.com/renatosocodato/panelforge-figures/issues"
+Repository = "https://github.com/renatosocodato/panelforge-figures"
 
 [project.scripts]
 figures = "panelforge_figures.cli:main"

@@ -318,10 +318,11 @@ def test_autonomous_md_panelforge_yaml_schema_block() -> None:
 
 
 def test_autonomous_md_length_in_band() -> None:
-    """Spec aim is ~150-200 lines; allow some slack but flag runaway docs."""
+    """Spec aim is ~150-200 lines; ceiling raised to 320 in PR #55 to
+    accommodate the privacy & data-handling disclosure block."""
     n_lines = len(AUTONOMOUS_MD.read_text().splitlines())
-    assert 100 <= n_lines <= 280, (
-        f"CLAUDE_CODE_AUTONOMOUS.md has {n_lines} lines; expected 100-280"
+    assert 100 <= n_lines <= 320, (
+        f"CLAUDE_CODE_AUTONOMOUS.md has {n_lines} lines; expected 100-320"
     )
 
 

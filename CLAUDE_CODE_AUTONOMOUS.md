@@ -189,6 +189,49 @@ Passes 1 and 2 always run.
 
 ---
 
+## Privacy & data handling (Pass-3 LLM)
+
+When Pass-3 LLM column mapping is enabled (i.e. both
+`ANTHROPIC_API_KEY` is set **and** the `claude-autonomous` extra is
+installed), the bridge sends the following to Anthropic's API:
+
+**What IS sent to Anthropic:**
+
+| Field | Example | Sourced from |
+|---|---|---|
+| Contract field name | `"estimates"` | recipe `_META.required_fields` |
+| Field type | `"list[float]"` | Pydantic type annotation |
+| Field description | `"Per-cell standardized effect sizes."` | Pydantic field's `description=` |
+| Candidate column names | `"cell_id"`, `"area_um2"`, `"velocity_um_per_min"` | user's data file headers |
+
+**What is NEVER sent to Anthropic:**
+
+- Cell-level data values from the user's CSV/Parquet files (sample
+  values are explicitly stripped — `_llm_pass` is invoked with
+  `samples={}` at the only call site in `data_bridge.py`).
+- The user's manuscript, methods, README, or any free-text project
+  content.
+- Project filesystem paths beyond the bare column names that the
+  bridge needs to score.
+
+**To opt out**: simply omit `ANTHROPIC_API_KEY` from your environment,
+**or** install without the `claude-autonomous` extra (`pip install
+panelforge-figures` instead of `pip install
+panelforge-figures[claude-autonomous]`). Pass-1 (exact match) and
+Pass-2 (fuzzy match) always run locally and never make network calls.
+Recipes whose required fields are not bound by Pass-1 + Pass-2 will
+surface in the checkpoint-2 mapping table for manual review.
+
+**Data retention**: Anthropic's API retention policy applies; see
+<https://www.anthropic.com/legal/privacy>. Column names are typically
+short, low-entropy strings (e.g. `area_um2`, `compartment`) and are
+unlikely to constitute PHI/PII unless your column-naming convention
+encodes it directly (e.g. `patient_DOB_yyyymmdd`). The bridge does
+not inspect column names for sensitive content — that responsibility
+sits with the user.
+
+---
+
 ## `panelforge.project.yaml` schema
 
 A user can short-circuit the scan + intake by committing this file at

@@ -472,3 +472,197 @@ def test_keyboard_interrupt_propagates(tmp_path: Path, _csv_data: RenderDataFile
                 data_files=[_csv_data],
                 out_dir=tmp_path / "figs",
             )
+
+
+# ─────────────────────── multi-source binding (A6/A7) ───────────────────
+
+
+def test_multi_source_render_binding_preserves_all_files(tmp_path: Path) -> None:
+    """`to_render_binding` must populate ``data_file_per_field`` with the
+    per-field source paths so multi-file recipes survive the conversion.
+
+    Regression test for DEFECT-A6: previously, when a recipe pulled
+    fields from 2+ files, ``data_file_id`` collapsed to ``None`` and the
+    render loop loaded nothing — every multi-source recipe failed
+    silently with an ``error_contract`` outcome.
+    """
+    from panelforge_figures.manifest.data_bridge import (
+        FieldBinding,
+        RecipeBinding,
+        to_render_binding,
+    )
+
+    csv_a = tmp_path / "a.csv"
+    csv_b = tmp_path / "b.csv"
+    csv_a.write_text("col_x\n1.0\n", encoding="utf-8")
+    csv_b.write_text("col_y\n2.0\n", encoding="utf-8")
+
+    rb = RecipeBinding(
+        full_name="multi.example",
+        bindings=(
+            FieldBinding(
+                contract_field="xs", field_type="list[float]", is_required=True,
+                data_source=csv_a, column_name="col_x",
+                pass_used="exact", confidence=1.0,
+            ),
+            FieldBinding(
+                contract_field="ys", field_type="list[float]", is_required=True,
+                data_source=csv_b, column_name="col_y",
+                pass_used="exact", confidence=1.0,
+            ),
+        ),
+        fully_bound=True,
+        skipped_reason=None,
+    )
+    rendered = to_render_binding(rb)
+    assert rendered.data_file_per_field == {"xs": csv_a, "ys": csv_b}
+    # data_file_id collapses to None when sources differ — the render loop
+    # uses data_file_per_field instead, so this is correct behaviour.
+    assert rendered.data_file_id is None
+
+
+def test_multi_source_recipe_renders_without_error_contract(tmp_path: Path) -> None:
+    """A recipe whose contract pulls columns from two different CSVs must
+    render successfully end-to-end via the render loop's multi-source
+    code path.
+    """
+    ok_name = _make_test_recipe("ok_multi_source")
+    csv_x = tmp_path / "x.csv"
+    csv_y = tmp_path / "y.csv"
+    pd.DataFrame({"col_x": [0.0, 1.0, 2.0]}).to_csv(csv_x, index=False)
+    pd.DataFrame({"col_y": [0.0, 1.0, 4.0]}).to_csv(csv_y, index=False)
+
+    binding = RenderBinding(
+        full_name=ok_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_per_field={"xs": csv_x, "ys": csv_y},
+    )
+
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[],  # The loop reads paths directly from data_file_per_field.
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_attempted == 1
+    assert log.n_success == 1
+    assert log.outcomes[0].status == "success"
+
+
+def test_multi_source_via_to_render_binding_e2e(tmp_path: Path) -> None:
+    """End-to-end: build a `RecipeBinding` (canonical shape) with fields
+    in two files, convert via ``to_render_binding``, render — must succeed.
+    """
+    from panelforge_figures.manifest.data_bridge import (
+        FieldBinding,
+        RecipeBinding,
+        to_render_binding,
+    )
+
+    ok_name = _make_test_recipe("ok_multi_e2e")
+    csv_x = tmp_path / "fx.csv"
+    csv_y = tmp_path / "fy.csv"
+    pd.DataFrame({"col_x": [0.0, 1.0]}).to_csv(csv_x, index=False)
+    pd.DataFrame({"col_y": [0.0, 1.0]}).to_csv(csv_y, index=False)
+
+    canonical = RecipeBinding(
+        full_name=ok_name,
+        bindings=(
+            FieldBinding(
+                contract_field="xs", field_type="list[float]", is_required=True,
+                data_source=csv_x, column_name="col_x",
+                pass_used="exact", confidence=1.0,
+            ),
+            FieldBinding(
+                contract_field="ys", field_type="list[float]", is_required=True,
+                data_source=csv_y, column_name="col_y",
+                pass_used="exact", confidence=1.0,
+            ),
+        ),
+        fully_bound=True,
+        skipped_reason=None,
+    )
+    flat = to_render_binding(canonical)
+    log = render_shortlist(
+        bindings=[flat],
+        data_files=[],
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_success == 1
+    assert log.outcomes[0].status == "success"
+
+
+def test_unified_fully_bound_definition(tmp_path: Path) -> None:
+    """The CLI's reconstruction logic must match `bind_recipe_to_data`'s
+    fully_bound output — both call into ``compute_fully_bound``.
+
+    Fixture: 3 required fields, only 2 bound → both code paths must
+    return ``False``.  This is the regression test for DEFECT-A7's
+    inconsistency between the CLI and the canonical predicate.
+    """
+    from panelforge_figures.manifest.data_bridge import (
+        FieldBinding,
+        compute_fully_bound,
+    )
+
+    fbs = [
+        FieldBinding(
+            contract_field="a", field_type="list[float]", is_required=True,
+            data_source=tmp_path / "a.csv", column_name="a",
+            pass_used="exact", confidence=1.0,
+        ),
+        FieldBinding(
+            contract_field="b", field_type="list[float]", is_required=True,
+            data_source=tmp_path / "b.csv", column_name="b",
+            pass_used="exact", confidence=1.0,
+        ),
+        FieldBinding(
+            contract_field="c", field_type="list[float]", is_required=True,
+            data_source=None, column_name=None,
+            pass_used="unbound", confidence=0.0,
+        ),
+    ]
+    # 1 of 3 required is unbound → must be False.
+    assert compute_fully_bound(fbs) is False
+    # Old CLI definition (column_name-based) would have agreed here, but
+    # they could diverge for cases where column_name is set but
+    # data_source is not — the helper guarantees a single answer.
+    column_based = all(fb.column_name is not None for fb in fbs)
+    source_based = compute_fully_bound(fbs)
+    assert column_based == source_based  # they agree in this case
+    # And when fully bound:
+    fbs_bound = [
+        FieldBinding(
+            contract_field="a", field_type="list[float]", is_required=True,
+            data_source=tmp_path / "a.csv", column_name="a",
+            pass_used="exact", confidence=1.0,
+        ),
+        FieldBinding(
+            contract_field="b", field_type="list[float]", is_required=True,
+            data_source=tmp_path / "b.csv", column_name="b",
+            pass_used="exact", confidence=1.0,
+        ),
+    ]
+    assert compute_fully_bound(fbs_bound) is True
+
+
+def test_data_file_id_back_compat_still_works(
+    tmp_path: Path, _csv_data: RenderDataFile
+) -> None:
+    """Bindings using only the legacy ``data_file_id`` (no
+    ``data_file_per_field``) must still load data correctly via
+    the single-source fallback path."""
+    ok_name = _make_test_recipe("ok_data_file_id_back_compat")
+    binding = RenderBinding(
+        full_name=ok_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx",  # legacy field — no data_file_per_field set.
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[_csv_data],
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_success == 1
+    assert log.outcomes[0].status == "success"

@@ -463,3 +463,132 @@ def test_unknown_recipe_returns_skipped() -> None:
     assert rb.fully_bound is False
     assert rb.bindings == ()
     assert rb.skipped_reason and "unknown recipe" in rb.skipped_reason
+
+
+# ---------------------------------------------------------------------------
+# Test 11 — Multi-source render binding (DEFECT-A6/A7)
+# ---------------------------------------------------------------------------
+
+
+def test_to_render_binding_multi_source(tmp_path: Path) -> None:
+    """Three FieldBindings spanning two unique data_sources must produce a
+    ``data_file_per_field`` mapping that preserves every bound field.
+
+    This is the regression test for DEFECT-A6: previously, if any binding
+    pointed to a different file than another, ``data_file_id`` collapsed
+    to ``None`` and the whole recipe silently failed at render time.
+    """
+    csv_a = tmp_path / "a.csv"
+    csv_b = tmp_path / "b.csv"
+    csv_a.write_text("cell_id,area_um2\n1,12.5\n", encoding="utf-8")
+    csv_b.write_text("velocity\n0.42\n", encoding="utf-8")
+
+    fb_cell = db.FieldBinding(
+        contract_field="cell_id", field_type="list[int]", is_required=True,
+        data_source=csv_a, column_name="cell_id",
+        pass_used="exact", confidence=1.0,
+    )
+    fb_area = db.FieldBinding(
+        contract_field="area_um2", field_type="list[float]", is_required=True,
+        data_source=csv_a, column_name="area_um2",
+        pass_used="exact", confidence=1.0,
+    )
+    fb_vel = db.FieldBinding(
+        contract_field="velocity", field_type="list[float]", is_required=True,
+        data_source=csv_b, column_name="velocity",
+        pass_used="exact", confidence=1.0,
+    )
+    rb = db.RecipeBinding(
+        full_name="multi.example",
+        bindings=(fb_cell, fb_area, fb_vel),
+        fully_bound=True,
+        skipped_reason=None,
+    )
+
+    rendered = db.to_render_binding(rb)
+    # data_file_per_field must contain all 3 fields, mapping to their sources.
+    assert rendered.data_file_per_field == {
+        "cell_id": csv_a,
+        "area_um2": csv_a,
+        "velocity": csv_b,
+    }
+    # Multi-source → data_file_id collapses to None (this is fine — the
+    # render loop now drives off data_file_per_field instead).
+    assert rendered.data_file_id is None
+    assert rendered.fully_bound is True
+
+
+def test_to_render_binding_multi_source_with_unbound_field(tmp_path: Path) -> None:
+    """Three FieldBindings, two unique sources, one unbound: per-field map
+    has 2 entries (only the bound fields)."""
+    csv_a = tmp_path / "a.csv"
+    csv_b = tmp_path / "b.csv"
+    csv_a.write_text("x\n1\n", encoding="utf-8")
+    csv_b.write_text("y\n2\n", encoding="utf-8")
+
+    fb_x = db.FieldBinding(
+        contract_field="x", field_type="list[float]", is_required=True,
+        data_source=csv_a, column_name="x",
+        pass_used="exact", confidence=1.0,
+    )
+    fb_y = db.FieldBinding(
+        contract_field="y", field_type="list[float]", is_required=True,
+        data_source=csv_b, column_name="y",
+        pass_used="exact", confidence=1.0,
+    )
+    fb_z = db.FieldBinding(
+        contract_field="z", field_type="list[float]", is_required=True,
+        data_source=None, column_name=None,
+        pass_used="unbound", confidence=0.0,
+    )
+    rb = db.RecipeBinding(
+        full_name="multi.partial",
+        bindings=(fb_x, fb_y, fb_z),
+        fully_bound=False,
+        skipped_reason="missing required fields",
+    )
+
+    rendered = db.to_render_binding(rb)
+    # Only 2 entries — unbound field is omitted (no source to record).
+    assert rendered.data_file_per_field == {"x": csv_a, "y": csv_b}
+    assert rendered.data_file_id is None
+
+
+# ---------------------------------------------------------------------------
+# Test 12 — compute_fully_bound (DEFECT-A7 unification)
+# ---------------------------------------------------------------------------
+
+
+def test_compute_fully_bound_helper_matches_bind_recipe_to_data(
+    tmp_path: Path,
+) -> None:
+    """`compute_fully_bound` is the single source of truth for the
+    ``fully_bound`` predicate — `bind_recipe_to_data`'s output must
+    agree with what the helper returns when given the same FieldBindings.
+    """
+    csv_path = _write_csv(tmp_path / "d.csv", ["estimates", "counts"])
+    df = db.DataFile(
+        path=csv_path, format="csv",
+        columns=("estimates", "counts"), n_rows=3,
+    )
+    rb = db.bind_recipe_to_data(
+        recipe_full_name="_test_db_modality.two_field_recipe",
+        data_files=[df],
+        use_llm=False,
+    )
+    # Direct reconstruction via the helper must match the recipe binding.
+    assert db.compute_fully_bound(rb.bindings) == rb.fully_bound
+
+    # And: stripping a required source should flip both consistently.
+    partial = tuple(
+        db.FieldBinding(
+            contract_field=b.contract_field, field_type=b.field_type,
+            is_required=b.is_required,
+            data_source=None if b.contract_field == "counts" else b.data_source,
+            column_name=None if b.contract_field == "counts" else b.column_name,
+            pass_used="unbound" if b.contract_field == "counts" else b.pass_used,
+            confidence=0.0 if b.contract_field == "counts" else b.confidence,
+        )
+        for b in rb.bindings
+    )
+    assert db.compute_fully_bound(partial) is False

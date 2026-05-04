@@ -23,7 +23,8 @@ hints.  Both APIs are imported by ``cli.figures generate`` (Wave 3).
 
 The module avoids tight coupling to ``data_bridge`` by typing its inputs
 structurally — ``RenderBinding`` need only expose ``full_name``,
-``fully_bound``, ``column_mapping``, ``data_file_id`` and (when unbound)
+``fully_bound``, ``column_mapping``, ``data_file_per_field`` (or the
+legacy single-source ``data_file_id``), and (when unbound)
 ``unbound_reason``; ``RenderDataFile`` need only expose ``file_id`` and
 ``path``.  This means the test suite can drive the loop with simple
 dataclasses, and the eventual ``data_bridge`` module can re-export the
@@ -67,11 +68,21 @@ class RenderBinding:
     Mirrors the ``data_bridge.RenderBinding`` produced upstream.  Kept
     here so this module is independently testable; the real
     ``data_bridge`` may import from here or define a compatible shape.
+
+    Multi-source support: ``data_file_per_field`` maps each contract
+    field to the path of the data file that supplies it.  This lets a
+    single recipe pull columns from multiple files (e.g. ``cell_id``
+    from ``morphometry.csv`` and ``velocity`` from ``tracks.csv``).
+
+    ``data_file_id`` is retained for backward compatibility; if
+    ``data_file_per_field`` is empty, the loop falls back to loading
+    every column from the single file referenced by ``data_file_id``.
     """
 
     full_name: str
     fully_bound: bool
     column_mapping: dict[str, str] = field(default_factory=dict)
+    data_file_per_field: dict[str, Path] = field(default_factory=dict)
     data_file_id: str | None = None
     unbound_reason: str | None = None
 
@@ -156,51 +167,85 @@ def _git_commit_short(repo_root: Path | None = None) -> str:
     return head_text[:8] if head_text else "unknown"
 
 
-def _load_data_for_binding(
-    binding: RenderBinding,
-    data_file: RenderDataFile | None,
+def _load_columns_from_path(
+    path: Path,
+    fields_to_columns: dict[str, str],
 ) -> dict[str, Any]:
-    """Read the data file referenced by ``binding`` and return mapped kwargs.
+    """Read selected columns from a single data file.
 
-    Supports CSV, Parquet, and NPZ.  The returned dict is keyed by
-    contract field name (the *target* of ``column_mapping``); values are
-    Python lists (CSV/parquet) or numpy arrays (npz).
+    Supports CSV, Parquet, and NPZ.  Returns a dict keyed by contract
+    field name; values are Python lists (CSV/parquet) or numpy arrays
+    (npz).  Columns absent from the file are silently skipped — the
+    contract validator catches the resulting incomplete kwargs.
     """
-    if data_file is None:
-        return {}
-    suffix = data_file.path.suffix.lower()
+    suffix = path.suffix.lower()
 
     if suffix == ".csv":
         import pandas as pd
 
-        df = pd.read_csv(data_file.path)
+        df = pd.read_csv(path)
         return {
             field_name: df[col].tolist()
-            for field_name, col in binding.column_mapping.items()
+            for field_name, col in fields_to_columns.items()
             if col in df.columns
         }
 
     if suffix in (".parquet", ".pq"):
         import pandas as pd
 
-        df = pd.read_parquet(data_file.path)
+        df = pd.read_parquet(path)
         return {
             field_name: df[col].tolist()
-            for field_name, col in binding.column_mapping.items()
+            for field_name, col in fields_to_columns.items()
             if col in df.columns
         }
 
     if suffix == ".npz":
         import numpy as np
 
-        with np.load(data_file.path) as bundle:
+        with np.load(path) as bundle:
             return {
                 field_name: bundle[col]
-                for field_name, col in binding.column_mapping.items()
+                for field_name, col in fields_to_columns.items()
                 if col in bundle.files
             }
 
-    raise ValueError(f"unsupported data file format: {data_file.path.suffix!r}")
+    raise ValueError(f"unsupported data file format: {path.suffix!r}")
+
+
+def _load_data_for_binding(
+    binding: RenderBinding,
+    data_file: RenderDataFile | None,
+) -> dict[str, Any]:
+    """Read the data file(s) referenced by ``binding`` and return mapped kwargs.
+
+    Multi-source path: when ``binding.data_file_per_field`` is populated,
+    fields are grouped by source path and each file is loaded once; the
+    per-file results are then merged.  Single-source legacy path: when
+    only ``data_file`` (matching ``binding.data_file_id``) is provided,
+    every column is loaded from that one file.
+
+    Returned dict is keyed by contract field name; values are Python
+    lists (CSV/parquet) or numpy arrays (npz).
+    """
+    # Multi-source path — preferred when populated by data_bridge.
+    if binding.data_file_per_field:
+        # Group contract fields by source path.
+        fields_by_path: dict[Path, dict[str, str]] = {}
+        for field_name, col in binding.column_mapping.items():
+            src = binding.data_file_per_field.get(field_name)
+            if src is None:
+                continue
+            fields_by_path.setdefault(src, {})[field_name] = col
+        merged: dict[str, Any] = {}
+        for path, mapping in fields_by_path.items():
+            merged.update(_load_columns_from_path(path, mapping))
+        return merged
+
+    # Single-source legacy path — used by tests and back-compat callers.
+    if data_file is None:
+        return {}
+    return _load_columns_from_path(data_file.path, binding.column_mapping)
 
 
 def _safe_filename(full_name: str) -> str:

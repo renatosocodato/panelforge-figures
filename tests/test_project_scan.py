@@ -298,3 +298,120 @@ def test_missing_optional_dirs_do_not_crash(tmp_path: Path, missing_dir: str) ->
     result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
     # Still have all 8 answers
     assert len(result.answers) == 8
+
+
+# ─────────────────────── DEFECT-A1 — live-keyword negation ───────────────
+
+
+def test_dynamics_negated_live_cell_does_not_infer_live(tmp_path: Path) -> None:
+    """A README that defers live-cell work should NOT infer dynamics=live."""
+    _seed(
+        tmp_path,
+        {
+            "README.md": (
+                "# Fixed-cell project\n\n"
+                "Live-cell experiments not yet completed (this manuscript is "
+                "fixed-cell only).\n"
+            ),
+        },
+    )
+    result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
+
+    dy = result.answers["dynamics_needed"]
+    # The defective scanner returned ("live", 0.8+).  Post-fix the live hit
+    # is suppressed and we fall through to the "static" default.
+    assert dy.value != "live" or dy.confidence < 0.7
+
+
+def test_dynamics_positive_live_cell_infers_live(tmp_path: Path) -> None:
+    """A clean positive live-cell mention still infers dynamics=live."""
+    _seed(
+        tmp_path,
+        {
+            "methods.md": (
+                "## Imaging\n\n"
+                "We performed live-cell imaging at 2 fps for 30 minutes "
+                "across all conditions.\n"
+            ),
+        },
+    )
+    result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
+
+    dy = result.answers["dynamics_needed"]
+    assert dy.value == "live"
+    assert dy.confidence >= 0.8
+
+
+def test_dynamics_mixed_negated_and_positive_live(tmp_path: Path) -> None:
+    """If at least one live-cell mention is positive, dynamics=live wins."""
+    _seed(
+        tmp_path,
+        {
+            "methods.md": (
+                "## Imaging methods\n\n"
+                "We did live-cell imaging at 2 fps for the primary cohort.\n"
+                "More live-cell experiments planned for follow-up.\n"
+            ),
+        },
+    )
+    result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
+
+    dy = result.answers["dynamics_needed"]
+    assert dy.value == "live"
+    assert dy.confidence >= 0.8
+
+
+def test_dynamics_all_negated_live_falls_through(tmp_path: Path) -> None:
+    """If every live-cell mention is negated, dynamics must NOT be live."""
+    _seed(
+        tmp_path,
+        {
+            "methods.md": (
+                "## Imaging\n\n"
+                "Live-cell did not work in this preparation; live-cell "
+                "experiments are deferred to future work.\n"
+            ),
+        },
+    )
+    result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
+
+    dy = result.answers["dynamics_needed"]
+    assert not (dy.value == "live" and dy.confidence >= 0.7)
+
+
+def test_dynamics_kymograph_unaffected_by_live_negation(tmp_path: Path) -> None:
+    """A kymograph mention wins even when live-cell is negated nearby."""
+    _seed(
+        tmp_path,
+        {
+            "methods.md": (
+                "## Dynamics\n\n"
+                "Kymograph analysis along protrusion axes. Live-cell "
+                "experiments deferred to a follow-up study.\n"
+            ),
+        },
+    )
+    result = scan_project(tmp_path, available_modalities=AVAILABLE_MODALITIES)
+
+    dy = result.answers["dynamics_needed"]
+    assert dy.value == "kymograph"
+
+
+def test_dynamics_disc1_fixture_after_fix() -> None:
+    """The bundled DISC1 fixture must NOT pre-fill dynamics=live (DEFECT-A1).
+
+    The fixture's README declares "Live-cell experiments not yet completed".
+    Pre-fix this poisoned ``dynamics_needed`` to ("live", 0.95) and the
+    DISC1 §3.7 worked example diverged from 0.565.  Post-fix we expect the
+    inferred value to drop out of the high-confidence band.
+    """
+    fixture_root = Path(__file__).resolve().parent / "fixtures" / "sample_project"
+    assert fixture_root.is_dir(), f"missing fixture: {fixture_root}"
+
+    result = scan_project(
+        project_root=fixture_root,
+        available_modalities=AVAILABLE_MODALITIES,
+    )
+
+    dy = result.answers["dynamics_needed"]
+    assert dy.value != "live" or dy.confidence < 0.7

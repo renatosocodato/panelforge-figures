@@ -324,12 +324,89 @@ def _infer_manuscript_anchor(
     return "none", 0.5, ["default"]
 
 
+# DEFECT-A1 fix: phrases that, when found within ±30 chars of a "live"-class
+# keyword occurrence, mark that occurrence as a negation/future-work mention
+# (not an actual live-imaging signal).  Multi-word phrases tolerate any
+# inter-word whitespace (newlines, multiple spaces) — see ``_NEGATION_RE``.
+# Entries are matched case-insensitively against the lowercased blob from
+# ``_gather_text``; we keep them in canonical form for readability.
+_LIVE_NEGATION_PHRASES: tuple[str, ...] = (
+    "not yet",
+    "future work",
+    "follow-up",
+    "follow up",
+    "out of scope",
+    "deferred",
+    "planned",
+    "upcoming",
+    "did not",
+    "no live",
+    "not perform",
+    "pending",
+)
+
+
+def _build_negation_regex(phrases: tuple[str, ...]) -> re.Pattern[str]:
+    """Compile a single regex that matches any negation phrase.
+
+    Inter-word whitespace inside a phrase is relaxed to ``\\s+`` so that a
+    line break or double space between "did" and "not" still trips the
+    negation guard (DEFECT-A1).  Hyphenated tokens like "follow-up" are
+    escaped verbatim and only match when both halves are present in the
+    same form (the bare-space variant "follow up" is listed separately).
+    """
+    parts: list[str] = []
+    for phrase in phrases:
+        words = phrase.split(" ")
+        parts.append(r"\s+".join(re.escape(w) for w in words))
+    return re.compile("|".join(parts), re.IGNORECASE)
+
+
+_NEGATION_RE = _build_negation_regex(_LIVE_NEGATION_PHRASES)
+
+
+def _keyword_has_unnegated_occurrence(
+    text: str, keyword: str, window: int = 30
+) -> bool:
+    """Return True iff ``keyword`` occurs in ``text`` outside any negation.
+
+    For each occurrence of ``keyword`` we look at the substring spanning
+    ``window`` characters before *and* after it; if no phrase from
+    :data:`_LIVE_NEGATION_PHRASES` (matched via :data:`_NEGATION_RE`)
+    appears in that window, the occurrence counts as a positive
+    (non-negated) signal.
+
+    The function returns True iff at least one occurrence is positive — i.e.
+    the keyword is suppressed only when *every* occurrence is in negation
+    proximity (DEFECT-A1).  Both ``text`` and ``keyword`` are expected to be
+    already lowercased (the blob from ``_gather_text`` is lowercased).
+    """
+    if not keyword or keyword not in text:
+        return False
+    klen = len(keyword)
+    start = 0
+    while True:
+        idx = text.find(keyword, start)
+        if idx < 0:
+            break
+        win_start = max(0, idx - window)
+        win_end = min(len(text), idx + klen + window)
+        window_text = text[win_start:win_end]
+        if _NEGATION_RE.search(window_text) is None:
+            return True       # at least one occurrence is positive — keep it
+        start = idx + klen
+    return False              # every occurrence sits next to a negation
+
+
 def _infer_dynamics_needed(
     text: str, csv_cols: set[str]
 ) -> tuple[str, float, list[str]]:
     has_kymo = "kymograph" in text
+    # DEFECT-A1 fix: respect negation/future-work proximity for live-class
+    # keywords.  A bare ``kw in text`` check mis-flags fixed-cell manuscripts
+    # that mention "Live-cell experiments not yet completed" as live-imaging.
     has_live = any(
-        kw in text
+        _keyword_has_unnegated_occurrence(text, kw)
         for kw in ("live-cell", "live cell", "intravital", "two-photon time-lapse",
                    "two-photon time lapse", "time-lapse imaging")
     )

@@ -2,6 +2,7 @@
 
 import json
 
+import pytest
 from click.testing import CliRunner
 
 from panelforge_figures.cli import main
@@ -51,3 +52,50 @@ def test_cli_show_recipe_prints_metadata():
     assert r.exit_code == 0
     assert "sobol_first_total_pair" in r.output
     assert "question" in r.output
+
+
+# ─────────────────────────── Wave 1/2/3 --help coverage ──────────────────
+#
+# Every subcommand's `--help` happy path must exit with code 0.  This is
+# the soak test for Click's dispatch surface: a missing/renamed command
+# fails this single parametrised case.
+
+_HELP_INVOCATIONS: tuple[tuple[str, ...], ...] = (
+    # Wave 1 — recipes_index.json
+    ("index", "emit", "--help"),
+    ("index", "validate", "--help"),
+    # Wave 2 — interactive intake
+    ("intake", "--help"),
+    # Wave 3 — autonomous flow (profile group + scan + bridge + generate)
+    ("profile", "--help"),
+    ("profile", "scan", "--help"),
+    ("bridge", "--help"),
+    ("generate", "--help"),
+)
+
+
+@pytest.mark.parametrize("argv", _HELP_INVOCATIONS, ids=lambda a: " ".join(a))
+def test_cli_subcommand_help_exits_clean(argv: tuple[str, ...]) -> None:
+    """`figures <subcommand> --help` is the safest happy-path probe."""
+    r = CliRunner().invoke(main, list(argv))
+    assert r.exit_code == 0, (
+        f"`figures {' '.join(argv)}` exited with {r.exit_code}\n"
+        f"output:\n{r.output}"
+    )
+    # `--help` always echoes a usage banner.
+    assert "Usage:" in r.output
+
+
+def test_cli_index_group_help_lists_emit_and_validate() -> None:
+    """The `index` group's help should mention both subcommands."""
+    r = CliRunner().invoke(main, ["index", "--help"])
+    assert r.exit_code == 0, r.output
+    assert "emit" in r.output
+    assert "validate" in r.output
+
+
+def test_cli_profile_group_help_lists_scan() -> None:
+    """The `profile` group's help should list the `scan` subcommand."""
+    r = CliRunner().invoke(main, ["profile", "--help"])
+    assert r.exit_code == 0, r.output
+    assert "scan" in r.output

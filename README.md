@@ -12,20 +12,27 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-**`v1.1.0` — hydration complete**: 20 modalities, **328 recipes**,
-CI-enforced typography + figure-integrity contract, **1691 passing
-tests**. The v1.1 plan landed +191 recipes across 21 user-gated
-sessions (137 → 328, +139 %). The v1.1 hydration plan (see
-`docs/hydration_coordinator.md`) grows the catalogue to 320+ recipes
-across 20 user-gated sessions.
+**`v1.6.0-recipe-discovery` — agent-discoverable**: 20 modalities,
+**448 recipes**, CI-enforced typography + figure-integrity contract,
+**~2600 passing tests**. The 448-recipe catalog is now agent-
+discoverable via [`recipes_index.json`](recipes_index.json) +
+[`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md) — a CLI agent on a
+manuscript repo can fetch the index from raw GitHub (no clone),
+score recipes via natural-language intake, and render publication-
+grade PNGs end-to-end. Claude Code agents can use
+[`CLAUDE_CODE_AUTONOMOUS.md`](CLAUDE_CODE_AUTONOMOUS.md) for fully
+autonomous runs (Anthropic SDK harness with prompt-caching). New
+to the system? Start with the
+[`docs/AGENT_RECIPES.md`](docs/AGENT_RECIPES.md) tutorial.
 
-| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | **v1.0.0** |
-|---|---|---|---|---|---|
-| Modalities | 3 | 7 | 11 | 15 | **20** ✓ |
-| Recipes | 18 | 49 | 80 | 107 | **137** ✓ |
-| Gallery PNGs | 18 | 49 | 80 | 107 | **137** ✓ |
-| Themes | 12 | 12 | 12 | 12 | **12** |
-| Tests | 113 | 237 | 361 | 469 | **736** |
+| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | v1.0.0 | v1.5.0 | **v1.6.0** |
+|---|---|---|---|---|---|---|---|
+| Modalities | 3 | 7 | 11 | 15 | 20 | 20 | **20** |
+| Recipes | 18 | 49 | 80 | 107 | 137 | 448 | **448** |
+| Gallery PNGs | 18 | 49 | 80 | 107 | 137 | 448 | **448** |
+| Themes | 12 | 12 | 12 | 12 | 12 | 12 | **12** |
+| Tests | 113 | 237 | 361 | 469 | 736 | 2356 | **~2600** |
+| Agent-discoverable | — | — | — | — | — | — | **yes** ✓ |
 
 ## Install
 

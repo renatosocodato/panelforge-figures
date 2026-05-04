@@ -11,6 +11,135 @@ project follows semantic versioning.
 - (No active beta pack — open for next manuscript-companion or
   cross-modality primitive batch.)
 
+## [1.6.0-recipe-discovery] — 2026-05-02 [SYSTEM COMPLETE]
+
+**Recipe-discovery system — COMPLETE.** 4 waves, ~12 working days,
+multi-agent parallel swarm execution. Lands the end-to-end pipeline
+that turns the 448-recipe catalog from a developer-only Python
+package into an *agent-discoverable* asset: a CLI agent on a
+manuscript repo can now (a) fetch a structured `recipes_index.json`
+from raw GitHub without cloning, (b) score recipes against a
+project-specific intake answered in natural language, (c) auto-emit
+a justified `figures.manifest.yaml`, and (d) render publication-grade
+PNGs. **Catalog count unchanged** (448 recipes — this system is
+discovery + intake, not new recipes), but every recipe now carries
+auto-derived tags (`anchor`, `factorial`, `equivalence`,
+`compartment_aware`, `scale_aware`, `wave`, `dimensionality`,
+`dynamics`) plus optional manual overrides via `docs/recipe_tags.yaml`.
+Tests **2356 → ~2600** (+244). PRs **#50 → #54**. Tag
+**`v1.6.0-recipe-discovery`**.
+
+### Per-wave delta
+
+| Wave | Theme | PR | Catalog | Tests Δ |
+|---|---|---|---|---|
+| w1 | machine-readable index — `recipes_index.json` schema, `figures index emit/validate`, raw-GitHub fetch contract, CI drift gate | #50 | 448 | +52 |
+| w2 | auto-tagger + override merge — `manifest/auto_tag.py`, `docs/recipe_tags.yaml`, scoring vector for `(anchor, factorial, equivalence, compartment_aware, scale_aware)` | #51 | 448 | +71 |
+| w3 | intake + scoring + project-scan — `manifest/intake.py` (yes/no/unknown questionnaire), `manifest/scoring.py` (weighted sim across 8 dims), `manifest/project_scan.py` (heuristic anchor/modality detection from manuscript repo) | #52 | 448 | +63 |
+| w4 | autonomous loop + agent docs — `manifest/render_loop.py`, `figures plan/agent` subcommands, `AGENT_BOOTSTRAP.md`, `CLAUDE_CODE_AUTONOMOUS.md`, `docs/AGENT_RECIPES.md`, weekly audit CI | #53, #54 | 448 | +58 |
+
+### Catalog impact
+
+- **`recipes_index.json` is now agent-discoverable.** Fetchable via
+  raw GitHub (no clone), schema-validated by
+  `docs/recipes_index.schema.json`, drift-gated in `ci.yml`.
+- 448 recipes unchanged in count but newly carry **8 structured
+  tag dimensions** + 2 manual override layers (Tier 1: anchor-tagged
+  manuscript packs; Tier 2: scale-aware biophysics) — total of
+  56 manual override entries in `docs/recipe_tags.yaml`.
+- Per-recipe scoring vector exposed under
+  `index.modalities[].recipes[].tags` and consumed by
+  `manifest/scoring.py`.
+
+### New CLI surface
+
+| Subcommand | Purpose |
+|---|---|
+| `figures index emit` | Regenerate `recipes_index.json` with stable headers |
+| `figures index validate` | JSON-schema validate the committed index |
+| `figures index tag` | Show merged auto + override tags for a recipe |
+| `figures intake` | Run the natural-language intake questionnaire |
+| `figures intake --from-file FILE` | Replay a saved intake transcript |
+| `figures scan PATH` | Heuristic-detect anchors from a manuscript repo |
+| `figures plan` | Score-rank recipes against an intake; emit candidate manifest |
+| `figures agent` | End-to-end loop: intake → score → plan → render → diff |
+
+### New documentation
+
+- `AGENT_BOOTSTRAP.md` — first-contact guide for any CLI agent.
+- `CLAUDE_CODE_AUTONOMOUS.md` — Anthropic-SDK harness for fully
+  autonomous Claude Code runs (with prompt-caching scaffolding).
+- `docs/AGENT_RECIPES.md` — tutorial walking through the
+  bootstrap → intake → render path with a worked example.
+- `docs/RECIPE_SELECTION.md` and
+  `docs/RECIPE_SELECTION_OFFLINE.md` — selection-policy rubrics
+  for online (raw-GitHub) and offline (clone) modes.
+- `docs/recipes_index.schema.json` — JSON Schema for the index.
+- `docs/recipe_tags.yaml` — manual override layer.
+
+### New `manifest/` modules
+
+| Module | Approx. LOC | Role |
+|---|---|---|
+| `manifest/auto_tag.py` | ~360 | Heuristic tag derivation from registry metadata |
+| `manifest/catalog.py` | ~210 | In-memory catalog with merged-tag projection |
+| `manifest/data_bridge.py` | ~140 | Map intake answers → adapter availability checks |
+| `manifest/intake.py` | ~290 | Yes/no/unknown questionnaire + saved transcripts |
+| `manifest/project_scan.py` | ~310 | Heuristic anchor/modality detection from manuscript repo |
+| `manifest/render_loop.py` | ~245 | Autonomous intake → plan → render loop |
+| `manifest/resolver.py` | ~180 | Resolve scored candidates to manifest entries |
+| `manifest/schema.py` | ~120 | Pydantic models for index + intake + plan |
+| `manifest/scoring.py` | ~200 | Weighted similarity across 8 tag dims |
+
+### Test surface
+
+**2356 → ~2600 (+244)** across the 4 waves. Each wave landed unit
+tests for its module plus integration tests against the full 448-
+recipe registry. `slow` marker introduced for the e2e
+`figures agent` loop (skipped on PRs via `-m "not slow"`, run
+weekly in `recipe_tags_audit.yml`).
+
+### Multi-agent swarm execution metrics
+
+- ~25 parallel agents across 4 waves (avg. ~6 agents per wave).
+- Total wall-clock ~12 working days vs sequential estimate of
+  ~35 working days (~3× speedup from parallelism).
+- All waves shipped behind a release branch
+  (`wave-N-<theme>`) merged into `main` only after each wave's
+  CI gate passed including drift checks.
+
+### What it enables
+
+- A Claude Code agent on first contact with a manuscript repo can
+  bootstrap recipe selection in seconds (raw-GitHub fetch, no clone).
+- Natural-language intake replaces hand-editing of
+  `figures.manifest.yaml` for the common case.
+- Scored ranking surfaces alternatives in the same modality
+  ("we picked X over Y because Z") for free.
+- Project-scan heuristics fingerprint a manuscript repo and propose
+  a starting set of recipes without requiring the user to know the
+  catalog.
+- The `figures agent` end-to-end loop renders publication-grade
+  PNGs from a single CLI invocation.
+
+### Future work / out-of-scope deferred
+
+- Multi-language reference agents (the harness is Anthropic-SDK
+  only at v1.6.0; OpenAI / Gemini bridges are deferred).
+- Web UI (we ship CLI only — a hosted web frontend is on the
+  v2.0 roadmap, not a v1.x deliverable).
+- Auth-gated private-repo support (current bootstrap assumes
+  raw-GitHub public read; PAT-backed sparse-checkout is deferred).
+- Cross-language registry exports (Bioconductor R bindings, Julia
+  packages — deferred to v1.7+).
+- Recipe-suggestion learning loop — the scorer is purely
+  heuristic at v1.6.0; ML-based ranking from logged user
+  selections is deferred.
+
+See [`docs/AGENT_RECIPES.md`](docs/AGENT_RECIPES.md) for the
+end-user tutorial and [`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md)
+for the CLI-agent first-contact guide.
+
 ## [1.5.0-beta-cdc42_factorial_companion] — 2026-04-30 [PACK COMPLETE]
 
 **CDC42 factorial companion pack — COMPLETE.** 4 waves, 25 new

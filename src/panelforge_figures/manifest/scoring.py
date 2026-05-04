@@ -95,12 +95,22 @@ class ScoredRecipe:
 
 
 def match_bool(recipe_value: bool | None, profile_value: bool) -> float:
-    """1.0 if recipe == profile (both True, or both False); else 0.0.
+    """Presence-checked match: 1.0 ONLY when profile==True AND recipe==True.
 
-    Note: a recipe with ``factorial: false`` in a factorial project returns
-    0.0 — *no penalty*, just no contribution.  The function is symmetric.
+    DEFECT-A2 fix (Wave-3 polish): the function is intentionally
+    asymmetric.  A recipe tagged ``factorial: false`` in a non-factorial
+    project contributes 0.0 — not 1.0 — because "I don't need factorial
+    support" should not credit a recipe just for not having it.  Only
+    affirmative alignment (``factorial: true`` recipe in a factorial
+    project) earns the weight.
+
+    This matches the worked-example arithmetic in
+    ``RECIPE_SELECTION.md`` (DISC1 example: factorial contribution 0.0
+    despite both profile and recipe being False).
     """
-    return 1.0 if bool(recipe_value) == bool(profile_value) else 0.0
+    if profile_value is True and recipe_value is True:
+        return 1.0
+    return 0.0
 
 
 def match_anchor(recipe_anchor: str | None, profile_anchor: str) -> float:
@@ -157,16 +167,25 @@ def match_dynamics(recipe_dyn: str | None, profile_dyn: str) -> float:
 def match_dim(recipe_dim: str | None, profile_dim: str) -> float:
     """Dimensionality-match heuristic.
 
-    - exact match → 1.0
-    - profile is "mixed" → 0.7 always
-    - otherwise → 0.0
+    DEFECT-A2 follow-on: profile=``mixed`` ALWAYS scores 0.7 regardless
+    of recipe dim (carve-out before the exact-match check), matching
+    ``RECIPE_SELECTION.md`` Example-1 arithmetic (0.10 × 0.7 = 0.07).
+    The semantic intent: "I have mixed-dim data" means "any single-dim
+    recipe gives me partial value, never full" — even a ``mixed/mixed``
+    pairing because the user's profile didn't commit to one dim.
+
+    Order:
+      - profile is ``mixed`` AND recipe is non-empty → 0.7 (mixed credit)
+      - exact match (non-mixed) → 1.0
+      - otherwise → 0.0
     """
     r = (recipe_dim or "").strip()
     p = (profile_dim or "").strip()
+    # Mixed-profile carve-out: applies before the exact-match branch.
+    if p == "mixed" and r:
+        return 0.7
     if r == p and r != "":
         return 1.0
-    if p == "mixed":
-        return 0.7
     return 0.0
 
 

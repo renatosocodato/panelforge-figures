@@ -72,7 +72,10 @@ panelforge_figures = [
 [tool.pytest.ini_options]
 minversion = "7.0"
 testpaths = ["tests"]
-addopts = "-ra --strict-markers --strict-config"
+addopts = ["-ra", "--strict-markers", "--strict-config", "-m", "not slow"]
+markers = [
+    "slow: heavyweight end-to-end tests (skipped on PRs; run on main / scheduled CI)",
+]
 filterwarnings = [
     "error",
     "ignore::DeprecationWarning:pkg_resources.*",

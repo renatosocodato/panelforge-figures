@@ -521,10 +521,12 @@ def write_render_report(
     lines.append("## Next steps")
     lines.append("")
     lines.append(
-        "- Fix the F failed recipes by addressing data shape issues."
+        f"- Fix the {log.n_failed} failed recipes by addressing data "
+        "shape issues."
     )
     lines.append(
-        "- For the K skipped recipes, add data or remove from shortlist."
+        f"- For the {log.n_skipped} skipped recipes, add data or remove "
+        "from shortlist."
     )
     lines.append(
         "- Re-run with `figures generate` to render only the previously-failed "

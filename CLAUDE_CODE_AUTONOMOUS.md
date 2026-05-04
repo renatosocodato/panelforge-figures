@@ -83,8 +83,10 @@ maps the user's `data/*.csv` columns onto each shortlisted recipe's
 Pydantic contract via three passes:
 
 1. **Pass 1 — exact**: identical column-name match (case-insensitive).
-2. **Pass 2 — fuzzy**: Levenshtein distance ≤ 2 + alias dictionary
-   (`area_um2 ↔ cell_area`, `condition ↔ treatment`, etc.).
+2. **Pass 2 — fuzzy**: `difflib.get_close_matches` with cutoff 0.8
+   (catches plural/singular drift, underscore vs space, Unicode
+   substitutions like `µ ↔ u`). An alias dictionary is planned for a
+   future polish wave.
 3. **Pass 3 — LLM**: only fires if `ANTHROPIC_API_KEY` is set and the
    `panelforge-figures[claude-autonomous]` extras are installed.
    Otherwise the bridge gracefully degrades and reports unmapped fields
@@ -137,15 +139,18 @@ figures/RENDER_REPORT.md.`
 Switch to the [`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md) flow whenever
 **any** of the following is true:
 
-- The user passes `--manual` or `--shortlist-only` to the CLI.
 - The project directory is empty (no `README.md`, no `data/`, no
   `manuscript.{md,tex}`).
 - More than 2 of the 8 intake fields land below confidence 0.7.
-- The user has set `panelforge.project.yaml: autonomy: false`.
 - `recipes_index.json` reports `index_meta.tags_enabled: false` (Wave 1).
 
 In each case, surface the reason to the user once, then hand off to the
 generic bootstrap.
+
+> **Future opt-out flags.**  `--manual`, `--shortlist-only`, and the
+> `panelforge.project.yaml: autonomy: false` knob are reserved but
+> not yet wired.  When implemented, they'll join the fall-back
+> triggers above.
 
 ---
 
@@ -155,12 +160,17 @@ generic bootstrap.
 |---|---|---|
 | 2 | `figures profile scan` | `manifest/project_scan.py` |
 | 3 | `figures intake` | `manifest/intake.py` |
-| 4 | `figures score --profile panelforge_workspace/profile.json` | `manifest/scoring.py` |
-| 5 | `figures bridge` | `manifest/data_bridge.py` |
+| 4-5 | `figures bridge` (scores + binds in one pass) | `manifest/scoring.py` + `manifest/data_bridge.py` |
 | 6 | `figures generate` | `manifest/render_loop.py` |
 
-All commands accept `--workspace <path>` to override the default
-`panelforge_workspace/` location.
+> **Note.**  Scoring runs as part of `figures bridge` rather than a
+> standalone `figures score` subcommand — bridge needs the shortlist
+> to know which contracts to bind.  A separate `figures score` is on
+> the roadmap for advanced use cases.
+
+All commands accept their own `--out` / `--profile` / `--bindings`
+path overrides.  Default cache location: `panelforge_workspace/`.
+A unified `--workspace <path>` flag is on the roadmap.
 
 ---
 

@@ -1,29 +1,34 @@
 # panelforge-figures
 
+[![PyPI version](https://img.shields.io/pypi/v/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
+[![Python versions](https://img.shields.io/pypi/pyversions/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
+
 A modality-first, publication-grade figure system for systems biology and
 computational biophysics, with an embedded Claude Code skill for agentic
 bootstrap inside any manuscript repository.
 
 > 🤖 **Are you a CLI agent on first contact with this repo?** Read
-> [`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md) — it tells you how to fetch
-> [`recipes_index.json`](recipes_index.json) from raw GitHub without
-> cloning, locate the recipes you need, and sparse-checkout only the
-> modalities relevant to the user's project.
+> [`AGENT_BOOTSTRAP.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/AGENT_BOOTSTRAP.md)
+> — it tells you how to fetch
+> [`recipes_index.json`](https://github.com/renatosocodato/panelforge-figures/blob/main/recipes_index.json)
+> from raw GitHub without cloning, locate the recipes you need, and
+> sparse-checkout only the modalities relevant to the user's project.
 
 ## Status
 
-**`v1.6.0-recipe-discovery` — agent-discoverable**: 20 modalities,
-**448 recipes**, CI-enforced typography + figure-integrity contract,
-**~2600 passing tests**. The 448-recipe catalog is now agent-
-discoverable via [`recipes_index.json`](recipes_index.json) +
-[`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md) — a CLI agent on a
-manuscript repo can fetch the index from raw GitHub (no clone),
-score recipes via natural-language intake, and render publication-
-grade PNGs end-to-end. Claude Code agents can use
-[`CLAUDE_CODE_AUTONOMOUS.md`](CLAUDE_CODE_AUTONOMOUS.md) for fully
-autonomous runs (Anthropic SDK harness with prompt-caching). New
-to the system? Start with the
-[`docs/AGENT_RECIPES.md`](docs/AGENT_RECIPES.md) tutorial.
+**`v1.6.1` — first PyPI publish**: 20 modalities, **448 recipes**,
+CI-enforced typography + figure-integrity contract, **2566 passing
+tests**. The 448-recipe catalog is agent-discoverable via
+[`recipes_index.json`](https://github.com/renatosocodato/panelforge-figures/blob/main/recipes_index.json)
++ [`AGENT_BOOTSTRAP.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/AGENT_BOOTSTRAP.md)
+— a CLI agent on a manuscript repo can fetch the index from raw
+GitHub (no clone), score recipes via natural-language intake, and
+render publication-grade PNGs end-to-end. Claude Code agents can use
+[`CLAUDE_CODE_AUTONOMOUS.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/CLAUDE_CODE_AUTONOMOUS.md)
+for fully autonomous runs (Anthropic SDK harness with prompt-caching).
+New to the system? Start with the
+[`docs/AGENT_RECIPES.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/docs/AGENT_RECIPES.md)
+tutorial.
 
 | | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | v1.0.0 | v1.5.0 | **v1.6.0** |
 |---|---|---|---|---|---|---|---|
@@ -36,17 +41,17 @@ to the system? Start with the
 
 ## Install
 
-From this repo:
-
 ```bash
-pip install git+https://github.com/renatosocodato/panelforge-figures.git
-```
+# Standard install
+pip install panelforge-figures
 
-For development:
+# With seaborn for split-violin recipes
+pip install panelforge-figures[seaborn]
 
-```bash
-git clone https://github.com/renatosocodato/panelforge-figures.git
-cd panelforge-figures
+# With autonomous Claude Code flow (Anthropic SDK)
+pip install panelforge-figures[claude-autonomous]
+
+# Development install (from source)
 pip install -e .[dev]
 ```
 

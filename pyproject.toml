@@ -49,6 +49,7 @@ dev = [
     "ruff>=0.4",
     "seaborn>=0.13",
     "jsonschema>=4.0",
+    "hypothesis>=6.100",
 ]
 
 [project.urls]

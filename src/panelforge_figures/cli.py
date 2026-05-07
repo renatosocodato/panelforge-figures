@@ -536,11 +536,23 @@ def bridge_cmd(
         "rendering. Use only for development / triage."
     ),
 )
+@click.option(
+    "--no-provenance", is_flag=True,
+    help=(
+        "DEVELOPMENT-ONLY escape hatch (Sprint 1B — v1.8.0). Suppress "
+        "emission of `<figure>.provenance.json` sidecars. The sidecars "
+        "are the audit trail that links every published PDF back to its "
+        "source data + recipe + scorer state; suppressing them breaks "
+        "`figures provenance verify`. Use only in tight dev loops where "
+        "the hashing overhead is felt; never in CI / archival renders."
+    ),
+)
 def generate_cmd(
     bindings_path: Path,
     data_dir: Path,
     out_dir: Path,
     skip_audit: bool,
+    no_provenance: bool,
 ) -> None:
     """Render bound recipes; write figures + RENDER_REPORT.md."""
     from .manifest import (
@@ -572,17 +584,32 @@ def generate_cmd(
             skipped_reason=None if all_bound else "missing required fields",
         ))
     files = discover_data_files(data_dir)
-    log = render_shortlist(
+
+    # Forward `enable_provenance` only if Build-A's render_loop accepts
+    # it. The flag is the CLI-side inverse of `enable_provenance`; while
+    # Sprint 1B is in flight we degrade gracefully when the keyword is
+    # absent so callers on a pre-1.8 render_loop still work.
+    import inspect as _inspect
+    _render_kwargs: dict[str, Any] = dict(
         bindings=[to_render_binding(rb) for rb in rbs],
         data_files=to_render_data_files(files),
         out_dir=out_dir,
         skip_audit=skip_audit,
     )
+    if "enable_provenance" in _inspect.signature(render_shortlist).parameters:
+        _render_kwargs["enable_provenance"] = not no_provenance
+    log = render_shortlist(**_render_kwargs)
     report_path = write_render_report(log)
     if skip_audit:
         click.echo(
             "  ⚠ AUDIT SKIPPED — DO NOT SHIP THIS RUN; rerun without "
             "--skip-audit before figure release.",
+            err=True,
+        )
+    if no_provenance:
+        click.echo(
+            "  ⚠ PROVENANCE SUPPRESSED — sidecars not written; "
+            "`figures provenance verify` will fail on these outputs.",
             err=True,
         )
     click.echo(
@@ -850,6 +877,167 @@ def audit_shortlist_cmd(
         sys.exit(1)
     if strict and n_warn > 0:
         sys.exit(1)
+
+
+# ─────────────────────── provenance (Sprint 1B — v1.8.0) ────────────────
+
+
+@main.group("provenance")
+def provenance_group() -> None:
+    """Sprint 1B (v1.8.0) — every rendered figure has a sidecar
+    provenance.json content-addressing data + recipe + scorer state.
+
+    Verify reproducibility with `provenance verify`; bundle for review
+    with `provenance bundle`; diff two snapshots with `provenance diff`.
+    """
+
+
+@provenance_group.command("show")
+@click.argument(
+    "figure_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+def provenance_show(figure_path: Path) -> None:
+    """Pretty-print the sidecar provenance.json for a figure."""
+    prov_path = figure_path.with_suffix(figure_path.suffix + ".provenance.json")
+    if not prov_path.is_file():
+        click.echo(f"✗ provenance sidecar not found at {prov_path}", err=True)
+        click.echo("  → render with `figures generate` to create one,", err=True)
+        click.echo(
+            "  → or pass `--enable-provenance` to a manual render call",
+            err=True,
+        )
+        sys.exit(1)
+    data = json.loads(prov_path.read_text())
+    click.echo(f"# Provenance: {figure_path.name}")
+    click.echo(f"  schema:           {data['schema_version']}")
+    click.echo(f"  rendered_at:      {data['rendered_at']}")
+    click.echo(f"  figure_sha256:    {data['figure_sha256'][:16]}...")
+    click.echo(f"  recipe:           {data['recipe']['full_name']}")
+    module_sha = data["recipe"].get("module_sha", "unknown")
+    click.echo(f"  recipe_module:    {module_sha[:16]}...")
+    click.echo(
+        f"  panelforge_ver:   {data['recipe']['panelforge_version']}"
+    )
+    click.echo("  data sources:")
+    for src in data["data"].get("sources", []):
+        sha = (src.get("sha256") or "unknown")[:16]
+        n_rows = src.get("n_rows", "?")
+        click.echo(
+            f"    - {src['path']:40s} sha256={sha}...  ({n_rows} rows)"
+        )
+    if data.get("scorer"):
+        click.echo(
+            f"  scorer.score:     {data['scorer'].get('score', 'n/a')}"
+        )
+    if data.get("audit"):
+        click.echo(
+            f"  audit.overall:    {data['audit'].get('overall', 'n/a')}"
+        )
+    env = data.get("rendering_environment", {})
+    click.echo(f"  python:           {env.get('python_version', '?')}")
+    click.echo(f"  matplotlib:       {env.get('matplotlib_version', '?')}")
+
+
+@provenance_group.command("verify")
+@click.argument(
+    "figure_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+def provenance_verify(figure_path: Path) -> None:
+    """Recompute all hashes; report drift in figure / data / recipe."""
+    try:
+        from .manifest.provenance import verify_provenance
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"provenance module not available: {exc}; "
+            "Build-A's `manifest/provenance.py` has not landed yet."
+        ) from exc
+
+    prov_path = figure_path.with_suffix(figure_path.suffix + ".provenance.json")
+    if not prov_path.is_file():
+        click.echo(f"✗ provenance sidecar not found at {prov_path}", err=True)
+        sys.exit(1)
+    result = verify_provenance(prov_path)
+    if result.overall == "match":
+        click.echo(f"✓ provenance verified: {figure_path.name}")
+        click.echo(
+            "  All hashes match.  Bit-identical reproducibility confirmed."
+        )
+        return
+    click.echo(f"✗ provenance drift detected: {figure_path.name}", err=True)
+    click.echo(f"  Drift class: {result.overall}", err=True)
+    for line in result.findings:
+        click.echo(f"    - {line}", err=True)
+    sys.exit(1)
+
+
+@provenance_group.command("bundle")
+@click.argument(
+    "figure_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--out", "out_path", type=click.Path(path_type=Path), default=None,
+    help="Default: <figure>.provenance.tar.gz",
+)
+def provenance_bundle(figure_path: Path, out_path: Path | None) -> None:
+    """Tarball figure + provenance + referenced data files + recipe module."""
+    try:
+        from .manifest.provenance import bundle_provenance
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"provenance module not available: {exc}; "
+            "Build-A's `manifest/provenance.py` has not landed yet."
+        ) from exc
+
+    bundle_path = bundle_provenance(figure_path, out_path=out_path)
+    click.echo(f"✓ wrote {bundle_path}")
+    click.echo(
+        f"  bundle size: {bundle_path.stat().st_size / 1024:.1f} KB"
+    )
+
+
+@provenance_group.command("diff")
+@click.argument(
+    "figure_a",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.argument(
+    "figure_b",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+def provenance_diff(figure_a: Path, figure_b: Path) -> None:
+    """Compare two figure provenance sidecars; flag what changed."""
+    try:
+        from .manifest.provenance import diff_provenance
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"provenance module not available: {exc}; "
+            "Build-A's `manifest/provenance.py` has not landed yet."
+        ) from exc
+
+    prov_a = figure_a.with_suffix(figure_a.suffix + ".provenance.json")
+    prov_b = figure_b.with_suffix(figure_b.suffix + ".provenance.json")
+    if not prov_a.is_file():
+        click.echo(f"✗ provenance for {figure_a} not found", err=True)
+        sys.exit(1)
+    if not prov_b.is_file():
+        click.echo(f"✗ provenance for {figure_b} not found", err=True)
+        sys.exit(1)
+    diff = diff_provenance(prov_a, prov_b)
+    has_diff = any(v for v in diff.values())
+    if not has_diff:
+        click.echo(
+            f"✓ no differences between {figure_a.name} and {figure_b.name}"
+        )
+        return
+    click.echo(f"# Differences: {figure_a.name} → {figure_b.name}")
+    for dim, changes in diff.items():
+        if changes:
+            click.echo(f"  {dim}:")
+            for line in changes:
+                click.echo(f"    - {line}")
 
 
 if __name__ == "__main__":

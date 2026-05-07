@@ -187,6 +187,11 @@ def _load_recipe_tags_yaml(yaml_path: Path | None = None) -> dict[str, dict[str,
     """Load `docs/recipe_tags.yaml` if it exists.  Returns empty dict
     when the file is absent (Wave 1) or PyYAML is missing (graceful
     degradation; auto-tagger fills the gap).
+
+    Validates each entry against the closed-taxonomy enums in
+    `tag_taxonomy.py`.  A typo like `anchor: DISCC1` raises
+    `TagValidationError` here — catching the bug at YAML-parse time
+    rather than later at JSON-Schema validation in `emit_index_json`.
     """
     if yaml_path is None:
         yaml_path = (
@@ -201,6 +206,14 @@ def _load_recipe_tags_yaml(yaml_path: Path | None = None) -> dict[str, dict[str,
     raw = yaml.safe_load(yaml_path.read_text()) or {}
     if not isinstance(raw, dict):  # pragma: no cover
         return {}
+
+    # validate_tag_dict already encodes `full_name` in its TagValidationError
+    # message, so we let it propagate directly — no need for try/except.
+    from .tag_taxonomy import validate_tag_dict
+    for full_name, tag_dict in raw.items():
+        if not isinstance(tag_dict, dict):
+            continue  # let downstream catch shape errors
+        validate_tag_dict(tag_dict, full_name=full_name)
     return raw
 
 

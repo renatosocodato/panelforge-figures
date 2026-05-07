@@ -879,6 +879,153 @@ def audit_shortlist_cmd(
         sys.exit(1)
 
 
+# ──────────── audit data-class (Sprint 2B — v1.11.0) ───────────────────
+
+
+@audit_group.command("data-class")
+@click.option(
+    "--data-dir", "data_dir",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=Path("data"),
+    help="Directory to scan recursively for tabular data files (default: data/).",
+)
+@click.option(
+    "--strict", is_flag=True,
+    help="Promote medium-risk WARN to ERROR (CI-friendly).",
+)
+def audit_data_class_cmd(data_dir: Path, strict: bool) -> None:
+    """Scan column names under data/ for PHI/PII patterns.
+
+    Reports a PHI risk audit against the current ``data_class`` (set
+    via ``figures config set data_class <value>``).  See
+    ``docs/spec_data_class_safety.md`` §5 for the behaviour matrix.
+
+    Exit codes:
+
+      * 0 — clean OR only INFO/WARN findings without ``--strict``.
+      * 2 — at least one HIGH-risk column found while
+        ``data_class != clinical`` (or any WARN under ``--strict``).
+    """
+    from .safety import DataClass, get_data_class
+    from .safety.phi_pattern_scanner import scan_columns_for_phi
+
+    cls = get_data_class()
+    click.echo(f"Current data_class: {cls.value}")
+    click.echo(f"Scanning columns under {data_dir} ...")
+
+    # Collect (file_name, column) pairs across CSVs only — parquet/h5ad
+    # support is reserved for Sprint 3+ (spec §5: walks data/ for csv,
+    # parquet, feather, h5ad).  CSV header reads are cheap and
+    # zero-dependency; richer formats can land alongside their gates.
+    all_columns: list[tuple[str, str]] = []
+    for csv in sorted(data_dir.rglob("*.csv")):
+        try:
+            import pandas as pd
+            df = pd.read_csv(csv, nrows=0)
+            for c in df.columns:
+                all_columns.append((csv.name, str(c)))
+        except Exception as exc:  # noqa: BLE001 — best-effort scan
+            click.echo(f"  warn: skipping {csv.name}: {exc}", err=True)
+
+    findings = scan_columns_for_phi([c for _f, c in all_columns])
+    if not findings:
+        click.echo(
+            f"✓ no PHI/PII patterns found across {len(all_columns)} columns"
+        )
+        return
+
+    high = [f for f in findings if f.risk_level == "high"]
+    medium = [f for f in findings if f.risk_level == "medium"]
+
+    if high and cls != DataClass.CLINICAL:
+        click.echo(
+            f"✗ {len(high)} HIGH-risk column(s) found but "
+            f"data_class={cls.value}",
+            err=True,
+        )
+        for f in high:
+            click.echo(
+                f"    - {f.column} (matched: {f.matched_pattern})",
+                err=True,
+            )
+        click.echo(
+            "  → set data_class=clinical OR remove/anonymise these columns",
+            err=True,
+        )
+        sys.exit(2)
+    if high and cls == DataClass.CLINICAL:
+        click.echo(
+            f"  {len(high)} HIGH-risk column(s) found "
+            "(acknowledged under data_class=clinical):"
+        )
+        for f in high:
+            click.echo(f"    - {f.column} (matched: {f.matched_pattern})")
+
+    if medium:
+        verb = "✗" if strict else "⚠"
+        click.echo(f"{verb} {len(medium)} medium-risk column(s):")
+        for f in medium:
+            click.echo(f"    - {f.column} (matched: {f.matched_pattern})")
+        if strict:
+            sys.exit(2)
+
+
+# ──────────── config (Sprint 2B — v1.11.0) ─────────────────────────────
+
+
+@main.group("config")
+def config_group() -> None:
+    """View / set ``panelforge.project.yaml`` configuration.
+
+    Sprint 2B (v1.11.0) — currently exposes only ``data_class``;
+    spec §8 sketches the v2.0.0 surface (overrides + interactive
+    confirmation flow for clinical) which will land in subsequent
+    sprints.
+    """
+
+
+@config_group.command("show")
+def config_show_cmd() -> None:
+    """Print current ``data_class`` and resolved policy."""
+    from .safety import get_data_class, get_policy
+
+    cls = get_data_class()
+    policy = get_policy()
+    click.echo(f"data_class: {cls.value}")
+    click.echo(f"  llm_pass3:        {policy.llm_pass3}")
+    click.echo(f"  telemetry:        {policy.telemetry}")
+    click.echo(f"  vision:           {policy.vision}")
+    click.echo(f"  provenance:       {policy.provenance_hashes}")
+    click.echo(f"  plugin_network:   {policy.plugin_network_required}")
+
+
+@config_group.command("set")
+@click.argument("key")
+@click.argument("value")
+def config_set_cmd(key: str, value: str) -> None:
+    """Set a config value.
+
+    Currently only ``data_class`` is supported.  Future overrides
+    (per spec §3) will be wired in subsequent sprints.
+    """
+    from .safety import DataClass, DataClassError, set_data_class
+
+    if key == "data_class":
+        try:
+            set_data_class(DataClass(value))
+        except (ValueError, DataClassError):
+            click.echo(
+                f"✗ invalid data_class: {value!r}; "
+                "valid values: clinical / research / public",
+                err=True,
+            )
+            sys.exit(1)
+        click.echo(f"✓ data_class = {value}")
+        return
+    click.echo(f"✗ unknown config key: {key}", err=True)
+    sys.exit(1)
+
+
 # ─────────────────────── provenance (Sprint 1B — v1.8.0) ────────────────
 
 

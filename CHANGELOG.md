@@ -11,6 +11,82 @@ project follows semantic versioning.
 - (No active beta pack — open for next manuscript-companion or
   cross-modality primitive batch.)
 
+## [2.0.0] — 2026-05-07
+
+**Major release.** Eight architectural elevations turning the
+recipe-discovery system from a single-repo solo tool into an
+elite Claude-Code-dependent platform that translates across
+manuscript / research / modeling projects.
+
+### Added (8 elevations)
+
+- **Statistical contract layer** (PR #61, v1.7.0). Each recipe
+  declares its `StatisticalContract` (assumptions, sample-size floor,
+  multiple-comparisons posture, effect-size units). New
+  `audit_recipe_against_data()` runs 13 audit rules and refuses
+  recipes whose contract is violated by the bound data.
+- **Provenance chain** (PR #62, v1.8.0). Every render now emits a
+  signed `ProvenanceRecord` at `panelforge_workspace/provenance.json`
+  with sha256 content hashes for inputs, recipe source, environment,
+  and outputs. `verify_provenance` round-trips; `bundle_provenance`
+  exports a tar with full lineage.
+- **Composition layer** (PR #63, v1.9.0). Multi-panel figure specs
+  via `FigureSpec` / `PanelSpec` / `PartitionedPanelSpec` Pydantic
+  models. Discriminated union over `GridLayout` / `GridspecLayout` /
+  `FreeformLayout`. `compose_figure()` builds matplotlib GridSpec,
+  renders each panel, links shared axes.
+- **Project plugins** (PR #64, v1.10.0). Per-project recipe packs
+  via Python entry_points OR a `panelforge_plugins/` directory.
+  `discover_all_plugins()` returns `PluginInfo` records with
+  registry-diff attribution. Conflict detection via
+  `PluginConflictError`.
+- **Data-class safety** (PR #65, v1.11.0). New
+  `safety.DataClass {clinical, research, public}` enum + locked
+  policy table gating LLM, telemetry, vision, plugin-network, and
+  provenance-redaction. 35 PHI/PII regex patterns power
+  `phi_pattern_scanner`. Clinical data is locked-down by default.
+- **Vision input + iterative refinement** (PR #66, v1.12.0).
+  `figures profile scan --reference-figure` accepts a PNG and
+  pre-fills the intake from Claude Sonnet 4.5 vision inference.
+  `figures refine path.png recipe_name` proposes contract patches
+  from a rendered figure. sha256-keyed cache, lazy-imported
+  `anthropic`, gated by `is_vision_allowed`.
+- **Cross-project orchestration** (PR #67, v1.13.0). Per-user
+  registry at `~/.config/panelforge/projects.yaml` with a
+  `figures projects {list,register,switch,current,diff,portfolio,
+  unregister,validate}` CLI surface. Recipe-overlap analysis +
+  shared-methods extraction suggestion.
+- **Active-learning loop** (PR #68, v1.14.0). Opt-in usage
+  telemetry at `panelforge_workspace/usage.jsonl` (OFF by default,
+  NEVER auto-uploaded). `figures pick`, `figures suggest-weights`
+  enable offline cross-validation of the scoring rubric.
+  `WEIGHTS_HISTORY` dict supports replay against historical weights.
+
+### Changed (cross-cutting)
+
+- **Version unstuck**: was `1.0.0` in pyproject + `__init__.py`
+  through the entire v1.6.x system rollout (corrected to `1.6.1`
+  briefly, then properly bumped here).
+- **Integration tests**: new `tests/test_v2_integration.py`
+  validates cross-cutting interactions between elevations
+  (e.g., provenance record captures statistical contract;
+  vision input respects data-class gates; plugin-discovered
+  recipes get statistically audited).
+- **Style-drift ratchet** held at 20/20 across all 8 elevations.
+- **Test count**: 2587 (post-v1.6.1) → 2882 (post-v2.0.0); +295
+  new tests across the 8 sprints.
+
+### Privacy invariants (carried through every elevation)
+
+- No data values ever sent to LLMs (vision input, telemetry,
+  refinement, scoring). Only categorical fields, recipe names,
+  numeric scores.
+- Telemetry OFF by default, never auto-uploaded.
+- Vision input opt-in via `ANTHROPIC_API_KEY` + extra install.
+- Clinical-data class blocks all LLM/telemetry/vision channels.
+- Cross-project registry stores paths + summary counts only —
+  never recipe outputs or contract data.
+
 ## [1.6.1] — 2026-05-04
 
 First PyPI publish. Bundles 3 production-readiness fixes from

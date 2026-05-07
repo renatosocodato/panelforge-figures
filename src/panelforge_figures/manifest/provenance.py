@@ -222,12 +222,26 @@ def build_provenance(
     ``verify_provenance`` later.
     """
     # Hash source data files.
+    # Sprint 2B (v1.11.0) — clinical class redacts the sha256 of data
+    # files while preserving path/format/n_rows so the sidecar still
+    # documents *which* files were used without leaking a hash that
+    # might be used as a row-level fingerprint downstream.  See
+    # ``docs/spec_data_class_safety.md`` §6 (Provenance hash row).
+    from ..safety import should_redact_provenance_hashes
+    redact_hashes = should_redact_provenance_hashes()
+
     data_records = []
     for df in data_files:
         df_path = Path(df["path"])
+        if redact_hashes:
+            sha = "[redacted]"
+        elif df_path.is_file():
+            sha = _sha256_file(df_path)
+        else:
+            sha = None
         rec = {
             "path": str(df_path),
-            "sha256": _sha256_file(df_path) if df_path.is_file() else None,
+            "sha256": sha,
             "format": df.get("format", df_path.suffix.lstrip(".")),
             "n_rows": df.get("n_rows"),
         }

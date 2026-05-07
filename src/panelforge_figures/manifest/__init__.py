@@ -103,6 +103,17 @@ from .tag_taxonomy import (
     validate_tag,
     validate_tag_dict,
 )
+from .vision_input import (
+    RefinementOutcome,
+    VisionInference,
+    VisionScanResult,
+    VisionUnavailableError,
+    refine_figure,
+    vision_scan_reference_figure,
+)
+from .vision_input import (
+    to_intake_pre_filled as to_intake_pre_filled_from_vision,
+)
 
 __all__ = [
     "ALL_RULE_NAMES",
@@ -147,7 +158,11 @@ __all__ = [
     "TagValidationError",
     "TagWave",
     "UNKNOWN_SENTINEL",
+    "RefinementOutcome",
     "VerificationResult",
+    "VisionInference",
+    "VisionScanResult",
+    "VisionUnavailableError",
     "WEIGHTS",
     "audit_recipe_against_data",
     "auto_tag_all",
@@ -168,6 +183,7 @@ __all__ = [
     "load_bindings_cache",
     "load_manifest",
     "load_provenance_json",
+    "refine_figure",
     "render_figure_yaml",
     "render_manifest",
     "render_shortlist",
@@ -177,6 +193,7 @@ __all__ = [
     "score_recipes",
     "scoring_rubric_dict",
     "to_intake_pre_filled",
+    "to_intake_pre_filled_from_vision",
     "to_render_binding",
     "to_render_data_files",
     "validate_figure_yaml",
@@ -184,6 +201,7 @@ __all__ = [
     "validate_tag",
     "validate_tag_dict",
     "verify_provenance",
+    "vision_scan_reference_figure",
     "write_bindings_cache",
     "write_catalog_json",
     "write_provenance_json",

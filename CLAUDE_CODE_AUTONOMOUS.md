@@ -230,6 +230,55 @@ encodes it directly (e.g. `patient_DOB_yyyymmdd`). The bridge does
 not inspect column names for sensitive content — that responsibility
 sits with the user.
 
+### Vision API additions (Sprint 2C — v1.12.0)
+
+When vision input is enabled (e.g. `figures profile scan
+--reference-figure`, `figures refine`, `figures vision-explain`), the
+**image bytes** are sent to Anthropic's API in addition to the field
+metadata listed above. This is a *separate consent surface* from the
+Pass-3 column mapping — users may opt into low-entropy column names
+but opt out of high-entropy figure content.
+
+**What IS sent to Anthropic in vision modes:**
+
+| Field | Example | Sourced from |
+|---|---|---|
+| Image bytes (base64-encoded) | the reference figure or rendered PNG/JPG | `--reference-figure` argument or `figures refine <pdf>` argument |
+| Image SHA-256 (cache key only, computed locally) | `9f86d081...` | local hash; not transmitted as a separate field |
+| Recipe Python source code | the contents of `recipes/<modality>/<recipe>.py` | the recipe package; only sent for `figures refine` |
+| User edit instruction (for `refine` only) | `"make y-axis log-scale"` | CLI argument |
+
+**What is NEVER sent in vision modes:**
+
+- Cell-level data values from the user's CSV/Parquet files (vision
+  modes only read images and recipe Python — never data files).
+- The user's manuscript, methods, README, or any other free-text
+  project content.
+- Project filesystem paths beyond the recipe module path.
+
+**Cost estimates** (Claude Sonnet 4.5 with vision, late-2025 pricing):
+
+| Mode | Approximate cost per call |
+|---|---|
+| `figures profile scan --reference-figure` | ~$0.012 |
+| `figures refine` | ~$0.025 |
+| `figures vision-explain` | ~$0.009 |
+
+**Cache**: results are cached by image SHA-256 in
+`panelforge_workspace/vision_cache/<sha[:16]>.json` so repeat calls on
+the same image are free.  Override the model with the
+`PANELFORGE_VISION_MODEL` env var (default: `claude-sonnet-4-5`).
+
+**To opt out of vision modes**:
+
+- omit the `--reference-figure` flag and the `figures refine` /
+  `figures vision-explain` subcommands (text-based scan and intake
+  never invoke vision), OR
+- set `data_class: clinical` (forces vision OFF unconditionally — see
+  `docs/spec_data_class_safety.md`), OR
+- omit `ANTHROPIC_API_KEY` from your environment, OR
+- install without the `claude-autonomous` extra.
+
 ---
 
 ## `panelforge.project.yaml` schema

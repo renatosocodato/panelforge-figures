@@ -575,6 +575,7 @@ def scan_project(
     *,
     available_modalities: tuple[str, ...] = (),
     confidence_threshold: float = 0.7,
+    auto_register: bool = True,
 ) -> ProjectScanResult:
     """Walk the project directory, infer intake answers, return structured result.
 
@@ -674,6 +675,44 @@ def scan_project(
     answers["shortlist_size"] = InferredAnswer(
         "shortlist_size", sl_val, sl_conf, tuple(sl_src), _band(sl_conf)
     )
+
+    # Auto-register the scanned project in the user-level registry. The
+    # behaviour is opt-out via either the kwarg ``auto_register=False`` or
+    # the sticky ``auto_register: false`` field in panelforge.project.yaml
+    # (spec §6). Failures are best-effort: scan must never raise on this
+    # side-effect.
+    yaml_opt_out = bool(yaml_cfg.get("auto_register") is False) if has_yaml else False
+    if auto_register and not yaml_opt_out:
+        try:
+            from panelforge_figures.projects import (  # noqa: PLC0415 — local: avoid cycle
+                register_if_absent,
+            )
+
+            project_id = (
+                str(yaml_cfg.get("project_id"))
+                if has_yaml and yaml_cfg.get("project_id")
+                else root.name
+            )
+            profile = (
+                str(yaml_cfg.get("active_profile") or yaml_cfg.get("profile") or "default")
+                if has_yaml
+                else "default"
+            )
+            register_if_absent(
+                path=root.resolve(),
+                project_id=project_id,
+                profile=profile,
+                n_recipes=0,
+                status="not yet rendered",
+            )
+        except Exception as exc:  # noqa: BLE001 — auto-register must never fail scan
+            import warnings
+
+            warnings.warn(
+                f"projects.register_if_absent failed: {exc}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
 
     return ProjectScanResult(
         project_root=root,

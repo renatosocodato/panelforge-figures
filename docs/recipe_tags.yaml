@@ -12,6 +12,18 @@
 # - Tier 1: all 25 recipes from v1.5.0-beta-cdc42_factorial_companion (anchor: CDC42, factorial: true)
 # - Tier 1: all 31 recipes from v1.4.0-beta-disc1_manuscript_companion (anchor: DISC1)
 # - Tier 2: remaining biophysics_scaling recipes (anchor: generic, scale_aware: true)
+# - Tier 2: full coverage of actin_microtubule_morphometry, intravital_imaging,
+#   meta_and_diagnostic, omics_differential, mixed_effects_models
+# - Tier 2: full coverage of grant_and_conceptual, spatial_statistics,
+#   clinical_cohort, dose_response_pharmacology, network_and_pathway,
+#   sensitivity_analysis
+
+actin_microtubule_morphometry.actin_microtubule_crosstalk_quiver:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset:
   anchor: DISC1
@@ -19,6 +31,19 @@ actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset:
   equivalence: false
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.actin_mt_ratio_spatial_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.airyscan_segmentation_mosaic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.airyscan_to_zone_territory_triptych:
   anchor: DISC1
@@ -33,12 +58,61 @@ actin_microtubule_morphometry.behavioral_fingerprint_trio_composite:
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+actin_microtubule_morphometry.branch_angle_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.branch_point_count_raincloud:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.branch_point_density_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.branching_topology_sunburst:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.cell_body_area_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.colocalization_coefficient_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
 actin_microtubule_morphometry.colocalization_raincloud_per_metric:
   anchor: DISC1
   factorial: false
   equivalence: true
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.colocalization_vs_morphology_correlation:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.condition_average_cell_composite:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.cortex_composite_zone_descriptors:
   anchor: DISC1
@@ -47,12 +121,65 @@ actin_microtubule_morphometry.cortex_composite_zone_descriptors:
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+actin_microtubule_morphometry.cortical_thickness_by_region:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.cytoskeleton_polarity_vectorfield:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
 actin_microtubule_morphometry.edge_gradient_intensity_profile:
   anchor: DISC1
   factorial: false
   equivalence: false
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.edge_velocity_spatial_correlation:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  dynamics: kymograph
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.exemplar_extremes_panel:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.filament_orientation_histogram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.intensity_radial_profile:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dimensionality: 1D
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.mitochondrial_axis_alignment:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.morphospace_trajectory_by_time:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: ordered_pseudotime
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.mt_mesh_density_compartment_compare:
   anchor: DISC1
@@ -75,12 +202,57 @@ actin_microtubule_morphometry.pca_silhouette_glyph_morphospace:
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+actin_microtubule_morphometry.per_cell_thumbnail_grid_with_metrics:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.persistence_length_by_segment:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.persistence_length_fit:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.process_end_count_violin:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.process_length_distribution_by_sex:
+  anchor: generic
+  factorial: true
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.protrusion_length_velocity_joint:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
 actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary:
   anchor: DISC1
   factorial: false
   equivalence: false
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.protrusion_retraction_kymograph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  dynamics: kymograph
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.pseudotime_thumbnail_strip:
   anchor: DISC1
@@ -90,11 +262,54 @@ actin_microtubule_morphometry.pseudotime_thumbnail_strip:
   dynamics: ordered_pseudotime
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+actin_microtubule_morphometry.sex_stratified_cvvelocity:
+  anchor: generic
+  factorial: true
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.shape_descriptor_scatter_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.shape_pca_morphospace:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.shape_umap_by_condition:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
 actin_microtubule_morphometry.sholl_intersections_radial_histogram:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+actin_microtubule_morphometry.skeleton_complexity_radar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.skeleton_overlay_kymograph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: kymograph
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.sphericity_vs_elongation_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.territory_contact_network_overlay:
   anchor: DISC1
@@ -102,6 +317,19 @@ actin_microtubule_morphometry.territory_contact_network_overlay:
   equivalence: false
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+actin_microtubule_morphometry.tip_enrichment_vs_shaft_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  wave: v1.2.0-beta-actin_microtubule_morphometry
+
+actin_microtubule_morphometry.topology_ternary_simplex:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.2.0-beta-actin_microtubule_morphometry
 
 actin_microtubule_morphometry.zone_fraction_alluvial_sankey:
   anchor: DISC1
@@ -449,7 +677,7 @@ biophysics_scaling.universality_class_comparison:
 
 biophysics_scaling.width_alignment_buffered_unbuffered_interaction:
   anchor: generic
-  factorial: false
+  factorial: true
   equivalence: false
   scale_aware: true
   wave: v1.1.0-beta-biophysics_scaling
@@ -477,11 +705,550 @@ biophysics_scaling.z_span_vs_width_with_euler_threshold:
   scale_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+clinical_cohort.adverse_event_incidence_bar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.baseline_table_visualization:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.calibration_plot_with_hl_test:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.competing_risks_cumulative_incidence:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.consort_flow_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.cox_forest_hazard_ratios:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.decision_curve_analysis:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.hazard_ratio_over_time_smoothed:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.kaplan_meier_by_stratum:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.number_needed_to_treat_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.outcome_by_quartile:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.propensity_score_balance_diagnostic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.risk_score_discrimination_ladder:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.roc_with_cutoff_optimization:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+clinical_cohort.subgroup_forest_plot:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.compound_cluster_structure_activity:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.dose_normalized_ec50_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.dose_response_sex_stratified:
+  anchor: generic
+  factorial: true
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.dose_response_time_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.drug_combo_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.hill_fit_with_ci:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.ic50_forest_across_compounds:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.ic50_vs_target_affinity_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.isobologram_combination:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.pharmacophore_activity_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.polypharmacology_radar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.response_rebound_kinetics:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.schild_regression:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.selectivity_index_tornado:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+dose_response_pharmacology.synergy_score_bliss_loewe:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.conceptual_triptych:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.cost_by_work_package_bar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.deliverables_timeline:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.ethics_and_impact_block:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.executive_summary_tile:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.hypothesis_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.innovation_positioning_quadrant:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.interdisciplinary_contribution_spider:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.methods_pipeline_flow:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.milestone_vs_risk_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 grant_and_conceptual.narrative_cascade_river_with_xrefs:
   anchor: DISC1
   factorial: false
   equivalence: false
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+grant_and_conceptual.research_aims_pyramid:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.team_expertise_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.team_network_graph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.timeline_gantt_with_milestones:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+grant_and_conceptual.work_package_flow:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+intravital_imaging.aligned_vs_unaligned_velocity_split:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.biosensor_activation_field_per_cell:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.biosensor_dose_response_curve:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: ordered_pseudotime
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.branch_order_topology_per_cell:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cell_cell_contact_frequency_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cell_shape_descriptors_by_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cell_track_trajectory_field:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.chemotaxis_index_trajectory:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: ordered_pseudotime
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cohort_baseline_balance_table_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: static
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.commitment_hazard_with_age:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.commitment_phase_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.commitment_vs_chemotaxis_contingency:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cue_response_dose_latency:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cue_to_net_displacement_latency:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.cue_to_reorientation_latency:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.curvature_along_protrusion_kymograph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  compartment_aware: true
+  dynamics: kymograph
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.depth_projected_microglia_field:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dimensionality: 3D
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.directional_persistence_autocorr:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.dose_x_time_response_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.dwell_time_distribution_per_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.emission_distribution_per_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.equivalence_tost_radar_per_condition:
+  anchor: generic
+  factorial: false
+  equivalence: true
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.hazard_rate_per_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.hmm_vs_hsmm_model_comparison:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.kinematic_power_spectral_density:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.laser_injury_response_radial:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dimensionality: 1D
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.latency_decomposition_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.launch_to_commitment_latency:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.migration_rose_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.model_calibration_brier_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.msd_curve_by_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.multi_channel_intravital_overlay:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.ornstein_uhlenbeck_fit_per_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.photobleaching_corrected_intensity_traces:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.posterior_state_probability_ribbons:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.process_event_timeline:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.protrusion_commitment_survival:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.protrusion_dominance_race_winner:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
 
 intravital_imaging.residence_time_kaplan_meier_with_ks_overlay:
   anchor: CDC42
@@ -490,12 +1257,89 @@ intravital_imaging.residence_time_kaplan_meier_with_ks_overlay:
   dynamics: live
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+intravital_imaging.sojourn_survival_per_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.speed_commitment_coupling:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_conditional_tip_msd:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_decoded_protrusion_polyline_field:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_decoded_tip_track_field:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_entry_exit_raster:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
 intravital_imaging.state_entry_exit_with_switch_callout:
   anchor: CDC42
   factorial: true
   equivalence: false
   dynamics: live
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+intravital_imaging.state_kinematic_spectral_embedding:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_occupancy_stacked_area:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.state_transition_kernel_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.surveillance_efficiency_metric:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.territory_change_pre_post:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
 
 intravital_imaging.territory_zone_overlay_intravital:
   anchor: DISC1
@@ -505,6 +1349,34 @@ intravital_imaging.territory_zone_overlay_intravital:
   dynamics: live
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+intravital_imaging.time_to_homing_survival:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.tip_pair_correlation_in_window:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.tip_ripleys_k_in_window:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.transfer_entropy_state_to_velocity_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
 intravital_imaging.transition_matrix_diagonal_dominance_callout:
   anchor: CDC42
   factorial: true
@@ -512,11 +1384,46 @@ intravital_imaging.transition_matrix_diagonal_dominance_callout:
   dynamics: live
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+intravital_imaging.two_photon_depth_projection:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dimensionality: 3D
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.velocity_distribution_by_state:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.vessel_diameter_kymograph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: kymograph
+  wave: v1.3.0-beta-intravital_imaging
+
+intravital_imaging.viscous_drag_tip_force_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  dynamics: live
+  wave: v1.3.0-beta-intravital_imaging
+
 meta_and_diagnostic.alternative_hypothesis_exclusion_table:
   anchor: DISC1
   factorial: false
   equivalence: false
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+meta_and_diagnostic.batch_effect_diagnostic_pca:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
 
 meta_and_diagnostic.bayes_factor_arrow_plot:
   anchor: CDC42
@@ -536,6 +1443,36 @@ meta_and_diagnostic.cross_contrast_correlation_matrix:
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+meta_and_diagnostic.data_quality_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.effect_size_funnel_plot:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.heterogeneity_forest:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.missing_data_pattern_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.missingness_upset:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 meta_and_diagnostic.model_parameterization_lineage_panel:
   anchor: DISC1
   factorial: false
@@ -553,6 +1490,12 @@ meta_and_diagnostic.multiverse_specification_curve:
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.outlier_detection_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
 
 meta_and_diagnostic.panel_provenance_ledger_table:
   anchor: CDC42
@@ -572,11 +1515,29 @@ meta_and_diagnostic.per_cell_audit_table_with_qa_flags:
   equivalence: false
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+meta_and_diagnostic.power_analysis_by_effect_size:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.prisma_flow_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+meta_and_diagnostic.qc_metric_radar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
 
 meta_and_diagnostic.random_forest_confusion_loocv:
   anchor: DISC1
@@ -584,11 +1545,107 @@ meta_and_diagnostic.random_forest_confusion_loocv:
   equivalence: false
   wave: v1.4.0-beta-disc1_manuscript_companion
 
+meta_and_diagnostic.replication_retrospective_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.reproducibility_correlogram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.retention_vs_attrition_sankey:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.sample_size_decision_ladder:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+meta_and_diagnostic.sensitivity_leave_one_out:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.bayes_posterior_density_by_term:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.emmeans_contrast_grid:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.fixed_vs_random_effect_partition:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.group_level_emmeans_with_pairwise:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.icc_variance_decomposition:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.marginal_effects_ribbon:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 mixed_effects_models.mediation_decomposition_slope_chart:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+mixed_effects_models.mixed_model_residual_diagnostic:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.model_comparison_aic_bic_ladder:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.partial_residuals_vs_predictor:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.posterior_contrast_density:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.posterior_predictive_check:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
 
 mixed_effects_models.pre_post_slope_chart_by_module:
   anchor: CDC42
@@ -596,11 +1653,41 @@ mixed_effects_models.pre_post_slope_chart_by_module:
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+mixed_effects_models.random_effects_caterpillar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.random_intercepts_vs_slopes_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.random_slopes_per_cluster:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+mixed_effects_models.sex_stratified_raincloud_with_coef_box:
+  anchor: generic
+  factorial: true
+  equivalence: false
+  wave: v1.0
+
 mixed_effects_models.sex_stratified_roc_loocv:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+mixed_effects_models.sex_x_genotype_interaction_forest:
+  anchor: generic
+  factorial: true
+  equivalence: false
+  wave: v1.0
 
 mixed_effects_models.two_way_anova_summary_plot:
   anchor: CDC42
@@ -608,17 +1695,173 @@ mixed_effects_models.two_way_anova_summary_plot:
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+network_and_pathway.centrality_degree_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.centrality_vs_effect_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.directed_network_force_layout:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.hub_gene_radial:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.interaction_chord_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.kegg_overlay_enrichment:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.module_eigengene_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.module_preservation_zsummary:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.pathway_crosstalk_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.pathway_flux_sankey_like:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.pathway_flux_streamgraph:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.ppi_seed_expansion:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.regulatory_network_hive:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.regulon_activity_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+network_and_pathway.subnetwork_comparison_diff:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.annotated_cluster_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.contrast_overlap_euler:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.differential_rank_ladder:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.effect_size_replicate_concordance:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.effect_size_vs_significance:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 omics_differential.gge_branch_selectivity_permutation_bar:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+omics_differential.gsea_running_enrichment:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.ma_plot_with_lowess:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 omics_differential.module_concordance_signed_heatmap:
   anchor: CDC42
   factorial: true
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
+
+omics_differential.multi_contrast_volcano_grid:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.ora_dotplot_by_ontology:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.pathway_flux_bubble:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.pathway_module_activity_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
 
 omics_differential.pathway_module_activity_with_sign_concordance:
   anchor: CDC42
@@ -644,9 +1887,219 @@ omics_differential.proteome_phosphoproteome_pathway_scatter:
   equivalence: false
   wave: v1.5.0-beta-cdc42_factorial_companion
 
+omics_differential.proteome_volcano_labeled_pathways:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.rank_product_meta_analysis:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.shrinkage_estimate_scatter:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.upset_set_comparisons:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+omics_differential.volcano_labeled_repelled:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.convergence_diagnostic_sobol:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.dimensionless_pi_group_collapse:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.fast_sensitivity_spectrum:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.fast_subspace_detection:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.interaction_matrix_sobol:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.interaction_network_sobol:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.lhs_parameter_space_coverage:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.morris_elementary_effects:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.parameter_scan_2d_contour:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.pi_group_rank_plot:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.sensitivity_by_output_quantity:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.sensitivity_time_evolution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.sobol_bootstrap_convergence:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.sobol_first_total_pair:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+sensitivity_analysis.tornado_diagram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.bivariate_pair_correlation:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.clark_evans_aggregation_bar:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.co_occurrence_significance_matrix:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.f_function_empty_space:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.kernel_density_heatmap:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
 spatial_statistics.kinhom_inhomogeneous_isotropy:
   anchor: DISC1
   factorial: false
   equivalence: false
   compartment_aware: true
   wave: v1.4.0-beta-disc1_manuscript_companion
+
+spatial_statistics.lisa_cluster_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.moran_i_by_lag:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.nearest_neighbor_distance_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.pair_correlation_function:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.quadrat_count_chisq:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.ripley_l_function:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.spatial_covariogram:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.spatial_permutation_null_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.voronoi_area_distribution:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0
+
+spatial_statistics.voronoi_territory_map:
+  anchor: generic
+  factorial: false
+  equivalence: false
+  wave: v1.0

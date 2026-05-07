@@ -15,6 +15,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     register_recipe,
     smart_fmt,
 )
@@ -67,6 +68,11 @@ _META = RecipeMetadata(
     optional_fields=("title",),
     file_format_hints=("yaml", "csv"),
     alternatives_in_modality=("competing_model_residual_panels",),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=10,
+        independence="paired",
+        refuses_when=("missing_paired_structure",),
+    ),
 )
 
 

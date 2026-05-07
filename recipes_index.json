@@ -614,16 +614,16 @@
             "actin_uy"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -686,16 +686,16 @@
             "ratio_image"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -722,16 +722,16 @@
             "cells"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "3D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -824,16 +824,16 @@
             "angles_deg_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -859,16 +859,16 @@
             "branch_counts_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -897,16 +897,16 @@
             "y_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -933,16 +933,16 @@
             "depth_counts_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -967,16 +967,16 @@
             "soma_areas_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1004,16 +1004,16 @@
             "coefficient_mean"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1075,16 +1075,16 @@
             "shape_metrics"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1110,16 +1110,16 @@
             "hulls"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1180,16 +1180,16 @@
             "thickness_um_by_region"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1221,16 +1221,16 @@
             "polarity_magnitude"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1293,16 +1293,16 @@
             "correlation"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "kymograph",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1330,16 +1330,16 @@
             "target_metric_label"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1364,16 +1364,16 @@
             "angles_deg_by_component"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1399,16 +1399,16 @@
             "intensity_by_channel"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "1D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1434,16 +1434,16 @@
             "delta_angle_deg"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1472,16 +1472,16 @@
             "trajectories_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "ordered_pseudotime",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1613,16 +1613,16 @@
             "cell_metric_labels"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1648,16 +1648,16 @@
             "segment_lp_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1685,16 +1685,16 @@
             "cos_theta_mean"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1719,16 +1719,16 @@
             "end_counts_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1754,16 +1754,16 @@
             "process_length_by_group"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1790,16 +1790,16 @@
             "velocity_um_per_s"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1861,16 +1861,16 @@
             "edge_velocity"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "kymograph",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1933,16 +1933,16 @@
             "cv_velocity_by_group"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -1968,16 +1968,16 @@
             "descriptors"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2007,16 +2007,16 @@
             "condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2045,16 +2045,16 @@
             "condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2117,16 +2117,16 @@
             "condition_values"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2154,16 +2154,16 @@
             "intensity"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "kymograph",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2190,16 +2190,16 @@
             "elongation"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2260,16 +2260,16 @@
             "shaft_intensity"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -2297,16 +2297,16 @@
             "condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.0"
+            "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -4149,7 +4149,7 @@
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
             "equivalence": false,
-            "factorial": false,
+            "factorial": true,
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
@@ -4900,16 +4900,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4936,16 +4936,16 @@
             "smd"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4971,16 +4971,16 @@
             "observed"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5006,16 +5006,16 @@
             "cif_by_cause"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5040,16 +5040,16 @@
             "stages"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5074,16 +5074,16 @@
             "covariates"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5110,16 +5110,16 @@
             "net_benefit_treat_none"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5147,16 +5147,16 @@
             "hr_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5182,16 +5182,16 @@
             "strata"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5215,16 +5215,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5253,16 +5253,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5287,16 +5287,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5325,16 +5325,16 @@
             "n_per_tier"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5363,16 +5363,16 @@
             "auc"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -5397,16 +5397,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -6592,16 +6592,16 @@
             "activity"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6629,16 +6629,16 @@
             "ec50_nM"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6669,16 +6669,16 @@
             "responses_male"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": true,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6708,16 +6708,16 @@
             "response"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6746,16 +6746,16 @@
             "effect"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6784,16 +6784,16 @@
             "responses"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6819,16 +6819,16 @@
             "compounds"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6856,16 +6856,16 @@
             "ki_nM"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6894,16 +6894,16 @@
             "mixtures"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6931,16 +6931,16 @@
             "activity"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -6966,16 +6966,16 @@
             "activity_by_compound"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -7005,16 +7005,16 @@
             "response"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -7042,16 +7042,16 @@
             "log_dr_minus_1"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -7079,16 +7079,16 @@
             "ic50_off_target_nM"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -7117,16 +7117,16 @@
             "loewe_score"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -8480,12 +8480,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8517,12 +8517,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8552,12 +8552,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8587,12 +8587,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8626,12 +8626,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8665,12 +8665,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8702,12 +8702,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8738,12 +8738,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8774,12 +8774,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8808,12 +8808,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8880,12 +8880,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8918,12 +8918,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8954,12 +8954,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -8992,12 +8992,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9027,12 +9027,12 @@
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -9087,16 +9087,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9122,16 +9122,16 @@
             "fields"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9157,16 +9157,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9190,16 +9190,16 @@
             "skeletons"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9227,16 +9227,16 @@
             "contact_counts"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9262,16 +9262,16 @@
             "circularity_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9297,16 +9297,16 @@
             "tracks"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9334,16 +9334,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9372,16 +9372,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9410,16 +9410,16 @@
             "condition_by_protrusion"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9447,16 +9447,16 @@
             "per_protrusion"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9480,16 +9480,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9514,16 +9514,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9551,16 +9551,16 @@
             "latencies"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9587,16 +9587,16 @@
             "latencies"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9622,16 +9622,16 @@
             "polyline"
           ],
           "tags": {
-            "anchor": "unknown",
-            "compartment_aware": "unknown",
+            "anchor": "generic",
+            "compartment_aware": true,
             "dimensionality": "2D",
             "dynamics": "kymograph",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -9661,16 +9661,16 @@
             "z_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "3D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9698,16 +9698,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9733,16 +9733,16 @@
             "responses"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9770,16 +9770,16 @@
             "dwells_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9806,16 +9806,16 @@
             "features_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9840,16 +9840,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
+            "dynamics": "live",
             "equivalence": true,
-            "factorial": "unknown",
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9877,16 +9877,16 @@
             "dwells_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9913,16 +9913,16 @@
             "fits"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9949,16 +9949,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -9988,16 +9988,16 @@
             "response"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
-            "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dimensionality": "1D",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10024,16 +10024,16 @@
             "latencies"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -10059,16 +10059,16 @@
             "latencies"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -10094,16 +10094,16 @@
             "heading_deg_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10129,16 +10129,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10167,16 +10167,16 @@
             "msd_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10206,16 +10206,16 @@
             "blue_channel"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10241,16 +10241,16 @@
             "fits"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10275,16 +10275,16 @@
             "cells"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10312,16 +10312,16 @@
             "states"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10348,16 +10348,16 @@
             "cells"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10383,16 +10383,16 @@
             "condition_by_protrusion"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -10416,16 +10416,16 @@
             "cells"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10489,16 +10489,16 @@
             "dwells_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -10525,16 +10525,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10565,16 +10565,16 @@
             "states"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10603,16 +10603,16 @@
             "decoded"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10641,16 +10641,16 @@
             "decoded"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10679,16 +10679,16 @@
             "states"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10752,16 +10752,16 @@
             "feature_names"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10789,16 +10789,16 @@
             "states"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10826,16 +10826,16 @@
             "states"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10865,16 +10865,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10899,16 +10899,16 @@
             "pairs"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -10968,16 +10968,16 @@
             "strata"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "live",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11004,16 +11004,16 @@
             "r_grid_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -11040,16 +11040,16 @@
             "r_grid_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -11077,16 +11077,16 @@
             "condition_by_cell"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -11150,16 +11150,16 @@
             "z_stack"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "3D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -11187,16 +11187,16 @@
             "speed_by_state"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         },
         {
           "alternatives_in_modality": [
@@ -11224,16 +11224,16 @@
             "diameter_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "kymograph",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11260,16 +11260,16 @@
             "tip_tracks"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
-            "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "dynamics": "live",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.3.0-beta-intravital_imaging"
           },
-          "tags_source": "auto"
+          "tags_source": "merged"
         }
       ]
     },
@@ -11360,16 +11360,16 @@
             "batch_labels"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11500,16 +11500,16 @@
             "higher_is_better"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11537,16 +11537,16 @@
             "pooled_effect"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11580,16 +11580,16 @@
             "tau_squared"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11617,16 +11617,16 @@
             "pattern_counts"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11652,16 +11652,16 @@
             "intersection_counts"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11795,16 +11795,16 @@
             "y_values"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11935,16 +11935,16 @@
             "n_range"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -11969,16 +11969,16 @@
             "stages"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12039,16 +12039,16 @@
             "sample_values"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12111,16 +12111,16 @@
             "status_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12146,16 +12146,16 @@
             "correlation_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12180,16 +12180,16 @@
             "stages"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12218,16 +12218,16 @@
             "effect_sizes"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12257,16 +12257,16 @@
             "original_pooled_ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -12323,16 +12323,16 @@
             "term_samples"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12360,16 +12360,16 @@
             "contrasts"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12396,16 +12396,16 @@
             "models"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12437,16 +12437,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12473,16 +12473,16 @@
             "variance"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12511,16 +12511,16 @@
             "groups"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12580,16 +12580,16 @@
             "residuals"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12616,16 +12616,16 @@
             "models"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12657,16 +12657,16 @@
             "partial_residual"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12694,16 +12694,16 @@
             "contrast_samples"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12730,16 +12730,16 @@
             "posterior_draws"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12804,16 +12804,16 @@
             "se"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12843,16 +12843,16 @@
             "slopes"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12881,16 +12881,16 @@
             "cluster_lines"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12922,16 +12922,16 @@
             "values_by_stratum"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": true,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -12997,16 +12997,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
+            "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13097,16 +13097,16 @@
             "degrees"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13134,16 +13134,16 @@
             "effect_size"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13171,16 +13171,16 @@
             "edges"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13208,16 +13208,16 @@
             "edge_weight"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13243,16 +13243,16 @@
             "interaction_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13278,16 +13278,16 @@
             "nodes"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13316,16 +13316,16 @@
             "eigengene_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13352,16 +13352,16 @@
             "zsummary"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13390,16 +13390,16 @@
             "crosstalk"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13426,16 +13426,16 @@
             "flow_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13463,16 +13463,16 @@
             "pathway_flux"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13499,16 +13499,16 @@
             "edges"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13536,16 +13536,16 @@
             "edges"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13574,16 +13574,16 @@
             "activity"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13612,16 +13612,16 @@
             "delta_weight"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -13679,16 +13679,16 @@
             "sample_conditions"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13714,16 +13714,16 @@
             "set_members"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13751,16 +13751,16 @@
             "padj"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13789,16 +13789,16 @@
             "rep2_log2fc"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13827,16 +13827,16 @@
             "padj"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13901,16 +13901,16 @@
             "hit_ranks"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -13940,16 +13940,16 @@
             "log2fc"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14013,16 +14013,16 @@
             "contrasts"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14051,16 +14051,16 @@
             "padj"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14088,16 +14088,16 @@
             "significance"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14128,16 +14128,16 @@
             "activity"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14311,16 +14311,16 @@
             "pathway"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14350,16 +14350,16 @@
             "rank_product"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14389,16 +14389,16 @@
             "shrunken_log2fc"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14425,16 +14425,16 @@
             "set_members"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -14466,16 +14466,16 @@
             "padj"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -15883,16 +15883,16 @@
             "index_trajectories"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -15920,16 +15920,16 @@
             "experiments"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -15961,16 +15961,16 @@
             "parameter_freqs"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -15997,16 +15997,16 @@
             "sensitivity_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16034,16 +16034,16 @@
             "S2"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16071,16 +16071,16 @@
             "S2"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16107,16 +16107,16 @@
             "samples"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16146,16 +16146,16 @@
             "sigma"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16189,16 +16189,16 @@
             "z"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16224,16 +16224,16 @@
             "aic"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16263,16 +16263,16 @@
             "indices"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16303,16 +16303,16 @@
             "indices"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "ordered_pseudotime",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16342,16 +16342,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16382,16 +16382,16 @@
             "ST"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -16419,16 +16419,16 @@
             "rows"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     },
@@ -17077,16 +17077,16 @@
             "csr_envelope_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17114,16 +17114,16 @@
             "ce_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17149,16 +17149,16 @@
             "p_matrix"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17186,16 +17186,16 @@
             "intensity_lambda"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17223,16 +17223,16 @@
             "y_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17298,16 +17298,16 @@
             "pseudo_p"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17336,16 +17336,16 @@
             "ci_hi"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17371,16 +17371,16 @@
             "distances_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17408,16 +17408,16 @@
             "g_r"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17442,16 +17442,16 @@
             "n_total_points"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17480,16 +17480,16 @@
             "n_points"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17514,16 +17514,16 @@
             "covariance"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17550,16 +17550,16 @@
             "observed_statistic"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17583,16 +17583,16 @@
             "areas_by_condition"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -17619,16 +17619,16 @@
             "y_um"
           ],
           "tags": {
-            "anchor": "unknown",
+            "anchor": "generic",
             "compartment_aware": "unknown",
             "dimensionality": "2D",
             "dynamics": "static",
-            "equivalence": "unknown",
-            "factorial": "unknown",
+            "equivalence": false,
+            "factorial": false,
             "scale_aware": "unknown",
             "wave": "v1.0"
           },
-          "tags_source": "auto"
+          "tags_source": "override"
         }
       ]
     }

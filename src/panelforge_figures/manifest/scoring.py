@@ -32,18 +32,31 @@ from typing import Any
 # Locked constants — spec amendments only.
 # ---------------------------------------------------------------------------
 
-WEIGHTS: Mapping[str, float] = MappingProxyType(
-    {
-        "factorial": 0.30,
-        "equivalence": 0.25,
-        "anchor": 0.20,
-        "dynamics": 0.15,
-        "dimensionality": 0.10,
-    }
-)
+SCORING_RUBRIC_VERSION: str = "1.0.0"
+
+# Append-only registry of historical weight tables.  Adding a new entry
+# requires bumping ``SCORING_RUBRIC_VERSION`` and shipping a release; entries
+# are never removed.  See ``docs/spec_active_learning.md`` §6 for the
+# versioning policy.
+WEIGHTS_HISTORY: dict[str, Mapping[str, float]] = {
+    "1.0.0": MappingProxyType(
+        {
+            "factorial": 0.30,
+            "equivalence": 0.25,
+            "anchor": 0.20,
+            "dynamics": 0.15,
+            "dimensionality": 0.10,
+        }
+    ),
+}
+
+# ``WEIGHTS`` is the default-version view into ``WEIGHTS_HISTORY``; callers
+# that don't pass ``weights_version`` to ``score_recipes`` see the entry
+# pinned to ``SCORING_RUBRIC_VERSION``.  Keeping this alias lets existing
+# importers continue to read ``scoring.WEIGHTS`` unchanged.
+WEIGHTS: Mapping[str, float] = WEIGHTS_HISTORY[SCORING_RUBRIC_VERSION]
 
 WEIGHTS_SUM_CHECK: float = 1.00
-SCORING_RUBRIC_VERSION: str = "1.0.0"
 MINIMUM_SCORE_FOR_SHORTLIST: float = 0.40
 DEFAULT_SHORTLIST_SIZE: int = 12
 
@@ -52,6 +65,14 @@ DEFAULT_SHORTLIST_SIZE: int = 12
 assert abs(sum(WEIGHTS.values()) - WEIGHTS_SUM_CHECK) < 1e-9, (
     f"WEIGHTS must sum to {WEIGHTS_SUM_CHECK}; got {sum(WEIGHTS.values())}"
 )
+# Every entry in ``WEIGHTS_HISTORY`` must independently sum to 1.0 — protects
+# against typos when a future maintainer appends a new rubric version.
+for _wv, _w in WEIGHTS_HISTORY.items():
+    assert abs(sum(_w.values()) - WEIGHTS_SUM_CHECK) < 1e-9, (
+        f"WEIGHTS_HISTORY[{_wv!r}] must sum to {WEIGHTS_SUM_CHECK}; "
+        f"got {sum(_w.values())}"
+    )
+del _wv, _w
 
 
 # ---------------------------------------------------------------------------
@@ -222,18 +243,22 @@ def _passes_hard_filters(
     return True
 
 
-def _score_one(tags: Mapping[str, Any], profile: ProjectProfile) -> float:
-    """Apply the locked weights to a single recipe's tags."""
+def _score_one(
+    tags: Mapping[str, Any],
+    profile: ProjectProfile,
+    weights: Mapping[str, float] = WEIGHTS,
+) -> float:
+    """Apply the given (or default) weights to a single recipe's tags."""
     return (
-        WEIGHTS["factorial"]
+        weights["factorial"]
         * match_bool(tags.get("factorial"), profile.factorial_design)
-        + WEIGHTS["equivalence"]
+        + weights["equivalence"]
         * match_bool(tags.get("equivalence"), profile.equivalence_claims)
-        + WEIGHTS["anchor"]
+        + weights["anchor"]
         * match_anchor(tags.get("anchor"), profile.manuscript_anchor)
-        + WEIGHTS["dynamics"]
+        + weights["dynamics"]
         * match_dynamics(tags.get("dynamics"), profile.dynamics_needed)
-        + WEIGHTS["dimensionality"]
+        + weights["dimensionality"]
         * match_dim(tags.get("dimensionality"), profile.dimensionality)
     )
 
@@ -253,6 +278,8 @@ def _anchor_strength(tags: Mapping[str, Any], profile: ProjectProfile) -> int:
 def score_recipes(
     profile: ProjectProfile,
     recipes_with_tags: Iterable[dict[str, Any]],
+    *,
+    weights_version: str = SCORING_RUBRIC_VERSION,
 ) -> list[ScoredRecipe]:
     """Apply hard filters + soft scoring + tie-breakers + threshold.
 
@@ -263,6 +290,11 @@ def score_recipes(
     recipes_with_tags : Iterable[dict]
         Each dict must carry ``modality``, ``name``, ``family``,
         ``answers_question``, and ``tags``.  Extra keys are ignored.
+    weights_version : str, keyword-only
+        Selects which entry of ``WEIGHTS_HISTORY`` to score against.  Defaults
+        to ``SCORING_RUBRIC_VERSION`` so existing callers see no change.
+        Raises ``KeyError`` if the version is not present in
+        ``WEIGHTS_HISTORY``.
 
     Returns
     -------
@@ -270,6 +302,7 @@ def score_recipes(
         Up to ``profile.shortlist_size`` rows, descending by score with
         deterministic tie-breakers applied.  Empty list is a valid result.
     """
+    weights = WEIGHTS_HISTORY[weights_version]
     recipes = list(recipes_with_tags)
 
     # Step 1 — hard filters.
@@ -282,7 +315,7 @@ def score_recipes(
     scored: list[tuple[ScoredRecipe, dict[str, Any]]] = []
     for r in survivors:
         tags = r.get("tags", {}) or {}
-        s = _score_one(tags, profile)
+        s = _score_one(tags, profile, weights)
         if s < MINIMUM_SCORE_FOR_SHORTLIST:
             continue
         modality = r.get("modality", "")

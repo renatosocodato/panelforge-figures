@@ -279,6 +279,43 @@ the same image are free.  Override the model with the
 - omit `ANTHROPIC_API_KEY` from your environment, OR
 - install without the `claude-autonomous` extra.
 
+### Telemetry channel (v1.13.0+)
+
+Panelforge ships an optional usage-telemetry channel for collecting
+calibration data (which recipes users actually pick out of the auto-
+shortlist). Telemetry is **OFF by default** and is **never auto-
+uploaded** — the package contains no upload code.
+
+Activation: add `telemetry: opt-in` to `panelforge.project.yaml`. Once
+enabled, every `figures generate` call appends a row to
+`panelforge_workspace/usage.jsonl`. The user later runs
+`figures pick <recipe_name>` to record which recipe they actually
+chose. To export an aggregated artifact for analysis (which the user
+manually transmits if they wish), run:
+
+```
+figures telemetry export ./calibration_2026q4.jsonl --anonymize
+```
+
+Even with opt-in enabled, the telemetry log contains:
+
+- categorical profile fields (modality, factorial_design, anchor_strength, …)
+- recipe `full_name` strings (e.g. `live_imaging_2d.factorial_anchor_v3`)
+- numeric scores and per-tag scores
+
+It NEVER contains:
+
+- manuscript text (never recorded)
+- CSV row contents (never recorded)
+- file paths (never recorded)
+- DOIs (never recorded)
+- auto-uploads (never — the user always ships the file manually)
+
+To disable on an opt-in project, change the YAML to `telemetry: off` or
+delete the line. The on-disk JSONL is plain text the user can `cat`,
+`grep`, or delete at any time. See `docs/spec_active_learning.md` §9 for
+the full privacy considerations.
+
 ---
 
 ## `panelforge.project.yaml` schema

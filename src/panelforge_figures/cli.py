@@ -1040,5 +1040,108 @@ def provenance_diff(figure_a: Path, figure_b: Path) -> None:
                 click.echo(f"    - {line}")
 
 
+# ─────────────────────── compose (Sprint 1C — v1.9.0) ──────────────────
+#
+# Multi-panel figure composition.  Pairs with Build-A's
+# `manifest/figure_composition.py` (public API:
+# `render_figure_yaml`, `validate_figure_yaml`).  See
+# `docs/spec_composition_layer.md`.
+
+
+@main.command("compose")
+@click.argument(
+    "yaml_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--out-dir",
+    type=click.Path(path_type=Path),
+    default=Path("figures"),
+    help="Output directory for the composed PDF (default: figures/).",
+)
+def compose_cmd(yaml_path: Path, out_dir: Path) -> None:
+    """Compose a multi-panel figure from a `*.figure.yaml` spec.
+
+    Sprint 1C — v1.9.0.  See `docs/spec_composition_layer.md`.
+    """
+    try:
+        from .manifest import render_figure_yaml
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"figure_composition module not available: {exc}; "
+            "Build-A's `manifest/figure_composition.py` has not landed yet."
+        ) from exc
+
+    out_path = render_figure_yaml(yaml_path, out_dir=out_dir)
+    click.echo(f"✓ composed: {out_path}")
+
+
+@main.command("compose-all")
+@click.option(
+    "--figures-dir",
+    type=click.Path(path_type=Path),
+    default=Path("figures"),
+    help="Root directory containing `*.figure.yaml` specs (default: figures/).",
+)
+def compose_all_cmd(figures_dir: Path) -> None:
+    """Compose ALL `*.figure.yaml` files under FIGURES_DIR.
+
+    Sprint 1C — v1.9.0.  Globs the directory non-recursively, composes
+    each spec, and reports per-file success / failure.  Exit code 0 iff
+    every spec composes; exit code 1 if no specs are found.
+    """
+    try:
+        from .manifest import render_figure_yaml
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"figure_composition module not available: {exc}; "
+            "Build-A's `manifest/figure_composition.py` has not landed yet."
+        ) from exc
+
+    yaml_files = sorted(figures_dir.glob("*.figure.yaml"))
+    if not yaml_files:
+        click.echo(
+            f"no *.figure.yaml files in {figures_dir}",
+            err=True,
+        )
+        sys.exit(1)
+    for yp in yaml_files:
+        try:
+            out = render_figure_yaml(yp, out_dir=figures_dir)
+            click.echo(f"✓ {yp.name} → {out.name}")
+        except Exception as e:  # noqa: BLE001 — surface any render error per-file
+            click.echo(f"✗ {yp.name}: {e}", err=True)
+
+
+@main.command("compose-validate")
+@click.argument(
+    "yaml_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+def compose_validate_cmd(yaml_path: Path) -> None:
+    """Schema-check a `*.figure.yaml` spec without rendering.
+
+    Sprint 1C — v1.9.0.  Validates the figure spec against its Pydantic
+    schema and verifies that every referenced recipe exists.  Exit code
+    0 if the spec is valid; exit code 1 otherwise (with one diagnostic
+    line per problem on stderr).
+    """
+    try:
+        from .manifest import validate_figure_yaml
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"figure_composition module not available: {exc}; "
+            "Build-A's `manifest/figure_composition.py` has not landed yet."
+        ) from exc
+
+    problems = validate_figure_yaml(yaml_path)
+    if not problems:
+        click.echo(f"✓ {yaml_path.name} valid")
+        return
+    for p in problems:
+        click.echo(f"✗ {p}", err=True)
+    sys.exit(1)
+
+
 if __name__ == "__main__":
     main()

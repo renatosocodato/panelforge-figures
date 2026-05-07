@@ -1,0 +1,33 @@
+# CDC42 factorial — 2x2 grid, panels labelled by sex x genotype.
+#
+# This fixture exercises GridLayout with shared y-axis linking between
+# the two CKO panels (the most common factorial readout pattern).
+figure_id: cdc42_factorial_2x2
+title: "Sex x genotype factorial — Cdc42 CKO"
+
+layout:
+  type: grid
+  rows: 2
+  cols: 2
+  hspace: 0.40
+  wspace: 0.30
+
+shared_aesthetic: mixed_effects_models
+panel_label_style: upper_left_bold
+figsize: [7.6, 6.0]
+
+panels:
+  - id: A
+    recipe: mixed_effects_models.sex_stratified_roc_loocv
+    caption: "F-CTL"
+  - id: B
+    recipe: mixed_effects_models.sex_stratified_roc_loocv
+    caption: "F-CKO"
+    shared_axis_with: A
+  - id: C
+    recipe: mixed_effects_models.sex_stratified_roc_loocv
+    caption: "M-CTL"
+  - id: D
+    recipe: mixed_effects_models.sex_stratified_roc_loocv
+    caption: "M-CKO"
+    shared_axis_with: C

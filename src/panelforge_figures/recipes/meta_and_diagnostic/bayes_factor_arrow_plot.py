@@ -14,6 +14,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     bf_from_bic,
     classify_bf_threshold,
     register_recipe,
@@ -77,6 +78,15 @@ _META = RecipeMetadata(
     optional_fields=("title",),
     file_format_hints=("yaml", "csv"),
     alternatives_in_modality=("heterogeneity_forest",),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=10,
+        distribution_assumption="approximately_gaussian",
+        multiple_comparisons="any_correction_required",
+        independence="iid",
+        effect_size_in_units="standardized_d",
+        rendered_claim_template="Cohen's d = {d:.2f} ({outcome_class})",
+        refuses_when=("underpowered",),
+    ),
 )
 
 

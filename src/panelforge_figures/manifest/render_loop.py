@@ -44,6 +44,7 @@ from pydantic import ValidationError
 
 from .. import __version__
 from ..core.contract import get_recipe
+from ..core.statistical_contract import DEFAULT_CONTRACT, StatisticalContract
 
 # ─────────────────────────── public exceptions ──────────────────────────
 
@@ -97,16 +98,37 @@ class RenderDataFile:
 
 @dataclass(frozen=True)
 class RenderOutcome:
-    """Per-recipe render result captured by the loop."""
+    """Per-recipe render result captured by the loop.
+
+    ``status`` is one of:
+
+    * ``"success"`` — recipe rendered to PDF + PNG.
+    * ``"skipped_unbound"`` — binding was incomplete; render was not attempted.
+    * ``"error_contract"`` — Pydantic ``ValidationError`` while building
+      the recipe's input contract from user data.
+    * ``"error_render"`` — generic exception raised by the renderer or
+      inside ``_load_data_for_binding``.
+    * ``"error_audit_refuse"`` — Sprint 1A (v1.7.0): the per-recipe
+      :class:`StatisticalContract` audit returned ``overall == "refuse"``;
+      the renderer was NOT invoked.  ``error_message`` carries the
+      formatted findings; ``audit_findings`` carries the structured form.
+
+    ``audit_findings`` is a tuple of structural :class:`AuditFinding`
+    objects (rule_id, severity, message). It is populated for every
+    audited recipe — both refused (status ``error_audit_refuse``) and
+    warned (status ``success`` with warnings riding along) — so the
+    report writer can surface them under "Statistical warnings".
+    """
 
     full_name: str
-    status: str  # "success" | "skipped_unbound" | "error_contract" | "error_render"
+    status: str
     pdf_path: Path | None
     png_path: Path | None
     error_class: str | None
     error_message: str | None
     traceback_excerpt: str | None  # last 5 lines if applicable
     elapsed_seconds: float
+    audit_findings: tuple[Any, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -248,6 +270,42 @@ def _load_data_for_binding(
     return _load_columns_from_path(data_file.path, binding.column_mapping)
 
 
+def _is_permissive(contract: StatisticalContract) -> bool:
+    """Return True if ``contract`` is the all-permissive default.
+
+    Used by the render-loop audit step to short-circuit recipes whose
+    authors have NOT yet declared an explicit statistical contract — the
+    default ``StatisticalContract()`` instance carries no rules to check
+    so running the audit machinery against it is wasted work.
+
+    The check is structural (compares the dataclass to the module-level
+    ``DEFAULT_CONTRACT`` sentinel) so it survives equality checks across
+    pickling and registry import order.
+    """
+    return contract == DEFAULT_CONTRACT
+
+
+def _format_audit_findings(report: Any) -> str:
+    """Format an ``AuditReport`` (or compatible object) as a single-line message.
+
+    Used for ``RenderOutcome.error_message`` when the audit refuses a
+    recipe; keeps the message dense enough to fit one report-table cell
+    while preserving the rule_id + severity vocabulary so a downstream
+    parser can recover the verdict structure.
+    """
+    pieces: list[str] = []
+    findings = getattr(report, "findings", ()) or ()
+    for f in findings:
+        sev = getattr(f, "severity", "")
+        rule = getattr(f, "rule_id", "")
+        msg = getattr(f, "message", "")
+        if sev in {"warn", "refuse"}:
+            pieces.append(f"[{str(sev).upper()}] {rule}: {msg}")
+    if not pieces:
+        return "statistical-contract audit refused this recipe"
+    return " | ".join(pieces)
+
+
 def _safe_filename(full_name: str) -> str:
     """Convert ``modality.recipe`` to a filesystem-safe stem.
 
@@ -266,17 +324,87 @@ def _safe_filename(full_name: str) -> str:
 # ─────────────────────────── render loop ────────────────────────────────
 
 
+def _run_audit_for_binding(
+    binding: RenderBinding,
+    entry: Any,
+    data_file: RenderDataFile | None,
+) -> tuple[Any, tuple[Any, ...]] | None:
+    """Run the statistical-contract audit on a binding's data.
+
+    Returns ``(report, findings_tuple)`` if the audit produced a report;
+    returns ``None`` if the audit module is unavailable, the contract is
+    permissive (default), or the data could not be re-read as a
+    DataFrame for any reason (the audit is best-effort and never
+    blocks rendering on its own bookkeeping failures).
+
+    The audit reads the data via ``pandas.read_csv`` (or ``read_parquet``)
+    independently of the column-mapping projection used by
+    ``_load_data_for_binding`` — the audit needs the *full* data file to
+    compute per-group counts, normality tests, etc.
+    """
+    contract = getattr(entry.metadata, "statistical_contract", None)
+    if contract is None or _is_permissive(contract):
+        return None
+    try:
+        from .statistical_audit import audit_recipe_against_data
+    except ImportError:  # pragma: no cover — Build-A scaffold guard
+        return None
+
+    # Determine a primary data path. Prefer per-field map's first entry,
+    # fall back to ``data_file`` (legacy single-source path).
+    primary: Path | None = None
+    if binding.data_file_per_field:
+        primary = next(iter(binding.data_file_per_field.values()), None)
+    elif data_file is not None:
+        primary = data_file.path
+    if primary is None:
+        return None
+
+    try:
+        import pandas as pd
+        suffix = primary.suffix.lower()
+        if suffix in {".parquet", ".pq"}:
+            df = pd.read_parquet(primary)
+        elif suffix == ".csv":
+            df = pd.read_csv(primary)
+        else:  # .npz or anything else — skip audit, defer to render-time errors
+            return None
+    except Exception:  # noqa: BLE001 — audit is best-effort
+        return None
+
+    try:
+        report = audit_recipe_against_data(
+            contract=contract,
+            data=df,
+            group_column=None,
+            recipe_full_name=binding.full_name,
+        )
+    except Exception:  # noqa: BLE001 — audit must not crash render
+        return None
+
+    return report, tuple(getattr(report, "findings", ()) or ())
+
+
 def _render_one(
     binding: RenderBinding,
     data_file: RenderDataFile | None,
     out_dir: Path,
     dpi: int,
     figsize: tuple[float, float],
+    *,
+    skip_audit: bool = False,
 ) -> RenderOutcome:
     """Execute a single recipe and return its outcome.
 
     Re-raises ``ImportError`` / ``ModuleNotFoundError`` / ``OSError`` /
     ``KeyboardInterrupt`` so the caller can convert them into halts.
+
+    When ``skip_audit`` is False (the default), the per-recipe
+    :class:`StatisticalContract` audit runs after the recipe is looked
+    up but before the contract is constructed. A ``refuse`` verdict
+    short-circuits the rest of the pipeline with status
+    ``error_audit_refuse``; ``warn`` and ``pass`` verdicts proceed
+    normally with the findings recorded on the outcome.
     """
     started = time.perf_counter()
 
@@ -307,6 +435,28 @@ def _render_one(
             elapsed_seconds=time.perf_counter() - started,
         )
 
+    # Statistical-contract audit (Sprint 1A — v1.7.0). Skip when the
+    # contract is the default permissive (e.g. recipes without explicit
+    # contracts) OR when --skip-audit was passed.
+    audit_findings: tuple[Any, ...] = ()
+    if not skip_audit:
+        audit_result = _run_audit_for_binding(binding, entry, data_file)
+        if audit_result is not None:
+            report, audit_findings = audit_result
+            overall = str(getattr(report, "overall", "")).lower()
+            if overall == "refuse":
+                return RenderOutcome(
+                    full_name=binding.full_name,
+                    status="error_audit_refuse",
+                    pdf_path=None,
+                    png_path=None,
+                    error_class="StatisticalContractViolation",
+                    error_message=_format_audit_findings(report),
+                    traceback_excerpt=None,
+                    elapsed_seconds=time.perf_counter() - started,
+                    audit_findings=audit_findings,
+                )
+
     # Load data — pandas/numpy may raise OSError on missing file (caller halts)
     # or generic Exception on parse problems (we capture).
     try:
@@ -323,6 +473,7 @@ def _render_one(
             error_message=str(exc),
             traceback_excerpt=_excerpt_traceback(exc),
             elapsed_seconds=time.perf_counter() - started,
+            audit_findings=audit_findings,
         )
 
     # Build contract.
@@ -338,6 +489,7 @@ def _render_one(
             error_message=str(exc),
             traceback_excerpt=_excerpt_traceback(exc),
             elapsed_seconds=time.perf_counter() - started,
+            audit_findings=audit_findings,
         )
     except (ImportError, ModuleNotFoundError, OSError):
         raise
@@ -351,6 +503,7 @@ def _render_one(
             error_message=str(exc),
             traceback_excerpt=_excerpt_traceback(exc),
             elapsed_seconds=time.perf_counter() - started,
+            audit_findings=audit_findings,
         )
 
     # Render + save.  Matplotlib import is lazy so an environment without
@@ -379,6 +532,7 @@ def _render_one(
                 error_message=str(exc),
                 traceback_excerpt=_excerpt_traceback(exc),
                 elapsed_seconds=time.perf_counter() - started,
+                audit_findings=audit_findings,
             )
     finally:
         plt.close(fig)
@@ -392,6 +546,7 @@ def _render_one(
         error_message=None,
         traceback_excerpt=None,
         elapsed_seconds=time.perf_counter() - started,
+        audit_findings=audit_findings,
     )
 
 
@@ -402,6 +557,7 @@ def render_shortlist(
     out_dir: Path = Path("figures"),
     dpi: int = 300,
     figsize: tuple[float, float] = (4.2, 3.2),
+    skip_audit: bool = False,
 ) -> RenderLog:
     """Run the render loop over a confirmed shortlist of bindings.
 
@@ -409,6 +565,18 @@ def render_shortlist(
     ``ImportError`` / ``ModuleNotFoundError`` / ``OSError`` raise
     :class:`EnvironmentalFailure` and halt the loop immediately;
     ``KeyboardInterrupt`` propagates unchanged.
+
+    Parameters
+    ----------
+    skip_audit
+        Sprint 1A (v1.7.0) escape hatch.  When ``True``, the per-recipe
+        :class:`StatisticalContract` audit is bypassed and the loop
+        reverts to its pre-1.7 behaviour (intake → score → bind →
+        render → report). When ``False`` (default), every recipe with
+        a non-permissive contract is audited before render; refused
+        bindings produce ``RenderOutcome(status="error_audit_refuse")``
+        and are NOT rendered.  See ``docs/spec_statistical_contract.md``
+        §4 for the pipeline placement rationale.
     """
     started_at = _utc_iso()
 
@@ -430,7 +598,10 @@ def render_shortlist(
     for binding in bindings:
         df = file_index.get(binding.data_file_id) if binding.data_file_id else None
         try:
-            outcome = _render_one(binding, df, out_dir, dpi, figsize)
+            outcome = _render_one(
+                binding, df, out_dir, dpi, figsize,
+                skip_audit=skip_audit,
+            )
         except (ImportError, ModuleNotFoundError) as exc:
             raise EnvironmentalFailure(
                 f"missing dependency while rendering {binding.full_name!r}: {exc}"
@@ -540,7 +711,8 @@ def write_render_report(
         lines.append("_No recipes skipped._")
     lines.append("")
 
-    # Failed section
+    # Failed section — render-time errors (NOT audit refusals; those are
+    # broken out into their own section below).
     failed = [
         o for o in log.outcomes
         if o.status in {"error_contract", "error_render"}
@@ -562,6 +734,52 @@ def write_render_report(
         lines.append("_No render errors._")
     lines.append("")
 
+    # Audit-refused section (Sprint 1A — v1.7.0). Recipes whose
+    # statistical-contract audit returned ``overall == "refuse"`` were
+    # NOT rendered; we surface them here so the user can act on the
+    # offending rule_id rather than scanning the generic Failed table.
+    audit_refused = [o for o in log.outcomes if o.status == "error_audit_refuse"]
+    lines.append(f"## Audit refused ({len(audit_refused)})")
+    lines.append("")
+    if audit_refused:
+        lines.append("| Recipe | Findings |")
+        lines.append("|---|---|")
+        for o in audit_refused:
+            msg = o.error_message or "audit refused (no message)"
+            lines.append(
+                f"| {_md_escape(o.full_name)} | {_md_escape(msg)} |"
+            )
+    else:
+        lines.append("_No recipes refused by statistical audit._")
+    lines.append("")
+
+    # Statistical warnings — surfaced from any outcome that carries
+    # non-empty audit findings whose severity is "warn". These rendered
+    # successfully but the report flags them so the figure consumer can
+    # decide whether to trust them.
+    warned: list[tuple[RenderOutcome, list[Any]]] = []
+    for o in log.outcomes:
+        warns = [
+            f for f in o.audit_findings
+            if str(getattr(f, "severity", "")).lower() == "warn"
+        ]
+        if warns:
+            warned.append((o, warns))
+    lines.append(f"## Statistical warnings ({len(warned)})")
+    lines.append("")
+    if warned:
+        for o, warns in warned:
+            lines.append(f"### {o.full_name}")
+            for w in warns:
+                rule = getattr(w, "rule_id", "<unknown>")
+                msg = getattr(w, "message", "")
+                lines.append(f"- **rule:** {rule}")
+                lines.append(f"  **observed:** {msg}")
+            lines.append("")
+    else:
+        lines.append("_No statistical warnings emitted._")
+    lines.append("")
+
     # Next steps
     lines.append("## Next steps")
     lines.append("")
@@ -573,6 +791,13 @@ def write_render_report(
         f"- For the {log.n_skipped} skipped recipes, add data or remove "
         "from shortlist."
     )
+    if audit_refused:
+        lines.append(
+            f"- For the {len(audit_refused)} audit-refused recipes, either "
+            "collect more data, pick a recipe with a more permissive "
+            "statistical contract, or rerun with `figures generate "
+            "--skip-audit` (NOT recommended for production)."
+        )
     lines.append(
         "- Re-run with `figures generate` to render only the previously-failed "
         "recipes."

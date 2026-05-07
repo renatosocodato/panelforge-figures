@@ -6,6 +6,7 @@ import json
 import logging
 import sys
 from pathlib import Path
+from typing import Any
 
 import click
 
@@ -526,7 +527,21 @@ def bridge_cmd(
 @click.option(
     "--out-dir", type=click.Path(path_type=Path), default=Path("figures"),
 )
-def generate_cmd(bindings_path: Path, data_dir: Path, out_dir: Path) -> None:
+@click.option(
+    "--skip-audit", is_flag=True,
+    help=(
+        "Skip the per-recipe statistical-contract audit step (Sprint 1A — "
+        "v1.7.0). NOT RECOMMENDED for production runs: the audit is the "
+        "guard that prevents underpowered / mis-specified figures from "
+        "rendering. Use only for development / triage."
+    ),
+)
+def generate_cmd(
+    bindings_path: Path,
+    data_dir: Path,
+    out_dir: Path,
+    skip_audit: bool,
+) -> None:
     """Render bound recipes; write figures + RENDER_REPORT.md."""
     from .manifest import (
         compute_fully_bound,
@@ -561,13 +576,280 @@ def generate_cmd(bindings_path: Path, data_dir: Path, out_dir: Path) -> None:
         bindings=[to_render_binding(rb) for rb in rbs],
         data_files=to_render_data_files(files),
         out_dir=out_dir,
+        skip_audit=skip_audit,
     )
     report_path = write_render_report(log)
+    if skip_audit:
+        click.echo(
+            "  ⚠ AUDIT SKIPPED — DO NOT SHIP THIS RUN; rerun without "
+            "--skip-audit before figure release.",
+            err=True,
+        )
     click.echo(
         f"\n✓ rendered {log.n_success}/{log.n_attempted} recipes "
         f"({log.n_skipped} skipped, {log.n_failed} failed)"
     )
     click.echo(f"  see {report_path}")
+
+
+# ─────────────────────────── audit (Sprint 1A — v1.7.0) ─────────────────
+
+
+@main.group("audit")
+def audit_group() -> None:
+    """Statistical-contract audit (Sprint 1A — v1.7.0).
+
+    Walks the per-recipe StatisticalContract against bound data
+    BEFORE render, surfacing PASS / WARN / REFUSE findings.
+
+    Two subcommands:
+
+      * `figures audit recipe <full_name> --data <csv>`
+        — audit one recipe against one data file.
+
+      * `figures audit shortlist`
+        — audit every recipe in the bound shortlist
+        (see `panelforge_workspace/data_bridge_cache.json`).
+    """
+
+
+def _format_audit_finding(finding: Any) -> str:
+    """Pretty-print a single AuditFinding for terminal output."""
+    sev = getattr(finding, "severity", "unknown")
+    rule = getattr(finding, "rule_id", "<unknown rule>")
+    msg = getattr(finding, "message", "")
+    if sev == "refuse":
+        marker = "✗"
+    elif sev == "warn":
+        marker = "⚠"
+    else:
+        marker = "✓"
+    return f"  {marker} [{sev.upper()}] {rule}: {msg}"
+
+
+@audit_group.command("recipe")
+@click.argument("recipe_full_name", type=str)
+@click.option(
+    "--data", "data_path", type=click.Path(
+        exists=True, dir_okay=False, path_type=Path,
+    ), required=True,
+    help="CSV (or parquet) holding the data to audit against the contract.",
+)
+@click.option(
+    "--group-column", type=str, default=None,
+    help=(
+        "Column to group by for per-group rules (e.g. n_per_group). "
+        "Required when the contract declares min_n_per_group."
+    ),
+)
+@click.option(
+    "--strict", is_flag=True,
+    help="Treat warnings as failures (exit 1).",
+)
+def audit_recipe_cmd(
+    recipe_full_name: str,
+    data_path: Path,
+    group_column: str | None,
+    strict: bool,
+) -> None:
+    """Audit one recipe against one CSV.
+
+    Example:
+
+      figures audit recipe biophysics_scaling.compartment_paired_delta_scatter \\
+        --data data/effect_sizes.csv
+
+    Exit codes:
+      0  audit passed (or only PASS findings)
+      1  audit refused, OR --strict and at least one WARN
+    """
+    import pandas as pd
+    try:
+        from .manifest.statistical_audit import audit_recipe_against_data
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"statistical_audit module not available: {exc}; "
+            "Build-A's `manifest/statistical_audit.py` has not landed yet."
+        ) from exc
+
+    ensure_all_imported()
+    try:
+        entry = get_recipe(recipe_full_name)
+    except KeyError as exc:
+        raise click.ClickException(str(exc)) from exc
+    contract = entry.metadata.statistical_contract
+    if data_path.suffix.lower() in {".parquet", ".pq"}:
+        df = pd.read_parquet(data_path)
+    else:
+        df = pd.read_csv(data_path)
+
+    report = audit_recipe_against_data(
+        contract=contract,
+        data=df,
+        group_column=group_column,
+        recipe_full_name=recipe_full_name,
+    )
+
+    click.echo(f"Audit: {recipe_full_name}")
+    click.echo(f"Data:  {data_path}  (n={len(df)})")
+    click.echo(f"Overall: {str(report.overall).upper()}")
+    click.echo("")
+    for finding in report.findings:
+        if getattr(finding, "severity", "pass") == "pass":
+            continue  # don't clutter
+        click.echo(_format_audit_finding(finding))
+
+    overall = str(report.overall).lower()
+    if overall == "refuse":
+        sys.exit(1)
+    if strict and overall == "warn":
+        sys.exit(1)
+
+
+@audit_group.command("shortlist")
+@click.option(
+    "--profile", "profile_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=Path("panelforge_workspace/profile.json"),
+    help="ProjectProfile JSON (used only for path resolution / future lookups).",
+)
+@click.option(
+    "--bindings", "bindings_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=Path("panelforge_workspace/data_bridge_cache.json"),
+    help="data_bridge cache produced by `figures bridge`.",
+)
+@click.option(
+    "--data-dir", "data_dir",
+    type=click.Path(file_okay=False, exists=True, path_type=Path),
+    default=Path("data"),
+    help="Directory holding user data files (csv / parquet / npz).",
+)
+@click.option(
+    "--strict", is_flag=True,
+    help="Treat warnings as failures (exit 1 if any binding warns).",
+)
+def audit_shortlist_cmd(
+    profile_path: Path,
+    bindings_path: Path,
+    data_dir: Path,
+    strict: bool,
+) -> None:
+    """Audit every recipe in the bound shortlist against discovered data.
+
+    Walks `panelforge_workspace/data_bridge_cache.json` to find each
+    recipe's bound data; runs `audit_recipe_against_data`; prints a
+    summary table.  Exits 1 if any binding refuses (or, with --strict,
+    if any binding warns).
+    """
+    import pandas as pd
+    try:
+        from .manifest.statistical_audit import audit_recipe_against_data
+    except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
+        raise click.ClickException(
+            f"statistical_audit module not available: {exc}; "
+            "Build-A's `manifest/statistical_audit.py` has not landed yet."
+        ) from exc
+
+    from .manifest import load_bindings_cache
+
+    if not profile_path.exists():
+        raise click.ClickException(
+            f"profile not found at {profile_path}; "
+            "run `figures intake` or `figures profile scan` first."
+        )
+    if not bindings_path.exists():
+        raise click.ClickException(
+            f"bindings cache not found at {bindings_path}; "
+            "run `figures bridge` first."
+        )
+
+    cache = load_bindings_cache(bindings_path)
+    # Group bindings by recipe full_name; pick a representative data file
+    # per recipe (audit-shortlist is a quick verdict-only pass).
+    by_recipe: dict[str, list] = {}
+    data_path_by_recipe: dict[str, Path] = {}
+    for (full_name, _field), fb in cache.items():
+        by_recipe.setdefault(full_name, []).append(fb)
+        if fb.data_source is not None and full_name not in data_path_by_recipe:
+            data_path_by_recipe[full_name] = fb.data_source
+
+    if not by_recipe:
+        click.echo("No bound recipes in the shortlist; nothing to audit.")
+        return
+
+    ensure_all_imported()
+
+    n_pass = 0
+    n_warn = 0
+    n_refuse = 0
+    n_skipped = 0
+
+    click.echo(
+        f"Auditing {len(by_recipe)} recipe(s) from {bindings_path}\n"
+        f"data dir: {data_dir}\n"
+    )
+    click.echo("| Recipe | Verdict | Data |")
+    click.echo("|---|---|---|")
+
+    for full_name in sorted(by_recipe):
+        data_path = data_path_by_recipe.get(full_name)
+        if data_path is None or not data_path.exists():
+            click.echo(
+                f"| {full_name} | SKIPPED (no data) | "
+                f"{data_path if data_path else '—'} |"
+            )
+            n_skipped += 1
+            continue
+        try:
+            entry = get_recipe(full_name)
+        except KeyError:
+            click.echo(f"| {full_name} | SKIPPED (unknown recipe) | — |")
+            n_skipped += 1
+            continue
+        try:
+            if data_path.suffix.lower() in {".parquet", ".pq"}:
+                df = pd.read_parquet(data_path)
+            else:
+                df = pd.read_csv(data_path)
+        except Exception as exc:  # noqa: BLE001 — robustness preferred for audit-shortlist
+            click.echo(f"| {full_name} | SKIPPED ({exc}) | {data_path} |")
+            n_skipped += 1
+            continue
+
+        try:
+            report = audit_recipe_against_data(
+                contract=entry.metadata.statistical_contract,
+                data=df,
+                group_column=None,
+                recipe_full_name=full_name,
+            )
+        except Exception as exc:  # noqa: BLE001 — robust display
+            click.echo(f"| {full_name} | ERROR ({exc}) | {data_path} |")
+            n_skipped += 1
+            continue
+
+        verdict = str(report.overall).upper()
+        click.echo(f"| {full_name} | {verdict} | {data_path} |")
+        if verdict == "PASS":
+            n_pass += 1
+        elif verdict == "WARN":
+            n_warn += 1
+        elif verdict == "REFUSE":
+            n_refuse += 1
+        else:
+            n_skipped += 1
+
+    click.echo("")
+    click.echo(
+        f"Summary: {n_pass} PASS / {n_warn} WARN / "
+        f"{n_refuse} REFUSE / {n_skipped} SKIPPED"
+    )
+
+    if n_refuse > 0:
+        sys.exit(1)
+    if strict and n_warn > 0:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

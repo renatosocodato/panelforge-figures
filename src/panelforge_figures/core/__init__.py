@@ -43,6 +43,13 @@ from .qa import (
     check_figure_integrity,
 )
 from .spectral_embedding_utility import embed_2d
+from .statistical_contract import (
+    DEFAULT_CONTRACT,
+    DistributionAssumption,
+    IndependenceStructure,
+    MultipleComparisonsPolicy,
+    StatisticalContract,
+)
 from .style import (
     PF_FONT_SIZES,
     PF_FONT_STACK,
@@ -59,6 +66,7 @@ from .transfer_entropy_utility import transfer_entropy
 
 __all__ = [
     "BF_THRESHOLDS",
+    "DEFAULT_CONTRACT",
     "FIGSIZE_PRESETS",
     "FigureIntegrityIssue",
     "FigureIntegrityReport",
@@ -67,12 +75,16 @@ __all__ = [
     "PF_FONT_STACK",
     "PF_LINE_WIDTHS",
     "AnnotationStyle",
+    "DistributionAssumption",
+    "IndependenceStructure",
     "InsetConvention",
     "ModalityAesthetic",
+    "MultipleComparisonsPolicy",
     "Palette",
     "RecipeContract",
     "RecipeFamily",
     "RecipeMetadata",
+    "StatisticalContract",
     "add_halo_label",
     "apply_base_style",
     "bf_from_bic",

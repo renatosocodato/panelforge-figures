@@ -16,11 +16,13 @@ from __future__ import annotations
 import importlib
 import logging
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel
+
+from .statistical_contract import StatisticalContract
 
 log = logging.getLogger(__name__)
 
@@ -70,6 +72,13 @@ class RecipeMetadata:
     n_points_typical: str = ""
     alternatives_in_modality: tuple[str, ...] = ()
     example_manifest: str | None = None  # relative to repo root
+    # Statistical-rigor contract (Sprint 1A). Default is all-permissive so
+    # the 392 untagged recipes render unchanged. Per-recipe contracts are
+    # the Tier-1 (cdc42 + disc1) migration target — see Build-C.
+    statistical_contract: StatisticalContract = field(
+        default_factory=lambda: StatisticalContract(),
+        kw_only=True,
+    )
 
 
 @dataclass

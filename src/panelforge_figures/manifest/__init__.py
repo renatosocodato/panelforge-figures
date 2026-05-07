@@ -56,6 +56,13 @@ from .scoring import (
     score_recipes,
     scoring_rubric_dict,
 )
+from .statistical_audit import (
+    ALL_RULE_NAMES,
+    AuditFinding,
+    AuditReport,
+    StatisticalContractViolation,
+    audit_recipe_against_data,
+)
 from .tag_taxonomy import (
     BOOL_TAGS,
     TAG_ENUMS,
@@ -70,6 +77,9 @@ from .tag_taxonomy import (
 )
 
 __all__ = [
+    "ALL_RULE_NAMES",
+    "AuditFinding",
+    "AuditReport",
     "BOOL_TAGS",
     "DEFAULT_SHORTLIST_SIZE",
     "DataFile",
@@ -93,6 +103,7 @@ __all__ = [
     "RenderOutcome",
     "SCORING_RUBRIC_VERSION",
     "ScoredRecipe",
+    "StatisticalContractViolation",
     "TAG_ENUMS",
     "TagAnchor",
     "TagDimensionality",
@@ -101,6 +112,7 @@ __all__ = [
     "TagWave",
     "UNKNOWN_SENTINEL",
     "WEIGHTS",
+    "audit_recipe_against_data",
     "auto_tag_all",
     "auto_tag_recipe",
     "bind_recipe_to_data",

@@ -19,6 +19,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     register_recipe,
     smart_fmt,
 )
@@ -69,6 +70,15 @@ _META = RecipeMetadata(
     ),
     file_format_hints=("yaml", "json"),
     alternatives_in_modality=("hierarchical_effect_size_ladder",),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=10,
+        distribution_assumption="approximately_gaussian",
+        multiple_comparisons="any_correction_required",
+        independence="paired",
+        effect_size_in_units="standardized_d",
+        rendered_claim_template="d = {d:.2f}, TOST p = {p_tost:.4f}",
+        refuses_when=("missing_paired_structure",),
+    ),
 )
 
 

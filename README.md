@@ -16,9 +16,16 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-**`v1.6.1` — first PyPI publish**: 20 modalities, **448 recipes**,
-CI-enforced typography + figure-integrity contract, **2566 passing
-tests**. The 448-recipe catalog is agent-discoverable via
+**`v2.0.0` — eight-elevation release**: 20 modalities, **448 recipes**,
+CI-enforced typography + figure-integrity contract, **2895 passing
+tests**. v2.0.0 turns the v1.6.1 recipe-discovery system into an
+elite Claude-Code-dependent platform via 8 architectural elevations:
+statistical contract → provenance → composition → plugins →
+data-class safety → vision input → cross-project orchestration →
+active-learning loop. Privacy-by-construction throughout (telemetry
+off by default, never auto-uploaded; clinical data class blocks all
+LLM/vision/telemetry channels). The 448-recipe catalog is
+agent-discoverable via
 [`recipes_index.json`](https://github.com/renatosocodato/panelforge-figures/blob/main/recipes_index.json)
 + [`AGENT_BOOTSTRAP.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/AGENT_BOOTSTRAP.md)
 — a CLI agent on a manuscript repo can fetch the index from raw
@@ -30,14 +37,15 @@ New to the system? Start with the
 [`docs/AGENT_RECIPES.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/docs/AGENT_RECIPES.md)
 tutorial.
 
-| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | v1.0.0 | v1.5.0 | **v1.6.0** |
-|---|---|---|---|---|---|---|---|
-| Modalities | 3 | 7 | 11 | 15 | 20 | 20 | **20** |
-| Recipes | 18 | 49 | 80 | 107 | 137 | 448 | **448** |
-| Gallery PNGs | 18 | 49 | 80 | 107 | 137 | 448 | **448** |
-| Themes | 12 | 12 | 12 | 12 | 12 | 12 | **12** |
-| Tests | 113 | 237 | 361 | 469 | 736 | 2356 | **~2600** |
-| Agent-discoverable | — | — | — | — | — | — | **yes** ✓ |
+| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | v1.0.0 | v1.5.0 | v1.6.0 | **v2.0.0** |
+|---|---|---|---|---|---|---|---|---|
+| Modalities | 3 | 7 | 11 | 15 | 20 | 20 | 20 | **20** |
+| Recipes | 18 | 49 | 80 | 107 | 137 | 448 | 448 | **448** |
+| Gallery PNGs | 18 | 49 | 80 | 107 | 137 | 448 | 448 | **448** |
+| Themes | 12 | 12 | 12 | 12 | 12 | 12 | 12 | **12** |
+| Tests | 113 | 237 | 361 | 469 | 736 | 2356 | ~2600 | **2895** |
+| Agent-discoverable | — | — | — | — | — | — | yes ✓ | yes ✓ |
+| 8 elevations | — | — | — | — | — | — | — | **yes** ✓ |
 
 ## Install
 

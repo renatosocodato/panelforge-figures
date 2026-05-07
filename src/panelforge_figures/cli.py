@@ -1818,5 +1818,229 @@ def projects_validate_cmd(yes: bool, config_path: Path | None) -> None:
     click.echo(f"✓ Dropped {len(dropped)} stale entr{'y' if len(dropped) == 1 else 'ies'}.")
 
 
+# ─────────────────── telemetry + active learning (Sprint 3B — v1.14.0) ──
+#
+# Opt-in usage telemetry, manual pick-recording, and offline weight
+# calibration.  See ``docs/spec_active_learning.md`` for the full spec.
+# Telemetry is OFF by default and is NEVER auto-uploaded — the user
+# explicitly runs ``figures telemetry export`` and ships the file by
+# hand if they wish.
+
+
+@main.group("telemetry")
+def telemetry_group() -> None:
+    """Opt-in usage telemetry — local only, never auto-uploaded.
+
+    Activated by setting ``telemetry: opt-in`` in
+    ``panelforge.project.yaml``.  When active, every ``figures generate``
+    call appends a row to ``panelforge_workspace/usage.jsonl``.  The user
+    later records their pick with ``figures pick <recipe_name>`` and
+    optionally ships an aggregated artifact via ``figures telemetry
+    export``.  See ``docs/spec_active_learning.md`` §3 + §9.
+    """
+
+
+@telemetry_group.command("status")
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge.project.yaml (default: cwd).",
+)
+def telemetry_status_cmd(project_root: Path) -> None:
+    """Print on/off + log location + row count."""
+    from .manifest.telemetry import (
+        is_telemetry_enabled,
+        telemetry_log_path,
+    )
+
+    enabled = is_telemetry_enabled(project_root)
+    log_path = telemetry_log_path(project_root)
+    if not enabled:
+        click.echo("telemetry: off (default — no rows written)")
+        return
+    n_rows = 0
+    if log_path.exists():
+        n_rows = sum(
+            1 for line in log_path.read_text().splitlines() if line.strip()
+        )
+    click.echo(
+        f"telemetry: opt-in (writing to {log_path}, {n_rows} rows)"
+    )
+
+
+@telemetry_group.command("export")
+@click.argument(
+    "output_path",
+    type=click.Path(path_type=Path),
+)
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge.project.yaml (default: cwd).",
+)
+@click.option(
+    "--anonymize/--no-anonymize",
+    default=True,
+    help="Replace session_id with sha256(session_id)[:16] (default: on).",
+)
+@click.option(
+    "--include-unpicked/--drop-unpicked",
+    default=False,
+    help=(
+        "By default rows without user_picked are dropped (they carry no "
+        "calibration signal).  Pass --include-unpicked to keep them."
+    ),
+)
+def telemetry_export_cmd(
+    output_path: Path,
+    project_root: Path,
+    anonymize: bool,
+    include_unpicked: bool,
+) -> None:
+    """Write a sanitized aggregated JSONL artifact.
+
+    The file is the user's to ship — panelforge does NOT upload it.
+    """
+    from .manifest.telemetry import (
+        TelemetryError,
+        export_telemetry,
+        is_telemetry_enabled,
+    )
+
+    if not is_telemetry_enabled(project_root):
+        click.echo(
+            click.style(
+                "✗ telemetry is off; nothing to export",
+                fg="red",
+            ),
+            err=True,
+        )
+        sys.exit(1)
+    try:
+        n = export_telemetry(
+            project_root,
+            output_path,
+            anonymize=anonymize,
+            drop_unpicked=not include_unpicked,
+        )
+    except TelemetryError as exc:
+        click.echo(f"✗ {exc}", err=True)
+        sys.exit(1)
+    click.echo(f"✓ exported {n} row(s) to {output_path}")
+
+
+@main.command("pick")
+@click.argument("full_name", type=str)
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge.project.yaml (default: cwd).",
+)
+@click.option(
+    "--session-id",
+    type=str,
+    default=None,
+    help=(
+        "Disambiguate when multiple un-picked rows are present.  "
+        "Defaults to the most recent un-picked row when unique."
+    ),
+)
+def pick_cmd(
+    full_name: str, project_root: Path, session_id: str | None
+) -> None:
+    """Set ``user_picked`` on the most recent telemetry row.
+
+    Friendly UsageError if no candidate row exists or if multiple rows
+    are ambiguous and ``--session-id`` is not supplied.  See
+    ``docs/spec_active_learning.md`` §2.
+    """
+    from .manifest.telemetry import TelemetryError, set_user_pick
+
+    try:
+        set_user_pick(project_root, full_name, session_id=session_id)
+    except TelemetryError as exc:
+        raise click.UsageError(str(exc)) from exc
+    click.echo(
+        click.style(
+            f"✓ recorded pick: {full_name}",
+            fg="green",
+        )
+    )
+
+
+@main.command("suggest-weights")
+@click.option(
+    "--aggregate-from",
+    "aggregate_from",
+    type=click.Path(path_type=Path, exists=True, dir_okay=False),
+    required=True,
+    help="Aggregated telemetry JSONL (concatenation of exported rows).",
+)
+@click.option(
+    "--output",
+    "output_path",
+    type=click.Path(path_type=Path),
+    required=True,
+    help="Where to write the weight-proposal JSON.",
+)
+@click.option(
+    "--seed",
+    type=int,
+    default=42,
+    help="RNG seed for the train/test split (default: 42, deterministic).",
+)
+def suggest_weights_cmd(
+    aggregate_from: Path, output_path: Path, seed: int
+) -> None:
+    """Cross-validate, propose new weights.
+
+    Runs an offline grid search over ±0.05 perturbations of the locked
+    weights and writes a JSON artifact reporting the current and
+    suggested top-3 hit rates plus uplift.  The CLI never edits source
+    files — a maintainer reviews the JSON and decides whether to ship a
+    new ``WEIGHTS_HISTORY`` entry.  See ``docs/spec_active_learning.md``
+    §5.
+    """
+    from .manifest.weight_calibration import (
+        CalibrationInput,
+        load_telemetry_rows,
+        suggest_weights,
+    )
+
+    rows = load_telemetry_rows(aggregate_from)
+    if not rows:
+        click.echo(
+            click.style(
+                f"✗ no calibration-bearing rows in {aggregate_from} "
+                "(rows must have user_picked set and at least one "
+                "rejected_higher_scored entry)",
+                fg="red",
+            ),
+            err=True,
+        )
+        sys.exit(1)
+    out = suggest_weights(CalibrationInput(rows=rows, seed=seed))
+    payload = {
+        "n_rows": out.n_rows,
+        "n_train": out.n_train,
+        "n_test": out.n_test,
+        "current_weights_version": out.current_weights_version,
+        "current_weights": dict(out.current_weights),
+        "current_top3_hit_rate": out.current_top3_hit_rate,
+        "suggested_weights": dict(out.suggested_weights),
+        "suggested_top3_hit_rate": out.suggested_top3_hit_rate,
+        "uplift": out.suggested_top3_hit_rate - out.current_top3_hit_rate,
+        "seed": out.seed,
+    }
+    output_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    click.echo(
+        f"✓ proposal written to {output_path}  "
+        f"(uplift {payload['uplift']:+.3f})"
+    )
+
+
 if __name__ == "__main__":
     main()

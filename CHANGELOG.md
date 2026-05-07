@@ -11,6 +11,66 @@ project follows semantic versioning.
 - (No active beta pack — open for next manuscript-companion or
   cross-modality primitive batch.)
 
+## [1.6.1] — 2026-05-04
+
+First PyPI publish. Bundles 3 production-readiness fixes from
+the Wave-3 soak report + corrects the long-stale package version
+(was stuck at 1.0.0 throughout the v1.6.0 system rollout).
+
+### Fixed
+
+- **DEFECT-A1**: live-cell keyword false-positive in
+  `_infer_dynamics_needed`. Added a 30-character negation/proximity
+  check covering 12 negation phrases (`not yet`, `future work`,
+  `follow-up`, `out of scope`, `deferred`, `planned`, `upcoming`,
+  `did not`, `no live`, `not perform`, `pending`, etc.).  The
+  `tests/fixtures/sample_project/` README's "Live-cell experiments
+  not yet completed" no longer trips a false-positive `live`
+  inference.
+- **DEFECT-A6/A7**: multi-source recipe binding silently produced
+  `error_contract` because `to_render_binding` set
+  `data_file_id=None` whenever a recipe's fields bound to ≥2 data
+  files.  Added `RenderBinding.data_file_per_field` (per-field
+  source map); legacy `data_file_id` retained for back-compat.
+  Extracted `compute_fully_bound()` as the single source of truth
+  shared by `bind_recipe_to_data` and `cli.generate_cmd` (the two
+  had divergent definitions: data_source vs column_name).
+
+### Added
+
+- `[project.urls] Documentation` field in `pyproject.toml`
+  (PyPI displays this prominently on the package page).
+- "Privacy & data handling (Pass-3 LLM)" section in
+  `CLAUDE_CODE_AUTONOMOUS.md` (~265 words; explicit list of what
+  IS sent to Anthropic and what is NEVER sent).
+- E2e regression gate `test_e2e_project_scan_disc1_fixture`
+  asserting `dynamics_needed != "live"` on the DISC1 fixture
+  (the bug shipped because no e2e test grounded an assertion on
+  this field).
+
+### Changed
+
+- Package version: **1.0.0 → 1.6.1** in both `pyproject.toml` and
+  `src/panelforge_figures/__init__.py`.  The "1.0.0" pin had been
+  stuck since the v1.0 hydration release; git tags (v1.1, v1.2, ...,
+  v1.6.0-recipe-discovery) advanced independently.  PyPI publish
+  requires this corrected.
+- README install commands now reference PyPI (`pip install
+  panelforge-figures`) instead of GitHub source (`pip install
+  git+https://...`).
+
+### Tests
+
+- 2552 → 2566 (+14 from PR #55).
+- Style-drift ratchet held at 20/20.
+- Spec §3.7 worked example reproduces 0.565 exactly.
+
+### Infrastructure
+
+- This is the **first PyPI publish** of the package.  See
+  `RELEASING.md` (added by Build-C in this PR) for the one-time
+  Trusted Publisher setup procedure on https://pypi.org.
+
 ## [1.6.0-recipe-discovery] — 2026-05-04 [SYSTEM COMPLETE]
 
 **Recipe-discovery system — COMPLETE.** 4 waves, ~12 working days,

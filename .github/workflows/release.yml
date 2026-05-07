@@ -1,0 +1,123 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write     # for GitHub Release creation
+  id-token: write     # for PyPI OIDC trusted publishing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+      is_prerelease: ${{ steps.tag.outputs.is_prerelease }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Parse tag
+        id: tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#v}"
+          # Pre-release: contains -rc / -beta / -alpha / -dev
+          if echo "$VERSION" | grep -qE '\-(rc|beta|alpha|dev)'; then
+            echo "is_prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Install build deps
+        run: pip install --upgrade build twine
+      - name: Build wheel + sdist
+        run: |
+          rm -rf dist/ build/ src/*.egg-info
+          python -m build
+      - name: Validate metadata
+        run: twine check --strict dist/*
+      - name: Smoke-test wheel install
+        run: |
+          python -m venv /tmp/release_smoke_venv
+          /tmp/release_smoke_venv/bin/pip install dist/*.whl
+          /tmp/release_smoke_venv/bin/figures --version
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ steps.tag.outputs.version }}
+          path: dist/
+          retention-days: 7
+
+  publish-testpypi:
+    if: needs.build.outputs.is_prerelease == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/panelforge-figures
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    if: needs.build.outputs.is_prerelease == 'false'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/panelforge-figures
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: [build, publish-pypi]
+    if: needs.build.outputs.is_prerelease == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+      - name: Extract CHANGELOG section
+        id: changelog
+        run: |
+          VERSION="${{ needs.build.outputs.version }}"
+          # Extract section between "## [VERSION]" and the next "## ["
+          awk "/^## \[$VERSION\]/,/^## \[/" CHANGELOG.md | sed '$d' > /tmp/release_notes.md
+          if [ ! -s /tmp/release_notes.md ]; then
+            echo "Release v$VERSION" > /tmp/release_notes.md
+          fi
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ needs.build.outputs.version }}" \
+            --title "v${{ needs.build.outputs.version }}" \
+            --notes-file /tmp/release_notes.md \
+            dist/*

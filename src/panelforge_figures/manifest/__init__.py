@@ -22,6 +22,23 @@ from .data_bridge import (
     to_render_data_files,
     write_bindings_cache,
 )
+from .figure_composition import (
+    compose_figure,
+    render_figure_yaml,
+    validate_figure_yaml,
+)
+from .figure_schema import (
+    FigureSpec as FigureCompositionSpec,
+)
+from .figure_schema import (
+    FreeformLayout,
+    GridLayout,
+    GridspecLayout,
+    PartitionedPanelSpec,
+)
+from .figure_schema import (
+    PanelSpec as CompositionPanelSpec,
+)
 from .intake import (
     INTAKE_QUESTIONS,
     IntakeAnswer,
@@ -92,11 +109,16 @@ __all__ = [
     "AuditFinding",
     "AuditReport",
     "BOOL_TAGS",
+    "CompositionPanelSpec",
     "DEFAULT_SHORTLIST_SIZE",
     "DataFile",
     "EnvironmentalFailure",
     "FieldBinding",
+    "FigureCompositionSpec",
     "FigureSpec",
+    "FreeformLayout",
+    "GridLayout",
+    "GridspecLayout",
     "INDEX_SCHEMA_VERSION",
     "INTAKE_QUESTIONS",
     "InferredAnswer",
@@ -106,6 +128,7 @@ __all__ = [
     "Manifest",
     "PROVENANCE_SCHEMA_VERSION",
     "PanelSpec",
+    "PartitionedPanelSpec",
     "ProjectProfile",
     "ProjectScanResult",
     "ProvenanceRecord",
@@ -136,6 +159,7 @@ __all__ = [
     "build_provenance",
     "bundle_provenance",
     "catalog_fingerprint",
+    "compose_figure",
     "compute_fully_bound",
     "diff_provenance",
     "discover_data_files",
@@ -144,6 +168,7 @@ __all__ = [
     "load_bindings_cache",
     "load_manifest",
     "load_provenance_json",
+    "render_figure_yaml",
     "render_manifest",
     "render_shortlist",
     "resolve_panel_data",
@@ -154,6 +179,7 @@ __all__ = [
     "to_intake_pre_filled",
     "to_render_binding",
     "to_render_data_files",
+    "validate_figure_yaml",
     "validate_manifest",
     "validate_tag",
     "validate_tag_dict",

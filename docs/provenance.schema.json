@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/renatosocodato/panelforge-figures/docs/provenance.schema.json",
+  "title": "panelforge_figures provenance.json sidecar",
+  "description": "Provenance chain sidecar emitted next to every rendered figure (PDF/PNG). See docs/spec_provenance_chain.md for full semantics. The sidecar content-addresses the figure back to (a) its source data files, (b) the recipe module that produced it, (c) the scorer state that selected it, and (d) the rendering environment.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "figure_path",
+    "figure_sha256",
+    "rendered_at",
+    "recipe",
+    "data",
+    "rendering_environment"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Semver of this sidecar's JSON-Schema; v2.0.0 ships '1.0.0'.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "figure_path": {
+      "type": "string",
+      "description": "Repo-relative path to the figure file (PDF or PNG). Absolute paths are discouraged for privacy (spec §10)."
+    },
+    "figure_sha256": {
+      "type": "string",
+      "description": "SHA-256 hex digest of the figure file's bytes.",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rendered_at": {
+      "type": "string",
+      "description": "ISO-8601 UTC timestamp of when the figure was rendered. Set to '1970-01-01T00:00:00Z' under --committed for archival determinism.",
+      "format": "date-time"
+    },
+    "recipe": {
+      "type": "object",
+      "description": "Identifier and provenance of the recipe module that produced the figure.",
+      "required": [
+        "full_name",
+        "module_path",
+        "panelforge_version",
+        "panelforge_git_commit"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "full_name": {
+          "type": "string",
+          "description": "Dotted modality.recipe identifier (e.g. 'actin_microtubule_morphometry.compartment_paired_delta_scatter')."
+        },
+        "module_sha": {
+          "type": ["string", "null"],
+          "description": "git blob sha of the recipe .py file (sha1 of git's blob format), or null if not in a git tree.",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "module_path": {
+          "type": "string",
+          "description": "Path to the recipe .py file. Repo-relative when possible."
+        },
+        "panelforge_version": {
+          "type": "string",
+          "description": "panelforge_figures.__version__ at render time."
+        },
+        "panelforge_git_commit": {
+          "type": "string",
+          "description": "Full git HEAD sha, or 'uncommitted' for dirty trees, or 'unknown' if .git is unreachable."
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "Source data files referenced by the recipe and the column mapping the binding step produced.",
+      "required": ["sources", "column_mapping"],
+      "additionalProperties": false,
+      "properties": {
+        "sources": {
+          "type": "array",
+          "description": "One entry per source data file consumed by the recipe.",
+          "items": {
+            "type": "object",
+            "required": ["path", "sha256"],
+            "additionalProperties": true,
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Path to the source data file."
+              },
+              "sha256": {
+                "type": ["string", "null"],
+                "description": "SHA-256 of the file's bytes; null if the file was missing at provenance-write time.",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "format": {
+                "type": ["string", "null"],
+                "description": "Format hint (e.g. 'csv', 'parquet', 'npz'). Optional."
+              },
+              "n_rows": {
+                "type": ["integer", "null"],
+                "description": "Number of rows in the source file when loaded. Optional.",
+                "minimum": 0
+              },
+              "size_bytes": {
+                "type": ["integer", "null"],
+                "description": "Optional byte size of the source file.",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "column_mapping": {
+          "type": "object",
+          "description": "Verbatim binding from the intake step (contract field → column name).",
+          "additionalProperties": {"type": "string"}
+        }
+      }
+    },
+    "scorer": {
+      "type": ["object", "null"],
+      "description": "Scorer state at the time of selection. Null when the recipe was rendered standalone (figures render <name>).",
+      "additionalProperties": true,
+      "properties": {
+        "version": {
+          "type": ["string", "null"],
+          "description": "Scoring rubric version."
+        },
+        "weights": {
+          "type": ["object", "null"],
+          "description": "Locked scoring weights at render time.",
+          "additionalProperties": {"type": "number"}
+        },
+        "score": {
+          "type": ["number", "null"],
+          "description": "Final scorer score for this recipe."
+        },
+        "tied_with": {
+          "type": ["array", "null"],
+          "description": "Recipes tied at the same score, broken by tie-breaker.",
+          "items": {"type": "string"}
+        },
+        "profile": {
+          "type": ["object", "null"],
+          "description": "Project profile fields used by the scorer (open-ended in v1.0; will tighten in v1.1 — spec §6.6)."
+        }
+      }
+    },
+    "audit": {
+      "type": ["object", "null"],
+      "description": "Statistical-contract audit findings. Null if no audit ran.",
+      "additionalProperties": true,
+      "properties": {
+        "rules_passed": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "rule_ids of audit rules that passed."
+        },
+        "rules_warned": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "rule_ids that emitted warnings (rendered anyway)."
+        },
+        "rules_failed": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "rule_ids that refused; should be empty for any successfully-rendered figure."
+        }
+      }
+    },
+    "rendering_environment": {
+      "type": "object",
+      "description": "Snapshot of the rendering environment used to produce the figure.",
+      "required": ["python_version", "matplotlib_version", "platform"],
+      "additionalProperties": true,
+      "properties": {
+        "python_version": {
+          "type": "string",
+          "description": "CPython version (e.g. '3.12.4').",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "matplotlib_version": {
+          "type": "string",
+          "description": "Installed matplotlib version, or 'unknown'."
+        },
+        "platform": {
+          "type": "string",
+          "description": "Lowercased platform.system(): 'darwin', 'linux', 'windows'."
+        },
+        "numpy_version": {
+          "type": ["string", "null"],
+          "description": "Optional numpy version."
+        },
+        "panelforge_version": {
+          "type": ["string", "null"],
+          "description": "Mirror of recipe.panelforge_version (legacy alias)."
+        },
+        "panelforge_workspace": {
+          "type": ["string", "null"],
+          "description": "Path to the panelforge workspace at render time."
+        },
+        "font_cache_sha256": {
+          "type": ["string", "null"],
+          "description": "Hash of matplotlib's fontlist cache for cross-machine determinism (spec §6).",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "rng_seed": {
+          "type": ["integer", "null"],
+          "description": "Numpy RNG seed used by the recipe."
+        },
+        "deterministic": {
+          "type": ["boolean", "null"],
+          "description": "True iff the recipe declares deterministic=True and a seed is fixed."
+        }
+      }
+    }
+  }
+}

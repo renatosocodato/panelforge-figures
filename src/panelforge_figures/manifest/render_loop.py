@@ -45,6 +45,7 @@ from pydantic import ValidationError
 from .. import __version__
 from ..core.contract import get_recipe
 from ..core.statistical_contract import DEFAULT_CONTRACT, StatisticalContract
+from .provenance import build_provenance, write_provenance_json
 
 # ─────────────────────────── public exceptions ──────────────────────────
 
@@ -385,6 +386,88 @@ def _run_audit_for_binding(
     return report, tuple(getattr(report, "findings", ()) or ())
 
 
+def _recipe_module_path(entry: Any) -> Path | None:
+    """Return the filesystem path to the recipe's source module, or None.
+
+    Used by the provenance sidecar emitter; falls back gracefully if the
+    module is built-in / frozen / stripped of source.
+    """
+    try:
+        import inspect
+
+        return Path(inspect.getfile(entry.render))
+    except (TypeError, OSError, ValueError):
+        return None
+
+
+def _emit_provenance_sidecar(
+    *,
+    binding: RenderBinding,
+    entry: Any,
+    pdf_path: Path,
+    data_files: list[RenderDataFile],
+    audit_findings: tuple[Any, ...],
+) -> None:
+    """Best-effort: write a provenance.json sidecar next to ``pdf_path``.
+
+    Failures are intentionally swallowed (logged-and-continue) — the spec
+    notes (§8) that "failure to write provenance is non-fatal, logged
+    as a warning."
+    """
+    try:
+        recipe_module_path = _recipe_module_path(entry)
+        if recipe_module_path is None:
+            return
+        # Build the data_files list in the shape build_provenance wants.
+        # Resolve paths from binding.data_file_per_field (preferred,
+        # multi-source) or binding.data_file_id (legacy single-source).
+        seen_paths: set[Path] = set()
+        data_files_meta: list[dict[str, Any]] = []
+        if binding.data_file_per_field:
+            for p in binding.data_file_per_field.values():
+                if p in seen_paths:
+                    continue
+                seen_paths.add(p)
+                data_files_meta.append({"path": str(p)})
+        elif binding.data_file_id:
+            for df in data_files:
+                if df.file_id == binding.data_file_id:
+                    data_files_meta.append({"path": str(df.path)})
+                    break
+
+        # Translate audit_findings into the rules_passed/warned/failed shape.
+        audit_meta: dict[str, Any] | None = None
+        if audit_findings:
+            audit_meta = {
+                "rules_passed": [],
+                "rules_warned": [
+                    str(getattr(f, "rule_id", ""))
+                    for f in audit_findings
+                    if str(getattr(f, "severity", "")).lower() == "warn"
+                ],
+                "rules_failed": [
+                    str(getattr(f, "rule_id", ""))
+                    for f in audit_findings
+                    if str(getattr(f, "severity", "")).lower() == "refuse"
+                ],
+            }
+
+        record = build_provenance(
+            figure_path=pdf_path,
+            recipe_full_name=binding.full_name,
+            recipe_module_path=recipe_module_path,
+            panelforge_version=__version__,
+            panelforge_git_commit=_git_commit_short(),
+            data_files=data_files_meta,
+            column_mapping=dict(binding.column_mapping),
+            scorer_state=None,
+            audit_findings=audit_meta,
+        )
+        write_provenance_json(record)
+    except Exception:  # noqa: BLE001 — provenance is best-effort
+        return
+
+
 def _render_one(
     binding: RenderBinding,
     data_file: RenderDataFile | None,
@@ -393,6 +476,8 @@ def _render_one(
     figsize: tuple[float, float],
     *,
     skip_audit: bool = False,
+    enable_provenance: bool = True,
+    all_data_files: list[RenderDataFile] | None = None,
 ) -> RenderOutcome:
     """Execute a single recipe and return its outcome.
 
@@ -537,6 +622,17 @@ def _render_one(
     finally:
         plt.close(fig)
 
+    # Provenance sidecar — Sprint 1B (PR #62).  Best-effort; failures
+    # do NOT change the render outcome.  See spec §8.
+    if enable_provenance:
+        _emit_provenance_sidecar(
+            binding=binding,
+            entry=entry,
+            pdf_path=pdf_path,
+            data_files=list(all_data_files or []),
+            audit_findings=audit_findings,
+        )
+
     return RenderOutcome(
         full_name=binding.full_name,
         status="success",
@@ -558,6 +654,7 @@ def render_shortlist(
     dpi: int = 300,
     figsize: tuple[float, float] = (4.2, 3.2),
     skip_audit: bool = False,
+    enable_provenance: bool = True,
 ) -> RenderLog:
     """Run the render loop over a confirmed shortlist of bindings.
 
@@ -577,6 +674,14 @@ def render_shortlist(
         bindings produce ``RenderOutcome(status="error_audit_refuse")``
         and are NOT rendered.  See ``docs/spec_statistical_contract.md``
         §4 for the pipeline placement rationale.
+    enable_provenance
+        Sprint 1B (PR #62) toggle.  When ``True`` (default), every
+        successful render emits a ``<figure>.pdf.provenance.json``
+        sidecar next to the PDF/PNG.  When ``False``, no sidecars are
+        written — useful for tight dev loops via ``--no-provenance``.
+        Sidecar emission is best-effort; failures are non-fatal and do
+        not change the render outcome.  See ``docs/spec_provenance_chain.md``
+        §8.
     """
     started_at = _utc_iso()
 
@@ -601,6 +706,8 @@ def render_shortlist(
             outcome = _render_one(
                 binding, df, out_dir, dpi, figsize,
                 skip_audit=skip_audit,
+                enable_provenance=enable_provenance,
+                all_data_files=data_files,
             )
         except (ImportError, ModuleNotFoundError) as exc:
             raise EnvironmentalFailure(

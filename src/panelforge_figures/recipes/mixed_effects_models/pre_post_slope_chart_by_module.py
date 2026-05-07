@@ -21,6 +21,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     register_recipe,
     smart_fmt,
 )
@@ -78,6 +79,11 @@ _META = RecipeMetadata(
     alternatives_in_modality=(
         "mediation_decomposition_slope_chart",
         "emmeans_contrast_grid",
+    ),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=10,
+        independence="paired",
+        refuses_when=("missing_paired_structure",),
     ),
 )
 

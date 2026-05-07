@@ -319,3 +319,92 @@ Each sub-PR follows the existing pack-tracker discipline: `docs/statistical_cont
 - Existing render-loop architecture: `src/panelforge_figures/manifest/render_loop.py` §1–§3 (run_render_loop, RenderOutcome, EnvironmentalFailure).
 - Existing recipe-metadata pattern: `src/panelforge_figures/core/contract.py` (`RecipeMetadata`, `register_recipe`).
 - Statistical primitives consumed: `scipy.stats.kstest` (normality), `numpy.linalg.matrix_rank` (singular design), per-group `scipy.stats.bootstrap` for CI-aware suggestions (deferred to v2.1).
+
+### Migration completed
+
+Sprint 1A (Build-C) migrated **45 of 57** Tier-1 recipes (cdc42 + disc1 manuscript companion packs) to declare explicit `StatisticalContract` blocks. The remaining 12 recipes are conceptual / narrative / raw-image primitives that do not render an inferential claim and therefore retain the all-permissive default contract by design (see spec §6 — descriptive families default to `StatisticalContract()` and are unaffected). All 448 recipes still render unchanged via their `_demo()` paths; the full pytest suite remains green at 2616 / 2616.
+
+The five contract templates used by this migration are:
+
+- **effect-size** — `min_n_per_group=10`, `distribution_assumption="approximately_gaussian"`, `multiple_comparisons="any_correction_required"`, `independence="iid"`, `effect_size_in_units="standardized_d"`, `refuses_when=("underpowered",)`.
+- **proportion** — `min_n_per_group=20`, `distribution_assumption="unit_interval"`, `independence="iid"`, `refuses_when=("underpowered", "unit_interval_violation")`.
+- **count** — `min_n_per_group=10`, `distribution_assumption="non_negative_integer"`, `refuses_when=("non_integer_in_count", "negative_in_non_negative")`.
+- **paired** — `min_n_per_group=10`, `independence="paired"`, `refuses_when=("missing_paired_structure",)`.
+- **paired + TOST / equivalence** — paired effect-size with `rendered_claim_template="d = {d:.2f}, TOST p = {p_tost:.4f}"`.
+
+#### Effect-size template (38 recipes)
+
+- `actin_microtubule_morphometry.behavioral_fingerprint_trio_composite`
+- `actin_microtubule_morphometry.colocalization_raincloud_per_metric`
+- `actin_microtubule_morphometry.cortex_composite_zone_descriptors`
+- `actin_microtubule_morphometry.edge_gradient_intensity_profile`
+- `actin_microtubule_morphometry.overlap_juxtaposition_quantification`
+- `actin_microtubule_morphometry.pca_silhouette_glyph_morphospace`
+- `actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary`
+- `biophysics_scaling.censoring_mode_waterfall_cascade`
+- `biophysics_scaling.confinement_energy_gauge_per_genotype`
+- `biophysics_scaling.confinement_ratio_distribution_by_genotype`
+- `biophysics_scaling.dissipation_quartile_pca_with_ellipses`
+- `biophysics_scaling.dual_scale_significance_lollipop`
+- `biophysics_scaling.molecular_resilience_index_bar`
+- `biophysics_scaling.permanova_null_distribution`
+- `biophysics_scaling.route_geometry_compact_screen`
+- `biophysics_scaling.sensitivity_sweep_alpha_width_seed_compound`
+- `biophysics_scaling.splay_taper_polarity_displacement_compound`
+- `biophysics_scaling.split_mirror_measured_vs_simulated`
+- `biophysics_scaling.z_span_vs_width_with_euler_threshold`
+- `intravital_imaging.residence_time_kaplan_meier_with_ks_overlay`
+- `intravital_imaging.state_entry_exit_with_switch_callout`
+- `intravital_imaging.transition_matrix_diagonal_dominance_callout`
+- `meta_and_diagnostic.bayes_factor_arrow_plot`
+- `meta_and_diagnostic.competing_model_residual_panels`
+- `meta_and_diagnostic.cross_contrast_correlation_matrix`
+- `meta_and_diagnostic.multiverse_robustness_classification_bar`
+- `meta_and_diagnostic.multiverse_specification_curve`
+- `meta_and_diagnostic.pca_loadings_heatmap`
+- `meta_and_diagnostic.random_forest_confusion_loocv`
+- `mixed_effects_models.sex_stratified_roc_loocv`
+- `mixed_effects_models.two_way_anova_summary_plot`
+- `omics_differential.gge_branch_selectivity_permutation_bar`
+- `omics_differential.module_concordance_signed_heatmap`
+- `omics_differential.pathway_module_activity_with_sign_concordance`
+- `omics_differential.pathway_space_bridge_summary_heatmap`
+- `omics_differential.pathway_space_triangulation_heatmap`
+- `omics_differential.proteome_phosphoproteome_pathway_scatter`
+- `spatial_statistics.kinhom_inhomogeneous_isotropy`
+
+#### Proportion template (2 recipes)
+
+- `actin_microtubule_morphometry.zone_fraction_alluvial_sankey`
+- `biophysics_scaling.quartile_stacked_bar_by_factor`
+
+#### Count template (1 recipe)
+
+- `actin_microtubule_morphometry.sholl_intersections_radial_histogram`
+
+#### Paired template (3 recipes)
+
+- `meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest`
+- `mixed_effects_models.mediation_decomposition_slope_chart`
+- `mixed_effects_models.pre_post_slope_chart_by_module`
+
+#### Paired + TOST / equivalence template (1 recipe)
+
+- `biophysics_scaling.compartment_paired_delta_scatter`
+
+#### Defaulted — narrative / conceptual / raw-image (12 recipes)
+
+These recipes render visual-only or conceptual content (raw imaging, narrative cascades, schematic flow, audit tables) rather than inferential statistical claims, and therefore retain the all-permissive `StatisticalContract()` per spec §6.
+
+- `actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset`
+- `actin_microtubule_morphometry.airyscan_to_zone_territory_triptych`
+- `actin_microtubule_morphometry.mt_mesh_density_compartment_compare`
+- `actin_microtubule_morphometry.pseudotime_thumbnail_strip`
+- `actin_microtubule_morphometry.territory_contact_network_overlay`
+- `biophysics_scaling.force_budget_schematic_with_data`
+- `grant_and_conceptual.narrative_cascade_river_with_xrefs`
+- `intravital_imaging.territory_zone_overlay_intravital`
+- `meta_and_diagnostic.alternative_hypothesis_exclusion_table`
+- `meta_and_diagnostic.model_parameterization_lineage_panel`
+- `meta_and_diagnostic.panel_provenance_ledger_table`
+- `meta_and_diagnostic.per_cell_audit_table_with_qa_flags`

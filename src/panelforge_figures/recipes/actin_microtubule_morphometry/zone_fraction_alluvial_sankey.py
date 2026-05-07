@@ -16,6 +16,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     register_recipe,
     smart_fmt,
 )
@@ -58,6 +59,13 @@ _META = RecipeMetadata(
     optional_fields=("zone_order", "title"),
     file_format_hints=("yaml", "csv"),
     alternatives_in_modality=("territory_change_pre_post",),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=20,
+        distribution_assumption="unit_interval",
+        independence="iid",
+        rendered_claim_template="fraction = {frac:.2%}",
+        refuses_when=("underpowered", "unit_interval_violation"),
+    ),
 )
 
 

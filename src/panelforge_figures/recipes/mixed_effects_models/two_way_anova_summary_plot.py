@@ -20,6 +20,7 @@ from ...core import (
     RecipeContract,
     RecipeFamily,
     RecipeMetadata,
+    StatisticalContract,
     register_recipe,
     smart_fmt,
 )
@@ -77,6 +78,15 @@ _META = RecipeMetadata(
     alternatives_in_modality=(
         "sex_x_genotype_interaction_forest",
         "emmeans_contrast_grid",
+    ),
+    statistical_contract=StatisticalContract(
+        min_n_per_group=10,
+        distribution_assumption="approximately_gaussian",
+        multiple_comparisons="any_correction_required",
+        independence="iid",
+        effect_size_in_units="standardized_d",
+        rendered_claim_template="Cohen's d = {d:.2f} ({outcome_class})",
+        refuses_when=("underpowered",),
     ),
 )
 

@@ -666,3 +666,245 @@ def test_data_file_id_back_compat_still_works(
     )
     assert log.n_success == 1
     assert log.outcomes[0].status == "success"
+
+
+# ─────────────────────── audit integration (Sprint 1A) ──────────────────
+
+
+def _make_audited_recipe(
+    name: str,
+    *,
+    statistical_contract,  # noqa: ANN001 — late-binding to avoid spec churn
+):
+    """Register a synthetic recipe carrying an explicit StatisticalContract.
+
+    Mirrors ``_make_test_recipe`` but threads the audit-layer contract
+    through ``RecipeMetadata`` so the render loop's audit step has
+    something to evaluate.
+    """
+    metadata = RecipeMetadata(
+        name=name,
+        modality="test_render_loop",
+        family=RecipeFamily.scatter_collapse,
+        answers_question="audit fixture recipe",
+        required_fields=("xs", "ys"),
+        statistical_contract=statistical_contract,
+    )
+
+    @register_recipe(
+        metadata=metadata,
+        contract=_FixtureContract,
+        demo_contract=_fixture_demo,
+    )
+    def render(contract: _FixtureContract, ax=None, **_):
+        if ax is None:
+            import matplotlib.pyplot as plt
+            _, ax = plt.subplots()
+        ax.scatter(contract.xs, contract.ys)
+        return ax
+
+    return f"test_render_loop.{name}"
+
+
+def test_audit_refused_recipe_produces_error_audit_refuse(tmp_path: Path) -> None:
+    """A recipe with min_n_per_group=6 against 3-row CSV → status `error_audit_refuse`.
+
+    The render must NOT be attempted; no PDF/PNG should land on disk.
+    """
+    from panelforge_figures.core.statistical_contract import StatisticalContract
+
+    csv_path = tmp_path / "tiny.csv"
+    pd.DataFrame({"col_x": [0.0, 1.0, 2.0], "col_y": [0.0, 1.0, 4.0]}).to_csv(
+        csv_path, index=False
+    )
+    full_name = _make_audited_recipe(
+        "audit_refuse_strict",
+        statistical_contract=StatisticalContract(min_n_per_group=6),
+    )
+    binding = RenderBinding(
+        full_name=full_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx_audit",
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[RenderDataFile(file_id="fx_audit", path=csv_path)],
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_attempted == 1
+    assert log.n_failed == 1
+    assert log.n_success == 0
+    o = log.outcomes[0]
+    assert o.status == "error_audit_refuse"
+    assert o.error_class == "StatisticalContractViolation"
+    assert o.error_message and "underpowered" in o.error_message
+    assert o.pdf_path is None and o.png_path is None
+    # No render artefacts on disk — the audit short-circuited before mpl was used.
+    expected_pdf = (tmp_path / "figs" / f"{full_name}.pdf")
+    assert not expected_pdf.exists()
+    # The audit findings should be carried on the outcome.
+    assert len(o.audit_findings) >= 1
+
+
+def test_audit_skip_flag_bypasses_audit_step(tmp_path: Path) -> None:
+    """Same refusal-grade contract + data, but with ``skip_audit=True`` → render runs.
+
+    Reverts to pre-Sprint-1A behaviour: the figure is produced even
+    though the contract would normally refuse.
+    """
+    from panelforge_figures.core.statistical_contract import StatisticalContract
+
+    csv_path = tmp_path / "tiny_skip.csv"
+    pd.DataFrame({"col_x": [0.0, 1.0, 2.0], "col_y": [0.0, 1.0, 4.0]}).to_csv(
+        csv_path, index=False
+    )
+    full_name = _make_audited_recipe(
+        "audit_skip_bypass",
+        statistical_contract=StatisticalContract(min_n_per_group=6),
+    )
+    binding = RenderBinding(
+        full_name=full_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx_skip",
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[RenderDataFile(file_id="fx_skip", path=csv_path)],
+        out_dir=tmp_path / "figs",
+        skip_audit=True,
+    )
+    assert log.n_success == 1
+    o = log.outcomes[0]
+    assert o.status == "success"
+    assert o.pdf_path is not None and o.pdf_path.exists()
+    # When the audit is skipped we don't carry findings on the outcome.
+    assert o.audit_findings == ()
+
+
+def test_permissive_contract_audit_is_no_op(
+    tmp_path: Path, _csv_data: RenderDataFile,
+) -> None:
+    """A recipe carrying the default permissive contract renders silently.
+
+    The audit step short-circuits (``_is_permissive`` returns True) so
+    the outcome carries no findings and the render proceeds normally —
+    this is the backwards-compat guarantee for the 392 untagged recipes.
+    """
+    full_name = _make_test_recipe("audit_permissive_passthrough")
+    binding = RenderBinding(
+        full_name=full_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx",
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[_csv_data],
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_success == 1
+    o = log.outcomes[0]
+    assert o.status == "success"
+    # Permissive contract → audit early-returns → no findings recorded.
+    assert o.audit_findings == ()
+
+
+def test_audit_warn_outcome_renders_and_records_findings(tmp_path: Path) -> None:
+    """A WARN-class audit verdict produces a successful render and carries the findings.
+
+    Heavy-tailed data + ``approximately_gaussian`` assumption triggers
+    ``non_normal_with_parametric_test`` (default verdict ``warn``); the
+    figure renders, and the warning rides along on the outcome so the
+    report writer can surface it.
+    """
+    import numpy as np
+
+    from panelforge_figures.core.statistical_contract import StatisticalContract
+
+    rng = np.random.default_rng(seed=7)
+    # Two independent draws so the design matrix is full-rank — otherwise
+    # ``singular_design`` would also fire and escalate to refuse.
+    xs = rng.lognormal(mean=0.0, sigma=1.5, size=120)
+    ys = rng.lognormal(mean=0.0, sigma=1.5, size=120)
+    csv_path = tmp_path / "warn.csv"
+    pd.DataFrame({
+        "col_x": xs.tolist(),
+        "col_y": ys.tolist(),
+    }).to_csv(csv_path, index=False)
+
+    full_name = _make_audited_recipe(
+        "audit_warn_render_continues",
+        statistical_contract=StatisticalContract(
+            distribution_assumption="approximately_gaussian",
+        ),
+    )
+    binding = RenderBinding(
+        full_name=full_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx_warn",
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[RenderDataFile(file_id="fx_warn", path=csv_path)],
+        out_dir=tmp_path / "figs",
+    )
+    assert log.n_success == 1
+    o = log.outcomes[0]
+    assert o.status == "success"
+    # The warning is carried on the outcome.
+    severities = {str(getattr(f, "severity", "")).lower() for f in o.audit_findings}
+    assert "warn" in severities
+
+
+def test_render_report_contains_statistical_warnings_section(
+    tmp_path: Path,
+) -> None:
+    """`write_render_report` emits a `## Statistical warnings` section.
+
+    Even when the run produces zero warnings, the section header must
+    still appear so consumers can rely on the report shape.
+    """
+    log = render_shortlist(
+        bindings=[],
+        data_files=[],
+        out_dir=tmp_path / "figs",
+    )
+    report_path = write_render_report(log, tmp_path / "figs" / "RENDER_REPORT.md")
+    text = report_path.read_text(encoding="utf-8")
+    assert "## Statistical warnings" in text
+    assert "## Audit refused" in text
+
+
+def test_render_report_audit_refused_section_lists_recipe(
+    tmp_path: Path,
+) -> None:
+    """A refused recipe must appear in the `## Audit refused` table."""
+    from panelforge_figures.core.statistical_contract import StatisticalContract
+
+    csv_path = tmp_path / "tiny_report.csv"
+    pd.DataFrame({"col_x": [0.0, 1.0, 2.0], "col_y": [0.0, 1.0, 4.0]}).to_csv(
+        csv_path, index=False
+    )
+    full_name = _make_audited_recipe(
+        "audit_report_refuse_listed",
+        statistical_contract=StatisticalContract(min_n_per_group=6),
+    )
+    binding = RenderBinding(
+        full_name=full_name,
+        fully_bound=True,
+        column_mapping={"xs": "col_x", "ys": "col_y"},
+        data_file_id="fx_report",
+    )
+    log = render_shortlist(
+        bindings=[binding],
+        data_files=[RenderDataFile(file_id="fx_report", path=csv_path)],
+        out_dir=tmp_path / "figs",
+    )
+    report_path = write_render_report(log, tmp_path / "figs" / "RENDER_REPORT.md")
+    text = report_path.read_text(encoding="utf-8")
+    assert "## Audit refused (1)" in text
+    assert full_name in text
+    assert "underpowered" in text

@@ -1143,5 +1143,64 @@ def compose_validate_cmd(yaml_path: Path) -> None:
     sys.exit(1)
 
 
+# ─────────────────── plugins (Sprint 2A — v1.10.0) ─────────────────────
+#
+# Project-extensible recipes discovered via `entry_points` (preferred)
+# or a `panelforge_plugins/` directory at the project root.  See
+# `docs/spec_project_plugins.md`.
+
+
+@main.group("plugins")
+def plugins_group() -> None:
+    """Project plugin discovery + management (Sprint 2A — v1.10.0).
+
+    Plugins extend the catalog with project-local recipes via
+    ``entry_points`` (preferred for installable groups) or a
+    ``panelforge_plugins/`` directory at the project root (preferred
+    for solo researchers).  See ``docs/spec_project_plugins.md``.
+    """
+
+
+@plugins_group.command("list")
+def plugins_list_cmd() -> None:
+    """List all discovered plugins (entry-points + directory)."""
+    from .plugins import discover_all_plugins
+
+    plugins = discover_all_plugins()
+    if not plugins:
+        click.echo("no plugins discovered")
+        return
+    click.echo(f"discovered {len(plugins)} plugin(s):")
+    for p in plugins:
+        n_recipes = len(p.discovered_recipes)
+        click.echo(
+            f"  {p.name:30s} {p.version:12s} {p.source:14s} "
+            f"recipes={n_recipes:<3d} {p.module_path}"
+        )
+
+
+@plugins_group.command("describe")
+@click.argument("plugin_name")
+def plugins_describe_cmd(plugin_name: str) -> None:
+    """Show details about a specific plugin."""
+    from .plugins import discover_all_plugins
+
+    plugins = {p.name: p for p in discover_all_plugins()}
+    if plugin_name not in plugins:
+        click.echo(f"✗ plugin {plugin_name!r} not found", err=True)
+        sys.exit(1)
+    p = plugins[plugin_name]
+    click.echo(f"plugin: {p.name}")
+    click.echo(f"  version:        {p.version}")
+    click.echo(f"  source:         {p.source}")
+    click.echo(f"  module_path:    {p.module_path}")
+    if p.discovered_recipes:
+        click.echo(f"  recipes ({len(p.discovered_recipes)}):")
+        for r in p.discovered_recipes:
+            click.echo(f"    - {r}")
+    else:
+        click.echo("  recipes: (none registered)")
+
+
 if __name__ == "__main__":
     main()

@@ -248,7 +248,19 @@ def build_index(*, include_tags: bool = False) -> dict[str, Any]:
     Wave 2 (`include_tags=True`): adds per-recipe `tags` (auto-tagger +
     `docs/recipe_tags.yaml` override + `tags_source` provenance), top-
     level `scoring_rubric`, and `intake_questions` blocks.
+
+    Sprint 2A (v1.10.0): runs project-plugin discovery (entry_points +
+    `panelforge_plugins/` walk) **before** `build_catalog()` so plugin
+    recipes appear in the same per-modality blocks.  Plugin-attributable
+    recipes get `tags_source: "plugin:<name>"` and a `plugin` field
+    naming the owning plugin (None for catalog recipes).
     """
+    # Plugin discovery runs before the catalog snapshot so plugin recipes
+    # land in the registry alongside catalog recipes.  Discovery is
+    # idempotent — repeated calls do not re-import already-loaded plugins.
+    from ..plugins import discover_all_plugins, plugin_for_recipe
+
+    discover_all_plugins()
     catalog = build_catalog()
     counts = registry_counts()
 
@@ -259,14 +271,18 @@ def build_index(*, include_tags: bool = False) -> dict[str, Any]:
         overrides = {}
 
     # Per-recipe tag scaffolding.  Wave 1 emits empty dicts; Wave 2 fills
-    # from auto-tagger + YAML override.
+    # from auto-tagger + YAML override.  Sprint 2A annotates each recipe
+    # with the owning plugin (or None for catalog recipes).
     for mod in catalog["modalities"]:
         mod["n_recipes"] = len(mod["recipes"])
         for rec in mod["recipes"]:
+            full_name = f"{mod['name']}.{rec['name']}"
+            owning_plugin = plugin_for_recipe(full_name)
+            rec["plugin"] = owning_plugin
+
             if not include_tags:
                 rec["tags"] = {}
                 continue
-            full_name = f"{mod['name']}.{rec['name']}"
             auto_tags = auto_tag_recipe(
                 name=rec["name"],
                 modality=mod["name"],
@@ -278,7 +294,13 @@ def build_index(*, include_tags: bool = False) -> dict[str, Any]:
             override_tags = overrides.get(full_name)
             merged, source = _merge_tags(auto_tags, override_tags)
             rec["tags"] = merged
-            rec["tags_source"] = source
+            # Plugin attribution wins over auto/override for `tags_source`
+            # so agents reading the index can route to plugin authors when
+            # debugging a plugin recipe.
+            if owning_plugin is not None:
+                rec["tags_source"] = f"plugin:{owning_plugin}"
+            else:
+                rec["tags_source"] = source
 
     index = {
         "index_meta": {

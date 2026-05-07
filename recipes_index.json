@@ -606,6 +606,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.actin_microtubule_crosstalk_quiver.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -645,6 +646,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset.render",
+          "plugin": null,
           "required_fields": [
             "edges"
           ],
@@ -682,6 +684,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.actin_mt_ratio_spatial_map.render",
+          "plugin": null,
           "required_fields": [
             "ratio_image"
           ],
@@ -718,6 +721,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.airyscan_segmentation_mosaic.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -751,6 +755,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.airyscan_to_zone_territory_triptych.render",
+          "plugin": null,
           "required_fields": [
             "bundles"
           ],
@@ -785,6 +790,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.behavioral_fingerprint_trio_composite.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -820,6 +826,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.branch_angle_distribution.render",
+          "plugin": null,
           "required_fields": [
             "angles_deg_by_condition"
           ],
@@ -855,6 +862,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.branch_point_count_raincloud.render",
+          "plugin": null,
           "required_fields": [
             "branch_counts_by_condition"
           ],
@@ -892,6 +900,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.branch_point_density_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um"
@@ -929,6 +938,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.branching_topology_sunburst.render",
+          "plugin": null,
           "required_fields": [
             "depth_counts_by_condition"
           ],
@@ -963,6 +973,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.cell_body_area_distribution.render",
+          "plugin": null,
           "required_fields": [
             "soma_areas_by_condition"
           ],
@@ -998,6 +1009,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.colocalization_coefficient_matrix.render",
+          "plugin": null,
           "required_fields": [
             "conditions",
             "coefficient_names",
@@ -1035,6 +1047,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.colocalization_raincloud_per_metric.render",
+          "plugin": null,
           "required_fields": [
             "coefficients"
           ],
@@ -1070,6 +1083,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.colocalization_vs_morphology_correlation.render",
+          "plugin": null,
           "required_fields": [
             "coloc_metrics",
             "shape_metrics"
@@ -1106,6 +1120,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.condition_average_cell_composite.render",
+          "plugin": null,
           "required_fields": [
             "hulls"
           ],
@@ -1141,6 +1156,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.cortex_composite_zone_descriptors.render",
+          "plugin": null,
           "required_fields": [
             "descriptors"
           ],
@@ -1175,6 +1191,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.cortical_thickness_by_region.render",
+          "plugin": null,
           "required_fields": [
             "regions",
             "thickness_um_by_region"
@@ -1213,6 +1230,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.cytoskeleton_polarity_vectorfield.render",
+          "plugin": null,
           "required_fields": [
             "cell_x_um",
             "cell_y_um",
@@ -1251,6 +1269,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.edge_gradient_intensity_profile.render",
+          "plugin": null,
           "required_fields": [
             "profiles"
           ],
@@ -1288,6 +1307,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.edge_velocity_spatial_correlation.render",
+          "plugin": null,
           "required_fields": [
             "arc_lag_um",
             "correlation"
@@ -1325,6 +1345,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.exemplar_extremes_panel.render",
+          "plugin": null,
           "required_fields": [
             "exemplars",
             "target_metric_label"
@@ -1360,6 +1381,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.filament_orientation_histogram.render",
+          "plugin": null,
           "required_fields": [
             "angles_deg_by_component"
           ],
@@ -1394,6 +1416,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.intensity_radial_profile.render",
+          "plugin": null,
           "required_fields": [
             "radius_um",
             "intensity_by_channel"
@@ -1430,6 +1453,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.mitochondrial_axis_alignment.render",
+          "plugin": null,
           "required_fields": [
             "delta_angle_deg"
           ],
@@ -1467,6 +1491,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.morphospace_trajectory_by_time.render",
+          "plugin": null,
           "required_fields": [
             "times",
             "trajectories_by_condition"
@@ -1501,6 +1526,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.mt_mesh_density_compartment_compare.render",
+          "plugin": null,
           "required_fields": [
             "snapshots"
           ],
@@ -1535,6 +1561,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.overlap_juxtaposition_quantification.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -1571,6 +1598,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.pca_silhouette_glyph_morphospace.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -1608,6 +1636,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.per_cell_thumbnail_grid_with_metrics.render",
+          "plugin": null,
           "required_fields": [
             "cell_thumbnails",
             "cell_metric_labels"
@@ -1644,6 +1673,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.persistence_length_by_segment.render",
+          "plugin": null,
           "required_fields": [
             "segment_lp_by_condition"
           ],
@@ -1680,6 +1710,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.persistence_length_fit.render",
+          "plugin": null,
           "required_fields": [
             "contour_length_um",
             "cos_theta_mean"
@@ -1715,6 +1746,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.process_end_count_violin.render",
+          "plugin": null,
           "required_fields": [
             "end_counts_by_condition"
           ],
@@ -1750,6 +1782,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.process_length_distribution_by_sex.render",
+          "plugin": null,
           "required_fields": [
             "process_length_by_group"
           ],
@@ -1785,6 +1818,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.protrusion_length_velocity_joint.render",
+          "plugin": null,
           "required_fields": [
             "length_um",
             "velocity_um_per_s"
@@ -1819,6 +1853,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -1855,6 +1890,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.protrusion_retraction_kymograph.render",
+          "plugin": null,
           "required_fields": [
             "arc_length_um",
             "time_s",
@@ -1892,6 +1928,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.pseudotime_thumbnail_strip.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -1929,6 +1966,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.sex_stratified_cvvelocity.render",
+          "plugin": null,
           "required_fields": [
             "cv_velocity_by_group"
           ],
@@ -1964,6 +2002,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.shape_descriptor_scatter_matrix.render",
+          "plugin": null,
           "required_fields": [
             "descriptors"
           ],
@@ -2001,6 +2040,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.shape_pca_morphospace.render",
+          "plugin": null,
           "required_fields": [
             "pc1",
             "pc2",
@@ -2039,6 +2079,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.shape_umap_by_condition.render",
+          "plugin": null,
           "required_fields": [
             "umap_x",
             "umap_y",
@@ -2076,6 +2117,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.sholl_intersections_radial_histogram.render",
+          "plugin": null,
           "required_fields": [
             "profiles"
           ],
@@ -2112,6 +2154,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.skeleton_complexity_radar.render",
+          "plugin": null,
           "required_fields": [
             "metric_names",
             "condition_values"
@@ -2148,6 +2191,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.skeleton_overlay_kymograph.render",
+          "plugin": null,
           "required_fields": [
             "arc_length_um",
             "time_s",
@@ -2185,6 +2229,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.sphericity_vs_elongation_scatter.render",
+          "plugin": null,
           "required_fields": [
             "sphericity",
             "elongation"
@@ -2220,6 +2265,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.territory_contact_network_overlay.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -2255,6 +2301,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.tip_enrichment_vs_shaft_scatter.render",
+          "plugin": null,
           "required_fields": [
             "tip_intensity",
             "shaft_intensity"
@@ -2290,6 +2337,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.topology_ternary_simplex.render",
+          "plugin": null,
           "required_fields": [
             "linear_fraction",
             "branched_fraction",
@@ -2328,6 +2376,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.actin_microtubule_morphometry.zone_fraction_alluvial_sankey.render",
+          "plugin": null,
           "required_fields": [
             "fractions_by_condition"
           ],
@@ -2398,6 +2447,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.buckling_critical_force_plot.render",
+          "plugin": null,
           "required_fields": [
             "lengths",
             "forces"
@@ -2435,6 +2485,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.censoring_mode_waterfall_cascade.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -2472,6 +2523,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.characteristic_time_vs_control.render",
+          "plugin": null,
           "required_fields": [
             "control",
             "tau"
@@ -2512,6 +2564,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.compartment_paired_delta_scatter.render",
+          "plugin": null,
           "required_fields": [
             "estimates"
           ],
@@ -2549,6 +2602,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.compartment_split_curvature_crosscorr.render",
+          "plugin": null,
           "required_fields": [
             "lag_um",
             "ccf_by_group_and_compartment"
@@ -2586,6 +2640,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.confinement_energy_gauge_per_genotype.render",
+          "plugin": null,
           "required_fields": [
             "bundles"
           ],
@@ -2621,6 +2676,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.confinement_free_energy_vs_width_curve.render",
+          "plugin": null,
           "required_fields": [
             "width_grid_um",
             "fconf_by_group",
@@ -2658,6 +2714,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.confinement_ratio_distribution_by_genotype.render",
+          "plugin": null,
           "required_fields": [
             "samples"
           ],
@@ -2694,6 +2751,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.crossover_scaling_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "y"
@@ -2731,6 +2789,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.dissipation_quartile_pca_with_ellipses.render",
+          "plugin": null,
           "required_fields": [
             "points"
           ],
@@ -2766,6 +2825,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.dual_scale_significance_lollipop.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -2800,6 +2860,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.energy_landscape_1d_cartoon.render",
+          "plugin": null,
           "required_fields": [
             "well_positions",
             "well_depths",
@@ -2843,6 +2904,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.equivalence_forest_with_tost_bounds.render",
+          "plugin": null,
           "required_fields": [
             "estimates"
           ],
@@ -2876,6 +2938,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.euler_critical_length_crossing_distribution.render",
+          "plugin": null,
           "required_fields": [
             "supported_lengths_by_group",
             "l_crit_um"
@@ -2914,6 +2977,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.feature_outcome_sankey_sig_vs_null.render",
+          "plugin": null,
           "required_fields": [
             "estimates"
           ],
@@ -2948,6 +3012,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.force_budget_schematic_with_data.render",
+          "plugin": null,
           "required_fields": [
             "terms"
           ],
@@ -2986,6 +3051,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.force_length_characteristic.render",
+          "plugin": null,
           "required_fields": [
             "lengths",
             "passive_force",
@@ -3025,6 +3091,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.forward_simulation_validation_contract.render",
+          "plugin": null,
           "required_fields": [
             "metrics"
           ],
@@ -3061,6 +3128,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.fractal_dimension_scaling.render",
+          "plugin": null,
           "required_fields": [
             "box_size",
             "box_count"
@@ -3098,6 +3166,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.geometric_mediation_path_diagram.render",
+          "plugin": null,
           "required_fields": [
             "path"
           ],
@@ -3135,6 +3204,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.hierarchical_effect_size_ladder.render",
+          "plugin": null,
           "required_fields": [
             "estimates",
             "scale_order"
@@ -3170,6 +3240,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.knudsen_reynolds_regime_diagram.render",
+          "plugin": null,
           "required_fields": [
             "knudsen",
             "reynolds"
@@ -3209,6 +3280,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.log_log_scaling_with_slope_box.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "y"
@@ -3248,6 +3320,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.log_log_with_theory_line.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "y",
@@ -3286,6 +3359,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.master_curve_collapse.render",
+          "plugin": null,
           "required_fields": [
             "conditions",
             "x_scale",
@@ -3324,6 +3398,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.molecular_resilience_index_bar.render",
+          "plugin": null,
           "required_fields": [
             "entries"
           ],
@@ -3362,6 +3437,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.ordered_trajectory_checkpoint_divergence.render",
+          "plugin": null,
           "required_fields": [
             "points",
             "y_label"
@@ -3398,6 +3474,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.per_cell_colocalization_parallel_coordinates.render",
+          "plugin": null,
           "required_fields": [
             "metrics_by_cell",
             "group_by_cell"
@@ -3436,6 +3513,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.permanova_null_distribution.render",
+          "plugin": null,
           "required_fields": [
             "null_R2",
             "observed_R2"
@@ -3476,6 +3554,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.persistence_length_lp_with_equivalence_bounds.render",
+          "plugin": null,
           "required_fields": [
             "lp_by_group_and_compartment",
             "tost"
@@ -3511,6 +3590,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.pi_group_sensitivity_bar.render",
+          "plugin": null,
           "required_fields": [
             "group_names",
             "contribution"
@@ -3548,6 +3628,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.power_law_tail_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "values"
           ],
@@ -3585,6 +3666,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.pre_registered_censoring_mode_grid.render",
+          "plugin": null,
           "required_fields": [
             "results",
             "modes",
@@ -3624,6 +3706,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.psd_active_gel_overlay_with_motor_inset.render",
+          "plugin": null,
           "required_fields": [
             "psds"
           ],
@@ -3659,6 +3742,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.quartile_stacked_bar_by_factor.render",
+          "plugin": null,
           "required_fields": [
             "bins"
           ],
@@ -3696,6 +3780,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.random_forest_importance_by_scale.render",
+          "plugin": null,
           "required_fields": [
             "importance_mean",
             "importance_ci",
@@ -3735,6 +3820,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.robustness_neighborhood_phase_corner.render",
+          "plugin": null,
           "required_fields": [
             "grid"
           ],
@@ -3770,6 +3856,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.route_geometry_compact_screen.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -3807,6 +3894,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.s_state_frontier_tip_raster.render",
+          "plugin": null,
           "required_fields": [
             "calls"
           ],
@@ -3844,6 +3932,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.scale_stratified_permanova_r2.render",
+          "plugin": null,
           "required_fields": [
             "r2_by_scale",
             "ci_by_scale",
@@ -3881,6 +3970,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.scaling_exponent_ci_forest.render",
+          "plugin": null,
           "required_fields": [
             "study_names",
             "alpha_hat",
@@ -3917,6 +4007,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.sensitivity_sweep_alpha_width_seed_compound.render",
+          "plugin": null,
           "required_fields": [
             "sweeps"
           ],
@@ -3952,6 +4043,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.shared_manifold_scatter_with_residuals.render",
+          "plugin": null,
           "required_fields": [
             "x_by_cell",
             "y_by_cell",
@@ -3990,6 +4082,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.splay_taper_polarity_displacement_compound.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -4023,6 +4116,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.split_mirror_measured_vs_simulated.render",
+          "plugin": null,
           "required_fields": [
             "comparisons"
           ],
@@ -4057,6 +4151,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.stress_strain_regime_map.render",
+          "plugin": null,
           "required_fields": [
             "strain",
             "stress",
@@ -4097,6 +4192,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.universality_class_comparison.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "y",
@@ -4138,6 +4234,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.width_alignment_buffered_unbuffered_interaction.render",
+          "plugin": null,
           "required_fields": [
             "width_um_by_cell",
             "alpha_by_cell",
@@ -4177,6 +4274,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.width_alpha_regime_phase_map.render",
+          "plugin": null,
           "required_fields": [
             "grid"
           ],
@@ -4215,6 +4313,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.xz_microtubule_bowing_z_span.render",
+          "plugin": null,
           "required_fields": [
             "xz_slices_by_group"
           ],
@@ -4249,6 +4348,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.biophysics_scaling.z_span_vs_width_with_euler_threshold.render",
+          "plugin": null,
           "required_fields": [
             "samples"
           ],
@@ -4313,6 +4413,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.calcium_and_fret_joint_plot.render",
+          "plugin": null,
           "required_fields": [
             "cell_id",
             "ca_event_rate_hz",
@@ -4350,6 +4451,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.calcium_event_amplitude_distribution.render",
+          "plugin": null,
           "required_fields": [
             "amplitudes_by_condition"
           ],
@@ -4387,6 +4489,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.calcium_event_onset_alignment.render",
+          "plugin": null,
           "required_fields": [
             "lag_s",
             "rate_by_group"
@@ -4423,6 +4526,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.calcium_propagation_wavefront.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -4460,6 +4564,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.calcium_wave_speed_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -4496,6 +4601,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.event_frequency_by_condition.render",
+          "plugin": null,
           "required_fields": [
             "rates_by_condition"
           ],
@@ -4531,6 +4637,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.event_raster_with_rate.render",
+          "plugin": null,
           "required_fields": [
             "t_bins",
             "event_times"
@@ -4568,6 +4675,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.gcamp_trace_stack.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "traces"
@@ -4603,6 +4711,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.network_burst_detection_overlay.render",
+          "plugin": null,
           "required_fields": [
             "t_bins",
             "event_times",
@@ -4642,6 +4751,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.oscillation_frequency_polar.render",
+          "plugin": null,
           "required_fields": [
             "cell_id",
             "phase_rad"
@@ -4680,6 +4790,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.population_synchronization_timeline.render",
+          "plugin": null,
           "required_fields": [
             "time_s",
             "sync_index"
@@ -4716,6 +4827,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.single_cell_calcium_landscape.render",
+          "plugin": null,
           "required_fields": [
             "cell_id",
             "event_frequency_hz",
@@ -4754,6 +4866,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.spike_triggered_average.render",
+          "plugin": null,
           "required_fields": [
             "t_window",
             "aligned_traces"
@@ -4792,6 +4905,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.stimulus_triggered_calcium_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "time_s",
             "cell_ids",
@@ -4828,6 +4942,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.calcium_signaling.synchronization_matrix.render",
+          "plugin": null,
           "required_fields": [
             "cell_ids",
             "sync_matrix"
@@ -4896,6 +5011,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.adverse_event_incidence_bar.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -4929,6 +5045,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.baseline_table_visualization.render",
+          "plugin": null,
           "required_fields": [
             "covariates",
             "arm_names",
@@ -4966,6 +5083,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.calibration_plot_with_hl_test.render",
+          "plugin": null,
           "required_fields": [
             "predicted",
             "observed"
@@ -5001,6 +5119,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.competing_risks_cumulative_incidence.render",
+          "plugin": null,
           "required_fields": [
             "time_points",
             "cif_by_cause"
@@ -5036,6 +5155,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.consort_flow_diagram.render",
+          "plugin": null,
           "required_fields": [
             "stages"
           ],
@@ -5070,6 +5190,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.cox_forest_hazard_ratios.render",
+          "plugin": null,
           "required_fields": [
             "covariates"
           ],
@@ -5103,6 +5224,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.decision_curve_analysis.render",
+          "plugin": null,
           "required_fields": [
             "thresholds",
             "net_benefit_model",
@@ -5140,6 +5262,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.hazard_ratio_over_time_smoothed.render",
+          "plugin": null,
           "required_fields": [
             "time_points",
             "hr_t",
@@ -5178,6 +5301,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.kaplan_meier_by_stratum.render",
+          "plugin": null,
           "required_fields": [
             "strata"
           ],
@@ -5211,6 +5335,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.number_needed_to_treat_forest.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -5245,6 +5370,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.outcome_by_quartile.render",
+          "plugin": null,
           "required_fields": [
             "quartile_labels",
             "n_per_quartile",
@@ -5283,6 +5409,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.propensity_score_balance_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -5317,6 +5444,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.risk_score_discrimination_ladder.render",
+          "plugin": null,
           "required_fields": [
             "tier_names",
             "event_rate",
@@ -5356,6 +5484,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.roc_with_cutoff_optimization.render",
+          "plugin": null,
           "required_fields": [
             "fpr",
             "tpr",
@@ -5393,6 +5522,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.clinical_cohort.subgroup_forest_plot.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -5458,6 +5588,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.angular_distribution_hist.render",
+          "plugin": null,
           "required_fields": [
             "rot_deg",
             "tilt_deg"
@@ -5492,6 +5623,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.b_factor_distribution_by_chain.render",
+          "plugin": null,
           "required_fields": [
             "b_factors_by_chain"
           ],
@@ -5527,6 +5659,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.bfactor_vs_residue.render",
+          "plugin": null,
           "required_fields": [
             "residue_index",
             "b_factor"
@@ -5562,6 +5695,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.conformational_ensemble_rmsf.render",
+          "plugin": null,
           "required_fields": [
             "residue_index",
             "rmsf"
@@ -5599,6 +5733,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.contact_map_with_secondary_structure.render",
+          "plugin": null,
           "required_fields": [
             "contact_matrix",
             "secondary_structure"
@@ -5634,6 +5769,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.docking_pose_score_vs_rmsd.render",
+          "plugin": null,
           "required_fields": [
             "rmsd",
             "score"
@@ -5669,6 +5805,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.domain_motion_decomposition.render",
+          "plugin": null,
           "required_fields": [
             "mode_names",
             "variance_explained"
@@ -5706,6 +5843,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.fsc_resolution_curve.render",
+          "plugin": null,
           "required_fields": [
             "spatial_freq_inv_ang",
             "fsc_masked"
@@ -5741,6 +5879,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.hydrogen_bond_network_diagram.render",
+          "plugin": null,
           "required_fields": [
             "central_residue",
             "partners"
@@ -5776,6 +5915,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.interface_area_vs_affinity.render",
+          "plugin": null,
           "required_fields": [
             "complex_names",
             "bsa",
@@ -5813,6 +5953,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.local_resolution_surface.render",
+          "plugin": null,
           "required_fields": [
             "resolution_ang"
           ],
@@ -5847,6 +5988,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.motion_correction_shift_vector.render",
+          "plugin": null,
           "required_fields": [
             "frame_index",
             "dx",
@@ -5883,6 +6025,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.particle_2d_class_montage.render",
+          "plugin": null,
           "required_fields": [
             "class_averages",
             "class_populations"
@@ -5920,6 +6063,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.ramachandran_plot.render",
+          "plugin": null,
           "required_fields": [
             "phi_deg",
             "psi_deg"
@@ -5955,6 +6099,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.cryoem_and_structure.surface_electrostatics_colormap.render",
+          "plugin": null,
           "required_fields": [
             "x_edges",
             "y_edges",
@@ -6022,6 +6167,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.angle_correlation_decay.render",
+          "plugin": null,
           "required_fields": [
             "lag_s",
             "cos_mean"
@@ -6058,6 +6204,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.confinement_radius_map.render",
+          "plugin": null,
           "required_fields": [
             "track_centers_um",
             "radius_of_gyration_um"
@@ -6094,6 +6241,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.confinement_radius_vs_time.render",
+          "plugin": null,
           "required_fields": [
             "time_s",
             "R_conf_per_track"
@@ -6130,6 +6278,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.diffusion_coefficient_heatmap_spatial.render",
+          "plugin": null,
           "required_fields": [
             "x_edges",
             "y_edges",
@@ -6166,6 +6315,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.displacement_vs_state_residence.render",
+          "plugin": null,
           "required_fields": [
             "state_names",
             "residence_bins_s",
@@ -6202,6 +6352,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.ensemble_vs_time_averaged_msd.render",
+          "plugin": null,
           "required_fields": [
             "lag_s",
             "ea_msd",
@@ -6237,6 +6388,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.hmm_state_dwell_distribution.render",
+          "plugin": null,
           "required_fields": [
             "dwells_by_state"
           ],
@@ -6271,6 +6423,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.jump_distance_van_hove.render",
+          "plugin": null,
           "required_fields": [
             "lag_s",
             "jumps_by_lag"
@@ -6306,6 +6459,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.msd_anomalous_exponent_fit.render",
+          "plugin": null,
           "required_fields": [
             "alpha_per_track",
             "D_per_track",
@@ -6344,6 +6498,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.msd_by_condition.render",
+          "plugin": null,
           "required_fields": [
             "lag_s",
             "msd_by_condition"
@@ -6379,6 +6534,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.step_size_distribution.render",
+          "plugin": null,
           "required_fields": [
             "steps_by_condition"
           ],
@@ -6413,6 +6569,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.track_directionality_polar.render",
+          "plugin": null,
           "required_fields": [
             "angles_rad"
           ],
@@ -6447,6 +6604,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.track_length_distribution.render",
+          "plugin": null,
           "required_fields": [
             "duration_s_by_condition"
           ],
@@ -6482,6 +6640,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.track_persistence_hist.render",
+          "plugin": null,
           "required_fields": [
             "persistence_length_um"
           ],
@@ -6517,6 +6676,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.diffusion_and_tracking.track_spaghetti_plot_colored_by_state.render",
+          "plugin": null,
           "required_fields": [
             "tracks_x",
             "tracks_y",
@@ -6584,6 +6744,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.compound_cluster_structure_activity.render",
+          "plugin": null,
           "required_fields": [
             "compound_names",
             "pc1",
@@ -6624,6 +6785,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.dose_normalized_ec50_forest.render",
+          "plugin": null,
           "required_fields": [
             "compound_names",
             "ec50_nM"
@@ -6662,6 +6824,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.dose_response_sex_stratified.render",
+          "plugin": null,
           "required_fields": [
             "doses_female",
             "responses_female",
@@ -6702,6 +6865,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.dose_response_time_matrix.render",
+          "plugin": null,
           "required_fields": [
             "concentrations_M",
             "time_min",
@@ -6740,6 +6904,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.drug_combo_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "doses_A",
             "doses_B",
@@ -6779,6 +6944,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.hill_fit_with_ci.render",
+          "plugin": null,
           "required_fields": [
             "doses",
             "responses"
@@ -6815,6 +6981,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.ic50_forest_across_compounds.render",
+          "plugin": null,
           "required_fields": [
             "compounds"
           ],
@@ -6850,6 +7017,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.ic50_vs_target_affinity_scatter.render",
+          "plugin": null,
           "required_fields": [
             "compound_names",
             "ic50_nM",
@@ -6888,6 +7056,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.isobologram_combination.render",
+          "plugin": null,
           "required_fields": [
             "ic50_A",
             "ic50_B",
@@ -6925,6 +7094,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.pharmacophore_activity_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "feature_names",
             "compound_names",
@@ -6961,6 +7131,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.polypharmacology_radar.render",
+          "plugin": null,
           "required_fields": [
             "target_names",
             "activity_by_compound"
@@ -7000,6 +7171,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.response_rebound_kinetics.render",
+          "plugin": null,
           "required_fields": [
             "time_min",
             "response"
@@ -7037,6 +7209,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.schild_regression.render",
+          "plugin": null,
           "required_fields": [
             "log_antagonist",
             "log_dr_minus_1"
@@ -7073,6 +7246,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.selectivity_index_tornado.render",
+          "plugin": null,
           "required_fields": [
             "target_names",
             "ic50_on_target_nM",
@@ -7111,6 +7285,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.dose_response_pharmacology.synergy_score_bliss_loewe.render",
+          "plugin": null,
           "required_fields": [
             "pair_names",
             "bliss_score",
@@ -7188,6 +7363,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.biosensor_dose_response_matrix.render",
+          "plugin": null,
           "required_fields": [
             "doses",
             "times_s",
@@ -7225,6 +7401,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.donor_acceptor_dual_channel.render",
+          "plugin": null,
           "required_fields": [
             "donor",
             "acceptor"
@@ -7261,6 +7438,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.donor_acceptor_scatter_linearity.render",
+          "plugin": null,
           "required_fields": [
             "donor",
             "acceptor"
@@ -7298,6 +7476,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.dose_response_hill_fret.render",
+          "plugin": null,
           "required_fields": [
             "doses",
             "ratios"
@@ -7335,6 +7514,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.fret_efficiency_vs_distance.render",
+          "plugin": null,
           "required_fields": [
             "distances_nm",
             "efficiency"
@@ -7372,6 +7552,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.fret_signal_to_noise_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -7409,6 +7590,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.fret_vs_scalar_activity_regression.render",
+          "plugin": null,
           "required_fields": [
             "fret_ratio",
             "scalar_activity",
@@ -7448,6 +7630,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.kymograph_ratio_edge_to_center.render",
+          "plugin": null,
           "required_fields": [
             "distance_um",
             "time_s",
@@ -7487,6 +7670,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.paired_pre_post_stimulus.render",
+          "plugin": null,
           "required_fields": [
             "pre_values",
             "post_values"
@@ -7522,6 +7706,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.ratio_distribution_by_condition.render",
+          "plugin": null,
           "required_fields": [
             "ratios_by_condition"
           ],
@@ -7561,6 +7746,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.ratio_heatmap_over_field.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -7598,6 +7784,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.ratio_map_with_segmentation_overlay.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -7638,6 +7825,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.ratio_timecourse_hierarchical_ci.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "conditions"
@@ -7673,6 +7861,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.roi_ratio_summary_grid.render",
+          "plugin": null,
           "required_fields": [
             "roi_ids",
             "timepoints",
@@ -7712,6 +7901,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.sensor_calibration_curve.render",
+          "plugin": null,
           "required_fields": [
             "concentrations",
             "ratios"
@@ -7749,6 +7939,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.single_cell_ratio_trajectories.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "groups"
@@ -7786,6 +7977,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.stimulus_response_fan.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "traces"
@@ -7824,6 +8016,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.fret_biosensors.windowed_roi_ratio_trajectory.render",
+          "plugin": null,
           "required_fields": [
             "time_s",
             "window_positions",
@@ -7890,6 +8083,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.autocorrelation_of_trajectories.render",
+          "plugin": null,
           "required_fields": [
             "tau_s",
             "acf_by_state"
@@ -7926,6 +8120,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.burst_size_distribution.render",
+          "plugin": null,
           "required_fields": [
             "burst_sizes"
           ],
@@ -7960,6 +8155,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.dwell_time_log_violin.render",
+          "plugin": null,
           "required_fields": [
             "state_dwells"
           ],
@@ -7996,6 +8192,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.ensemble_mean_variance_tube.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "mean",
@@ -8034,6 +8231,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.extinction_probability_vs_parameter.render",
+          "plugin": null,
           "required_fields": [
             "theta",
             "p_ext_by_initial"
@@ -8069,6 +8267,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.fisher_information_parameter_estimation.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "fim"
@@ -8105,6 +8304,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.master_equation_steady_state.render",
+          "plugin": null,
           "required_fields": [
             "n_values",
             "analytic_p",
@@ -8143,6 +8343,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.mean_first_passage_time_matrix.render",
+          "plugin": null,
           "required_fields": [
             "state_labels",
             "mfpt"
@@ -8179,6 +8380,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.noise_power_spectrum.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "signal_trace"
@@ -8216,6 +8418,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.rate_vs_control_parameter.render",
+          "plugin": null,
           "required_fields": [
             "control",
             "rates_by_transition"
@@ -8251,6 +8454,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.state_occupancy_raster.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "state_sequences",
@@ -8288,6 +8492,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.stochastic_resonance_signature.render",
+          "plugin": null,
           "required_fields": [
             "noise_amplitude",
             "snr"
@@ -8326,6 +8531,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.tau_leaping_comparison.render",
+          "plugin": null,
           "required_fields": [
             "time_s",
             "exact_trace",
@@ -8365,6 +8571,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.trajectory_fan_with_fpt.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "trajectories"
@@ -8400,6 +8607,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.gillespie_stochastic.waiting_time_ecdf_fitted.render",
+          "plugin": null,
           "required_fields": [
             "waiting_times"
           ],
@@ -8470,6 +8678,7 @@
             "arrow_labels"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.conceptual_triptych.render",
+          "plugin": null,
           "required_fields": [
             "left",
             "middle",
@@ -8507,6 +8716,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.cost_by_work_package_bar.render",
+          "plugin": null,
           "required_fields": [
             "wp_names",
             "category_names",
@@ -8544,6 +8754,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.deliverables_timeline.render",
+          "plugin": null,
           "required_fields": [
             "deliverables"
           ],
@@ -8578,6 +8789,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.ethics_and_impact_block.render",
+          "plugin": null,
           "required_fields": [
             "ethics_sections",
             "impact_sections"
@@ -8616,6 +8828,7 @@
             "color_key"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.executive_summary_tile.render",
+          "plugin": null,
           "required_fields": [
             "headline_value",
             "headline_label",
@@ -8657,6 +8870,7 @@
             "claim_color_key"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.hypothesis_diagram.render",
+          "plugin": null,
           "required_fields": [
             "claim"
           ],
@@ -8691,6 +8905,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.innovation_positioning_quadrant.render",
+          "plugin": null,
           "required_fields": [
             "competitors",
             "our_name",
@@ -8729,6 +8944,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.interdisciplinary_contribution_spider.render",
+          "plugin": null,
           "required_fields": [
             "discipline_names",
             "coverage"
@@ -8764,6 +8980,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.methods_pipeline_flow.render",
+          "plugin": null,
           "required_fields": [
             "input_label",
             "output_label",
@@ -8800,6 +9017,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.milestone_vs_risk_matrix.render",
+          "plugin": null,
           "required_fields": [
             "milestones"
           ],
@@ -8834,6 +9052,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.narrative_cascade_river_with_xrefs.render",
+          "plugin": null,
           "required_fields": [
             "stages"
           ],
@@ -8870,6 +9089,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.research_aims_pyramid.render",
+          "plugin": null,
           "required_fields": [
             "objective",
             "aim_titles",
@@ -8908,6 +9128,7 @@
             "show_values"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.team_expertise_matrix.render",
+          "plugin": null,
           "required_fields": [
             "members",
             "competencies",
@@ -8946,6 +9167,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.team_network_graph.render",
+          "plugin": null,
           "required_fields": [
             "partners"
           ],
@@ -8984,6 +9206,7 @@
             "x_label"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.timeline_gantt_with_milestones.render",
+          "plugin": null,
           "required_fields": [
             "tasks"
           ],
@@ -9019,6 +9242,7 @@
             "edges"
           ],
           "path": "panelforge_figures.recipes.grant_and_conceptual.work_package_flow.render",
+          "plugin": null,
           "required_fields": [
             "wps"
           ],
@@ -9083,6 +9307,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.aligned_vs_unaligned_velocity_split.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -9118,6 +9343,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.biosensor_activation_field_per_cell.render",
+          "plugin": null,
           "required_fields": [
             "fields"
           ],
@@ -9152,6 +9378,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.biosensor_dose_response_curve.render",
+          "plugin": null,
           "required_fields": [
             "traces",
             "condition_by_cell"
@@ -9186,6 +9413,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.branch_order_topology_per_cell.render",
+          "plugin": null,
           "required_fields": [
             "skeletons"
           ],
@@ -9222,6 +9450,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cell_cell_contact_frequency_matrix.render",
+          "plugin": null,
           "required_fields": [
             "cell_ids",
             "contact_counts"
@@ -9257,6 +9486,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cell_shape_descriptors_by_state.render",
+          "plugin": null,
           "required_fields": [
             "states",
             "circularity_by_state"
@@ -9293,6 +9523,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cell_track_trajectory_field.render",
+          "plugin": null,
           "required_fields": [
             "tracks"
           ],
@@ -9328,6 +9559,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.chemotaxis_index_trajectory.render",
+          "plugin": null,
           "required_fields": [
             "bundles",
             "cue_onset_s_by_cell",
@@ -9368,6 +9600,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cohort_baseline_balance_table_matrix.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -9405,6 +9638,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.commitment_hazard_with_age.render",
+          "plugin": null,
           "required_fields": [
             "protrusions",
             "condition_by_protrusion"
@@ -9443,6 +9677,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.commitment_phase_diagram.render",
+          "plugin": null,
           "required_fields": [
             "per_protrusion"
           ],
@@ -9476,6 +9711,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.commitment_vs_chemotaxis_contingency.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -9510,6 +9746,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cue_response_dose_latency.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -9547,6 +9784,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cue_to_net_displacement_latency.render",
+          "plugin": null,
           "required_fields": [
             "latencies"
           ],
@@ -9583,6 +9821,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.cue_to_reorientation_latency.render",
+          "plugin": null,
           "required_fields": [
             "latencies"
           ],
@@ -9618,6 +9857,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.curvature_along_protrusion_kymograph.render",
+          "plugin": null,
           "required_fields": [
             "polyline"
           ],
@@ -9655,6 +9895,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.depth_projected_microglia_field.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -9693,6 +9934,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.directional_persistence_autocorr.render",
+          "plugin": null,
           "required_fields": [
             "bundles",
             "condition_by_cell"
@@ -9729,6 +9971,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.dose_x_time_response_matrix.render",
+          "plugin": null,
           "required_fields": [
             "responses"
           ],
@@ -9766,6 +10009,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.dwell_time_distribution_per_state.render",
+          "plugin": null,
           "required_fields": [
             "dwells_by_state"
           ],
@@ -9802,6 +10046,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.emission_distribution_per_state.render",
+          "plugin": null,
           "required_fields": [
             "features_by_state"
           ],
@@ -9836,6 +10081,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.equivalence_tost_radar_per_condition.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -9873,6 +10119,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.hazard_rate_per_state.render",
+          "plugin": null,
           "required_fields": [
             "dwells_by_state"
           ],
@@ -9909,6 +10156,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.hmm_vs_hsmm_model_comparison.render",
+          "plugin": null,
           "required_fields": [
             "fits"
           ],
@@ -9943,6 +10191,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.kinematic_power_spectral_density.render",
+          "plugin": null,
           "required_fields": [
             "bundles",
             "state_by_cell",
@@ -9982,6 +10231,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.laser_injury_response_radial.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "time_min",
@@ -10020,6 +10270,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.latency_decomposition_forest.render",
+          "plugin": null,
           "required_fields": [
             "latencies"
           ],
@@ -10055,6 +10306,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.launch_to_commitment_latency.render",
+          "plugin": null,
           "required_fields": [
             "latencies"
           ],
@@ -10090,6 +10342,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.migration_rose_diagram.render",
+          "plugin": null,
           "required_fields": [
             "heading_deg_by_condition"
           ],
@@ -10125,6 +10378,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.model_calibration_brier_forest.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -10162,6 +10416,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.msd_curve_by_state.render",
+          "plugin": null,
           "required_fields": [
             "tau_s",
             "msd_by_state"
@@ -10200,6 +10455,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.multi_channel_intravital_overlay.render",
+          "plugin": null,
           "required_fields": [
             "red_channel",
             "green_channel",
@@ -10237,6 +10493,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.ornstein_uhlenbeck_fit_per_state.render",
+          "plugin": null,
           "required_fields": [
             "fits"
           ],
@@ -10271,6 +10528,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.photobleaching_corrected_intensity_traces.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -10307,6 +10565,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.posterior_state_probability_ribbons.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "states"
@@ -10344,6 +10603,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.process_event_timeline.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -10378,6 +10638,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.protrusion_commitment_survival.render",
+          "plugin": null,
           "required_fields": [
             "protrusions",
             "condition_by_protrusion"
@@ -10412,6 +10673,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.protrusion_dominance_race_winner.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -10448,6 +10710,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.residence_time_kaplan_meier_with_ks_overlay.render",
+          "plugin": null,
           "required_fields": [
             "strata"
           ],
@@ -10485,6 +10748,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.sojourn_survival_per_state.render",
+          "plugin": null,
           "required_fields": [
             "dwells_by_state"
           ],
@@ -10520,6 +10784,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.speed_commitment_coupling.render",
+          "plugin": null,
           "required_fields": [
             "bundles",
             "condition_by_cell"
@@ -10559,6 +10824,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_conditional_tip_msd.render",
+          "plugin": null,
           "required_fields": [
             "tracks",
             "decoded",
@@ -10598,6 +10864,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_decoded_protrusion_polyline_field.render",
+          "plugin": null,
           "required_fields": [
             "polylines",
             "decoded"
@@ -10636,6 +10903,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_decoded_tip_track_field.render",
+          "plugin": null,
           "required_fields": [
             "tip_tracks",
             "decoded"
@@ -10674,6 +10942,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_entry_exit_raster.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "states"
@@ -10710,6 +10979,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_entry_exit_with_switch_callout.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "switches",
@@ -10747,6 +11017,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_kinematic_spectral_embedding.render",
+          "plugin": null,
           "required_fields": [
             "rows",
             "feature_names"
@@ -10783,6 +11054,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_occupancy_stacked_area.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "condition_by_cell",
@@ -10821,6 +11093,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.state_transition_kernel_matrix.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "states"
@@ -10858,6 +11131,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.surveillance_efficiency_metric.render",
+          "plugin": null,
           "required_fields": [
             "condition_names",
             "estimate",
@@ -10895,6 +11169,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.territory_change_pre_post.render",
+          "plugin": null,
           "required_fields": [
             "pairs"
           ],
@@ -10928,6 +11203,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.territory_zone_overlay_intravital.render",
+          "plugin": null,
           "required_fields": [
             "field",
             "zone_map"
@@ -10964,6 +11240,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.time_to_homing_survival.render",
+          "plugin": null,
           "required_fields": [
             "strata"
           ],
@@ -10998,6 +11275,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.tip_pair_correlation_in_window.render",
+          "plugin": null,
           "required_fields": [
             "snapshots",
             "condition_by_snapshot",
@@ -11034,6 +11312,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.tip_ripleys_k_in_window.render",
+          "plugin": null,
           "required_fields": [
             "snapshots",
             "condition_by_snapshot",
@@ -11071,6 +11350,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.transfer_entropy_state_to_velocity_matrix.render",
+          "plugin": null,
           "required_fields": [
             "bundles",
             "decoded",
@@ -11108,6 +11388,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.transition_matrix_diagonal_dominance_callout.render",
+          "plugin": null,
           "required_fields": [
             "decoded",
             "states",
@@ -11146,6 +11427,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.two_photon_depth_projection.render",
+          "plugin": null,
           "required_fields": [
             "z_stack"
           ],
@@ -11182,6 +11464,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.velocity_distribution_by_state.render",
+          "plugin": null,
           "required_fields": [
             "states",
             "speed_by_state"
@@ -11218,6 +11501,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.vessel_diameter_kymograph.render",
+          "plugin": null,
           "required_fields": [
             "position_um",
             "time_s",
@@ -11256,6 +11540,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.intravital_imaging.viscous_drag_tip_force_map.render",
+          "plugin": null,
           "required_fields": [
             "tip_tracks"
           ],
@@ -11320,6 +11605,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.alternative_hypothesis_exclusion_table.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -11354,6 +11640,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.batch_effect_diagnostic_pca.render",
+          "plugin": null,
           "required_fields": [
             "pc1",
             "pc2",
@@ -11390,6 +11677,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.bayes_factor_arrow_plot.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -11424,6 +11712,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.competing_model_residual_panels.render",
+          "plugin": null,
           "required_fields": [
             "fits"
           ],
@@ -11458,6 +11747,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.cross_contrast_correlation_matrix.render",
+          "plugin": null,
           "required_fields": [
             "contrast_labels",
             "correlation"
@@ -11492,6 +11782,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.data_quality_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "sample_names",
             "metric_names",
@@ -11531,6 +11822,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.effect_size_funnel_plot.render",
+          "plugin": null,
           "required_fields": [
             "effect_sizes",
             "standard_errors",
@@ -11568,6 +11860,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.heterogeneity_forest.render",
+          "plugin": null,
           "required_fields": [
             "study_names",
             "es",
@@ -11611,6 +11904,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.missing_data_pattern_matrix.render",
+          "plugin": null,
           "required_fields": [
             "variable_names",
             "patterns",
@@ -11646,6 +11940,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.missingness_upset.render",
+          "plugin": null,
           "required_fields": [
             "variable_names",
             "intersections",
@@ -11683,6 +11978,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.model_parameterization_lineage_panel.render",
+          "plugin": null,
           "required_fields": [
             "edges"
           ],
@@ -11717,6 +12013,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.multiverse_robustness_classification_bar.render",
+          "plugin": null,
           "required_fields": [
             "specs"
           ],
@@ -11753,6 +12050,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.multiverse_specification_curve.render",
+          "plugin": null,
           "required_fields": [
             "specs"
           ],
@@ -11790,6 +12088,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.outlier_detection_scatter.render",
+          "plugin": null,
           "required_fields": [
             "x_values",
             "y_values"
@@ -11825,6 +12124,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.panel_provenance_ledger_table.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -11859,6 +12159,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.pca_loadings_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "bundle"
           ],
@@ -11894,6 +12195,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.per_cell_audit_table_with_qa_flags.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -11930,6 +12232,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.power_analysis_by_effect_size.render",
+          "plugin": null,
           "required_fields": [
             "effect_sizes",
             "n_range"
@@ -11965,6 +12268,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.prisma_flow_diagram.render",
+          "plugin": null,
           "required_fields": [
             "stages"
           ],
@@ -11999,6 +12303,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest.render",
+          "plugin": null,
           "required_fields": [
             "entries"
           ],
@@ -12034,6 +12339,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.qc_metric_radar.render",
+          "plugin": null,
           "required_fields": [
             "metric_names",
             "sample_values"
@@ -12070,6 +12376,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.random_forest_confusion_loocv.render",
+          "plugin": null,
           "required_fields": [
             "confusion_matrix",
             "class_labels"
@@ -12105,6 +12412,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.replication_retrospective_matrix.render",
+          "plugin": null,
           "required_fields": [
             "study_names",
             "attempt_names",
@@ -12141,6 +12449,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.reproducibility_correlogram.render",
+          "plugin": null,
           "required_fields": [
             "replicate_names",
             "correlation_matrix"
@@ -12176,6 +12485,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.retention_vs_attrition_sankey.render",
+          "plugin": null,
           "required_fields": [
             "stages"
           ],
@@ -12214,6 +12524,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.sample_size_decision_ladder.render",
+          "plugin": null,
           "required_fields": [
             "effect_sizes"
           ],
@@ -12247,6 +12558,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.meta_and_diagnostic.sensitivity_leave_one_out.render",
+          "plugin": null,
           "required_fields": [
             "study_names",
             "loo_pooled_es",
@@ -12319,6 +12631,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.bayes_posterior_density_by_term.render",
+          "plugin": null,
           "required_fields": [
             "term_samples"
           ],
@@ -12356,6 +12669,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.emmeans_contrast_grid.render",
+          "plugin": null,
           "required_fields": [
             "contrasts"
           ],
@@ -12392,6 +12706,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.fixed_vs_random_effect_partition.render",
+          "plugin": null,
           "required_fields": [
             "models"
           ],
@@ -12430,6 +12745,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.group_level_emmeans_with_pairwise.render",
+          "plugin": null,
           "required_fields": [
             "groups",
             "emmeans",
@@ -12468,6 +12784,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.icc_variance_decomposition.render",
+          "plugin": null,
           "required_fields": [
             "levels",
             "variance"
@@ -12506,6 +12823,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.marginal_effects_ribbon.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "groups"
@@ -12541,6 +12859,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.mediation_decomposition_slope_chart.render",
+          "plugin": null,
           "required_fields": [
             "paths"
           ],
@@ -12575,6 +12894,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.mixed_model_residual_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "fitted",
             "residuals"
@@ -12612,6 +12932,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.model_comparison_aic_bic_ladder.render",
+          "plugin": null,
           "required_fields": [
             "models"
           ],
@@ -12652,6 +12973,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.partial_residuals_vs_predictor.render",
+          "plugin": null,
           "required_fields": [
             "predictor",
             "partial_residual"
@@ -12690,6 +13012,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.posterior_contrast_density.render",
+          "plugin": null,
           "required_fields": [
             "contrast_samples"
           ],
@@ -12725,6 +13048,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.posterior_predictive_check.render",
+          "plugin": null,
           "required_fields": [
             "observed",
             "posterior_draws"
@@ -12763,6 +13087,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.pre_post_slope_chart_by_module.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -12798,6 +13123,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.random_effects_caterpillar.render",
+          "plugin": null,
           "required_fields": [
             "cluster_ids",
             "blups",
@@ -12837,6 +13163,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.random_intercepts_vs_slopes_scatter.render",
+          "plugin": null,
           "required_fields": [
             "cluster_ids",
             "intercepts",
@@ -12876,6 +13203,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.random_slopes_per_cluster.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "cluster_lines"
@@ -12918,6 +13246,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.sex_stratified_raincloud_with_coef_box.render",
+          "plugin": null,
           "required_fields": [
             "values_by_stratum"
           ],
@@ -12952,6 +13281,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.sex_stratified_roc_loocv.render",
+          "plugin": null,
           "required_fields": [
             "entries"
           ],
@@ -12990,6 +13320,7 @@
             "x_label"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.sex_x_genotype_interaction_forest.render",
+          "plugin": null,
           "required_fields": [
             "terms",
             "estimates",
@@ -13029,6 +13360,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.mixed_effects_models.two_way_anova_summary_plot.render",
+          "plugin": null,
           "required_fields": [
             "result"
           ],
@@ -13093,6 +13425,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.centrality_degree_distribution.render",
+          "plugin": null,
           "required_fields": [
             "degrees"
           ],
@@ -13128,6 +13461,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.centrality_vs_effect_scatter.render",
+          "plugin": null,
           "required_fields": [
             "node_names",
             "centrality",
@@ -13166,6 +13500,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.directed_network_force_layout.render",
+          "plugin": null,
           "required_fields": [
             "node_names",
             "edges"
@@ -13202,6 +13537,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.hub_gene_radial.render",
+          "plugin": null,
           "required_fields": [
             "hub_name",
             "neighbour_names",
@@ -13238,6 +13574,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.interaction_chord_diagram.render",
+          "plugin": null,
           "required_fields": [
             "group_names",
             "interaction_matrix"
@@ -13274,6 +13611,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.kegg_overlay_enrichment.render",
+          "plugin": null,
           "required_fields": [
             "nodes"
           ],
@@ -13310,6 +13648,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.module_eigengene_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "module_names",
             "sample_names",
@@ -13347,6 +13686,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.module_preservation_zsummary.render",
+          "plugin": null,
           "required_fields": [
             "module_names",
             "zsummary"
@@ -13385,6 +13725,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.pathway_crosstalk_matrix.render",
+          "plugin": null,
           "required_fields": [
             "pathway_names",
             "crosstalk"
@@ -13420,6 +13761,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.pathway_flux_sankey_like.render",
+          "plugin": null,
           "required_fields": [
             "sources",
             "targets",
@@ -13458,6 +13800,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.pathway_flux_streamgraph.render",
+          "plugin": null,
           "required_fields": [
             "time",
             "pathway_flux"
@@ -13493,6 +13836,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.ppi_seed_expansion.render",
+          "plugin": null,
           "required_fields": [
             "seed_names",
             "expanded_names",
@@ -13530,6 +13874,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.regulatory_network_hive.render",
+          "plugin": null,
           "required_fields": [
             "axis_names",
             "nodes_per_axis",
@@ -13568,6 +13913,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.regulon_activity_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "regulon_names",
             "sample_names",
@@ -13606,6 +13952,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.network_and_pathway.subnetwork_comparison_diff.render",
+          "plugin": null,
           "required_fields": [
             "node_names",
             "edges",
@@ -13672,6 +14019,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.annotated_cluster_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "sample_names",
@@ -13709,6 +14057,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.contrast_overlap_euler.render",
+          "plugin": null,
           "required_fields": [
             "set_names",
             "set_members"
@@ -13745,6 +14094,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.differential_rank_ladder.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "log2fc",
@@ -13783,6 +14133,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.effect_size_replicate_concordance.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "rep1_log2fc",
@@ -13822,6 +14173,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.effect_size_vs_significance.render",
+          "plugin": null,
           "required_fields": [
             "log2fc",
             "padj"
@@ -13858,6 +14210,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.gge_branch_selectivity_permutation_bar.render",
+          "plugin": null,
           "required_fields": [
             "branches",
             "null"
@@ -13896,6 +14249,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.gsea_running_enrichment.render",
+          "plugin": null,
           "required_fields": [
             "ranked_scores",
             "hit_ranks"
@@ -13935,6 +14289,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.ma_plot_with_lowess.render",
+          "plugin": null,
           "required_fields": [
             "mean_expr",
             "log2fc"
@@ -13972,6 +14327,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.module_concordance_signed_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -14009,6 +14365,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.multi_contrast_volcano_grid.render",
+          "plugin": null,
           "required_fields": [
             "contrasts"
           ],
@@ -14043,6 +14400,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.ora_dotplot_by_ontology.render",
+          "plugin": null,
           "required_fields": [
             "pathways",
             "ontologies",
@@ -14081,6 +14439,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.pathway_flux_bubble.render",
+          "plugin": null,
           "required_fields": [
             "pathways",
             "activity_score",
@@ -14122,6 +14481,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.pathway_module_activity_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "module_names",
             "sample_names",
@@ -14161,6 +14521,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.pathway_module_activity_with_sign_concordance.render",
+          "plugin": null,
           "required_fields": [
             "cells"
           ],
@@ -14197,6 +14558,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.pathway_space_bridge_summary_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "layers"
           ],
@@ -14233,6 +14595,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.pathway_space_triangulation_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "layers"
           ],
@@ -14267,6 +14630,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.proteome_phosphoproteome_pathway_scatter.render",
+          "plugin": null,
           "required_fields": [
             "rows"
           ],
@@ -14304,6 +14668,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.proteome_volcano_labeled_pathways.render",
+          "plugin": null,
           "required_fields": [
             "protein_names",
             "log2fc",
@@ -14344,6 +14709,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.rank_product_meta_analysis.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "per_study_ranks",
@@ -14383,6 +14749,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.shrinkage_estimate_scatter.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "raw_log2fc",
@@ -14420,6 +14787,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.upset_set_comparisons.render",
+          "plugin": null,
           "required_fields": [
             "set_names",
             "set_members"
@@ -14460,6 +14828,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.omics_differential.volcano_labeled_repelled.render",
+          "plugin": null,
           "required_fields": [
             "gene_names",
             "log2fc",
@@ -14527,6 +14896,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.bimodality_coefficient_grid.render",
+          "plugin": null,
           "required_fields": [
             "conditions",
             "timepoints",
@@ -14563,6 +14933,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.bimodality_kurtosis_vs_conditions.render",
+          "plugin": null,
           "required_fields": [
             "condition_names",
             "bimodality_coef",
@@ -14602,6 +14973,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.bistability_hysteresis_loop.render",
+          "plugin": null,
           "required_fields": [
             "control",
             "forward_ratio",
@@ -14638,6 +15010,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.drift_diffusion_decomposition.render",
+          "plugin": null,
           "required_fields": [
             "x_bins",
             "drift",
@@ -14675,6 +15048,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.multiplicative_noise_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "means",
             "stds"
@@ -14715,6 +15089,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.multiplicative_vs_additive_noise_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "Y",
             "xi_sq"
@@ -14752,6 +15127,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.paracrine_coupling_length_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -14794,6 +15170,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.paracrine_kernel_fit.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "K_r"
@@ -14831,6 +15208,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.ratio_autocorrelation_decay.render",
+          "plugin": null,
           "required_fields": [
             "tau_s",
             "acf_by_state"
@@ -14869,6 +15247,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.ratio_trajectory_with_phase_annotation.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "ratio"
@@ -14909,6 +15288,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.redox_state_switching_frequency_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -14946,6 +15326,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.redox_state_transition_diagram.render",
+          "plugin": null,
           "required_fields": [
             "rate_red_to_int",
             "rate_int_to_red",
@@ -14989,6 +15370,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.roGFP2_ratio_vs_disulfide_titration.render",
+          "plugin": null,
           "required_fields": [
             "disulfide_fraction",
             "ratio_measured"
@@ -15025,6 +15407,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.single_cell_ratio_distribution.render",
+          "plugin": null,
           "required_fields": [
             "ratios"
           ],
@@ -15063,6 +15446,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.redox_imaging.time_above_threshold_distribution.render",
+          "plugin": null,
           "required_fields": [
             "durations_by_condition"
           ],
@@ -15133,6 +15517,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.basin_of_attraction_map.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15173,6 +15558,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.bifurcation_hopf.render",
+          "plugin": null,
           "required_fields": [
             "control_param",
             "fixed_point",
@@ -15214,6 +15600,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.bifurcation_pitchfork.render",
+          "plugin": null,
           "required_fields": [
             "control_param",
             "central_branch",
@@ -15255,6 +15642,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.bifurcation_saddle_node.render",
+          "plugin": null,
           "required_fields": [
             "control_param",
             "stable_branches",
@@ -15299,6 +15687,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.codim2_bifurcation_map.render",
+          "plugin": null,
           "required_fields": [
             "mu_range",
             "nu_range",
@@ -15337,6 +15726,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.excitability_threshold_diagram.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15382,6 +15772,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.nullcline_intersection_annotated.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15422,6 +15813,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.phase_portrait_bistable.render",
+          "plugin": null,
           "required_fields": [
             "well_low",
             "well_high"
@@ -15459,6 +15851,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.phase_portrait_oscillator.render",
+          "plugin": null,
           "required_fields": [
             "mu"
           ],
@@ -15496,6 +15889,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.phase_portrait_tristable.render",
+          "plugin": null,
           "required_fields": [
             "home",
             "gate",
@@ -15535,6 +15929,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.phase_portrait_with_trajectories.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15577,6 +15972,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.poincare_first_return_map.render",
+          "plugin": null,
           "required_fields": [
             "x_n",
             "x_n_plus_1"
@@ -15614,6 +16010,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.potential_landscape_1d.render",
+          "plugin": null,
           "required_fields": [
             "x",
             "conditions"
@@ -15652,6 +16049,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.potential_landscape_2d_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15693,6 +16091,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.potential_landscape_waddington_3d.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15731,6 +16130,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.quasi_steady_state_reduction.render",
+          "plugin": null,
           "required_fields": [
             "t",
             "x_full",
@@ -15769,6 +16169,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.slow_manifold_projection.render",
+          "plugin": null,
           "required_fields": [
             "x_grid",
             "y_grid",
@@ -15810,6 +16211,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.rhogtpase_dynamics.timescale_separation_diagnostic.render",
+          "plugin": null,
           "required_fields": [
             "param",
             "fast_scale",
@@ -15877,6 +16279,7 @@
             "tolerance"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.convergence_diagnostic_sobol.render",
+          "plugin": null,
           "required_fields": [
             "n_samples",
             "parameter_names",
@@ -15916,6 +16319,7 @@
             "fit_line"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.dimensionless_pi_group_collapse.render",
+          "plugin": null,
           "required_fields": [
             "experiments"
           ],
@@ -15954,6 +16358,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.fast_sensitivity_spectrum.render",
+          "plugin": null,
           "required_fields": [
             "frequencies",
             "power",
@@ -15992,6 +16397,7 @@
             "top_k"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.fast_subspace_detection.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "sensitivity_matrix"
@@ -16029,6 +16435,7 @@
             "output_label"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.interaction_matrix_sobol.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "S2"
@@ -16066,6 +16473,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.interaction_network_sobol.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "S2"
@@ -16102,6 +16510,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.lhs_parameter_space_coverage.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "samples"
@@ -16140,6 +16549,7 @@
             "label_top_n"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.morris_elementary_effects.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "mu_star",
@@ -16181,6 +16591,7 @@
             "log_y"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.parameter_scan_2d_contour.render",
+          "plugin": null,
           "required_fields": [
             "x_name",
             "y_name",
@@ -16218,6 +16629,7 @@
             "winner_label"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.pi_group_rank_plot.render",
+          "plugin": null,
           "required_fields": [
             "formulations",
             "r2",
@@ -16257,6 +16669,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.sensitivity_by_output_quantity.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "output_names",
@@ -16297,6 +16710,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.sensitivity_time_evolution.render",
+          "plugin": null,
           "required_fields": [
             "time",
             "parameter_names",
@@ -16334,6 +16748,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.sobol_bootstrap_convergence.render",
+          "plugin": null,
           "required_fields": [
             "n_samples",
             "parameter_names",
@@ -16376,6 +16791,7 @@
             "output_label"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.sobol_first_total_pair.render",
+          "plugin": null,
           "required_fields": [
             "parameter_names",
             "S1",
@@ -16414,6 +16830,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.sensitivity_analysis.tornado_diagram.render",
+          "plugin": null,
           "required_fields": [
             "baseline",
             "rows"
@@ -16479,6 +16896,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.cluster_proportion_stacked_by_sample.render",
+          "plugin": null,
           "required_fields": [
             "sample_ids",
             "condition_by_sample",
@@ -16516,6 +16934,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.diffusion_map_2d.render",
+          "plugin": null,
           "required_fields": [
             "dc1",
             "dc2",
@@ -16552,6 +16971,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.expression_dotplot_by_cluster.render",
+          "plugin": null,
           "required_fields": [
             "clusters",
             "genes",
@@ -16589,6 +17009,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.neighborhood_composition_stacked.render",
+          "plugin": null,
           "required_fields": [
             "conditions",
             "clusters",
@@ -16627,6 +17048,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.pca_biplot_with_loadings.render",
+          "plugin": null,
           "required_fields": [
             "pc1",
             "pc2",
@@ -16667,6 +17089,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.per_cluster_marker_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "clusters",
             "genes",
@@ -16705,6 +17128,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.pseudotime_gene_expression_trajectory.render",
+          "plugin": null,
           "required_fields": [
             "pseudotime",
             "gene_curves"
@@ -16740,6 +17164,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.rare_population_highlighted_umap.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -16777,6 +17202,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.receptor_ligand_signaling_dotplot.render",
+          "plugin": null,
           "required_fields": [
             "sender_receiver_pairs",
             "lr_pairs",
@@ -16816,6 +17242,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.rnavelocity_arrow_field.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -16856,6 +17283,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.trajectory_branching_force_directed.render",
+          "plugin": null,
           "required_fields": [
             "branches"
           ],
@@ -16892,6 +17320,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.trajectory_pseudotime_arrow.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -16928,6 +17357,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.umap_categorical_with_density_contours.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -16965,6 +17395,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.umap_continuous_expression.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -17001,6 +17432,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.single_cell_embeddings.umap_density_contour_overlay.render",
+          "plugin": null,
           "required_fields": [
             "umap1",
             "umap2",
@@ -17070,6 +17502,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.bivariate_pair_correlation.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "g12_observed",
@@ -17107,6 +17540,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.clark_evans_aggregation_bar.render",
+          "plugin": null,
           "required_fields": [
             "condition_names",
             "ce_index",
@@ -17143,6 +17577,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.co_occurrence_significance_matrix.render",
+          "plugin": null,
           "required_fields": [
             "type_names",
             "zscore_matrix",
@@ -17178,6 +17613,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.f_function_empty_space.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "f_observed",
@@ -17218,6 +17654,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.kernel_density_heatmap.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um"
@@ -17254,6 +17691,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.kinhom_inhomogeneous_isotropy.render",
+          "plugin": null,
           "required_fields": [
             "r_grid_um",
             "kinhom_curves",
@@ -17291,6 +17729,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.lisa_cluster_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um",
@@ -17329,6 +17768,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.moran_i_by_lag.render",
+          "plugin": null,
           "required_fields": [
             "lag_um",
             "morans_i",
@@ -17367,6 +17807,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.nearest_neighbor_distance_distribution.render",
+          "plugin": null,
           "required_fields": [
             "distances_um"
           ],
@@ -17403,6 +17844,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.pair_correlation_function.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "g_r"
@@ -17437,6 +17879,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.quadrat_count_chisq.render",
+          "plugin": null,
           "required_fields": [
             "count_grid",
             "n_total_points"
@@ -17472,6 +17915,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.ripley_l_function.render",
+          "plugin": null,
           "required_fields": [
             "r_um",
             "l_observed",
@@ -17509,6 +17953,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.spatial_covariogram.render",
+          "plugin": null,
           "required_fields": [
             "lag_um",
             "covariance"
@@ -17545,6 +17990,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.spatial_permutation_null_distribution.render",
+          "plugin": null,
           "required_fields": [
             "null_distribution",
             "observed_statistic"
@@ -17579,6 +18025,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.voronoi_area_distribution.render",
+          "plugin": null,
           "required_fields": [
             "areas_by_condition"
           ],
@@ -17614,6 +18061,7 @@
             "title"
           ],
           "path": "panelforge_figures.recipes.spatial_statistics.voronoi_territory_map.render",
+          "plugin": null,
           "required_fields": [
             "x_um",
             "y_um"

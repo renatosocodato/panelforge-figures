@@ -404,12 +404,30 @@ def profile_group() -> None:
     default=Path("panelforge_workspace/profile.json"),
     help="Where to write the scan-derived ProjectProfile JSON.",
 )
-def profile_scan_cmd(project_root: Path, out_path: Path) -> None:
+@click.option(
+    "--reference-figure",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help=(
+        "Optional: reference figure PNG/JPG to seed inference via the "
+        "vision API (Sprint 2C — v1.12.0).  Sends the image bytes to "
+        "Anthropic; gated on data_class and ANTHROPIC_API_KEY."
+    ),
+)
+def profile_scan_cmd(
+    project_root: Path,
+    out_path: Path,
+    reference_figure: Path | None,
+) -> None:
     """Scan README/manuscript/data/; pre-fill the 8 intake answers.
 
     Writes the inferred ProjectProfile + per-answer confidence scores
     to disk so downstream `figures intake` / `figures bridge` /
     `figures generate` can consume it.
+
+    With ``--reference-figure``, additionally calls the vision API to
+    extract visual signals from the reference image.  See
+    ``docs/spec_vision_input.md`` for the full design.
     """
     from .core.contract import list_modalities
     from .manifest import (
@@ -426,17 +444,182 @@ def profile_scan_cmd(project_root: Path, out_path: Path) -> None:
         click.echo(f"  {ans.label:24s}  {fname}: {ans.value!r:20s} (conf={ans.confidence:.2f})")
 
     pre_filled = to_intake_pre_filled(result)
-    click.echo(f"\n{len(pre_filled)} of 8 fields meet ≥0.7 confidence; "
+
+    # Vision augmentation — Sprint 2C.
+    if reference_figure is not None:
+        from .manifest.vision_input import (
+            VisionUnavailableError,
+            vision_scan_reference_figure,
+        )
+        from .manifest.vision_input import (
+            to_intake_pre_filled as to_intake_pre_filled_from_vision,
+        )
+        click.echo(
+            f"\n[vision] scanning {reference_figure.name} "
+            f"({reference_figure.stat().st_size} bytes)..."
+        )
+        try:
+            vision_result = vision_scan_reference_figure(reference_figure)
+        except VisionUnavailableError as exc:
+            click.echo(f"[vision] skipped: {exc}", err=True)
+        else:
+            click.echo(
+                f"[vision] inferred {len(vision_result.inferences)} signals "
+                f"(model={vision_result.model}, "
+                f"~${vision_result.cost_usd_estimate:.4f}/call)"
+            )
+            for inf in vision_result.inferences:
+                click.echo(
+                    f"  {inf.field_name:30s} = {inf.value!r:20s} "
+                    f"conf={inf.confidence:.2f}"
+                )
+            vision_pre_fill = to_intake_pre_filled_from_vision(vision_result)
+            if vision_pre_fill:
+                click.echo(
+                    f"[vision] {len(vision_pre_fill)} field(s) above "
+                    f"threshold; merging into intake pre-fill"
+                )
+                # Merge: vision wins where text-scan didn't reach the
+                # threshold; existing text-scan answers are preserved
+                # (they have stronger confidence semantics from §3 of
+                # the spec).
+                from .manifest import IntakeAnswer
+                field_to_qid = {
+                    "factorial_design": 1,
+                    "equivalence_claims": 2,
+                    "manuscript_anchor": 3,
+                    "dynamics_needed": 4,
+                    "dimensionality": 5,
+                }
+                for fname, value in vision_pre_fill.items():
+                    if fname in pre_filled:
+                        continue  # text-scan already won
+                    qid = field_to_qid.get(fname)
+                    if qid is None:
+                        continue
+                    pre_filled[fname] = IntakeAnswer(
+                        question_id=qid,
+                        field_name=fname,
+                        value=value,
+                        source="inferred",
+                        confidence=0.8,  # vision threshold per spec §3
+                    )
+                    click.echo(f"  [vision] {fname} = {value!r}")
+
+    click.echo(f"\n{len(pre_filled)} of 8 fields meet >=0.7 confidence; "
                "passing to intake")
     profile = run_intake_interactive(
         available_modalities=available,
         pre_filled=pre_filled,
         out_path=out_path,
     )
-    click.echo(f"\n✓ profile written to {out_path}")
+    click.echo(f"\n[ok] profile written to {out_path}")
     click.echo(f"  anchor={profile.manuscript_anchor}  "
                f"factorial={profile.factorial_design}  "
                f"shortlist_size={profile.shortlist_size}")
+
+
+# ──────────────── vision input + refinement (Sprint 2C — v1.12.0) ───────
+#
+# Vision-driven recipe selection + iterative figure refinement.  See
+# `docs/spec_vision_input.md` for the full design.  All three commands
+# below are gated on ``safety.is_vision_allowed()`` (clinical refuses,
+# research uses ANTHROPIC_API_KEY as the opt-in signal, public is
+# default-on).
+
+
+@main.command("refine")
+@click.argument(
+    "figure_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.argument("instruction", type=str)
+@click.option(
+    "--recipe", "recipe_module_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help=(
+        "Optional: path to the recipe Python module that produced "
+        "the figure.  Sent to Anthropic alongside the rendered PNG "
+        "so the model can reason about what's mutable in the contract."
+    ),
+)
+def refine_cmd(
+    figure_path: Path,
+    instruction: str,
+    recipe_module_path: Path | None,
+) -> None:
+    """Refine a rendered figure with a natural-language instruction.
+
+    Sends the rendered PNG/PDF + the recipe Python source + the
+    instruction to Claude vision; receives a JSON-patch on the
+    contract.  The patch is printed for review — re-render only after
+    inspecting it.
+
+    Example::
+
+        figures refine figures/forest_v3.pdf "make y-axis log-scale"
+    """
+    from .manifest.vision_input import VisionUnavailableError, refine_figure
+
+    try:
+        outcome = refine_figure(
+            figure_path,
+            instruction,
+            recipe_module_path=recipe_module_path,
+        )
+    except VisionUnavailableError as exc:
+        click.echo(f"[refine] vision unavailable: {exc}", err=True)
+        sys.exit(1)
+
+    click.echo(f"# Refinement of {figure_path.name}")
+    click.echo(f"  instruction: {instruction!r}")
+    if outcome.contract_patch:
+        click.echo("  suggested contract patch:")
+        click.echo(json.dumps(outcome.contract_patch, indent=4))
+    else:
+        click.echo("  suggested contract patch: (empty — model returned no actionable patch)")
+    if outcome.suggested_alternatives:
+        click.echo("  alternative recipes:")
+        for alt in outcome.suggested_alternatives:
+            click.echo(f"    - {alt}")
+    click.echo(f"\n  cost estimate: ~${outcome.cost_usd_estimate:.4f}")
+
+
+@main.command("vision-explain")
+@click.argument(
+    "image_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+def vision_explain_cmd(image_path: Path) -> None:
+    """Have Claude explain what's in a figure (read-only).
+
+    Calls the same scanner as ``profile scan --reference-figure`` but
+    prints all inferences regardless of confidence threshold and does
+    not change any contract.  Useful for sanity-checking what vision
+    sees in a figure before driving downstream refinement.
+    """
+    from .manifest.vision_input import (
+        VisionUnavailableError,
+        vision_scan_reference_figure,
+    )
+
+    try:
+        result = vision_scan_reference_figure(image_path)
+    except VisionUnavailableError as exc:
+        click.echo(f"[vision-explain] unavailable: {exc}", err=True)
+        sys.exit(1)
+
+    click.echo(f"# Vision analysis: {image_path.name}")
+    click.echo(f"Model: {result.model}")
+    click.echo(f"Image SHA-256: {result.image_sha256}")
+    click.echo(f"Inferences ({len(result.inferences)}):")
+    for inf in result.inferences:
+        click.echo(
+            f"  {inf.field_name:30s} = {inf.value!r:20s} "
+            f"conf={inf.confidence:.2f}"
+        )
+    click.echo(f"\n  cost estimate: ~${result.cost_usd_estimate:.4f}")
 
 
 @main.command("bridge")

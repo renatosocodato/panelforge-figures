@@ -1,0 +1,41 @@
+# DISC1 Figure 3 — six-panel grid using real recipes from the catalog.
+#
+# This fixture exercises the GridLayout path with a 3x2 layout and panel
+# A/B/C/D/E/F overlays.  The panels deliberately mix modalities to verify
+# the engine doesn't assume a uniform aesthetic.
+figure_id: example_figure_3
+title: "DISC1 perturbation panel"
+caption: "Six-panel summary of DISC1 morphometry, dynamics, and Bayesian evidence."
+
+layout:
+  type: grid
+  rows: 3
+  cols: 2
+  hspace: 0.45
+  wspace: 0.32
+
+shared_aesthetic: meta_and_diagnostic
+panel_label_style: upper_left_bold
+figsize: [8.5, 9.0]
+dpi: 200
+
+panels:
+  - id: A
+    recipe: actin_microtubule_morphometry.protrusion_retraction_kymograph
+    caption: "Protrusion-retraction kymograph"
+  - id: B
+    recipe: actin_microtubule_morphometry.behavioral_fingerprint_trio_composite
+    caption: "Behavioural fingerprint"
+    shared_axis_with: A
+  - id: C
+    recipe: omics_differential.proteome_phosphoproteome_pathway_scatter
+    caption: "Omics concordance"
+  - id: D
+    recipe: mixed_effects_models.two_way_anova_summary_plot
+    caption: "Two-way ANOVA"
+  - id: E
+    recipe: meta_and_diagnostic.bayes_factor_arrow_plot
+    caption: "Bayesian evidence"
+  - id: F
+    recipe: biophysics_scaling.persistence_length_lp_with_equivalence_bounds
+    caption: "Persistence length"

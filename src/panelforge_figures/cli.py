@@ -1532,5 +1532,291 @@ def plugins_describe_cmd(plugin_name: str) -> None:
         click.echo("  recipes: (none registered)")
 
 
+# ─────────────────────────── projects (Sprint 3A) ───────────────────────────
+
+@main.group("projects")
+def projects_group() -> None:
+    """Multi-project registry: list / register / switch / diff / portfolio.
+
+    Sprint 3A — see ``docs/spec_cross_project.md``. The registry lives at
+    ``~/.config/panelforge/projects.yaml`` (XDG-aware) and stores **paths,
+    not data** — switching projects only re-reads the local
+    ``panelforge_workspace/``.
+    """
+
+
+def _format_last_used(dt: Any) -> str:
+    """Render a UTC datetime as ``YYYY-MM-DD HH:MM`` for the list table."""
+    try:
+        return dt.strftime("%Y-%m-%d %H:%M")
+    except (AttributeError, ValueError):
+        return "n/a"
+
+
+@projects_group.command("list")
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path (default: ~/.config/panelforge/projects.yaml).")
+def projects_list_cmd(config_path: Path | None) -> None:
+    """Print a table of registered projects with last-used + status."""
+    from .projects import load_registry
+
+    registry = load_registry(config_path)
+    if not registry.projects:
+        click.echo("no projects registered")
+        click.echo("(register one with `figures projects register <path>`)")
+        return
+    header = (
+        f"  {'ID':<24} {'LAST USED':<18} {'PROFILE':<18} "
+        f"{'RECIPES':<8} {'STATUS':<16} TAGS"
+    )
+    click.echo(header)
+    for pid, entry in registry.projects.items():
+        marker = "*" if pid == registry.default_project else " "
+        tags = ", ".join(entry.tags) if entry.tags else ""
+        click.echo(
+            f"{marker} {pid:<24} {_format_last_used(entry.last_used):<18} "
+            f"{entry.active_profile:<18} {entry.n_recipes_picked:<8} "
+            f"{entry.last_render_status:<16} {tags}"
+        )
+    click.echo("")
+    click.echo("(* = default project; switch with `figures projects switch <id>`)")
+
+
+def _read_project_id_from_yaml(path: Path) -> str | None:
+    """Best-effort read of ``project_id`` from ``panelforge.project.yaml``."""
+    for name in ("panelforge.project.yaml", "panelforge.project.yml"):
+        candidate = path / name
+        if candidate.is_file():
+            try:
+                import yaml as _yaml
+
+                with candidate.open("r", encoding="utf-8") as fh:
+                    data = _yaml.safe_load(fh) or {}
+                if isinstance(data, dict):
+                    pid = data.get("project_id")
+                    if isinstance(pid, str) and pid:
+                        return pid
+            except Exception:  # noqa: BLE001 — fall through to fallback
+                return None
+    return None
+
+
+@projects_group.command("register")
+@click.argument("path", type=click.Path(path_type=Path), default=Path("."))
+@click.option("--id", "project_id", type=str, default=None,
+              help="Override the project_id (default: read panelforge.project.yaml).")
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_register_cmd(path: Path, project_id: str | None,
+                          config_path: Path | None) -> None:
+    """Add PATH to the registry (PATH defaults to the current directory)."""
+    from datetime import datetime
+
+    from .projects import (
+        ProjectIdCollision,
+        ProjectPathMissing,
+        load_registry,
+        register_if_absent,
+    )
+
+    resolved = Path(path).expanduser().resolve()
+    if not resolved.is_dir():
+        click.echo(f"✗ path is not a directory: {resolved}", err=True)
+        sys.exit(1)
+    if project_id is None:
+        project_id = _read_project_id_from_yaml(resolved)
+    if project_id is None:
+        project_id = f"{resolved.name}_{datetime.now().year}"
+
+    existing = load_registry(config_path)
+    is_first = not existing.projects
+    try:
+        register_if_absent(
+            path=resolved,
+            project_id=project_id,
+            profile="default",
+            n_recipes=0,
+            status="not yet rendered",
+            config_path=config_path,
+            set_default=is_first,
+        )
+    except ProjectIdCollision as exc:
+        click.echo(f"✗ {exc}", err=True)
+        sys.exit(1)
+    except ProjectPathMissing as exc:
+        click.echo(f"✗ {exc}", err=True)
+        sys.exit(1)
+    if is_first:
+        click.echo(f"✓ Registered as `{project_id}`. {click.style('(default project)', bold=True)}")
+    else:
+        click.echo(f"✓ Registered as `{project_id}`.")
+
+
+@projects_group.command("switch")
+@click.argument("project_id", type=str)
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_switch_cmd(project_id: str, config_path: Path | None) -> None:
+    """Set the default project to PROJECT_ID and warm-load its workspace."""
+    from .projects import ProjectPathMissing, switch_default
+
+    try:
+        entry = switch_default(project_id, config_path=config_path)
+    except KeyError:
+        click.echo(f"✗ project not registered: {project_id!r}", err=True)
+        sys.exit(1)
+    except ProjectPathMissing as exc:
+        click.echo(f"✗ {exc}", err=True)
+        sys.exit(1)
+    click.echo(
+        f"✓ Switched. Active profile: {entry.active_profile}. "
+        f"{entry.n_recipes_picked} recipes in manifest."
+    )
+    click.echo("  (warm-loaded panelforge_workspace/state.json — no scan re-run)")
+
+
+@projects_group.command("current")
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_current_cmd(config_path: Path | None) -> None:
+    """Print the active project + key metadata."""
+    from .projects import load_registry
+
+    registry = load_registry(config_path)
+    if not registry.default_project or registry.default_project not in registry.projects:
+        click.echo("No active project (run `figures projects switch <id>`).")
+        sys.exit(1)
+    entry = registry.projects[registry.default_project]
+    click.echo(f"Active project: {click.style(entry.id, bold=True)}")
+    click.echo(f"  Path:           {entry.path}")
+    click.echo(f"  Profile:        {entry.active_profile}")
+    click.echo(f"  Recipes picked: {entry.n_recipes_picked}")
+    click.echo(f"  Last render:    {entry.last_render_status}")
+    click.echo(f"  Last used:      {_format_last_used(entry.last_used)} UTC")
+
+
+@projects_group.command("diff")
+@click.argument("a_id", type=str)
+@click.argument("b_id", type=str)
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_diff_cmd(a_id: str, b_id: str, config_path: Path | None) -> None:
+    """Recipe-overlap analysis between two registered projects."""
+    from .projects import load_registry
+    from .projects.portfolio import diff_projects
+
+    registry = load_registry(config_path)
+    if a_id not in registry.projects:
+        click.echo(f"✗ project not registered: {a_id!r}", err=True)
+        sys.exit(1)
+    if b_id not in registry.projects:
+        click.echo(f"✗ project not registered: {b_id!r}", err=True)
+        sys.exit(1)
+    report = diff_projects(registry, a_id, b_id)
+    a_count = len(report.shared) + len(report.a_only)
+    b_count = len(report.shared) + len(report.b_only)
+    click.echo("")
+    click.echo(f"Project A ({a_id}): {a_count} recipes")
+    click.echo(f"Project B ({b_id}): {b_count} recipes")
+    click.echo("")
+    click.echo(f"Shared ({len(report.shared)}):")
+    for recipe in report.shared:
+        click.echo(f"  - {recipe}")
+    click.echo("")
+    click.echo(f"A only ({len(report.a_only)}):")
+    for recipe in report.a_only:
+        click.echo(f"  - {recipe}")
+    click.echo("")
+    click.echo(f"B only ({len(report.b_only)}):")
+    for recipe in report.b_only:
+        click.echo(f"  - {recipe}")
+    if report.suggestion:
+        click.echo("")
+        click.echo(report.suggestion)
+        click.echo(
+            f"Run:  figures compose-from-shared {a_id} {b_id} "
+            "--out shared_methods.figure.yaml"
+        )
+
+
+@projects_group.command("portfolio")
+@click.option("--png", "png_path", type=click.Path(path_type=Path), default=None,
+              help="Also emit a matplotlib PNG of the heatmap.")
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_portfolio_cmd(png_path: Path | None, config_path: Path | None) -> None:
+    """Portfolio summary across every registered project."""
+    from .projects import load_registry
+    from .projects.portfolio import (
+        aggregate_portfolio,
+        render_heatmap_png,
+        render_heatmap_terminal,
+        top_n_recipes,
+    )
+
+    registry = load_registry(config_path)
+    if not registry.projects:
+        click.echo("no projects registered — nothing to summarise")
+        return
+    summary = aggregate_portfolio(registry)
+    click.echo(
+        f"Portfolio summary — {summary.n_projects} projects, "
+        f"{summary.n_distinct_recipes} distinct recipes used"
+    )
+    click.echo("")
+    click.echo("Top 10 recipes (by project-count):")
+    for row in top_n_recipes(summary, n=10):
+        click.echo(
+            f"  {row.project_count}/{summary.n_projects}  {row.recipe_full_name}"
+        )
+    click.echo("")
+    click.echo("Recipe usage heatmap")
+    click.echo(render_heatmap_terminal(summary))
+    if png_path is not None:
+        out = render_heatmap_png(summary, Path(png_path))
+        click.echo(f"✓ Wrote heatmap PNG to {out}")
+
+
+@projects_group.command("unregister")
+@click.argument("project_id", type=str)
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_unregister_cmd(project_id: str, config_path: Path | None) -> None:
+    """Remove PROJECT_ID from the registry; never deletes project files."""
+    from .projects import unregister
+
+    try:
+        unregister(project_id, config_path=config_path)
+    except KeyError:
+        click.echo(f"✗ project not registered: {project_id!r}", err=True)
+        sys.exit(1)
+    click.echo(f"✓ Unregistered `{project_id}`. (project files untouched)")
+
+
+@projects_group.command("validate")
+@click.option("--yes", is_flag=True, help="Skip confirmation prompt.")
+@click.option("--config-path", type=click.Path(path_type=Path), default=None,
+              help="Override the registry path.")
+def projects_validate_cmd(yes: bool, config_path: Path | None) -> None:
+    """Walk the registry, drop entries whose path no longer exists."""
+    from .projects import load_registry, validate_registry
+
+    registry = load_registry(config_path)
+    stale = [
+        pid for pid, entry in registry.projects.items() if not entry.path.is_dir()
+    ]
+    if not stale:
+        click.echo("✓ Registry clean (no stale entries).")
+        return
+    click.echo("Stale entries (path missing):")
+    for pid in stale:
+        click.echo(f"  - {pid}  ({registry.projects[pid].path})")
+    if not yes and not click.confirm("Drop these entries from the registry?"):
+        click.echo("(no changes made)")
+        return
+    dropped = validate_registry(prompt=False, config_path=config_path)
+    click.echo(f"✓ Dropped {len(dropped)} stale entr{'y' if len(dropped) == 1 else 'ies'}.")
+
+
 if __name__ == "__main__":
     main()

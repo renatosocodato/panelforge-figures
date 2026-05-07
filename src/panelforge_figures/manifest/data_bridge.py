@@ -270,7 +270,17 @@ def _llm_pass(
     Lazy-imports ``anthropic`` so that callers without the optional
     package can still import this module. Returns ``(column, conf, reason)``;
     ``column`` is None on any failure path.
+
+    Sprint 2B (v1.11.0) — gated on ``data_class``: clinical refuses
+    even with a key set; research treats key-presence as opt-in;
+    public is default-on.  See ``docs/spec_data_class_safety.md`` §6.
     """
+    # Sprint 2B gate — fail-closed before any other work.  Imported
+    # lazily to keep this module's import surface small for callers
+    # that bypass the safety module entirely (test fixtures etc.).
+    from ..safety import is_llm_allowed
+    if not is_llm_allowed():
+        return None, 0.0, "data_class disables LLM Pass-3"
     if not os.environ.get("ANTHROPIC_API_KEY"):
         return None, 0.0, "no API key"
     try:

@@ -2535,5 +2535,61 @@ def author_recipe_cmd(
         click.get_current_context().exit(1)
 
 
+# ─────────────────────── manuscript alignment (E7 — v3.0.0rc2) ───────────────
+
+
+@main.command("align-manuscript")
+@click.argument(
+    "manuscript",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--backend",
+    type=click.Choice(["tfidf", "sentence_transformers"]),
+    default="tfidf",
+    help="Similarity backend (tfidf is offline, no extra deps).",
+)
+@click.option("--top-n", type=int, default=20, help="Number of top recipes to show.")
+@click.option("--json", "as_json", is_flag=True, help="Emit machine-readable JSON.")
+def align_manuscript_cmd(
+    manuscript: Path, backend: str, top_n: int, as_json: bool,
+) -> None:
+    """Score recipes by their semantic alignment with the manuscript text.
+
+    Output: ranked list of recipes whose ``answers_question`` matches
+    sections in the manuscript.  Default backend (``tfidf``) requires no
+    extra deps; ``sentence_transformers`` requires
+    ``pip install panelforge-figures[embeddings]``.
+    """
+    import json as _json
+
+    from .core.contract import ensure_all_imported, list_recipes
+    from .manifest.manuscript_alignment import (
+        AlignmentBackend,
+        compute_alignment_scores,
+        score_to_dict,
+    )
+
+    ensure_all_imported()
+    recipes = list_recipes()
+    scores = compute_alignment_scores(
+        manuscript, recipes, backend=AlignmentBackend(backend),
+    )
+    scores.sort(key=lambda s: s.score, reverse=True)
+    top = scores[:top_n]
+
+    if as_json:
+        click.echo(_json.dumps([score_to_dict(s) for s in top], indent=2))
+        return
+
+    click.echo(click.style(
+        f"manuscript: {manuscript.name}  ·  backend: {backend}  ·  top {top_n}",
+        fg="cyan",
+    ))
+    click.echo(f"{'rank':>4}  {'score':>5}  recipe")
+    for i, s in enumerate(top, 1):
+        click.echo(f"{i:>4}  {s.score:5.3f}  {s.recipe_full_name}")
+
+
 if __name__ == "__main__":
     main()

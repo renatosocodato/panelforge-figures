@@ -370,11 +370,13 @@ def test_render_demo_to_gallery_produces_png(tmp_path: Path) -> None:
 # ─────────────────────────── version sanity ───────────────────────────────
 
 
-def test_version_is_3_0_0_rc1() -> None:
-    """v3.0.0-rc1 ships with Elevation 6 (recipe authoring co-pilot)."""
+def test_version_is_at_least_v3() -> None:
+    """E6 (recipe authoring) ships starting in v3.0.0rc1; subsequent
+    elevations may bump higher."""
     from panelforge_figures import __version__
 
-    assert __version__ == "3.0.0rc1"
+    parts = __version__.split(".")
+    assert int(parts[0]) >= 3, f"expected >= 3.x.y, got {__version__!r}"
 
 
 # ─────────────────────────── module import isolation ─────────────────────

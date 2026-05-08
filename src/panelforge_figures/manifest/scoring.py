@@ -48,6 +48,18 @@ WEIGHTS_HISTORY: dict[str, Mapping[str, float]] = {
             "dimensionality": 0.10,
         }
     ),
+    # E7 (v3.0.0rc2) — shadow-mode rubric with manuscript_alignment term.
+    # Not the default; users opt in via ``--weights-version 1.1.0``.
+    "1.1.0": MappingProxyType(
+        {
+            "factorial": 0.27,
+            "equivalence": 0.23,
+            "anchor": 0.18,
+            "dynamics": 0.13,
+            "dimensionality": 0.09,
+            "manuscript_alignment": 0.10,
+        }
+    ),
 }
 
 # ``WEIGHTS`` is the default-version view into ``WEIGHTS_HISTORY``; callers

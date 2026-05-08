@@ -2834,5 +2834,180 @@ def fill_gap_cmd(
         click.get_current_context().exit(1)
 
 
+# ─────────────────── novelty scout (E9 — v3.2.0) ──────────────────────────
+
+
+@main.command("novelty-scout")
+@click.option(
+    "--from-yaml", "yaml_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Path to a panel-candidates YAML (one entry per panel: "
+         "panel_id, recipe_full_name, research_question, [role], [modality]).",
+)
+@click.option(
+    "--candidate-recipe", "candidate_recipes", multiple=True,
+    help="Quick form: one recipe full_name per flag, "
+         "research_question read from _META.answers_question.",
+)
+@click.option(
+    "--target", type=click.Choice(["maximal", "balanced", "permissive"]),
+    default="maximal",
+)
+@click.option(
+    "--api-key", type=str, default=None,
+    help="Consensus API key (default: $CONSENSUS_API_KEY).",
+)
+@click.option(
+    "--mock", is_flag=True,
+    help="Use MockConsensusClient (no live API calls; for offline testing).",
+)
+@click.option(
+    "--output", type=click.Path(path_type=Path), default=None,
+    help="Path for the markdown / JSON report (default: stdout markdown).",
+)
+@click.option(
+    "--json", "as_json", is_flag=True,
+    help="Emit machine-readable JSON instead of markdown.",
+)
+@click.option("--limit-per-query", type=int, default=20)
+def novelty_scout_cmd(
+    yaml_path: Path | None,
+    candidate_recipes: tuple[str, ...],
+    target: str,
+    api_key: str | None,
+    mock: bool,
+    output: Path | None,
+    as_json: bool,
+    limit_per_query: int,
+) -> None:
+    """Score figure-plan panels by literature novelty (Consensus.app backed).
+
+    Classifies each panel as REPETITION / INCREMENTAL / HIDDEN_NOVELTY /
+    ULTRA_NOVELTY. Supporting panels (controls / baselines / methodology /
+    provenance) are PROTECTED from demotion regardless of class.
+
+    With --target=maximal (default), recommends:
+
+      promote ULTRA_NOVELTY     -> main figure prominence
+      keep + flag HIDDEN_NOVELTY (opportunity)
+      demote INCREMENTAL        -> supplementary
+      drop REPETITION
+    """
+    import json as _json
+
+    import yaml
+
+    from panelforge_figures.manifest.novelty_scout import (
+        ConsensusProClient,
+        ConsensusUnavailableError,
+        MockConsensusClient,
+        PanelCandidate,
+        PanelRole,
+        TargetNovelty,
+        render_markdown_report,
+        score_figure_plan,
+    )
+
+    # Build panel candidates from input source
+    panels: list[PanelCandidate] = []
+    if yaml_path:
+        data = yaml.safe_load(yaml_path.read_text()) or {}
+        for entry in data.get("panels", []):
+            panels.append(
+                PanelCandidate(
+                    panel_id=entry["panel_id"],
+                    recipe_full_name=entry["recipe_full_name"],
+                    research_question=entry.get("research_question") or "",
+                    role=PanelRole(entry.get("role", "auto")),
+                    figure_id=entry.get("figure_id"),
+                    modality=entry.get("modality"),
+                    extra_query_terms=tuple(entry.get("extra_query_terms", []) or []),
+                )
+            )
+    if candidate_recipes:
+        ensure_all_imported()
+        recipes = {
+            f"{r.metadata.modality}.{r.metadata.name}": r
+            for r in list_recipes()
+        }
+        for full_name in candidate_recipes:
+            r = recipes.get(full_name)
+            if r is None:
+                click.echo(
+                    click.style(
+                        f"⚠ recipe {full_name!r} not found in registry — skipping",
+                        fg="yellow",
+                    ),
+                    err=True,
+                )
+                continue
+            panels.append(
+                PanelCandidate(
+                    panel_id=full_name,
+                    recipe_full_name=full_name,
+                    research_question=r.metadata.answers_question,
+                    modality=r.metadata.modality,
+                )
+            )
+    if not panels:
+        click.echo(
+            click.style(
+                "✗ no panels to assess — pass --from-yaml or --candidate-recipe",
+                fg="red",
+            ),
+            err=True,
+        )
+        click.get_current_context().exit(1)
+        return
+
+    # Pick the client
+    client: Any
+    if mock:
+        client = MockConsensusClient()
+        click.echo(
+            click.style(
+                "[mock] using MockConsensusClient — no live API calls",
+                fg="yellow",
+            )
+        )
+    else:
+        try:
+            client = ConsensusProClient(api_key=api_key)
+        except ConsensusUnavailableError as exc:
+            click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+            click.get_current_context().exit(1)
+            return
+
+    # Run scoring
+    target_enum = TargetNovelty(target)
+    report = score_figure_plan(panels, client, target=target_enum)
+
+    # Emit
+    if as_json:
+        text = _json.dumps(report.to_dict(), indent=2)
+    else:
+        text = render_markdown_report(report)
+
+    if output:
+        output.write_text(text)
+        click.echo(click.style(f"✓ wrote {output}", fg="green"))
+    else:
+        click.echo(text)
+
+    # Brief stderr summary regardless
+    click.echo(
+        click.style(
+            f"\n→ verdict: {report.overall_verdict}  "
+            f"(density {report.novelty_density:.2f}; "
+            f"{report.n_ultra_novelty} ultra, {report.n_hidden_novelty} hidden, "
+            f"{report.n_incremental} incremental, {report.n_repetition} repetition, "
+            f"{report.n_protected} supporting-protected)",
+            fg="cyan",
+        ),
+        err=True,
+    )
+
+
 if __name__ == "__main__":
     main()

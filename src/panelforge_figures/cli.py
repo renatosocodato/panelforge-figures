@@ -2323,5 +2323,78 @@ def mcp_serve_cmd(
         click.echo("✓ MCP server shut down.", err=True)
 
 
+# ─────────────────────────── verify-claims (E2 — v2.5.0) ──────────────────
+
+
+@main.command("verify-claims")
+@click.argument(
+    "manuscript",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--figures",
+    "figures_dir",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=Path("panelforge_workspace/figures"),
+    help="Directory of rendered figures + provenance sidecars.",
+)
+@click.option("--alpha", type=float, default=0.05, help="Significance threshold.")
+@click.option(
+    "--correlation-threshold",
+    type=float,
+    default=0.1,
+    help="Minimum |r| for a correlation to be considered present.",
+)
+@click.option("--json", "as_json", is_flag=True, help="Emit JSON instead of Markdown.")
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the report (default: stdout).",
+)
+def verify_claims_cmd(
+    manuscript: Path,
+    figures_dir: Path,
+    alpha: float,
+    correlation_threshold: float,
+    as_json: bool,
+    output: Path | None,
+) -> None:
+    """Cross-check Figure N claims in MANUSCRIPT against rendered figures."""
+    from panelforge_figures.manifest.claim_check import (
+        render_markdown_report,
+        report_to_dict,
+        verify_manuscript,
+    )
+
+    report = verify_manuscript(
+        manuscript,
+        figures_dir,
+        alpha=alpha,
+        correlation_threshold=correlation_threshold,
+    )
+
+    if as_json:
+        text = json.dumps(report_to_dict(report), indent=2)
+    else:
+        text = render_markdown_report(report)
+
+    if output:
+        output.write_text(text, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"))
+    else:
+        click.echo(text)
+
+    if report.n_unsupported > 0:
+        click.echo(
+            click.style(
+                f"\n✗ {report.n_unsupported} unsupported claim(s) — exiting 1",
+                fg="red",
+            ),
+            err=True,
+        )
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

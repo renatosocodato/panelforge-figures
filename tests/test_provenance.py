@@ -417,9 +417,10 @@ def test_bundle_raises_when_sidecar_missing(workspace: Path) -> None:
 # ─────────────────────────── meta (2 tests) ─────────────────────────────
 
 
-def test_schema_version_locked_to_1_0_0() -> None:
-    """spec §2.2: v2.0.0 ships schema_version '1.0.0'."""
-    assert PROVENANCE_SCHEMA_VERSION == "1.0.0"
+def test_schema_version_locked_to_1_1_0() -> None:
+    """spec §2.2 + Elevation 3: v2.2.0 ships schema_version '1.1.0' (bumped
+    from '1.0.0' to add the optional ``provenance_lock`` field)."""
+    assert PROVENANCE_SCHEMA_VERSION == "1.1.0"
 
 
 def test_panelforge_built_at_env_var_overrides_timestamp(

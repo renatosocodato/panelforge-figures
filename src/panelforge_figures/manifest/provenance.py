@@ -42,7 +42,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-PROVENANCE_SCHEMA_VERSION = "1.0.0"
+PROVENANCE_SCHEMA_VERSION = "1.1.0"
 
 
 # ─────────────────────────── data classes ───────────────────────────────
@@ -81,6 +81,13 @@ class ProvenanceRecord:
     scorer: dict[str, Any] | None = None
     audit: dict[str, Any] | None = None
     rendering_environment: dict[str, Any] = field(default_factory=dict)
+    provenance_lock: dict[str, Any] | None = None
+    """Optional reproducibility-envelope lock dict (Elevation 3, schema
+    1.1.0). Embeds the contents of ``panelforge.lock.json`` (or a
+    sub-dict thereof) so a sidecar carries enough environment+RNG+data
+    state to attempt a byte-identical replay. Defaults to ``None`` for
+    backwards compatibility — old (1.0.0) sidecars load cleanly with
+    this field absent."""
 
 
 @dataclass(frozen=True)
@@ -185,6 +192,7 @@ def build_provenance(
     column_mapping: dict[str, str] | None = None,
     scorer_state: dict[str, Any] | None = None,
     audit_findings: dict[str, Any] | None = None,
+    provenance_lock: dict[str, Any] | None = None,
 ) -> ProvenanceRecord:
     """Compute the full provenance record for a rendered figure.
 
@@ -270,6 +278,7 @@ def build_provenance(
             "matplotlib_version": _matplotlib_version(),
             "platform": platform.system().lower(),
         },
+        provenance_lock=provenance_lock,
     )
 
 
@@ -295,6 +304,8 @@ def _record_to_dict(record: ProvenanceRecord) -> dict[str, Any]:
         d["scorer"] = record.scorer
     if record.audit is not None:
         d["audit"] = record.audit
+    if record.provenance_lock is not None:
+        d["provenance_lock"] = record.provenance_lock
     return d
 
 
@@ -338,6 +349,7 @@ def load_provenance_json(path: Path) -> ProvenanceRecord:
         scorer=data.get("scorer"),
         audit=data.get("audit"),
         rendering_environment=data.get("rendering_environment", {}),
+        provenance_lock=data.get("provenance_lock"),
     )
 
 

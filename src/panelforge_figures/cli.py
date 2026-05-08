@@ -2471,5 +2471,69 @@ def verify_claims_cmd(
         click.get_current_context().exit(1)
 
 
+# ────────────────────────── author-recipe (E6 — v3.0.0rc1) ────────────────
+
+
+@main.command("author-recipe")
+@click.option("--modality", required=True, type=str,
+              help="Modality (lowercase_snake_case).")
+@click.option("--name", "recipe_name", required=True, type=str,
+              help="Recipe name (lowercase_snake_case).")
+@click.option("--family", required=True,
+              type=click.Choice([
+                  "coef_forest", "comparison", "correlation",
+                  "factorial", "equivalence",
+              ]))
+@click.option("--research-question", required=True, type=str,
+              help="Plain-English research question this recipe is meant to answer.")
+@click.option("--project-root", type=click.Path(path_type=Path), default=Path("."),
+              help="Project root for the new recipe.")
+@click.option("--overwrite", is_flag=True,
+              help="Overwrite existing recipe / test files.")
+@click.option("--render-demo/--no-render-demo", default=True,
+              help="Render the demo PNG into docs/gallery/.")
+def author_recipe_cmd(
+    modality: str,
+    recipe_name: str,
+    family: str,
+    research_question: str,
+    project_root: Path,
+    overwrite: bool,
+    render_demo: bool,
+) -> None:
+    """Scaffold a new recipe (.py + test + gallery PNG) following the panelforge pattern.
+
+    The author refines the rendering body; everything else is wired up.
+    """
+    from .manifest.recipe_authoring import (
+        RecipeAuthoringError,
+        render_demo_to_gallery,
+        scaffold_recipe,
+        write_scaffold,
+    )
+
+    try:
+        scaffold = scaffold_recipe(
+            modality=modality,
+            recipe_name=recipe_name,
+            family=family,
+            research_question=research_question,
+            project_root=project_root,
+        )
+        paths = write_scaffold(scaffold, overwrite=overwrite)
+        click.echo(click.style(f"✓ wrote {paths['recipe']}", fg="green"))
+        click.echo(click.style(f"✓ wrote {paths['test']}", fg="green"))
+        if render_demo:
+            try:
+                gallery_path = render_demo_to_gallery(scaffold)
+                click.echo(click.style(f"✓ wrote {gallery_path}", fg="green"))
+            except Exception as exc:  # pragma: no cover
+                click.echo(click.style(
+                    f"⚠ demo rendering failed: {exc}", fg="yellow"))
+    except RecipeAuthoringError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

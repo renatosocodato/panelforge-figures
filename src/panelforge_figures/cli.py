@@ -1370,6 +1370,81 @@ def provenance_diff(figure_a: Path, figure_b: Path) -> None:
                 click.echo(f"    - {line}")
 
 
+# ─────────────────────── caption (Elevation E5 — v2.5.0) ───────────────
+#
+# Audit-driven caption drafts. Pairs with Build-A's
+# `manifest/caption.py` (public API: `draft_caption_from_provenance`,
+# `render_caption_markdown`). The output is a stub the user edits,
+# NOT final text — an auditable seed for the writing process.
+
+
+def _caption_style_choices() -> list[str]:
+    """Materialise the CaptionStyle enum values for click.Choice.
+
+    Imported lazily so the CLI module does not pull caption.py at
+    interpreter start (it has no other consumers in v2.5.0).
+    """
+    from .manifest.caption import CaptionStyle
+
+    return [s.value for s in CaptionStyle]
+
+
+@main.command("caption")
+@click.argument(
+    "provenance_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--style",
+    type=click.Choice(_caption_style_choices()),
+    default="plain",
+    help="House style for the title line (plain, nature, cell, nejm, lab_default).",
+)
+@click.option(
+    "--use-llm",
+    is_flag=True,
+    help="Opt-in flag for LLM polish; gated by the data-class policy "
+    "and deferred to v2.6.0 — emits template-only with a marker note.",
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Write markdown to this path; otherwise print to stdout.",
+)
+def caption_cmd(
+    provenance_path: Path,
+    style: str,
+    use_llm: bool,
+    output: Path | None,
+) -> None:
+    """Draft a figure caption from a provenance.json sidecar."""
+    from .manifest.caption import (
+        CaptionError,
+        CaptionStyle,
+        draft_caption_from_provenance,
+        render_caption_markdown,
+    )
+
+    try:
+        draft = draft_caption_from_provenance(
+            provenance_path,
+            style=CaptionStyle(style),
+            use_llm=use_llm,
+        )
+    except CaptionError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        sys.exit(1)
+
+    md = render_caption_markdown(draft)
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(md, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"))
+    else:
+        click.echo(md)
+
+
 # ─────────────────────── compose (Sprint 1C — v1.9.0) ──────────────────
 #
 # Multi-panel figure composition.  Pairs with Build-A's

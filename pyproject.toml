@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "panelforge-figures"
-version = "3.0.0rc2"
+version = "3.1.0"
 description = "Modality-first publication-grade figure system for systems biology and computational biophysics."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -46,6 +46,10 @@ claude-autonomous = ["anthropic>=0.34"]
 power = [
     "statsmodels>=0.14",
     "scipy>=1.11",
+]
+recommender = [
+    "pandas>=2.0",
+    "pyarrow>=14.0",
 ]
 mcp = [
     "mcp>=1.0.0",

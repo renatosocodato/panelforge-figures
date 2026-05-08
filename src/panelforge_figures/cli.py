@@ -2591,5 +2591,248 @@ def align_manuscript_cmd(
         click.echo(f"{i:>4}  {s.score:5.3f}  {s.recipe_full_name}")
 
 
+# ─────────────── data-driven family recommender (E8 — v3.1.0) ─────────────
+
+
+@main.command("recommend")
+@click.argument(
+    "data_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option("--top-k", type=int, default=5,
+              help="Maximum number of family recommendations to display.")
+@click.option("--show-gaps/--no-show-gaps", default=True,
+              help="Surface families with no matching recipe as recipe gaps.")
+@click.option("--json", "as_json", is_flag=True,
+              help="Emit machine-readable JSON instead of a pretty table.")
+def recommend_cmd(
+    data_path: Path, top_k: int, show_gaps: bool, as_json: bool
+) -> None:
+    """Profile DATA_PATH and recommend high-value figure families.
+
+    Default (no --json): prints a ranked table with rationale + matching
+    recipes per family + recipe-gaps callout. The principled stance is
+    preserved — the user picks the family from the recommendations.
+    """
+    import json as _json
+
+    from .manifest.family_recommender import (
+        RecommenderError,
+        detect_recipe_gaps,
+        profile_data,
+        recommend_families,
+    )
+
+    try:
+        profile = profile_data(data_path)
+    except RecommenderError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    recs = recommend_families(profile, top_k=top_k)
+    gaps = detect_recipe_gaps(profile, recs) if show_gaps else []
+
+    if as_json:
+        click.echo(_json.dumps({
+            "profile": profile.to_dict(),
+            "recommendations": [
+                {
+                    "family": r.family,
+                    "confidence": r.confidence,
+                    "rationale": r.rationale,
+                    "n_matching_recipes": r.n_matching_recipes,
+                    "matching_recipes": list(r.matching_recipe_names),
+                }
+                for r in recs
+            ],
+            "gaps": [
+                {
+                    "family": g.family,
+                    "data_profile_summary": g.data_profile_summary,
+                    "suggested_recipe_name": g.suggested_recipe_name,
+                    "suggested_modality": g.suggested_modality,
+                    "suggested_research_question": g.suggested_research_question,
+                    "rationale": g.rationale,
+                }
+                for g in gaps
+            ],
+        }, indent=2))
+        return
+
+    click.echo(click.style(
+        f"data: {data_path.name}  ·  "
+        f"{profile.n_rows} rows × {profile.n_cols} cols",
+        fg="cyan",
+    ))
+    click.echo(f"  grouping:    {profile.grouping_structure.value}")
+    click.echo(f"  factors:     {profile.candidate_factor_columns}")
+    click.echo(f"  responses:   {profile.candidate_response_columns}")
+    click.echo(
+        f"  missing:     {profile.fraction_missing:.0%} "
+        f"({profile.n_missing_total} cells)"
+    )
+    if profile.notes:
+        for note in profile.notes:
+            click.echo(click.style(f"  note: {note}", fg="yellow"))
+    click.echo()
+
+    if not recs:
+        click.echo(click.style(
+            "no families scored above the confidence floor — the data shape "
+            "is unusual; consider providing a richer data file.",
+            fg="yellow",
+        ))
+    else:
+        click.echo(click.style("recommended families:", fg="green", bold=True))
+        for i, r in enumerate(recs, 1):
+            click.echo(
+                f"  {i}. {r.family}  (confidence {r.confidence:.2f})"
+            )
+            click.echo(f"     rationale: {r.rationale}")
+            click.echo(
+                f"     matching recipes: {r.n_matching_recipes}"
+            )
+            for name in r.matching_recipe_names[:3]:
+                click.echo(f"       · {name}")
+
+    if gaps:
+        click.echo()
+        click.echo(click.style("recipe gaps detected:", fg="yellow", bold=True))
+        for g in gaps:
+            click.echo(f"  ⚠ family {g.family}: no good-fit recipe")
+            click.echo(f"    suggested name: {g.suggested_recipe_name}")
+            click.echo(
+                f"    research question: {g.suggested_research_question}"
+            )
+            click.echo(f"    rationale: {g.rationale}")
+        click.echo()
+        click.echo(click.style(
+            "→ scaffold a tailored recipe via:", fg="cyan",
+        ))
+        first_gap_family = gaps[0].family
+        click.echo(
+            "    figures fill-gap "
+            f"--family {first_gap_family} --data {data_path} "
+            f"--name {gaps[0].suggested_recipe_name}"
+        )
+
+
+@main.command("fill-gap")
+@click.option("--family", required=True, type=str,
+              help="Figure family to scaffold a recipe for.")
+@click.option("--data", "data_path", required=True,
+              type=click.Path(exists=True, dir_okay=False, path_type=Path),
+              help="Data file used to derive the recipe scaffold.")
+@click.option("--modality", type=str, default="custom_lab",
+              help="Modality the new recipe lives in.")
+@click.option("--name", "recipe_name", type=str, default=None,
+              help="Recipe name (defaults to the auto-suggested gap name).")
+@click.option("--research-question", type=str, default=None,
+              help="Research question (defaults to the auto-suggested one).")
+@click.option("--project-root", type=click.Path(path_type=Path),
+              default=Path("."),
+              help="Project root for the new recipe.")
+@click.option("--yes", is_flag=True, help="Skip confirmation prompt.")
+def fill_gap_cmd(
+    family: str,
+    data_path: Path,
+    modality: str,
+    recipe_name: str | None,
+    research_question: str | None,
+    project_root: Path,
+    yes: bool,
+) -> None:
+    """Interactively scaffold a tailored recipe for a (family, data) gap.
+
+    Reads the data, computes a profile, generates a sensible default
+    recipe_name + research_question if not given, prompts for confirmation,
+    then invokes E6's ``scaffold_recipe`` + ``write_scaffold`` +
+    ``render_demo_to_gallery``.
+    """
+    from .manifest.family_recommender import (
+        RecommenderError,
+        detect_recipe_gaps,
+        profile_data,
+        recommend_families,
+    )
+    from .manifest.recipe_authoring import (
+        RecipeAuthoringError,
+        render_demo_to_gallery,
+        scaffold_recipe,
+        write_scaffold,
+    )
+
+    try:
+        profile = profile_data(data_path)
+    except RecommenderError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    recs = recommend_families(profile)
+    target = next((r for r in recs if r.family == family), None)
+    if target is None:
+        click.echo(click.style(
+            f"✗ family {family!r} did not score above the confidence floor "
+            "for this data; reconsider the data shape or use "
+            "`figures author-recipe` to scaffold an unconstrained recipe.",
+            fg="red",
+        ), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    gaps = detect_recipe_gaps(profile, [target], confidence_threshold=0.0)
+    gap = gaps[0] if gaps else None
+
+    final_name = recipe_name or (
+        gap.suggested_recipe_name if gap else f"{family}_custom_v1"
+    )
+    final_q = research_question or (
+        gap.suggested_research_question
+        if gap
+        else "TODO: research question"
+    )
+
+    click.echo(click.style("about to scaffold:", fg="cyan"))
+    click.echo(f"  modality:           {modality}")
+    click.echo(f"  recipe_name:        {final_name}")
+    click.echo(f"  family:             {family}")
+    click.echo(f"  research_question:  {final_q}")
+    click.echo(f"  project_root:       {project_root}")
+    if target.n_matching_recipes > 0:
+        click.echo(click.style(
+            f"  note: {target.n_matching_recipes} matching recipe(s) already "
+            "exist in the registry — you may not need a new one.",
+            fg="yellow",
+        ))
+
+    if not yes:
+        if not click.confirm("\nproceed?"):
+            click.echo("aborted.")
+            return
+
+    try:
+        scaffold = scaffold_recipe(
+            modality=modality,
+            recipe_name=final_name,
+            family=family,
+            research_question=final_q,
+            project_root=project_root,
+        )
+        paths = write_scaffold(scaffold, overwrite=False)
+        click.echo(click.style(f"✓ wrote {paths['recipe']}", fg="green"))
+        click.echo(click.style(f"✓ wrote {paths['test']}", fg="green"))
+        try:
+            gallery_path = render_demo_to_gallery(scaffold)
+            click.echo(click.style(f"✓ wrote {gallery_path}", fg="green"))
+        except Exception as exc:  # pragma: no cover
+            click.echo(click.style(
+                f"⚠ demo render failed: {exc}", fg="yellow"))
+    except RecipeAuthoringError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

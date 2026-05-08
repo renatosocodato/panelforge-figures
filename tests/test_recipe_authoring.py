@@ -376,7 +376,10 @@ def test_version_is_at_least_v3() -> None:
     from panelforge_figures import __version__
 
     parts = __version__.split(".")
-    assert int(parts[0]) >= 3, f"expected >= 3.x.y, got {__version__!r}"
+    major_str = "".join(ch for ch in parts[0] if ch.isdigit()) or "0"
+    assert int(major_str) >= 3, (
+        f"expected >= 3.x.y after E6 shipped, got {__version__!r}"
+    )
 
 
 # ─────────────────────────── module import isolation ─────────────────────

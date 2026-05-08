@@ -458,7 +458,7 @@
     "git_commit": "committed",
     "n_modalities": 20,
     "n_recipes": 448,
-    "panelforge_version": "3.0.0rc2",
+    "panelforge_version": "3.1.0",
     "schema_version": "1.0.0",
     "tags_enabled": true
   },
@@ -18253,5 +18253,5 @@
     "merge_on",
     "pivot_wide"
   ],
-  "version": "3.0.0rc2"
+  "version": "3.1.0"
 }

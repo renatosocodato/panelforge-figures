@@ -2253,5 +2253,75 @@ def power_cmd(
         click.echo(f"  note:             {note}")
 
 
+# ─────────────────────────── mcp (E1 — v2.1.0) ────────────────────────────
+
+
+@main.group("mcp")
+def mcp_group() -> None:
+    """Model Context Protocol server — expose recipes as Claude tools."""
+
+
+@mcp_group.command("serve")
+@click.option(
+    "--transport",
+    type=click.Choice(["stdio"]),
+    default="stdio",
+    help="Transport (only stdio supported in v2.1).",
+)
+@click.option("--no-recipes", is_flag=True, help="Disable recipe tools.")
+@click.option("--no-scorer", is_flag=True, help="Disable scorer tools.")
+@click.option("--no-index", is_flag=True, help="Disable index tools.")
+@click.option("--no-provenance", is_flag=True, help="Disable provenance tools.")
+@click.option("--no-projects", is_flag=True, help="Disable projects tools.")
+@click.option(
+    "--with-telemetry",
+    is_flag=True,
+    help="Expose telemetry tools (gated; runtime may still refuse).",
+)
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Project root containing panelforge.project.yaml.",
+)
+def mcp_serve_cmd(
+    transport: str,
+    no_recipes: bool,
+    no_scorer: bool,
+    no_index: bool,
+    no_provenance: bool,
+    no_projects: bool,
+    with_telemetry: bool,
+    project_root: Path | None,
+) -> None:
+    """Run the panelforge MCP server (stdio transport).
+
+    NOTE: stdout is reserved for MCP protocol messages only.  All status
+    messages go to stderr via ``click.echo(..., err=True)``.
+    """
+    # Imports are lazy so the rest of the CLI works without the [mcp] extra.
+    from .mcp import MCPServerConfig, MCPUnavailableError, serve_stdio
+
+    config = MCPServerConfig(
+        expose_recipes=not no_recipes,
+        expose_scorer=not no_scorer,
+        expose_index=not no_index,
+        expose_provenance=not no_provenance,
+        expose_projects=not no_projects,
+        expose_telemetry=with_telemetry,
+        project_root=project_root,
+    )
+
+    try:
+        import asyncio
+
+        asyncio.run(serve_stdio(config))
+    except MCPUnavailableError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+    except KeyboardInterrupt:
+        click.echo("✓ MCP server shut down.", err=True)
+
+
 if __name__ == "__main__":
     main()

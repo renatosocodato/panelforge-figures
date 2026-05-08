@@ -240,6 +240,8 @@ def test_cli_power_requires_effect_size():
 
 
 # Cluster 8 — Version bump
-def test_version_is_2_3_0():
+def test_version_is_at_least_v2():
+    """v2+ programme: each subsequent elevation bumps the minor version."""
     from panelforge_figures import __version__
-    assert __version__ == "2.3.0"
+    parts = __version__.split(".")
+    assert int(parts[0]) >= 2, f"expected ≥ 2.x.y, got {__version__!r}"

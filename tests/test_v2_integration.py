@@ -30,10 +30,11 @@ from panelforge_figures.manifest.scoring import (
 # ───────────────────── 0. version is correct ─────────────────────
 
 
-def test_version_is_v2_0_0() -> None:
-    """Phase 3 of the v2.0.0 elevation programme bumps the version
-    string from `1.6.1` to `2.0.0` everywhere it appears."""
-    assert __version__ == "2.0.0"
+def test_version_is_at_least_v2() -> None:
+    """v2.0.0 elevation programme: the package must be ≥ 2.0.0.
+    Each subsequent elevation bumps the minor version."""
+    parts = __version__.split(".")
+    assert int(parts[0]) >= 2, f"expected ≥ 2.x.y, got {__version__!r}"
 
 
 # ───────────────────── 1. scoring × weights history (v1.14.0) ─────────────────────

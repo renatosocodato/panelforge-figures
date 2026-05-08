@@ -3009,5 +3009,232 @@ def novelty_scout_cmd(
     )
 
 
+# ─────────────────── figures-scout orchestrator (E9 — phase 2, v3.3.0) ─────
+
+
+@main.command("scout")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option("--max-figures", type=int, default=4)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default="cell",
+)
+@click.option(
+    "--target-novelty",
+    type=click.Choice(["maximal", "balanced", "permissive", "none"]),
+    default="maximal",
+)
+@click.option(
+    "--mock-novelty/--live-novelty", default=False,
+    help="Use MockConsensusClient (no live API calls).",
+)
+@click.option(
+    "--plan-out", type=click.Path(path_type=Path),
+    default=Path("figures_plan.yaml"),
+)
+@click.option(
+    "--report-out", type=click.Path(path_type=Path), default=None,
+    help="Markdown report path (default: stdout).",
+)
+@click.option("--json", "as_json", is_flag=True)
+def scout_cmd(
+    project_root: Path,
+    max_figures: int,
+    venue: str,
+    target_novelty: str,
+    mock_novelty: bool,
+    plan_out: Path,
+    report_out: Path | None,
+    as_json: bool,
+) -> None:
+    """Walk PROJECT_ROOT, propose a multi-figure narrative plan, surface gaps + novelty."""
+    import json as _json
+
+    from panelforge_figures.manifest.scout import (
+        render_scout_report_markdown,
+        save_figure_plan_yaml,
+        scout_project,
+    )
+
+    report = scout_project(
+        project_root,
+        max_figures=max_figures,
+        venue=venue,
+        target_novelty=target_novelty,
+        use_mock_novelty=mock_novelty,
+    )
+
+    save_figure_plan_yaml(report.figure_plan, plan_out)
+    click.echo(click.style(f"✓ wrote {plan_out}", fg="green"), err=True)
+
+    if as_json:
+        text = _json.dumps(report.to_dict(), indent=2, default=str)
+    else:
+        text = render_scout_report_markdown(report)
+
+    if report_out:
+        report_out.write_text(text)
+        click.echo(click.style(f"✓ wrote {report_out}", fg="green"), err=True)
+    else:
+        click.echo(text)
+
+    click.echo(
+        click.style(
+            f"\n→ next: figures execute-plan {plan_out}",
+            fg="cyan",
+        ),
+        err=True,
+    )
+
+
+@main.command("execute-plan")
+@click.argument(
+    "plan_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option("--yes", is_flag=True, help="Skip per-gap confirmation prompts.")
+@click.option(
+    "--no-scaffold-recipes", "scaffold_recipes",
+    flag_value=False, default=True,
+)
+@click.option(
+    "--no-render-figures", "render_figures",
+    flag_value=False, default=True,
+)
+@click.option(
+    "--no-draft-captions", "draft_captions",
+    flag_value=False, default=True,
+)
+@click.option(
+    "--no-scaffold-manuscript", "scaffold_manuscript",
+    flag_value=False, default=True,
+)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default="cell",
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]), default="latex",
+)
+def execute_plan_cmd(
+    plan_path: Path,
+    yes: bool,
+    scaffold_recipes: bool,
+    render_figures: bool,
+    draft_captions: bool,
+    scaffold_manuscript: bool,
+    venue: str,
+    fmt: str,
+) -> None:
+    """Execute a figures_plan.yaml: scaffold gaps, render figures, draft captions, scaffold manuscript."""
+    from panelforge_figures.manifest.execute_plan import (
+        ExecutionError,
+        execute_plan,
+    )
+
+    try:
+        result = execute_plan(
+            plan_path, yes=yes, scaffold_recipes=scaffold_recipes,
+            render_figures=render_figures, draft_captions=draft_captions,
+            scaffold_manuscript=scaffold_manuscript,
+            manuscript_venue=venue, manuscript_format=fmt,
+        )
+    except ExecutionError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    click.echo(
+        click.style(
+            f"\n✓ done. {result.n_panels_rendered}/{result.n_panels_attempted} "
+            f"panels rendered, "
+            f"{result.n_recipes_scaffolded} recipes scaffolded, "
+            f"{result.n_captions_drafted} captions drafted",
+            fg="green",
+        )
+    )
+    if result.manuscript_path:
+        click.echo(
+            click.style(
+                f"  manuscript: {result.manuscript_path}",
+                fg="green",
+            )
+        )
+    for panel_id, status, msg in result.panels_status:
+        sym = {
+            "rendered": "✓",
+            "scaffolded_then_rendered": "🆕",
+            "skipped_gap": "⚠",
+            "failed": "✗",
+        }.get(status, "·")
+        click.echo(f"  {sym} {panel_id}  {status}  {msg}")
+
+
+@main.command("manuscript-scaffold")
+@click.argument(
+    "plan_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default="cell",
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]), default="latex",
+)
+@click.option("--output", type=click.Path(path_type=Path), default=None)
+@click.option("--overwrite", is_flag=True)
+def manuscript_scaffold_cmd(
+    plan_path: Path,
+    venue: str,
+    fmt: str,
+    output: Path | None,
+    overwrite: bool,
+) -> None:
+    """Scaffold manuscript/main.tex from a figures_plan.yaml."""
+    from panelforge_figures.manifest.manuscript_scaffold import (
+        ManuscriptFormat,
+        ScaffoldError,
+        Venue,
+        scaffold_manuscript,
+    )
+    from panelforge_figures.manifest.scout import load_figure_plan_yaml
+
+    plan = load_figure_plan_yaml(plan_path)
+    try:
+        result = scaffold_manuscript(
+            plan,
+            project_root=plan.project_root,
+            venue=Venue(venue),
+            format=ManuscriptFormat(fmt),
+            output_path=output,
+            overwrite=overwrite,
+        )
+    except ScaffoldError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    click.echo(
+        click.style(f"✓ wrote {result.manuscript_path}", fg="green")
+    )
+    click.echo(
+        click.style(f"✓ wrote {result.references_path}", fg="green")
+    )
+    click.echo(f"  venue:               {result.venue.value}")
+    click.echo(f"  format:              {result.format.value}")
+    click.echo(f"  figures:             {result.n_figures}")
+    click.echo(f"  captions drafted:    {result.n_captions_drafted}")
+    click.echo(f"  methods paragraphs:  {result.n_methods_paragraphs}")
+
+
 if __name__ == "__main__":
     main()

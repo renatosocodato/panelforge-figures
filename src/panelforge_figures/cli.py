@@ -2042,5 +2042,113 @@ def suggest_weights_cmd(
     )
 
 
+# ─────────────────── reproducibility envelope (E3 — v2.2.0) ──────────────
+
+@main.command("lock")
+@click.option("--project-root", type=click.Path(path_type=Path), default=Path("."))
+@click.option("--output", type=click.Path(path_type=Path), default=Path("panelforge.lock.json"))
+@click.option("--data-file", type=click.Path(path_type=Path), multiple=True,
+              help="Path to a data file to include in the lock (repeatable).")
+@click.option("--figure-path", type=click.Path(path_type=Path), default=None,
+              help="Path to a rendered figure to hash into the lock.")
+@click.option("--numpy-seed", type=int, default=None)
+@click.option("--python-random-seed", type=int, default=None)
+def lock_cmd(
+    project_root: Path,
+    output: Path,
+    data_file: tuple[Path, ...],
+    figure_path: Path | None,
+    numpy_seed: int | None,
+    python_random_seed: int | None,
+) -> None:
+    """Write a panelforge.lock.json with full env snapshot.
+
+    Captures: Python version, OS, BLAS, RNG seeds, git state, uv.lock SHA
+    (or pip freeze fallback), data file SHAs, optional figure SHA.
+    """
+    from panelforge_figures import __version__
+    from panelforge_figures.manifest.reproducibility import (
+        RNGSeeds,
+        build_lock,
+        save_lock,
+    )
+
+    seeds = RNGSeeds(
+        numpy_seed=numpy_seed,
+        python_random_seed=python_random_seed,
+        torch_seed=None,
+        hypothesis_seed=None,
+    )
+    lock = build_lock(
+        project_root=project_root,
+        panelforge_version=__version__,
+        data_files=list(data_file) if data_file else None,
+        figure_path=figure_path,
+        rng_seeds=seeds,
+    )
+    saved_at = save_lock(lock, output)
+    click.echo(click.style(f"✓ wrote {saved_at}", fg="green"))
+    click.echo(f"  schema:           {lock.schema_version}")
+    click.echo(f"  panelforge:       {lock.panelforge_version}")
+    click.echo(f"  python:           {lock.environment.python_version}")
+    click.echo(
+        f"  git:              {lock.panelforge_git_commit[:8]}"
+        f"{'-dirty' if lock.panelforge_git_dirty else ''}"
+    )
+    if lock.uv_lock_path:
+        click.echo(f"  uv.lock:          {lock.uv_lock_sha256[:16]}...")
+    else:
+        click.echo(f"  pip freeze rows:  {len(lock.pip_freeze)}")
+    click.echo(f"  data files:       {len(lock.data_files)}")
+    if lock.figure_sha256:
+        click.echo(f"  figure:           {lock.figure_sha256[:16]}...")
+
+
+@main.command("replay")
+@click.argument("lock_path", type=click.Path(exists=True, path_type=Path))
+@click.option("--workdir", type=click.Path(path_type=Path), default=Path("."))
+@click.option("--recipe", type=str, required=False,
+              help="Recipe full_name to re-render (defaults to the lock's recipe if known).")
+def replay_cmd(lock_path: Path, workdir: Path, recipe: str | None) -> None:
+    """Replay a panelforge.lock.json — verify env match + (in v2.2.0)
+    report drift diagnostics. Full uv-sync re-render is post-v2.2.
+    """
+    from panelforge_figures.manifest.reproducibility import (
+        ReproducibilityError,
+        load_lock,
+        replay_lock,
+    )
+
+    try:
+        lock = load_lock(lock_path)
+    except ReproducibilityError as exc:
+        click.echo(click.style(f"✗ failed to load lock: {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+
+    click.echo(f"replaying {lock_path}")
+    click.echo(f"  panelforge:  {lock.panelforge_version}")
+    click.echo(f"  git commit:  {lock.panelforge_git_commit[:8]}")
+    click.echo(f"  python:      {lock.environment.python_version}")
+    click.echo(f"  created:     {lock.created_at}")
+    click.echo()
+
+    result = replay_lock(
+        lock,
+        workdir=workdir,
+        recipe_full_name=recipe or "<unknown>",
+        contract_dict={},
+    )
+
+    if result.success:
+        click.echo(click.style("✓ env matches lock", fg="green"))
+        for msg in result.log_messages:
+            click.echo(f"  {msg}")
+    else:
+        click.echo(click.style("✗ env drift detected", fg="red"))
+        for field, diff in result.drift_diagnostics.items():
+            click.echo(f"  {field}: expected {diff['expected']!r}, actual {diff['actual']!r}")
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

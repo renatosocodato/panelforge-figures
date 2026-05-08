@@ -32,10 +32,14 @@ from panelforge_figures.manifest.scoring import (
 
 def test_version_is_at_least_v2() -> None:
     """v2.0.0 elevation programme: the package must be >= 2.0.0.
-    Subsequent elevations (E1-E8) bump the minor version; v3+ accepted."""
+    Subsequent elevations (E1-E8) bump the minor version; v3+ accepted.
+
+    Strip any pre-release suffix ('3.1.0rc1' → '3') before parsing.
+    """
     parts = __version__.split(".")
     assert len(parts) >= 2, f"unexpected version format: {__version__!r}"
-    assert int(parts[0]) >= 2, f"expected >= 2.x.y, got {__version__!r}"
+    major_str = "".join(ch for ch in parts[0] if ch.isdigit()) or "0"
+    assert int(major_str) >= 2, f"expected >= 2.x.y, got {__version__!r}"
 
 
 # ───────────────────── 1. scoring × weights history (v1.14.0) ─────────────────────
@@ -281,11 +285,13 @@ def test_recipes_index_panelforge_version() -> None:
     if pv is None:
         pytest.skip("recipes_index.json has no panelforge_version field")
     # Allow stale index (pre-regen) — accept the current version, the
-    # pre-v2 baseline (1.6.1), or any prior v2.x bump while elevations
-    # land. Drift outside that band still flags a release-notes red flag.
+    # pre-v2 baseline (1.6.1), or any prior v2.x / v3.x bump while
+    # elevations land. We only require the index's recorded major to be
+    # >= 2 (i.e. inside the v2.0.0 elevation programme).
     pv_parts = pv.split(".")
-    is_v2_band = len(pv_parts) >= 2 and pv_parts[0] == "2"
-    assert pv == __version__ or pv == "1.6.1" or is_v2_band, (
+    major_str = "".join(ch for ch in pv_parts[0] if ch.isdigit()) or "0"
+    is_v2_or_later_band = len(pv_parts) >= 2 and int(major_str) >= 2
+    assert pv == __version__ or pv == "1.6.1" or is_v2_or_later_band, (
         f"recipes_index.json panelforge_version is {pv!r}; "
-        f"expected {__version__!r} (run `figures index emit` to refresh)"
+        f"expected >= 2.0.0 (run `figures index emit` to refresh)"
     )

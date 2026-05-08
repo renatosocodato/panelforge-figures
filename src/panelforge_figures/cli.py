@@ -2150,5 +2150,108 @@ def replay_cmd(lock_path: Path, workdir: Path, recipe: str | None) -> None:
         click.get_current_context().exit(1)
 
 
+# ─────────────────── adaptive power analysis (E4 — v2.3.0) ──────────────
+
+@main.command("power")
+@click.argument("recipe", type=str)
+@click.option("--effect-size", "-e", type=float, required=True,
+              help="Effect size in the family's native units (e.g. Cohen's d=0.3).")
+@click.option("--alpha", "-a", type=float, default=0.05)
+@click.option("--power", "-p", "power_target", type=float, default=0.80,
+              help="Desired statistical power (default 0.80).")
+@click.option("--n-groups", type=int, default=2,
+              help="Number of groups (e.g. 2 for t-test, 4 for 2x2 factorial).")
+@click.option("--df-num", type=int, default=None,
+              help="Numerator degrees of freedom (for ANOVA / chi-square).")
+@click.option("--df-den", type=int, default=None,
+              help="Denominator degrees of freedom (for ANOVA).")
+@click.option("--montecarlo-iterations", type=int, default=1000,
+              help="MC iterations for nonparametric families (default 1000).")
+@click.option("--effect-size-units", type=str, default=None)
+@click.option("--json", "as_json", is_flag=True, help="Emit JSON output.")
+def power_cmd(
+    recipe: str, effect_size: float, alpha: float,
+    power_target: float, n_groups: int,
+    df_num: int | None, df_den: int | None,
+    montecarlo_iterations: int, effect_size_units: str | None,
+    as_json: bool,
+) -> None:
+    """Compute required N for a recipe at given effect size + alpha + power.
+
+    Example:
+      figures power two_way_anova_summary_plot -e 0.3 -a 0.05 -p 0.8
+    """
+    import json as _json
+
+    from panelforge_figures.core.contract import (
+        ensure_all_imported,
+        list_recipes,
+    )
+    from panelforge_figures.manifest.power import (
+        PowerError,
+        compute_required_n,
+    )
+
+    ensure_all_imported()
+    recipes = list_recipes()
+
+    # Find the recipe by full_name OR bare name (modality.name OR name)
+    matched = None
+    for info in recipes:
+        full = f"{info.metadata.modality}.{info.metadata.name}"
+        if recipe == full or recipe == info.metadata.name:
+            matched = info
+            break
+
+    if matched is None:
+        click.echo(click.style(
+            f"✗ no recipe matching {recipe!r}; "
+            f"use `figures list-recipes` to see options",
+            fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    family = matched.metadata.family.value
+    full_name = f"{matched.metadata.modality}.{matched.metadata.name}"
+
+    try:
+        result = compute_required_n(
+            recipe_full_name=full_name,
+            family=family,
+            effect_size=effect_size,
+            alpha=alpha,
+            power_target=power_target,
+            df_num=df_num, df_den=df_den,
+            n_groups=n_groups,
+            montecarlo_iterations=montecarlo_iterations,
+            effect_size_units=effect_size_units,
+        )
+    except PowerError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    if as_json:
+        click.echo(_json.dumps(result.to_dict(), indent=2, sort_keys=True))
+        return
+
+    # Human-friendly output
+    click.echo(click.style(
+        f"power analysis: {full_name}", fg="cyan"))
+    click.echo(f"  family:           {result.family}")
+    click.echo(f"  method:           {result.method.value}")
+    click.echo(f"  effect_size:      {result.effect_size}  ({result.effect_size_units})")
+    click.echo(f"  alpha:            {result.alpha}")
+    click.echo(f"  power_target:     {result.power_target}")
+    click.echo(click.style(
+        f"  required_n_per_group: {result.required_n_per_group}",
+        fg="green", bold=True))
+    click.echo(f"  required_n_total:    {result.required_n_total}")
+    if result.montecarlo_iterations:
+        click.echo(f"  mc_iterations:    {result.montecarlo_iterations}")
+    for note in result.notes:
+        click.echo(f"  note:             {note}")
+
+
 if __name__ == "__main__":
     main()

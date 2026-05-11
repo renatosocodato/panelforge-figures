@@ -552,12 +552,16 @@ def test_run_lint_xrefs_runs_on_real_manuscript(tmp_path: Path) -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_run_audit_venue_placeholder() -> None:
-    r = _run_audit_venue()
+def test_run_audit_venue_now_shipped() -> None:
+    """E16 is now shipped; with no manuscript_path → skipped (sensible default)."""
+    r = _run_audit_venue(
+        manuscript_path=None,
+        figures_dir=None,
+        venue=None,
+        skip_missing_inputs=True,
+    )
     assert r.step == CIAuditStep.audit_venue
     assert r.status == StepStatus.skipped
-    assert "E16" in r.summary
-    assert "not yet shipped" in r.summary
 
 
 def test_run_audit_bias_placeholder() -> None:

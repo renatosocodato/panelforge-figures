@@ -159,7 +159,7 @@ def test_workflow_template_parses() -> None:
 def test_workflow_template_references_action() -> None:
     """The workflow references the action via the repo-rooted path."""
     text = WORKFLOW_TEMPLATE.read_text()
-    assert "renatosocodato/panelforge-figures@v3.10.0" in text
+    assert "renatosocodato/panelforge-figures@v3.11.0" in text
 
 
 def test_workflow_template_has_pull_request_permissions() -> None:

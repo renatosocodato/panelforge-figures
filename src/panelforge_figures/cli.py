@@ -3530,5 +3530,397 @@ def cache_invalidate_cmd(project_root: Path, panel_id: tuple[str, ...]) -> None:
     click.echo(f"\n{removed} panel(s) invalidated")
 
 
+# ────────── E12 — STAR Methods + reporting checklists (v3.6.0) ────────────
+
+
+@main.command("star-methods")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(exists=True, path_type=Path),
+    default=None,
+    help="Path to figures_plan.yaml; if absent, no per-recipe methods text.",
+)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default="cell",
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]),
+    default="latex",
+)
+@click.option(
+    "--out",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="If set, write the rendered output to this file.",
+)
+def star_methods_cmd(
+    project_root: Path,
+    plan_path: Path | None,
+    venue: str,
+    fmt: str,
+    out: Path | None,
+) -> None:
+    """Generate STAR Methods table + sections from project state."""
+    from panelforge_figures.manifest.scout import load_figure_plan_yaml
+    from panelforge_figures.manifest.star_methods import (
+        StarMethodsError,
+        generate_star_methods,
+        render_star_methods_table_latex,
+        render_star_methods_table_markdown,
+    )
+
+    plan = None
+    if plan_path is not None:
+        try:
+            plan = load_figure_plan_yaml(plan_path)
+        except Exception as exc:
+            click.echo(
+                click.style(f"✗ failed to load plan: {exc}", fg="red"), err=True
+            )
+            click.get_current_context().exit(1)
+            return
+
+    try:
+        table = generate_star_methods(
+            project_root, plan, venue=venue, format=fmt
+        )
+    except StarMethodsError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    if fmt == "latex":
+        body = render_star_methods_table_latex(table)
+    else:
+        body = render_star_methods_table_markdown(table)
+
+    sections: list[str] = []
+    sections.append(body)
+
+    if table.method_details_paragraphs:
+        if fmt == "latex":
+            sections.append(r"\subsection*{Method Details}")
+        else:
+            sections.append("## Method Details")
+        for family in sorted(table.method_details_paragraphs):
+            sections.append(table.method_details_paragraphs[family])
+
+    if table.quantification_paragraphs:
+        if fmt == "latex":
+            sections.append(r"\subsection*{Quantification and Statistical Analysis}")
+        else:
+            sections.append("## Quantification and Statistical Analysis")
+        for family in sorted(table.quantification_paragraphs):
+            sections.append(table.quantification_paragraphs[family])
+
+    if fmt == "latex":
+        sections.append(r"\subsection*{Data and Code Availability}")
+    else:
+        sections.append("## Data and Code Availability")
+    sections.append(table.data_and_code_section)
+
+    output_text = "\n\n".join(sections) + "\n"
+
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(output_text, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {out}", fg="green"))
+    else:
+        click.echo(output_text)
+
+    click.echo(
+        click.style(
+            f"  Key Resources Table:        {len(table.key_resources)} rows",
+            fg="cyan",
+        ),
+        err=True,
+    )
+    click.echo(
+        click.style(
+            f"  Method-details paragraphs:  {len(table.method_details_paragraphs)}",
+            fg="cyan",
+        ),
+        err=True,
+    )
+    click.echo(
+        click.style(
+            f"  Quantification paragraphs:  {len(table.quantification_paragraphs)}",
+            fg="cyan",
+        ),
+        err=True,
+    )
+    click.echo(
+        click.style(f"  Venue: {table.venue}; format: {fmt}", fg="cyan"),
+        err=True,
+    )
+
+
+@main.group("checklist")
+def checklist_group() -> None:
+    """Reporting checklists: ARRIVE / CONSORT / STARD / MIQE."""
+
+
+def _render_and_write_checklist(checklist, fmt: str, out: Path | None) -> None:
+    from panelforge_figures.manifest.reporting_checklists import (
+        render_checklist_latex,
+        render_checklist_markdown,
+    )
+
+    if fmt == "latex":
+        body = render_checklist_latex(checklist)
+    else:
+        body = render_checklist_markdown(checklist)
+
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(body, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {out}", fg="green"))
+    else:
+        click.echo(body)
+
+    total = (
+        checklist.n_present
+        + checklist.n_absent
+        + checklist.n_not_applicable
+        + checklist.n_unknown
+    )
+    click.echo(
+        click.style(f"  {checklist.kind.value} — total {total} items", fg="cyan"),
+        err=True,
+    )
+    click.echo(
+        click.style(
+            f"  present={checklist.n_present}  absent={checklist.n_absent}  "
+            f"n/a={checklist.n_not_applicable}  unknown={checklist.n_unknown}",
+            fg="cyan",
+        ),
+        err=True,
+    )
+
+
+def _load_plan_if_any(plan_path: Path | None):
+    if plan_path is None:
+        return None
+    try:
+        from panelforge_figures.manifest.scout import load_figure_plan_yaml
+
+        return load_figure_plan_yaml(plan_path)
+    except Exception:
+        return None
+
+
+@checklist_group.command("arrive")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to manuscript file (.md or .tex) for keyword scanning.",
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to figures_plan.yaml for contract-evidence classification.",
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]),
+    default="markdown",
+)
+@click.option(
+    "--out",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+def checklist_arrive_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    plan_path: Path | None,
+    fmt: str,
+    out: Path | None,
+) -> None:
+    """Generate ARRIVE 2.0 checklist for animal-research papers."""
+    from panelforge_figures.manifest.reporting_checklists import (
+        ChecklistError,
+        generate_arrive_checklist,
+    )
+
+    plan = _load_plan_if_any(plan_path)
+    try:
+        checklist = generate_arrive_checklist(
+            project_root, manuscript_path=manuscript, figure_plan=plan
+        )
+    except ChecklistError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    _render_and_write_checklist(checklist, fmt, out)
+
+
+@checklist_group.command("consort")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]),
+    default="markdown",
+)
+@click.option(
+    "--out",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+def checklist_consort_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    plan_path: Path | None,
+    fmt: str,
+    out: Path | None,
+) -> None:
+    """Generate CONSORT 2010 checklist for randomised controlled trials."""
+    from panelforge_figures.manifest.reporting_checklists import (
+        ChecklistError,
+        generate_consort_checklist,
+    )
+
+    plan = _load_plan_if_any(plan_path)
+    try:
+        checklist = generate_consort_checklist(
+            project_root, manuscript_path=manuscript, figure_plan=plan
+        )
+    except ChecklistError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    _render_and_write_checklist(checklist, fmt, out)
+
+
+@checklist_group.command("stard")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]),
+    default="markdown",
+)
+@click.option(
+    "--out",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+def checklist_stard_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    plan_path: Path | None,
+    fmt: str,
+    out: Path | None,
+) -> None:
+    """Generate STARD 2015 checklist for diagnostic-accuracy studies."""
+    from panelforge_figures.manifest.reporting_checklists import (
+        ChecklistError,
+        generate_stard_checklist,
+    )
+
+    plan = _load_plan_if_any(plan_path)
+    try:
+        checklist = generate_stard_checklist(
+            project_root, manuscript_path=manuscript, figure_plan=plan
+        )
+    except ChecklistError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    _render_and_write_checklist(checklist, fmt, out)
+
+
+@checklist_group.command("miqe")
+@click.argument(
+    "project_root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]),
+    default="markdown",
+)
+@click.option(
+    "--out",
+    type=click.Path(path_type=Path),
+    default=None,
+)
+def checklist_miqe_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    plan_path: Path | None,
+    fmt: str,
+    out: Path | None,
+) -> None:
+    """Generate MIQE checklist for qPCR experiments."""
+    from panelforge_figures.manifest.reporting_checklists import (
+        ChecklistError,
+        generate_miqe_checklist,
+    )
+
+    plan = _load_plan_if_any(plan_path)
+    try:
+        checklist = generate_miqe_checklist(
+            project_root, manuscript_path=manuscript, figure_plan=plan
+        )
+    except ChecklistError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    _render_and_write_checklist(checklist, fmt, out)
+
+
 if __name__ == "__main__":
     main()

@@ -3922,5 +3922,90 @@ def checklist_miqe_cmd(
     _render_and_write_checklist(checklist, fmt, out)
 
 
+# ─────────────────────── xref linter (E13 — v3.7.0) ──────────────────────────
+
+
+@main.group("lint")
+def lint_group() -> None:
+    """Manuscript / figure linting commands."""
+
+
+@lint_group.command("xrefs")
+@click.argument(
+    "manuscript_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--figures",
+    "figures_dir",
+    type=click.Path(path_type=Path),
+    default=Path("panelforge_workspace/figures"),
+    help="Directory containing rendered figure files (pdf/png/svg).",
+)
+@click.option(
+    "--min-caption-chars",
+    type=int,
+    default=30,
+    help="Minimum caption length before emitting caption_too_short.",
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Write report to this file instead of stdout.",
+)
+@click.option(
+    "--json", "as_json", is_flag=True,
+    help="Emit machine-readable JSON instead of markdown.",
+)
+@click.option(
+    "--fail-on-warning", is_flag=True,
+    help="Exit 1 on any warning, not just errors.",
+)
+def lint_xrefs_cmd(
+    manuscript_path: Path,
+    figures_dir: Path,
+    min_caption_chars: int,
+    output: Path | None,
+    as_json: bool,
+    fail_on_warning: bool,
+) -> None:
+    """Cross-reference linter: orphan refs/figures, missing captions, dead paths."""
+    import json as _json
+
+    from .manifest.xref_linter import (
+        LintError,
+        lint_xrefs,
+        render_lint_report_markdown,
+    )
+
+    try:
+        report = lint_xrefs(
+            manuscript_path,
+            figures_dir=figures_dir if figures_dir and figures_dir.exists() else None,
+            min_caption_chars=min_caption_chars,
+        )
+    except LintError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(2)
+        return
+
+    if as_json:
+        text = _json.dumps(report.to_dict(), indent=2, default=str)
+    else:
+        text = render_lint_report_markdown(report)
+
+    if output is not None:
+        output.write_text(text, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"))
+    else:
+        click.echo(text)
+
+    if report.n_errors > 0:
+        click.get_current_context().exit(1)
+    elif fail_on_warning and report.n_warnings > 0:
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

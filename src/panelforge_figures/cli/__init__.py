@@ -4223,5 +4223,169 @@ def _latest_backup(path: Path) -> Path | None:
 
 
 
+# ───────────────────────── E18: bundled CI audit ─────────────────────────
+
+
+@main.command("ci-audit")
+@click.option(
+    "--project-root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=Path("."),
+    help="Path to the panelforge project root (default: current dir).",
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to the manuscript .tex/.md (optional).",
+)
+@click.option(
+    "--figures-dir",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to the rendered figures directory.",
+)
+@click.option(
+    "--plan-path",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to figures_plan.yaml (optional; used by checklists).",
+)
+@click.option(
+    "--venue",
+    type=str,
+    default=None,
+    help="Target venue for venue-specific audits (E16).",
+)
+@click.option(
+    "--steps",
+    type=str,
+    default="",
+    help="Comma-separated step list (default: scout,verify-claims,"
+         "lint-xrefs,checklist-arrive when manuscript provided; scout otherwise).",
+)
+@click.option(
+    "--fail-on-warning",
+    is_flag=True,
+    help="Treat warnings as failures (exit 1 on warn).",
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the Markdown report (default: stdout).",
+)
+@click.option(
+    "--output-json",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the JSON report.",
+)
+@click.option(
+    "--output-junit",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the JUnit XML report.",
+)
+@click.option(
+    "--github-comment",
+    is_flag=True,
+    help="Render PR-comment-sized Markdown (truncated) to --output / stdout.",
+)
+def ci_audit_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    figures_dir: Path | None,
+    plan_path: Path | None,
+    venue: str | None,
+    steps: str,
+    fail_on_warning: bool,
+    output: Path | None,
+    output_json: Path | None,
+    output_junit: Path | None,
+    github_comment: bool,
+) -> None:
+    """Run the bundled CI audit chain (scout + verify-claims + lint-xrefs + checklist).
+
+    Designed for invocation from CI (GitHub Actions, GitLab CI, Jenkins, etc.).
+    Outputs Markdown by default; --output-json + --output-junit emit
+    machine-readable artefacts for downstream tooling.
+
+    Exit codes:
+      0 — pass (or warn without --fail-on-warning)
+      1 — fail / error / warn-with-fail-on-warning
+      2 — internal runner error (bad step name, bad path)
+    """
+    import json as _json
+
+    from panelforge_figures.manifest.ci_runner import (
+        CIAuditStep,
+        StepStatus,
+        render_ci_report_github_comment,
+        render_ci_report_junit_xml,
+        render_ci_report_markdown,
+        run_ci_audit,
+    )
+
+    steps_list: tuple[CIAuditStep, ...] | None = None
+    if steps:
+        try:
+            steps_list = tuple(
+                CIAuditStep(s.strip()) for s in steps.split(",") if s.strip()
+            )
+        except ValueError as exc:
+            click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+            click.get_current_context().exit(2)
+            return
+
+    try:
+        report = run_ci_audit(
+            project_root,
+            manuscript_path=manuscript,
+            figures_dir=figures_dir,
+            plan_path=plan_path,
+            steps=steps_list,
+            venue=venue,
+            fail_on_warning=fail_on_warning,
+        )
+    except Exception as exc:  # noqa: BLE001 — top-level CLI guard
+        click.echo(click.style(f"✗ CI runner failed: {exc}", fg="red"), err=True)
+        click.get_current_context().exit(2)
+        return
+
+    md = (
+        render_ci_report_github_comment(report)
+        if github_comment
+        else render_ci_report_markdown(report)
+    )
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(md, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"), err=True)
+    else:
+        click.echo(md)
+
+    if output_json is not None:
+        output_json.parent.mkdir(parents=True, exist_ok=True)
+        output_json.write_text(
+            _json.dumps(report.to_dict(), indent=2, default=str),
+            encoding="utf-8",
+        )
+        click.echo(click.style(f"✓ wrote {output_json}", fg="green"), err=True)
+
+    if output_junit is not None:
+        output_junit.parent.mkdir(parents=True, exist_ok=True)
+        output_junit.write_text(
+            render_ci_report_junit_xml(report), encoding="utf-8"
+        )
+        click.echo(click.style(f"✓ wrote {output_junit}", fg="green"), err=True)
+
+    # ── Exit code ────────────────────────────────────────────────────────
+    if report.overall_status in (StepStatus.fail, StepStatus.error):
+        click.get_current_context().exit(1)
+    elif fail_on_warning and report.overall_status == StepStatus.warn:
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

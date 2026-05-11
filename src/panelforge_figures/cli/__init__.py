@@ -4387,5 +4387,126 @@ def ci_audit_cmd(
         click.get_current_context().exit(1)
 
 
+# --------------------------------------------------------------------------- #
+# audit-venue (E16)                                                            #
+# --------------------------------------------------------------------------- #
+
+
+@main.command("audit-venue")
+@click.argument(
+    "manuscript_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--venue",
+    type=str,
+    required=True,
+    help="Target venue (nature, cell, nejm, science, biorxiv, elife, "
+         "plos_one, jama, plain).",
+)
+@click.option(
+    "--figures-dir",
+    type=click.Path(path_type=Path),
+    default=Path("panelforge_workspace/figures"),
+    help="Directory containing rendered figures.",
+)
+@click.option(
+    "--bib-path",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Optional path to a BibTeX file (reserved).",
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the Markdown report (default: stdout).",
+)
+@click.option(
+    "--json",
+    "as_json",
+    is_flag=True,
+    help="Emit JSON (machine-readable) instead of Markdown.",
+)
+@click.option(
+    "--fail-on-warning",
+    is_flag=True,
+    help="Treat warnings as failures (exit 1 on warn).",
+)
+def audit_venue_cmd(
+    manuscript_path: Path,
+    venue: str,
+    figures_dir: Path,
+    bib_path: Path | None,
+    output: Path | None,
+    as_json: bool,
+    fail_on_warning: bool,
+) -> None:
+    """Audit MANUSCRIPT_PATH + figures package against target VENUE's locked rules.
+
+    Compares the manuscript and figures directory against the journal's
+    "Instructions to Authors" (figure caps, abstract format, required
+    statements, citation style, color mode, etc.) and emits a pass/warn/fail
+    report.
+
+    Exit codes:
+      0 — pass (or warn without --fail-on-warning)
+      1 — blocked (any error) / warn-with-fail-on-warning
+      2 — internal error (unknown venue, parse failure)
+    """
+    from panelforge_figures.manifest.venue_auditor import (
+        Venue,
+        VenueAuditorError,
+        audit_venue,
+        render_venue_audit_markdown,
+    )
+
+    try:
+        venue_enum = Venue(venue)
+    except ValueError:
+        click.echo(
+            click.style(
+                f"✗ unknown venue: {venue!r}; expected one of "
+                f"{[v.value for v in Venue]}",
+                fg="red",
+            ),
+            err=True,
+        )
+        click.get_current_context().exit(2)
+        return
+
+    fdir = figures_dir if figures_dir.exists() else None
+
+    try:
+        report = audit_venue(
+            manuscript_path,
+            venue=venue_enum,
+            figures_dir=fdir,
+            bib_path=bib_path,
+        )
+    except VenueAuditorError as exc:
+        click.echo(click.style(f"✗ venue auditor failed: {exc}", fg="red"), err=True)
+        click.get_current_context().exit(2)
+        return
+
+    if as_json:
+        payload = json.dumps(report.to_dict(), indent=2, default=str)
+    else:
+        payload = render_venue_audit_markdown(report)
+
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(payload, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"), err=True)
+    else:
+        click.echo(payload)
+
+    # ── Exit code ────────────────────────────────────────────────────────
+    if report.overall_verdict == "blocked":
+        click.get_current_context().exit(1)
+    elif fail_on_warning and report.overall_verdict == "needs_revision":
+        click.get_current_context().exit(1)
+
+
 if __name__ == "__main__":
     main()

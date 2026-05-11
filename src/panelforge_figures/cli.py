@@ -4007,5 +4007,198 @@ def lint_xrefs_cmd(
         click.get_current_context().exit(1)
 
 
+# ─────────────────────── E14: smart citation insertion ───────────────────────
+
+
+@main.group("cite")
+def cite_group() -> None:
+    """Citation suggestion + insertion commands.
+
+    The ``cite`` group reads cached Consensus.app paper records (produced
+    by E9-phase-1 / ``novelty-scout``) and proposes ``\\cite{...}``
+    insertions for claim sentences in the target manuscript. Default
+    mode is a non-destructive dry-run preview; pass ``--apply`` to
+    write the insertions and augment ``references.bib`` in place.
+    """
+
+
+@cite_group.command("suggest")
+@click.argument(
+    "manuscript_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--cache-dir",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Consensus cache dir (default: panelforge_workspace/.consensus_cache "
+         "under the manuscript's parent).",
+)
+@click.option("--min-similarity", type=float, default=0.6,
+              help="Minimum cosine similarity between cached query and claim "
+                   "sentence (default: 0.6).")
+@click.option(
+    "--bib-path",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Existing references.bib path for cite-key dedup "
+         "(default: manuscript_path.parent/references.bib).",
+)
+@click.option("--apply", "apply_changes", is_flag=True,
+              help="Apply suggestions in-place (default: dry-run preview).")
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Where to write the suggestions report (default: stdout).",
+)
+@click.option("--json", "as_json", is_flag=True,
+              help="Emit JSON instead of Markdown.")
+@click.option(
+    "--top-n",
+    type=int,
+    default=3,
+    help="Number of papers from the best-matching cached query to cite "
+         "(default: 3).",
+)
+def cite_suggest_cmd(
+    manuscript_path: Path,
+    cache_dir: Path | None,
+    min_similarity: float,
+    bib_path: Path | None,
+    apply_changes: bool,
+    output: Path | None,
+    as_json: bool,
+    top_n: int,
+) -> None:
+    """Suggest \\cite{} insertions for claim sentences from the Consensus cache.
+
+    Default mode is DRY-RUN — prints suggestions for review.
+    Pass ``--apply`` to insert citations + augment references.bib.
+    """
+    from panelforge_figures.manifest.citation_inserter import (
+        InserterError,
+        apply_citation_insertions,
+        render_suggestions_markdown,
+        suggest_citations_for_manuscript,
+    )
+
+    effective_bib = bib_path or (manuscript_path.parent / "references.bib")
+
+    try:
+        result = suggest_citations_for_manuscript(
+            manuscript_path,
+            cache_dir=cache_dir,
+            min_similarity=min_similarity,
+            existing_bib_path=effective_bib,
+            top_n_papers=top_n,
+        )
+    except InserterError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    backup_manuscript: Path | None = None
+    backup_bib: Path | None = None
+
+    if apply_changes and result.suggestions:
+        # Recompute backup paths *before* the apply pass so we can
+        # report them in the result. The helper picks the same paths
+        # because it checks file existence at call time.
+        try:
+            apply_citation_insertions(
+                manuscript_path,
+                list(result.suggestions),
+                list(result.new_bib_entries),
+                existing_bib_path=effective_bib,
+                backup=True,
+            )
+        except InserterError as exc:
+            click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+            click.get_current_context().exit(1)
+            return
+        # Find the actual backups (the helper picked the first
+        # non-conflicting names; we look up the latest .bak* files).
+        backup_manuscript = _latest_backup(manuscript_path)
+        backup_bib = _latest_backup(effective_bib) if effective_bib.exists() else None
+
+        from panelforge_figures.manifest.citation_inserter import (
+            CitationInsertionResult,
+        )
+        result = CitationInsertionResult(
+            manuscript_path=result.manuscript_path,
+            n_sentences_scanned=result.n_sentences_scanned,
+            n_suggestions=result.n_suggestions,
+            n_applied=len(result.suggestions),
+            new_bib_entries=result.new_bib_entries,
+            suggestions=result.suggestions,
+            backup_manuscript_path=backup_manuscript,
+            backup_bib_path=backup_bib,
+        )
+
+    if as_json:
+        payload: dict[str, Any] = {
+            "manuscript_path": str(result.manuscript_path),
+            "n_sentences_scanned": result.n_sentences_scanned,
+            "n_suggestions": result.n_suggestions,
+            "n_applied": result.n_applied,
+            "min_similarity": min_similarity,
+            "suggestions": [
+                {
+                    "sentence": s.sentence,
+                    "line_number": s.line_number,
+                    "char_offset": s.char_offset,
+                    "cite_keys": list(s.cite_keys),
+                    "confidence": s.confidence,
+                    "rationale": s.rationale,
+                }
+                for s in result.suggestions
+            ],
+            "new_bib_entries": [
+                {
+                    "entry_type": e.entry_type,
+                    "cite_key": e.cite_key,
+                    "fields": dict(e.fields),
+                }
+                for e in result.new_bib_entries
+            ],
+            "backup_manuscript_path": (
+                str(result.backup_manuscript_path)
+                if result.backup_manuscript_path else None
+            ),
+            "backup_bib_path": (
+                str(result.backup_bib_path)
+                if result.backup_bib_path else None
+            ),
+        }
+        text = json.dumps(payload, indent=2, default=str)
+    else:
+        text = render_suggestions_markdown(result)
+
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(text, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"))
+    else:
+        click.echo(text)
+
+
+def _latest_backup(path: Path) -> Path | None:
+    """Return the most recently-created ``.bak*`` sibling of ``path``.
+
+    Helper for the CLI to report which file the writer backed up to,
+    since the writer itself returns only the (modified) target paths.
+    """
+    parent = path.parent
+    stem_suffix = path.name + ".bak"
+    candidates = sorted(
+        (p for p in parent.glob(f"{stem_suffix}*") if p.is_file()),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
+
 if __name__ == "__main__":
     main()

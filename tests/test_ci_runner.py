@@ -564,12 +564,12 @@ def test_run_audit_venue_now_shipped() -> None:
     assert r.status == StepStatus.skipped
 
 
-def test_run_audit_bias_placeholder() -> None:
+def test_run_audit_bias_skips_when_no_figures_dir() -> None:
+    """E17 is shipped — without figures_dir, runner skips with a clear summary."""
     r = _run_audit_bias()
     assert r.step == CIAuditStep.audit_bias
     assert r.status == StepStatus.skipped
-    assert "E17" in r.summary
-    assert "not yet shipped" in r.summary
+    assert "no figures directory" in r.summary
 
 
 # --------------------------------------------------------------------------- #

@@ -12,7 +12,8 @@ Pipeline
 * ``lint-xrefs``                — cross-reference linter (requires manuscript)
 * ``checklist-{arrive,consort,stard,miqe}`` — reporting checklists
 * ``audit-venue``               — venue-specific audit (E16)
-* ``audit-bias``                — bias audit (E17; placeholder)
+* ``audit-bias``                — figure-bias audit (E17; structural,
+  metadata-driven)
 
 Each step lazy-imports its module so missing optional dependencies in
 unrelated chains do not propagate.  The overall verdict is the worst severity
@@ -74,7 +75,7 @@ class CIAuditStep(StrEnum):
     checklist_stard = "checklist-stard"
     checklist_miqe = "checklist-miqe"
     audit_venue = "audit-venue"           # E16
-    audit_bias = "audit-bias"             # E17 — placeholder
+    audit_bias = "audit-bias"             # E17 — figure-bias audit
 
 
 @dataclass(frozen=True)
@@ -612,12 +613,53 @@ def _run_audit_venue(
     )
 
 
-def _run_audit_bias(**_: Any) -> CIStepResult:
-    """E17 placeholder — bias audit not yet shipped."""
+def _run_audit_bias(
+    *,
+    figures_dir: Path | None = None,
+    skip_missing_inputs: bool = True,
+    **_: Any,
+) -> CIStepResult:
+    """Run E17 figure-bias auditor across rendered figures."""
+    from panelforge_figures.manifest.bias_auditor import audit_bias_across_directory
+
+    if figures_dir is None or not Path(figures_dir).exists():
+        if skip_missing_inputs:
+            return CIStepResult(
+                step=CIAuditStep.audit_bias,
+                status=StepStatus.skipped,
+                summary="no figures directory",
+            )
+        return CIStepResult(
+            step=CIAuditStep.audit_bias,
+            status=StepStatus.error,
+            summary="figures directory missing",
+            error_message=f"path not found: {figures_dir}",
+        )
+
+    report = audit_bias_across_directory(Path(figures_dir))
+    if report.overall_verdict == "honest":
+        status = StepStatus.pass_
+    elif report.overall_verdict == "needs_review":
+        status = StepStatus.warn
+    else:  # concerning
+        status = StepStatus.fail
+
+    details = tuple(
+        f"[{f.severity.value}] {f.figure_id}: {f.message}"
+        for f in report.findings[:10]
+    )
     return CIStepResult(
         step=CIAuditStep.audit_bias,
-        status=StepStatus.skipped,
-        summary="E17 not yet shipped; placeholder",
+        status=status,
+        n_errors=report.n_errors,
+        n_warnings=report.n_warnings,
+        n_info=report.n_info,
+        summary=(
+            f"verdict: {report.overall_verdict} · "
+            f"{report.n_figures_inspected} figures: "
+            f"{report.n_errors} errors, {report.n_warnings} warnings"
+        ),
+        details=details,
     )
 
 

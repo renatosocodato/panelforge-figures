@@ -76,6 +76,12 @@ class StatisticalContract:
     n_minimum_for_visualization: int | None = None
     refuses_when: tuple[str, ...] = ()
     max_missingness_fraction: float | None = None  # WARN above this
+    requires_ci: bool = False
+    """When ``True``, the figure-bias auditor (Elevation 17) treats omission
+    of confidence-interval fields in ``audit_findings`` as an honest-reporting
+    violation (severity = error). Backwards-compatible — existing recipes
+    default to ``False`` and continue to render unchanged. See
+    ``docs/spec_figure_bias_auditor.md`` §4.2."""
 
 
 # All-permissive default — the 392 untagged recipes all share this instance.

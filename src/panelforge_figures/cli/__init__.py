@@ -4507,6 +4507,89 @@ def audit_venue_cmd(
     elif fail_on_warning and report.overall_verdict == "needs_revision":
         click.get_current_context().exit(1)
 
+# ─────────────────────────── audit-bias (E17 — v3.12.0) ─────────────────
+
+
+@main.command("audit-bias")
+@click.argument(
+    "figures_dir",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=Path("panelforge_workspace/figures"),
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path for the Markdown report (default: stdout).",
+)
+@click.option(
+    "--json",
+    "as_json",
+    is_flag=True,
+    help="Emit machine-readable JSON instead of Markdown.",
+)
+@click.option(
+    "--fail-on-warning",
+    is_flag=True,
+    help="Treat warnings as failures (exit 1 when verdict is needs_review).",
+)
+def audit_bias_cmd(
+    figures_dir: Path,
+    output: Path | None,
+    as_json: bool,
+    fail_on_warning: bool,
+) -> None:
+    """Audit rendered figures for visualization-bias patterns.
+
+    Walks ``FIGURES_DIR`` for ``*.provenance.json`` sidecars and runs the
+    Elevation 17 structural-bias checks against each one (truncated
+    axes, dual-axes, log/linear scale mismatches, missing CIs, missing
+    sample-size annotations on underpowered figures, 3D embellishments
+    on 2D data, p-values without effect sizes, colour-blind-unsafe
+    colormaps).
+
+    Exit codes:
+      0 — verdict is ``honest`` (or ``needs_review`` without --fail-on-warning)
+      1 — verdict is ``concerning`` (or ``needs_review`` with --fail-on-warning)
+      2 — internal auditor error (bad path, malformed sidecar set)
+    """
+    import json as _json
+
+    from panelforge_figures.manifest.bias_auditor import (
+        BiasAuditorError,
+        audit_bias_across_directory,
+        render_bias_audit_markdown,
+    )
+
+    try:
+        report = audit_bias_across_directory(figures_dir)
+    except BiasAuditorError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(2)
+        return
+    except Exception as exc:  # noqa: BLE001 — top-level CLI guard
+        click.echo(click.style(f"✗ bias auditor failed: {exc}", fg="red"), err=True)
+        click.get_current_context().exit(2)
+        return
+
+    if as_json:
+        rendered = _json.dumps(report.to_dict(), indent=2, default=str)
+    else:
+        rendered = render_bias_audit_markdown(report)
+
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"), err=True)
+    else:
+        click.echo(rendered)
+
+    if report.overall_verdict == "concerning":
+        click.get_current_context().exit(1)
+    elif fail_on_warning and report.overall_verdict == "needs_review":
+        click.get_current_context().exit(1)
+
+
 
 if __name__ == "__main__":
     main()

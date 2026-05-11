@@ -349,7 +349,7 @@ inference untouched.
 - `src/panelforge_figures/manifest/scoring.py` — Step 4
 - `src/panelforge_figures/manifest/data_bridge.py` — Step 5
 - `src/panelforge_figures/manifest/render_loop.py` — Step 6
-- `src/panelforge_figures/cli.py` — `figures` Click entry point
+- `src/panelforge_figures/cli/__init__.py` — `figures` Click entry point
 - `tests/fixtures/sample_project/` — end-to-end test fixture
 
 ---

@@ -254,7 +254,7 @@ EXPECTED_RELATIVE_PATHS = (
     "src/panelforge_figures/manifest/project_scan.py",
     "src/panelforge_figures/manifest/intake.py",
     "src/panelforge_figures/manifest/scoring.py",
-    "src/panelforge_figures/cli.py",
+    "src/panelforge_figures/cli/__init__.py",
     "tests/fixtures/sample_project/",
 )
 

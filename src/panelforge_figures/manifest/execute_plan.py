@@ -43,6 +43,19 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .. import __version__ as _PF_VERSION
+from .render_cache import (
+    CacheStatus,
+    check_staleness,
+    compute_contract_sha,
+    compute_data_sha,
+    compute_recipe_sha,
+    load_cache,
+    save_cache,
+    summarize_cache_state,
+    update_cache_entry,
+)
+
 __all__ = [
     "ExecutionError",
     "ExecutionResult",
@@ -66,6 +79,7 @@ class PanelExecutionStatus(str):
     rendered = "rendered"
     scaffolded_then_rendered = "scaffolded_then_rendered"
     skipped_gap = "skipped_gap"
+    cached = "cached"
     failed = "failed"
 
 
@@ -127,6 +141,8 @@ class ExecutionResult:
     manuscript_path: Path | None
     panels_status: tuple[tuple[str, str, str], ...]
     notes: tuple[str, ...] = field(default_factory=tuple)
+    n_panels_cached: int = 0
+    cache_summary: dict[str, int] = field(default_factory=dict)
 
 
 # ─────────────────────────── plan loading ───────────────────────────────
@@ -232,6 +248,75 @@ def _scaffold_one_gap(
         return False, f"scaffold-error: {type(exc).__name__}: {exc}"
 
     return True, f"scaffolded {scaffold.recipe_module_path.name}"
+
+
+def _resolve_recipe_module_path(full_name: str) -> Path | None:
+    """Best-effort lookup of the recipe ``.py`` file for ``full_name``.
+
+    Used by the cache to hash recipe source bytes.  Falls back to
+    ``None`` for plugin / built-in / source-less recipes, which the
+    cache treats as "no recipe SHA" (an empty string).
+    """
+    if not full_name:
+        return None
+    try:
+        import inspect
+
+        from panelforge_figures.core.contract import (
+            ensure_all_imported,
+            list_recipes,
+        )
+
+        ensure_all_imported()
+        for entry in list_recipes():
+            if getattr(entry, "full_name", None) == full_name:
+                try:
+                    return Path(inspect.getfile(entry.render))
+                except (TypeError, OSError, ValueError):
+                    return None
+    except Exception:  # noqa: BLE001 — best-effort
+        return None
+    return None
+
+
+def _panel_data_paths(panel: Any) -> list[Path]:
+    """Collect every data file referenced by ``panel`` for SHA computation.
+
+    Handles both single-source (``data_file`` / ``data_path``) and the
+    multi-source (``data_file_per_field``) layouts.  Returns an empty
+    list when the panel has no data wiring.
+    """
+    paths: list[Path] = []
+    primary = _panel_attr(panel, "data_file") or _panel_attr(panel, "data_path")
+    if primary:
+        paths.append(Path(primary))
+    per_field = _panel_attr(panel, "data_file_per_field", {}) or {}
+    for v in per_field.values():
+        try:
+            paths.append(Path(v))
+        except TypeError:
+            continue
+    return paths
+
+
+def _panel_contract_dict(panel: Any) -> dict[str, Any]:
+    """Build a canonical contract-like dict for SHA computation.
+
+    The "contract" the cache cares about is the structural shape of the
+    panel's wiring: full_name + column_mapping + data_file_ids.  We do
+    NOT rebuild the Pydantic input contract (that'd require loading
+    data and instantiating the recipe) — we just hash the panel-level
+    declarations, which is sufficient to detect any user-edit that
+    would change the render output.
+    """
+    column_mapping = _panel_attr(panel, "column_mapping", {}) or {}
+    per_field = _panel_attr(panel, "data_file_per_field", {}) or {}
+    return {
+        "full_name": str(_panel_attr(panel, "recipe_full_name", "") or ""),
+        "column_mapping": dict(column_mapping),
+        "data_file_per_field": {k: str(v) for k, v in per_field.items()},
+        "role": str(_panel_attr(panel, "role", "primary") or "primary"),
+    }
 
 
 def _render_one_panel(
@@ -532,6 +617,7 @@ def execute_plan(
     manuscript_venue: str = "cell",
     manuscript_format: str = "latex",
     manuscript_policy: str = "preserve",
+    force: bool = False,
 ) -> ExecutionResult:
     """Execute a ``figures_plan.yaml`` end-to-end.
 
@@ -556,6 +642,11 @@ def execute_plan(
       inserts new figure blocks, appends new figures, etc.).
     * ``"propose"`` — same as ``update`` but the modified text is
       written to ``<manuscript>.suggested.<ext>`` instead of in place.
+
+    ``force`` (E11) bypasses the render cache.  When ``True`` every
+    panel re-renders regardless of cache freshness; the cache is still
+    updated to reflect the new SHAs, so the next un-forced run is fast
+    again.  Defaults to ``False`` — the cache is the v3.5.0 baseline.
     """
     plan_path = Path(plan_path)
     plan = _load_plan(plan_path)
@@ -575,6 +666,8 @@ def execute_plan(
             manuscript_path=None,
             panels_status=(),
             notes=("plan contained zero panels — nothing to execute",),
+            n_panels_cached=0,
+            cache_summary={},
         )
 
     workspace = project_root / "panelforge_workspace"
@@ -586,6 +679,15 @@ def execute_plan(
     n_rendered = 0
     n_scaffolded = 0
     n_captions = 0
+    n_cached = 0
+
+    # ── Cache bootstrap (E11) ────────────────────────────────────────────
+    # The cache is loaded once at the start of Phase 2 and saved once
+    # at the end.  Intra-loop save would be defensive against crashes
+    # but adds I/O; we instead rely on the atomic write to be all-or-
+    # nothing across the full pass.
+    cache = load_cache(project_root)
+    panel_states: dict[str, CacheStatus] = {}
 
     # ── Phase 1 + 2: scaffold gaps then render every panel ────────────
     rendered_paths: dict[str, Path] = {}
@@ -620,6 +722,55 @@ def execute_plan(
             statuses.append((pid, PanelExecutionStatus.skipped_gap, label))
             continue
 
+        # ── E11 cache check ──────────────────────────────────────────
+        full_name = _panel_attr(panel, "recipe_full_name") or ""
+        if not full_name:
+            modality = _panel_attr(panel, "modality")
+            recipe_name = _panel_attr(panel, "recipe_name")
+            if modality and recipe_name:
+                full_name = f"{modality}.{recipe_name}"
+
+        recipe_module_path = _resolve_recipe_module_path(full_name)
+        current_recipe_sha = (
+            compute_recipe_sha(recipe_module_path)
+            if recipe_module_path is not None
+            else ""
+        )
+        current_contract_sha = compute_contract_sha(_panel_contract_dict(panel))
+        current_data_sha = compute_data_sha(_panel_data_paths(panel))
+
+        # Figure out a candidate output path so check_staleness can flag
+        # a deleted output.  Render output naming is owned by render_loop;
+        # we look at the cached entry (the renderer wrote the actual file
+        # name on the previous successful render).
+        cached_entry = cache.get(pid)
+        candidate_output: Path | None = None
+        if cached_entry is not None and cached_entry.output_path:
+            candidate_output = Path(cached_entry.output_path)
+
+        status = check_staleness(
+            cache,
+            panel_id=pid,
+            current_recipe_sha=current_recipe_sha,
+            current_contract_sha=current_contract_sha,
+            current_data_sha=current_data_sha,
+            output_path=candidate_output,
+        )
+        panel_states[pid] = status
+
+        if status == CacheStatus.fresh and not force and not scaffolded_here:
+            # Cache hit: skip the render, surface the cached output path.
+            n_cached += 1
+            statuses.append(
+                (pid, PanelExecutionStatus.cached,
+                 f"cache hit ({cached_entry.output_path})"
+                 if cached_entry is not None
+                 else "cache hit")
+            )
+            if cached_entry is not None and cached_entry.output_path:
+                rendered_paths[pid] = Path(cached_entry.output_path)
+            continue
+
         ok_r, msg_r, path_r = _render_one_panel(
             panel, project_root=project_root,
             out_dir=figures_dir, notes=notes,
@@ -634,8 +785,44 @@ def execute_plan(
             statuses.append((pid, status_code, msg_r))
             if path_r is not None:
                 rendered_paths[pid] = path_r
+                # Record this successful render in the cache.
+                try:
+                    note_label = (
+                        "rendered"
+                        if status in (CacheStatus.missing, CacheStatus.fresh)
+                        else f"re-rendered: {status.value}"
+                    )
+                    if force:
+                        note_label = "rendered (--force)"
+                    update_cache_entry(
+                        cache,
+                        panel_id=pid,
+                        figure_id=str(_panel_attr(panel, "figure_id", "") or ""),
+                        recipe_full_name=str(full_name),
+                        recipe_sha=current_recipe_sha,
+                        contract_sha=current_contract_sha,
+                        data_sha=current_data_sha,
+                        output_path=path_r,
+                        panelforge_version=_PF_VERSION,
+                        notes=(note_label,),
+                    )
+                except Exception as exc:  # noqa: BLE001 — cache is best-effort
+                    notes.append(f"cache update failed for {pid}: {exc}")
         else:
+            # Do NOT update the cache on render failure — the previous
+            # cached entry (if any) stays valid; the next attempt will
+            # see the same staleness and retry.
             statuses.append((pid, PanelExecutionStatus.failed, msg_r))
+
+    # ── Persist cache (E11) ──────────────────────────────────────────────
+    if render_figures:
+        try:
+            saved_path = save_cache(cache, project_root)
+            notes.append(f"render cache → {saved_path}")
+        except Exception as exc:  # noqa: BLE001 — cache write is best-effort
+            notes.append(f"render cache save failed: {exc}")
+
+    cache_summary = summarize_cache_state(cache, panel_states)
 
     # ── Phase 3: caption drafts for everything we successfully rendered ─
     if draft_captions:
@@ -689,4 +876,6 @@ def execute_plan(
         manuscript_path=manuscript_path,
         panels_status=tuple(statuses),
         notes=tuple(notes),
+        n_panels_cached=n_cached,
+        cache_summary=cache_summary,
     )

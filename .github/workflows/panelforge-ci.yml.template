@@ -1,0 +1,35 @@
+# Copy this file into your manuscript repo at:
+#     .github/workflows/panelforge-ci.yml
+#
+# This template gates every PR on the panelforge-figures audit chain.
+# Reports appear as a PR comment + a downloadable artifact.
+
+name: panelforge-figures audit
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/**"
+      - "panelforge_workspace/**"
+      - "figures_plan.yaml"
+      - "data/**"
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write    # required for the PR comment
+    steps:
+      - uses: actions/checkout@v4
+      - uses: renatosocodato/panelforge-figures@v3.10.0
+        with:
+          project-root: .
+          manuscript: manuscript/main.tex
+          venue: cell             # nature | cell | nejm | biorxiv | science | plain
+          steps: scout,verify-claims,lint-xrefs,checklist-arrive
+          fail-on-warning: false
+          panelforge-version: 3.10.0
+          comment-on-pr: true

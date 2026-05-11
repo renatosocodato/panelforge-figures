@@ -4590,6 +4590,99 @@ def audit_bias_cmd(
         click.get_current_context().exit(1)
 
 
+# ───────────────────────── status (E20 — v3.14.0) ─────────────────────────
+
+
+@main.command("status")
+@click.option(
+    "--project-root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=Path("."),
+    help="Project root (defaults to CWD).",
+)
+@click.option(
+    "--manuscript",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Override manuscript path (auto-detected otherwise).",
+)
+@click.option(
+    "--figures-dir",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Override figures directory (defaults to panelforge_workspace/figures).",
+)
+@click.option(
+    "--format",
+    "fmt",
+    type=click.Choice(["text", "json", "html", "markdown"]),
+    default="text",
+    help="Output format (default: text).",
+)
+@click.option("--no-color", is_flag=True, help="Disable ANSI colour in text output.")
+@click.option("--verbose", "-v", "verbose_flag", is_flag=True,
+              help="Show secondary detail lines.")
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Write output to FILE instead of stdout.",
+)
+def status_cmd(
+    project_root: Path,
+    manuscript: Path | None,
+    figures_dir: Path | None,
+    fmt: str,
+    no_color: bool,
+    verbose_flag: bool,
+    output: Path | None,
+) -> None:
+    """Single-screen dashboard of project + cache + provenance + audit state.
+
+    Designed to fit a typical 24-line terminal.  ``--format json`` emits
+    structured output for CI; ``--format html`` is suitable for docs-site
+    embedding; ``--format markdown`` produces a GitHub-task-list comment.
+    """
+    import json as _json
+
+    from panelforge_figures.manifest.status_dashboard import (
+        StatusLevel,
+        collect_status,
+        render_dashboard_html,
+        render_dashboard_markdown,
+        render_dashboard_text,
+    )
+
+    dashboard = collect_status(
+        project_root,
+        manuscript_path=manuscript,
+        figures_dir=figures_dir,
+        verbose=verbose_flag,
+    )
+
+    if fmt == "json":
+        text = _json.dumps(dashboard.to_dict(), indent=2, default=str)
+    elif fmt == "html":
+        text = render_dashboard_html(dashboard)
+    elif fmt == "markdown":
+        text = render_dashboard_markdown(dashboard)
+    else:
+        text = render_dashboard_text(
+            dashboard, color=not no_color, verbose=verbose_flag
+        )
+
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(text, encoding="utf-8")
+        click.echo(click.style(f"✓ wrote {output}", fg="green"), err=True)
+    else:
+        click.echo(text)
+
+    # Exit code: only fail when explicit FAILs are surfaced.
+    if dashboard.overall_level == StatusLevel.fail:
+        click.get_current_context().exit(1)
+
+
 
 if __name__ == "__main__":
     main()

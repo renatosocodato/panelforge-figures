@@ -1,5 +1,5 @@
 """panelforge-figures — modality-first publication-grade figure system."""
 
-__version__ = "3.13.0"
+__version__ = "3.14.0"
 
 __all__ = ["__version__"]

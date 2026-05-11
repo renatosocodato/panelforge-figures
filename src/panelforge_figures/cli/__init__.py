@@ -10,17 +10,17 @@ from typing import Any
 
 import click
 
-from . import __version__
-from .adapters import list_adapters
-from .core.contract import (
+from .. import __version__
+from ..adapters import list_adapters
+from ..core.contract import (
     ensure_all_imported,
     get_recipe,
     list_recipes,
     modality_description,
     registry_counts,
 )
-from .core.palette import list_palettes
-from .manifest import (
+from ..core.palette import list_palettes
+from ..manifest import (
     build_catalog,
     build_index,
     catalog_fingerprint,
@@ -144,7 +144,7 @@ def list_adapters_cmd() -> None:
 
 @main.command("list-themes")
 def list_themes_cmd() -> None:
-    from .themes import list_themes
+    from ..themes import list_themes
     for name in list_themes():
         click.echo(name)
 
@@ -198,7 +198,7 @@ def gallery() -> None:
 @gallery.command("regenerate")
 @click.option("--out", type=click.Path(path_type=Path), default=Path("docs/gallery"))
 def gallery_regenerate(out: Path) -> None:
-    from .gallery.generator import regenerate_gallery
+    from ..gallery.generator import regenerate_gallery
     paths = regenerate_gallery(out)
     click.echo(f"regenerated {len(paths)} gallery PNGs under {out}")
 
@@ -207,7 +207,7 @@ def gallery_regenerate(out: Path) -> None:
 @click.option("--root", type=click.Path(path_type=Path), default=Path("docs/gallery"))
 @click.option("--threshold", type=float, default=0.02, help="L1 diff threshold (0-1).")
 def gallery_diff(root: Path, threshold: float) -> None:
-    from .gallery.generator import diff_gallery
+    from ..gallery.generator import diff_gallery
     diffs = diff_gallery(root, threshold=threshold)
     if not diffs:
         click.echo("✓ no gallery drift above threshold")
@@ -367,8 +367,8 @@ def intake_cmd(out_path: Path) -> None:
     Writes the resulting ProjectProfile to disk.  Use this profile
     with `figures generate` (Wave 3) to produce a ranked shortlist.
     """
-    from .core.contract import list_modalities
-    from .manifest import run_intake_interactive
+    from ..core.contract import list_modalities
+    from ..manifest import run_intake_interactive
     ensure_all_imported()
     available = tuple(list_modalities())
     profile = run_intake_interactive(
@@ -429,8 +429,8 @@ def profile_scan_cmd(
     extract visual signals from the reference image.  See
     ``docs/spec_vision_input.md`` for the full design.
     """
-    from .core.contract import list_modalities
-    from .manifest import (
+    from ..core.contract import list_modalities
+    from ..manifest import (
         run_intake_interactive,
         scan_project,
         to_intake_pre_filled,
@@ -447,11 +447,11 @@ def profile_scan_cmd(
 
     # Vision augmentation — Sprint 2C.
     if reference_figure is not None:
-        from .manifest.vision_input import (
+        from ..manifest.vision_input import (
             VisionUnavailableError,
             vision_scan_reference_figure,
         )
-        from .manifest.vision_input import (
+        from ..manifest.vision_input import (
             to_intake_pre_filled as to_intake_pre_filled_from_vision,
         )
         click.echo(
@@ -483,7 +483,7 @@ def profile_scan_cmd(
                 # threshold; existing text-scan answers are preserved
                 # (they have stronger confidence semantics from §3 of
                 # the spec).
-                from .manifest import IntakeAnswer
+                from ..manifest import IntakeAnswer
                 field_to_qid = {
                     "factorial_design": 1,
                     "equivalence_claims": 2,
@@ -560,7 +560,7 @@ def refine_cmd(
 
         figures refine figures/forest_v3.pdf "make y-axis log-scale"
     """
-    from .manifest.vision_input import VisionUnavailableError, refine_figure
+    from ..manifest.vision_input import VisionUnavailableError, refine_figure
 
     try:
         outcome = refine_figure(
@@ -599,7 +599,7 @@ def vision_explain_cmd(image_path: Path) -> None:
     not change any contract.  Useful for sanity-checking what vision
     sees in a figure before driving downstream refinement.
     """
-    from .manifest.vision_input import (
+    from ..manifest.vision_input import (
         VisionUnavailableError,
         vision_scan_reference_figure,
     )
@@ -649,7 +649,7 @@ def bridge_cmd(
     `data/`, runs Pass-1 exact → Pass-2 fuzzy → Pass-3 LLM (gated on
     ANTHROPIC_API_KEY env var; opt out with --no-llm).
     """
-    from .manifest import (
+    from ..manifest import (
         ProjectProfile,
         bind_shortlist_to_data,
         build_index,
@@ -738,7 +738,7 @@ def generate_cmd(
     no_provenance: bool,
 ) -> None:
     """Render bound recipes; write figures + RENDER_REPORT.md."""
-    from .manifest import (
+    from ..manifest import (
         compute_fully_bound,
         discover_data_files,
         load_bindings_cache,
@@ -756,7 +756,7 @@ def generate_cmd(
     # Reconstruct RecipeBindings (canonical data_bridge shape).
     # `fully_bound` MUST be derived via `compute_fully_bound` so the CLI
     # cannot diverge from `bind_recipe_to_data`'s definition (DEFECT-A7).
-    from .manifest.data_bridge import RecipeBinding as _RB
+    from ..manifest.data_bridge import RecipeBinding as _RB
     rbs = []
     for fn, fbs in by_recipe.items():
         all_bound = compute_fully_bound(fbs)
@@ -875,7 +875,7 @@ def audit_recipe_cmd(
     """
     import pandas as pd
     try:
-        from .manifest.statistical_audit import audit_recipe_against_data
+        from ..manifest.statistical_audit import audit_recipe_against_data
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"statistical_audit module not available: {exc}; "
@@ -954,14 +954,14 @@ def audit_shortlist_cmd(
     """
     import pandas as pd
     try:
-        from .manifest.statistical_audit import audit_recipe_against_data
+        from ..manifest.statistical_audit import audit_recipe_against_data
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"statistical_audit module not available: {exc}; "
             "Build-A's `manifest/statistical_audit.py` has not landed yet."
         ) from exc
 
-    from .manifest import load_bindings_cache
+    from ..manifest import load_bindings_cache
 
     if not profile_path.exists():
         raise click.ClickException(
@@ -1089,8 +1089,8 @@ def audit_data_class_cmd(data_dir: Path, strict: bool) -> None:
       * 2 — at least one HIGH-risk column found while
         ``data_class != clinical`` (or any WARN under ``--strict``).
     """
-    from .safety import DataClass, get_data_class
-    from .safety.phi_pattern_scanner import scan_columns_for_phi
+    from ..safety import DataClass, get_data_class
+    from ..safety.phi_pattern_scanner import scan_columns_for_phi
 
     cls = get_data_class()
     click.echo(f"Current data_class: {cls.value}")
@@ -1170,7 +1170,7 @@ def config_group() -> None:
 @config_group.command("show")
 def config_show_cmd() -> None:
     """Print current ``data_class`` and resolved policy."""
-    from .safety import get_data_class, get_policy
+    from ..safety import get_data_class, get_policy
 
     cls = get_data_class()
     policy = get_policy()
@@ -1191,7 +1191,7 @@ def config_set_cmd(key: str, value: str) -> None:
     Currently only ``data_class`` is supported.  Future overrides
     (per spec §3) will be wired in subsequent sprints.
     """
-    from .safety import DataClass, DataClassError, set_data_class
+    from ..safety import DataClass, DataClassError, set_data_class
 
     if key == "data_class":
         try:
@@ -1277,7 +1277,7 @@ def provenance_show(figure_path: Path) -> None:
 def provenance_verify(figure_path: Path) -> None:
     """Recompute all hashes; report drift in figure / data / recipe."""
     try:
-        from .manifest.provenance import verify_provenance
+        from ..manifest.provenance import verify_provenance
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"provenance module not available: {exc}; "
@@ -1314,7 +1314,7 @@ def provenance_verify(figure_path: Path) -> None:
 def provenance_bundle(figure_path: Path, out_path: Path | None) -> None:
     """Tarball figure + provenance + referenced data files + recipe module."""
     try:
-        from .manifest.provenance import bundle_provenance
+        from ..manifest.provenance import bundle_provenance
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"provenance module not available: {exc}; "
@@ -1340,7 +1340,7 @@ def provenance_bundle(figure_path: Path, out_path: Path | None) -> None:
 def provenance_diff(figure_a: Path, figure_b: Path) -> None:
     """Compare two figure provenance sidecars; flag what changed."""
     try:
-        from .manifest.provenance import diff_provenance
+        from ..manifest.provenance import diff_provenance
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"provenance module not available: {exc}; "
@@ -1384,7 +1384,7 @@ def _caption_style_choices() -> list[str]:
     Imported lazily so the CLI module does not pull caption.py at
     interpreter start (it has no other consumers in v2.5.0).
     """
-    from .manifest.caption import CaptionStyle
+    from ..manifest.caption import CaptionStyle
 
     return [s.value for s in CaptionStyle]
 
@@ -1419,7 +1419,7 @@ def caption_cmd(
     output: Path | None,
 ) -> None:
     """Draft a figure caption from a provenance.json sidecar."""
-    from .manifest.caption import (
+    from ..manifest.caption import (
         CaptionError,
         CaptionStyle,
         draft_caption_from_provenance,
@@ -1470,7 +1470,7 @@ def compose_cmd(yaml_path: Path, out_dir: Path) -> None:
     Sprint 1C — v1.9.0.  See `docs/spec_composition_layer.md`.
     """
     try:
-        from .manifest import render_figure_yaml
+        from ..manifest import render_figure_yaml
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"figure_composition module not available: {exc}; "
@@ -1496,7 +1496,7 @@ def compose_all_cmd(figures_dir: Path) -> None:
     every spec composes; exit code 1 if no specs are found.
     """
     try:
-        from .manifest import render_figure_yaml
+        from ..manifest import render_figure_yaml
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"figure_composition module not available: {exc}; "
@@ -1532,7 +1532,7 @@ def compose_validate_cmd(yaml_path: Path) -> None:
     line per problem on stderr).
     """
     try:
-        from .manifest import validate_figure_yaml
+        from ..manifest import validate_figure_yaml
     except ImportError as exc:  # pragma: no cover — Build-A scaffold guard
         raise click.ClickException(
             f"figure_composition module not available: {exc}; "
@@ -1569,7 +1569,7 @@ def plugins_group() -> None:
 @plugins_group.command("list")
 def plugins_list_cmd() -> None:
     """List all discovered plugins (entry-points + directory)."""
-    from .plugins import discover_all_plugins
+    from ..plugins import discover_all_plugins
 
     plugins = discover_all_plugins()
     if not plugins:
@@ -1588,7 +1588,7 @@ def plugins_list_cmd() -> None:
 @click.argument("plugin_name")
 def plugins_describe_cmd(plugin_name: str) -> None:
     """Show details about a specific plugin."""
-    from .plugins import discover_all_plugins
+    from ..plugins import discover_all_plugins
 
     plugins = {p.name: p for p in discover_all_plugins()}
     if plugin_name not in plugins:
@@ -1633,7 +1633,7 @@ def _format_last_used(dt: Any) -> str:
               help="Override the registry path (default: ~/.config/panelforge/projects.yaml).")
 def projects_list_cmd(config_path: Path | None) -> None:
     """Print a table of registered projects with last-used + status."""
-    from .projects import load_registry
+    from ..projects import load_registry
 
     registry = load_registry(config_path)
     if not registry.projects:
@@ -1687,7 +1687,7 @@ def projects_register_cmd(path: Path, project_id: str | None,
     """Add PATH to the registry (PATH defaults to the current directory)."""
     from datetime import datetime
 
-    from .projects import (
+    from ..projects import (
         ProjectIdCollision,
         ProjectPathMissing,
         load_registry,
@@ -1733,7 +1733,7 @@ def projects_register_cmd(path: Path, project_id: str | None,
               help="Override the registry path.")
 def projects_switch_cmd(project_id: str, config_path: Path | None) -> None:
     """Set the default project to PROJECT_ID and warm-load its workspace."""
-    from .projects import ProjectPathMissing, switch_default
+    from ..projects import ProjectPathMissing, switch_default
 
     try:
         entry = switch_default(project_id, config_path=config_path)
@@ -1755,7 +1755,7 @@ def projects_switch_cmd(project_id: str, config_path: Path | None) -> None:
               help="Override the registry path.")
 def projects_current_cmd(config_path: Path | None) -> None:
     """Print the active project + key metadata."""
-    from .projects import load_registry
+    from ..projects import load_registry
 
     registry = load_registry(config_path)
     if not registry.default_project or registry.default_project not in registry.projects:
@@ -1777,8 +1777,8 @@ def projects_current_cmd(config_path: Path | None) -> None:
               help="Override the registry path.")
 def projects_diff_cmd(a_id: str, b_id: str, config_path: Path | None) -> None:
     """Recipe-overlap analysis between two registered projects."""
-    from .projects import load_registry
-    from .projects.portfolio import diff_projects
+    from ..projects import load_registry
+    from ..projects.portfolio import diff_projects
 
     registry = load_registry(config_path)
     if a_id not in registry.projects:
@@ -1821,8 +1821,8 @@ def projects_diff_cmd(a_id: str, b_id: str, config_path: Path | None) -> None:
               help="Override the registry path.")
 def projects_portfolio_cmd(png_path: Path | None, config_path: Path | None) -> None:
     """Portfolio summary across every registered project."""
-    from .projects import load_registry
-    from .projects.portfolio import (
+    from ..projects import load_registry
+    from ..projects.portfolio import (
         aggregate_portfolio,
         render_heatmap_png,
         render_heatmap_terminal,
@@ -1858,7 +1858,7 @@ def projects_portfolio_cmd(png_path: Path | None, config_path: Path | None) -> N
               help="Override the registry path.")
 def projects_unregister_cmd(project_id: str, config_path: Path | None) -> None:
     """Remove PROJECT_ID from the registry; never deletes project files."""
-    from .projects import unregister
+    from ..projects import unregister
 
     try:
         unregister(project_id, config_path=config_path)
@@ -1874,7 +1874,7 @@ def projects_unregister_cmd(project_id: str, config_path: Path | None) -> None:
               help="Override the registry path.")
 def projects_validate_cmd(yes: bool, config_path: Path | None) -> None:
     """Walk the registry, drop entries whose path no longer exists."""
-    from .projects import load_registry, validate_registry
+    from ..projects import load_registry, validate_registry
 
     registry = load_registry(config_path)
     stale = [
@@ -1924,7 +1924,7 @@ def telemetry_group() -> None:
 )
 def telemetry_status_cmd(project_root: Path) -> None:
     """Print on/off + log location + row count."""
-    from .manifest.telemetry import (
+    from ..manifest.telemetry import (
         is_telemetry_enabled,
         telemetry_log_path,
     )
@@ -1978,7 +1978,7 @@ def telemetry_export_cmd(
 
     The file is the user's to ship — panelforge does NOT upload it.
     """
-    from .manifest.telemetry import (
+    from ..manifest.telemetry import (
         TelemetryError,
         export_telemetry,
         is_telemetry_enabled,
@@ -2032,7 +2032,7 @@ def pick_cmd(
     are ambiguous and ``--session-id`` is not supplied.  See
     ``docs/spec_active_learning.md`` §2.
     """
-    from .manifest.telemetry import TelemetryError, set_user_pick
+    from ..manifest.telemetry import TelemetryError, set_user_pick
 
     try:
         set_user_pick(project_root, full_name, session_id=session_id)
@@ -2079,7 +2079,7 @@ def suggest_weights_cmd(
     new ``WEIGHTS_HISTORY`` entry.  See ``docs/spec_active_learning.md``
     §5.
     """
-    from .manifest.weight_calibration import (
+    from ..manifest.weight_calibration import (
         CalibrationInput,
         load_telemetry_rows,
         suggest_weights,
@@ -2375,7 +2375,7 @@ def mcp_serve_cmd(
     messages go to stderr via ``click.echo(..., err=True)``.
     """
     # Imports are lazy so the rest of the CLI works without the [mcp] extra.
-    from .mcp import MCPServerConfig, MCPUnavailableError, serve_stdio
+    from ..mcp import MCPServerConfig, MCPUnavailableError, serve_stdio
 
     config = MCPServerConfig(
         expose_recipes=not no_recipes,
@@ -2505,7 +2505,7 @@ def author_recipe_cmd(
 
     The author refines the rendering body; everything else is wired up.
     """
-    from .manifest.recipe_authoring import (
+    from ..manifest.recipe_authoring import (
         RecipeAuthoringError,
         render_demo_to_gallery,
         scaffold_recipe,
@@ -2563,8 +2563,8 @@ def align_manuscript_cmd(
     """
     import json as _json
 
-    from .core.contract import ensure_all_imported, list_recipes
-    from .manifest.manuscript_alignment import (
+    from ..core.contract import ensure_all_imported, list_recipes
+    from ..manifest.manuscript_alignment import (
         AlignmentBackend,
         compute_alignment_scores,
         score_to_dict,
@@ -2616,7 +2616,7 @@ def recommend_cmd(
     """
     import json as _json
 
-    from .manifest.family_recommender import (
+    from ..manifest.family_recommender import (
         RecommenderError,
         detect_recipe_gaps,
         profile_data,
@@ -2750,13 +2750,13 @@ def fill_gap_cmd(
     then invokes E6's ``scaffold_recipe`` + ``write_scaffold`` +
     ``render_demo_to_gallery``.
     """
-    from .manifest.family_recommender import (
+    from ..manifest.family_recommender import (
         RecommenderError,
         detect_recipe_gaps,
         profile_data,
         recommend_families,
     )
-    from .manifest.recipe_authoring import (
+    from ..manifest.recipe_authoring import (
         RecipeAuthoringError,
         render_demo_to_gallery,
         scaffold_recipe,
@@ -3047,6 +3047,11 @@ def novelty_scout_cmd(
     help="What to do when an existing manuscript is found (E10).",
 )
 @click.option("--json", "as_json", is_flag=True)
+@click.option(
+    "--interactive",
+    is_flag=True,
+    help="Open interactive TUI (requires panelforge-figures[tui]).",
+)
 def scout_cmd(
     project_root: Path,
     max_figures: int,
@@ -3057,8 +3062,26 @@ def scout_cmd(
     report_out: Path | None,
     manuscript_policy: str,
     as_json: bool,
+    interactive: bool,
 ) -> None:
     """Walk PROJECT_ROOT, propose a multi-figure narrative plan, surface gaps + novelty."""
+    if interactive:
+        from .tui_scout import InteractiveScoutError, run_interactive_scout
+        try:
+            out = run_interactive_scout(
+                project_root,
+                max_figures=max_figures,
+                venue=venue,
+                target_novelty=target_novelty,
+                use_mock_novelty=mock_novelty,
+                plan_out=plan_out,
+            )
+        except InteractiveScoutError as exc:
+            click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+            click.get_current_context().exit(1)
+            return
+        click.echo(click.style(f"\n✓ interactive session saved → {out}", fg="green"))
+        return
     import json as _json
 
     from panelforge_figures.manifest.scout import (
@@ -3973,7 +3996,7 @@ def lint_xrefs_cmd(
     """Cross-reference linter: orphan refs/figures, missing captions, dead paths."""
     import json as _json
 
-    from .manifest.xref_linter import (
+    from ..manifest.xref_linter import (
         LintError,
         lint_xrefs,
         render_lint_report_markdown,

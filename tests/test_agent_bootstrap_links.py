@@ -23,7 +23,7 @@ EXPECTED_RELATIVE_PATHS = (
     "docs/recipes_index.schema.json",
     ".github/workflows/ci.yml",
     "src/panelforge_figures/manifest/catalog.py",
-    "src/panelforge_figures/cli.py",
+    "src/panelforge_figures/cli/__init__.py",
 )
 
 

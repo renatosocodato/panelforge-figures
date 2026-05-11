@@ -91,7 +91,7 @@ After sparse checkout, install the package locally (`pip install -e .`) and rend
 - `docs/recipes_index.schema.json` — JSON-Schema for the index
 - `.github/workflows/ci.yml` — CI workflow that regenerates and validates the index
 - `src/panelforge_figures/manifest/catalog.py` — index builder (Python)
-- `src/panelforge_figures/cli.py` — `figures index emit|validate` subcommands
+- `src/panelforge_figures/cli/__init__.py` — `figures index emit|validate` subcommands
 
 ---
 

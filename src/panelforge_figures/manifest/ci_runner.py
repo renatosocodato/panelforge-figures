@@ -11,7 +11,7 @@ Pipeline
 * ``verify-claims``             — Figure-N claim consistency (requires manuscript)
 * ``lint-xrefs``                — cross-reference linter (requires manuscript)
 * ``checklist-{arrive,consort,stard,miqe}`` — reporting checklists
-* ``audit-venue``               — venue-specific audit (E16; placeholder)
+* ``audit-venue``               — venue-specific audit (E16)
 * ``audit-bias``                — bias audit (E17; placeholder)
 
 Each step lazy-imports its module so missing optional dependencies in
@@ -73,7 +73,7 @@ class CIAuditStep(StrEnum):
     checklist_consort = "checklist-consort"
     checklist_stard = "checklist-stard"
     checklist_miqe = "checklist-miqe"
-    audit_venue = "audit-venue"           # E16 — placeholder
+    audit_venue = "audit-venue"           # E16
     audit_bias = "audit-bias"             # E17 — placeholder
 
 
@@ -515,12 +515,100 @@ def _run_checklist(
     )
 
 
-def _run_audit_venue(**_: Any) -> CIStepResult:
-    """E16 placeholder — venue-specific audit not yet shipped."""
+def _run_audit_venue(
+    *,
+    manuscript_path: Path | None,
+    figures_dir: Path | None,
+    venue: str | None,
+    skip_missing_inputs: bool,
+    **_: Any,
+) -> CIStepResult:
+    """E16 — venue-specific audit (figure caps, abstract, statements, etc.).
+
+    Skipped when no manuscript or no venue is supplied.  Errors map to
+    ``StepStatus.fail``; warnings map to ``StepStatus.warn``; otherwise
+    ``StepStatus.pass_``.
+    """
+    if manuscript_path is None:
+        return CIStepResult(
+            step=CIAuditStep.audit_venue,
+            status=StepStatus.skipped if skip_missing_inputs else StepStatus.fail,
+            summary="no manuscript provided",
+        )
+    if not manuscript_path.exists():
+        return CIStepResult(
+            step=CIAuditStep.audit_venue,
+            status=StepStatus.skipped if skip_missing_inputs else StepStatus.fail,
+            summary=f"manuscript not found: {manuscript_path}",
+        )
+    if not venue:
+        return CIStepResult(
+            step=CIAuditStep.audit_venue,
+            status=StepStatus.skipped if skip_missing_inputs else StepStatus.fail,
+            summary="no venue provided (pass --venue)",
+        )
+
+    from panelforge_figures.manifest.venue_auditor import (
+        Venue,
+        VenueAuditorError,
+        audit_venue,
+    )
+
+    # Resolve venue string to the enum (default unknown values to "plain").
+    try:
+        venue_enum = Venue(venue)
+    except ValueError:
+        return CIStepResult(
+            step=CIAuditStep.audit_venue,
+            status=StepStatus.skipped if skip_missing_inputs else StepStatus.fail,
+            summary=(
+                f"unknown venue: {venue!r}; "
+                f"expected one of {[v.value for v in Venue]}"
+            ),
+        )
+
+    fdir = figures_dir if (figures_dir and figures_dir.exists()) else None
+
+    try:
+        report = audit_venue(
+            manuscript_path,
+            venue=venue_enum,
+            figures_dir=fdir,
+        )
+    except VenueAuditorError as exc:
+        return CIStepResult(
+            step=CIAuditStep.audit_venue,
+            status=StepStatus.error,
+            summary=f"venue auditor error: {exc}",
+            error_message=str(exc),
+        )
+
+    if report.n_errors > 0:
+        status = StepStatus.fail
+    elif report.n_warnings > 0:
+        status = StepStatus.warn
+    else:
+        status = StepStatus.pass_
+
+    summary = (
+        f"{report.venue.value}: {report.n_errors} error(s), "
+        f"{report.n_warnings} warning(s), {report.n_info} info "
+        f"({report.overall_verdict})"
+    )
+
+    details: list[str] = [
+        f"- [{v.severity.value}] {v.rule_id}: {v.message}"
+        for v in report.violations
+    ]
+
     return CIStepResult(
         step=CIAuditStep.audit_venue,
-        status=StepStatus.skipped,
-        summary="E16 not yet shipped; placeholder",
+        status=status,
+        n_errors=report.n_errors,
+        n_warnings=report.n_warnings,
+        n_info=report.n_info,
+        summary=summary,
+        details=tuple(details),
     )
 
 

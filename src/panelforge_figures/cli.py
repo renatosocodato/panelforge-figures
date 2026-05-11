@@ -3136,6 +3136,11 @@ def scout_cmd(
     default="preserve",
     help="What to do when an existing manuscript is found (E10).",
 )
+@click.option(
+    "--force",
+    is_flag=True,
+    help="Force re-render even when the cache says inputs are unchanged (E11).",
+)
 def execute_plan_cmd(
     plan_path: Path,
     yes: bool,
@@ -3146,6 +3151,7 @@ def execute_plan_cmd(
     venue: str,
     fmt: str,
     manuscript_policy: str,
+    force: bool,
 ) -> None:
     """Execute a figures_plan.yaml: scaffold gaps, render figures, draft captions, scaffold manuscript."""
     from panelforge_figures.manifest.execute_plan import (
@@ -3160,6 +3166,7 @@ def execute_plan_cmd(
             scaffold_manuscript=scaffold_manuscript,
             manuscript_venue=venue, manuscript_format=fmt,
             manuscript_policy=manuscript_policy,
+            force=force,
         )
     except ExecutionError as exc:
         click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
@@ -3170,6 +3177,7 @@ def execute_plan_cmd(
         click.style(
             f"\n✓ done. {result.n_panels_rendered}/{result.n_panels_attempted} "
             f"panels rendered, "
+            f"{result.n_panels_cached} cached, "
             f"{result.n_recipes_scaffolded} recipes scaffolded, "
             f"{result.n_captions_drafted} captions drafted",
             fg="green",
@@ -3185,10 +3193,11 @@ def execute_plan_cmd(
     for panel_id, status, msg in result.panels_status:
         sym = {
             "rendered": "✓",
-            "scaffolded_then_rendered": "🆕",
-            "skipped_gap": "⚠",
-            "failed": "✗",
-        }.get(status, "·")
+            "scaffolded_then_rendered": "+",
+            "cached": "=",
+            "skipped_gap": "!",
+            "failed": "x",
+        }.get(status, ".")
         click.echo(f"  {sym} {panel_id}  {status}  {msg}")
 
 
@@ -3413,6 +3422,112 @@ def blueprint_import_cmd(
         )
     for note in result.notes:
         click.echo(click.style(f"  note: {note}", fg="yellow"))
+
+
+# ─────────────── E11 — render cache (status / clear / invalidate) ─────────────
+
+
+@main.group("cache")
+def cache_group() -> None:
+    """Inspect and manage the incremental render cache (E11).
+
+    The cache lives at ``panelforge_workspace/render_cache.json`` and
+    tracks per-panel SHAs so ``figures execute-plan`` can skip panels
+    whose inputs haven't changed since the last render.
+    """
+
+
+@cache_group.command("status")
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge_workspace/ (default: cwd).",
+)
+def cache_status_cmd(project_root: Path) -> None:
+    """Show cache state: file path, entry count, oldest, newest."""
+    from panelforge_figures.manifest.render_cache import (
+        cache_path_for_project,
+        load_cache,
+    )
+
+    cache = load_cache(project_root)
+    path = cache_path_for_project(project_root)
+    click.echo(f"cache: {path}")
+    click.echo(f"exists: {path.exists()}")
+    click.echo(f"entries: {len(cache.entries)}")
+    if cache.entries:
+        sorted_by_time = sorted(
+            cache.entries.values(), key=lambda e: e.rendered_at
+        )
+        click.echo(f"oldest: {sorted_by_time[0].rendered_at}")
+        click.echo(f"newest: {sorted_by_time[-1].rendered_at}")
+        click.echo()
+        click.echo(
+            f"{'panel_id':<24}  {'figure_id':<12}  "
+            f"{'rendered_at':<20}  recipe"
+        )
+        for e in sorted_by_time:
+            click.echo(
+                f"{e.panel_id:<24}  {e.figure_id:<12}  "
+                f"{e.rendered_at:<20}  {e.recipe_full_name}"
+            )
+
+
+@cache_group.command("clear")
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge_workspace/ (default: cwd).",
+)
+@click.option(
+    "--yes", is_flag=True,
+    help="Skip the confirmation prompt.",
+)
+def cache_clear_cmd(project_root: Path, yes: bool) -> None:
+    """Delete the render cache file (force a full re-render next time)."""
+    from panelforge_figures.manifest.render_cache import cache_path_for_project
+
+    path = cache_path_for_project(project_root)
+    if not path.exists():
+        click.echo("cache is already empty")
+        return
+    if not yes and not click.confirm(f"delete {path}?"):
+        click.echo("aborted")
+        return
+    path.unlink()
+    click.echo(click.style(f"✓ deleted {path}", fg="green"))
+
+
+@cache_group.command("invalidate")
+@click.option(
+    "--project-root",
+    type=click.Path(path_type=Path),
+    default=Path("."),
+    help="Project root containing panelforge_workspace/ (default: cwd).",
+)
+@click.option(
+    "--panel-id",
+    multiple=True,
+    required=True,
+    help="Panel ID(s) to remove from the cache; may be passed multiple times.",
+)
+def cache_invalidate_cmd(project_root: Path, panel_id: tuple[str, ...]) -> None:
+    """Remove specific panel(s) from the cache, forcing re-render next time."""
+    from panelforge_figures.manifest.render_cache import load_cache, save_cache
+
+    cache = load_cache(project_root)
+    removed = 0
+    for pid in panel_id:
+        if cache.get(pid):
+            cache.remove(pid)
+            removed += 1
+            click.echo(click.style(f"✓ removed {pid}", fg="green"))
+        else:
+            click.echo(click.style(f"! {pid} not in cache", fg="yellow"))
+    save_cache(cache, project_root)
+    click.echo(f"\n{removed} panel(s) invalidated")
 
 
 if __name__ == "__main__":

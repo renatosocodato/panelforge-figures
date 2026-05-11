@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "panelforge-figures"
-version = "3.8.0"
+version = "3.9.0"
 description = "Modality-first publication-grade figure system for systems biology and computational biophysics."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -60,6 +60,9 @@ embeddings = [
 novelty = [
     "requests>=2.31",
     "pyyaml>=6.0",
+]
+tui = [
+    "textual>=0.40",
 ]
 dev = [
     "pytest>=7.4",

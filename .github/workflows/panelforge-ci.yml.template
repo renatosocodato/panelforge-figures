@@ -24,12 +24,12 @@ jobs:
       pull-requests: write    # required for the PR comment
     steps:
       - uses: actions/checkout@v4
-      - uses: renatosocodato/panelforge-figures@v3.12.0
+      - uses: renatosocodato/panelforge-figures@v3.13.0
         with:
           project-root: .
           manuscript: manuscript/main.tex
           venue: cell             # nature | cell | nejm | biorxiv | science | plain
           steps: scout,verify-claims,lint-xrefs,checklist-arrive
           fail-on-warning: false
-          panelforge-version: 3.12.0
+          panelforge-version: 3.13.0
           comment-on-pr: true

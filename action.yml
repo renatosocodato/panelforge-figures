@@ -1,0 +1,133 @@
+name: panelforge-figures audit
+description: Run the bundled panelforge-figures CI audit chain on a manuscript repo.
+author: Renato Socodato
+inputs:
+  project-root:
+    description: "Path to the panelforge project root."
+    required: false
+    default: "."
+  manuscript:
+    description: "Path to the manuscript (.tex or .md). Optional."
+    required: false
+    default: ""
+  figures-dir:
+    description: "Path to the rendered-figures directory."
+    required: false
+    default: "panelforge_workspace/figures"
+  plan-path:
+    description: "Path to figures_plan.yaml (if generated already)."
+    required: false
+    default: ""
+  venue:
+    description: "Target venue for venue-specific audit (E16). Optional."
+    required: false
+    default: ""
+  steps:
+    description: "Comma-separated step list (default: scout,verify-claims,lint-xrefs,checklist-arrive)."
+    required: false
+    default: "scout,verify-claims,lint-xrefs,checklist-arrive"
+  fail-on-warning:
+    description: "Treat warnings as failures."
+    required: false
+    default: "false"
+  panelforge-version:
+    description: "Pin to a specific panelforge-figures version (default: latest)."
+    required: false
+    default: ""
+  python-version:
+    description: "Python version for the runner."
+    required: false
+    default: "3.12"
+  comment-on-pr:
+    description: "Post the audit report as a PR comment (requires PR context)."
+    required: false
+    default: "true"
+outputs:
+  status:
+    description: "pass / warn / fail / error"
+    value: ${{ steps.audit.outputs.status }}
+  n-errors:
+    description: "total error count"
+    value: ${{ steps.audit.outputs.n_errors }}
+  n-warnings:
+    description: "total warning count"
+    value: ${{ steps.audit.outputs.n_warnings }}
+  report-path:
+    description: "Path to the full Markdown report artifact."
+    value: ${{ steps.audit.outputs.report_path }}
+runs:
+  using: composite
+  steps:
+    - name: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: install-panelforge
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.panelforge-version }}" ]; then
+          pip install "panelforge-figures==${{ inputs.panelforge-version }}"
+        else
+          pip install panelforge-figures
+        fi
+    - name: run-audit
+      id: audit
+      shell: bash
+      run: |
+        EXTRA_FLAGS=""
+        if [ -n "${{ inputs.manuscript }}" ]; then
+          EXTRA_FLAGS="$EXTRA_FLAGS --manuscript ${{ inputs.manuscript }}"
+        fi
+        if [ -n "${{ inputs.figures-dir }}" ]; then
+          EXTRA_FLAGS="$EXTRA_FLAGS --figures-dir ${{ inputs.figures-dir }}"
+        fi
+        if [ -n "${{ inputs.plan-path }}" ]; then
+          EXTRA_FLAGS="$EXTRA_FLAGS --plan-path ${{ inputs.plan-path }}"
+        fi
+        if [ -n "${{ inputs.venue }}" ]; then
+          EXTRA_FLAGS="$EXTRA_FLAGS --venue ${{ inputs.venue }}"
+        fi
+        if [ "${{ inputs.fail-on-warning }}" = "true" ]; then
+          EXTRA_FLAGS="$EXTRA_FLAGS --fail-on-warning"
+        fi
+        figures ci-audit \
+          --project-root "${{ inputs.project-root }}" \
+          --steps "${{ inputs.steps }}" \
+          --output panelforge_ci_report.md \
+          --output-json panelforge_ci_report.json \
+          --output-junit panelforge_ci_report.xml \
+          $EXTRA_FLAGS || EXIT_CODE=$?
+        STATUS=$(python -c "import json; print(json.load(open('panelforge_ci_report.json'))['overall_status'])")
+        N_ERRORS=$(python -c "import json; r=json.load(open('panelforge_ci_report.json')); print(sum(s['n_errors'] for s in r['steps']))")
+        N_WARNINGS=$(python -c "import json; r=json.load(open('panelforge_ci_report.json')); print(sum(s['n_warnings'] for s in r['steps']))")
+        echo "status=$STATUS" >> $GITHUB_OUTPUT
+        echo "n_errors=$N_ERRORS" >> $GITHUB_OUTPUT
+        echo "n_warnings=$N_WARNINGS" >> $GITHUB_OUTPUT
+        echo "report_path=panelforge_ci_report.md" >> $GITHUB_OUTPUT
+        exit ${EXIT_CODE:-0}
+    - name: upload-artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: panelforge-ci-report
+        path: panelforge_ci_report.*
+    - name: comment-on-pr
+      if: ${{ inputs.comment-on-pr == 'true' && github.event_name == 'pull_request' }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('panelforge_ci_report.md', 'utf8');
+          // Truncate to GitHub's 65535-char limit
+          const truncated = report.length > 60000
+            ? report.substring(0, 60000) + '\n\n... (truncated; see workflow artifact for full report)'
+            : report;
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '## panelforge-figures audit\n\n' + truncated,
+          });
+branding:
+  icon: bar-chart-2
+  color: blue

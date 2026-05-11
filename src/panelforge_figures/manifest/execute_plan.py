@@ -409,6 +409,115 @@ def _scaffold_manuscript(
     return getattr(result, "manuscript_path", None)
 
 
+def _find_existing_manuscript(project_root: Path) -> Path | None:
+    """Look for a pre-existing manuscript file under ``project_root``.
+
+    Returns the first match among ``manuscript/main.tex``,
+    ``manuscript/main.md``, ``manuscript.tex``, ``manuscript.md``.
+    """
+    candidates = (
+        project_root / "manuscript" / "main.tex",
+        project_root / "manuscript" / "main.md",
+        project_root / "manuscript.tex",
+        project_root / "manuscript.md",
+        project_root / "main.tex",
+        project_root / "paper.md",
+    )
+    for c in candidates:
+        if c.is_file():
+            return c
+    return None
+
+
+def _apply_manuscript_policy(
+    plan: Any,
+    *,
+    existing_path: Path,
+    project_root: Path,
+    policy: str,
+    notes: list[str],
+) -> Path | None:
+    """Apply the manuscript collision policy to an existing manuscript.
+
+    Returns the path of the produced (or referenced) manuscript file, or
+    ``None`` if the policy could not be applied.  All branches are
+    tolerant — every failure becomes a soft note.
+    """
+    try:
+        from .manuscript_collision import (
+            ManuscriptPolicy,
+            apply_update_policy,
+            detect_collision,
+            render_collision_report_markdown,
+        )
+        from .manuscript_parse import parse_manuscript
+    except ImportError as exc:
+        notes.append(
+            f"manuscript_collision modules unavailable: {exc}"
+        )
+        return None
+
+    try:
+        existing = parse_manuscript(existing_path)
+        report = detect_collision(existing, plan)
+    except Exception as exc:  # noqa: BLE001 — tolerant
+        notes.append(
+            f"manuscript collision detection failed: "
+            f"{type(exc).__name__}: {exc}"
+        )
+        return None
+
+    workspace = project_root / "panelforge_workspace"
+    workspace.mkdir(parents=True, exist_ok=True)
+    report_md_path = workspace / "manuscript_collision_report.md"
+
+    try:
+        report_md = render_collision_report_markdown(report)
+        report_md_path.write_text(report_md, encoding="utf-8")
+        notes.append(f"manuscript collision report → {report_md_path}")
+    except Exception as exc:  # noqa: BLE001 — tolerant
+        notes.append(
+            f"manuscript collision report render failed: {exc}"
+        )
+
+    try:
+        target_policy = ManuscriptPolicy(policy)
+    except Exception:  # noqa: BLE001 — tolerant
+        notes.append(
+            f"unknown manuscript policy {policy!r}; defaulting to detect"
+        )
+        target_policy = ManuscriptPolicy("detect")
+
+    if target_policy == ManuscriptPolicy("detect"):
+        # detect = no mutation; the report alone is the artefact.
+        return existing_path
+
+    try:
+        out_path, _modified_text = apply_update_policy(
+            existing, plan, report,
+            policy=target_policy,
+        )
+        notes.append(f"manuscript {target_policy.value} → {out_path}")
+        return Path(out_path)
+    except TypeError:
+        # Some Build-B variants take a different signature; try without
+        # the explicit policy kwarg.
+        try:
+            out_path, _modified_text = apply_update_policy(existing, plan, report)
+            notes.append(f"manuscript update → {out_path}")
+            return Path(out_path)
+        except Exception as exc:  # noqa: BLE001 — tolerant
+            notes.append(
+                f"manuscript apply_update_policy failed: {type(exc).__name__}: {exc}"
+            )
+            return None
+    except Exception as exc:  # noqa: BLE001 — tolerant
+        notes.append(
+            f"manuscript apply_update_policy failed: {type(exc).__name__}: {exc}"
+        )
+        return None
+
+
 # ─────────────────────────── main entrypoint ────────────────────────────
 
 
@@ -422,6 +531,7 @@ def execute_plan(
     scaffold_manuscript: bool = True,
     manuscript_venue: str = "cell",
     manuscript_format: str = "latex",
+    manuscript_policy: str = "preserve",
 ) -> ExecutionResult:
     """Execute a ``figures_plan.yaml`` end-to-end.
 
@@ -433,6 +543,19 @@ def execute_plan(
     operations.  In v3.3.0 the executor is non-interactive end-to-end
     (we never call ``input()``); the parameter is wired for forward
     compatibility with a CLI prompt that may land later.
+
+    ``manuscript_policy`` (E10) drives Phase 4 behaviour when an
+    existing manuscript is detected on disk:
+
+    * ``"preserve"`` (default) — leave the existing manuscript alone;
+      scaffold only if no manuscript exists.
+    * ``"detect"`` — parse the existing manuscript, write a collision
+      report to ``panelforge_workspace/manuscript_collision_report.md``;
+      do not mutate the manuscript.
+    * ``"update"`` — in-place mutation (Build-B's ``apply_update_policy``
+      inserts new figure blocks, appends new figures, etc.).
+    * ``"propose"`` — same as ``update`` but the modified text is
+      written to ``<manuscript>.suggested.<ext>`` instead of in place.
     """
     plan_path = Path(plan_path)
     plan = _load_plan(plan_path)
@@ -527,13 +650,33 @@ def execute_plan(
     # ── Phase 4: manuscript ─────────────────────────────────────────────
     manuscript_path: Path | None = None
     if scaffold_manuscript:
-        manuscript_path = _scaffold_manuscript(
-            plan,
-            project_root=project_root,
-            venue=manuscript_venue,
-            fmt=manuscript_format,
-            notes=notes,
-        )
+        existing_path = _find_existing_manuscript(project_root)
+        if existing_path is not None and manuscript_policy != "preserve":
+            # An existing manuscript was found and the user asked us to
+            # do something about it (detect / update / propose).  Delegate
+            # to the collision module rather than re-scaffolding.
+            manuscript_path = _apply_manuscript_policy(
+                plan,
+                existing_path=existing_path,
+                project_root=project_root,
+                policy=manuscript_policy,
+                notes=notes,
+            )
+        else:
+            if existing_path is not None:
+                notes.append(
+                    "existing manuscript preserved "
+                    f"({existing_path}); no scaffolding"
+                )
+                manuscript_path = existing_path
+            else:
+                manuscript_path = _scaffold_manuscript(
+                    plan,
+                    project_root=project_root,
+                    venue=manuscript_venue,
+                    fmt=manuscript_format,
+                    notes=notes,
+                )
     else:
         notes.append("manuscript skipped (scaffold_manuscript=False)")
 

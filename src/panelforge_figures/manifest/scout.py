@@ -259,21 +259,42 @@ class FigurePlan:
 
 @dataclass(frozen=True)
 class ProjectScoutReport:
-    """End-to-end scout result; serialisable for the CLI to dump as JSON."""
+    """End-to-end scout result; serialisable for the CLI to dump as JSON.
+
+    The ``collision_report`` field (E10) is populated by
+    :func:`scout_project` when the inventory contains a manuscript and
+    ``manuscript_policy != "preserve"``.  It holds a :class:`CollisionReport`
+    (from :mod:`manuscript_collision`) which the rendered markdown surface
+    presents as a per-figure status table.  Tolerant: ``None`` indicates
+    either no manuscript was present, the collision check was disabled,
+    or the collision module wasn't importable yet.
+    """
 
     inventory: ProjectInventory
     figure_plan: FigurePlan
     novelty_report: dict[str, Any] | None
     recommendations_per_data_file: dict[str, list[dict[str, Any]]]
     notes: tuple[str, ...] = ()
+    collision_report: Any | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        collision_dict: Any = None
+        if self.collision_report is not None:
+            to_dict_fn = getattr(self.collision_report, "to_dict", None)
+            if callable(to_dict_fn):
+                try:
+                    collision_dict = to_dict_fn()
+                except Exception:  # pragma: no cover — defensive
+                    collision_dict = str(self.collision_report)
+            else:
+                collision_dict = str(self.collision_report)
         return {
             "inventory": _inventory_to_dict(self.inventory),
             "figure_plan": self.figure_plan.to_dict(),
             "novelty_report": self.novelty_report,
             "recommendations_per_data_file": self.recommendations_per_data_file,
             "notes": list(self.notes),
+            "collision_report": collision_dict,
         }
 
 
@@ -1258,6 +1279,7 @@ def scout_project(
     target_novelty: str = "maximal",
     consensus_client: Any | None = None,
     use_mock_novelty: bool = False,
+    manuscript_policy: str = "detect",
 ) -> ProjectScoutReport:
     """End-to-end project scout (read-only, no execution).
 
@@ -1273,7 +1295,12 @@ def scout_project(
        list from the plan, score it via :func:`score_figure_plan` (E9-phase
        1) → ``novelty_report.to_dict()``. Otherwise ``novelty_report`` is
        ``None``.
-    6. Emit :class:`ProjectScoutReport`.
+    6. If ``inventory.manuscript_path`` is set and
+       ``manuscript_policy != "preserve"``: parse the manuscript and detect
+       collisions against the proposed plan; attach the resulting
+       :class:`CollisionReport` to the result.  The check is tolerant —
+       any failure becomes a soft warning, not a hard error.
+    7. Emit :class:`ProjectScoutReport`.
 
     Consensus-client routing
     ------------------------
@@ -1281,6 +1308,13 @@ def scout_project(
     * ``use_mock_novelty`` True → :class:`MockConsensusClient`.
     * ``CONSENSUS_API_KEY`` env var set → :class:`ConsensusProClient`.
     * Otherwise → :class:`MockConsensusClient` (with a ``RuntimeWarning``).
+
+    ``manuscript_policy`` options
+    -----------------------------
+    * ``"detect"``  → parse manuscript + emit collision report (default).
+    * ``"update"``  → same as detect (mutation happens in execute_plan).
+    * ``"propose"`` → same as detect (mutation happens in execute_plan).
+    * ``"preserve"`` → skip the collision check entirely.
     """
     inventory = walk_project(project_root)
 
@@ -1345,12 +1379,50 @@ def scout_project(
     else:
         notes.append("novelty scoring disabled (target_novelty='none')")
 
+    # ── E10: manuscript collision detection ───────────────────────────
+    collision_report: Any | None = None
+    if (
+        inventory_profiled.manuscript_path is not None
+        and manuscript_policy != "preserve"
+    ):
+        try:
+            from .manuscript_collision import detect_collision
+            from .manuscript_parse import parse_manuscript
+        except ImportError as exc:
+            warnings.warn(
+                f"manuscript collision modules unavailable: {exc}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            notes.append(
+                "manuscript present but collision module not importable yet"
+            )
+        else:
+            try:
+                existing = parse_manuscript(inventory_profiled.manuscript_path)
+                collision_report = detect_collision(existing, plan)
+            except Exception as exc:
+                warnings.warn(
+                    f"manuscript collision check failed: {exc}",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                notes.append(f"manuscript collision check failed: {exc}")
+    elif (
+        inventory_profiled.manuscript_path is not None
+        and manuscript_policy == "preserve"
+    ):
+        notes.append(
+            "manuscript collision check skipped (policy=preserve)"
+        )
+
     return ProjectScoutReport(
         inventory=inventory_profiled,
         figure_plan=plan,
         novelty_report=novelty_dict,
         recommendations_per_data_file=recommendations,
         notes=tuple(notes),
+        collision_report=collision_report,
     )
 
 
@@ -1491,6 +1563,31 @@ def render_scout_report_markdown(report: ProjectScoutReport) -> str:
     elif plan.n_gaps:
         lines.append(f"_(novelty scoring disabled or unavailable; {plan.n_gaps} "
                      "recipe gap(s) flagged)_")
+        lines.append("")
+
+    # ── manuscript collision report (E10) ──────────────────────────────
+    if report.collision_report is not None:
+        lines.append("## Manuscript collision report")
+        lines.append("")
+        try:
+            from .manuscript_collision import render_collision_report_markdown
+            collision_md = render_collision_report_markdown(report.collision_report)
+            # The downstream renderer usually emits its own H1; strip it
+            # so the section fits inside the scout report cleanly.
+            for cl in collision_md.splitlines():
+                if cl.startswith("# "):
+                    continue
+                lines.append(cl)
+        except Exception:  # pragma: no cover — defensive fallback
+            cr_dict = (
+                report.collision_report.to_dict()
+                if hasattr(report.collision_report, "to_dict")
+                else {}
+            )
+            lines.append(
+                f"- collision_report attached "
+                f"(per-figure: {len(cr_dict.get('per_figure', []) or [])})"
+            )
         lines.append("")
 
     # ── notes & next steps ─────────────────────────────────────────────

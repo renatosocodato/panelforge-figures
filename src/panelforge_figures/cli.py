@@ -3040,6 +3040,12 @@ def novelty_scout_cmd(
     "--report-out", type=click.Path(path_type=Path), default=None,
     help="Markdown report path (default: stdout).",
 )
+@click.option(
+    "--manuscript-policy",
+    type=click.Choice(["detect", "update", "propose", "preserve"]),
+    default="detect",
+    help="What to do when an existing manuscript is found (E10).",
+)
 @click.option("--json", "as_json", is_flag=True)
 def scout_cmd(
     project_root: Path,
@@ -3049,6 +3055,7 @@ def scout_cmd(
     mock_novelty: bool,
     plan_out: Path,
     report_out: Path | None,
+    manuscript_policy: str,
     as_json: bool,
 ) -> None:
     """Walk PROJECT_ROOT, propose a multi-figure narrative plan, surface gaps + novelty."""
@@ -3066,6 +3073,7 @@ def scout_cmd(
         venue=venue,
         target_novelty=target_novelty,
         use_mock_novelty=mock_novelty,
+        manuscript_policy=manuscript_policy,
     )
 
     save_figure_plan_yaml(report.figure_plan, plan_out)
@@ -3122,6 +3130,12 @@ def scout_cmd(
     "--format", "fmt",
     type=click.Choice(["latex", "markdown"]), default="latex",
 )
+@click.option(
+    "--manuscript-policy",
+    type=click.Choice(["detect", "update", "propose", "preserve"]),
+    default="preserve",
+    help="What to do when an existing manuscript is found (E10).",
+)
 def execute_plan_cmd(
     plan_path: Path,
     yes: bool,
@@ -3131,6 +3145,7 @@ def execute_plan_cmd(
     scaffold_manuscript: bool,
     venue: str,
     fmt: str,
+    manuscript_policy: str,
 ) -> None:
     """Execute a figures_plan.yaml: scaffold gaps, render figures, draft captions, scaffold manuscript."""
     from panelforge_figures.manifest.execute_plan import (
@@ -3144,6 +3159,7 @@ def execute_plan_cmd(
             render_figures=render_figures, draft_captions=draft_captions,
             scaffold_manuscript=scaffold_manuscript,
             manuscript_venue=venue, manuscript_format=fmt,
+            manuscript_policy=manuscript_policy,
         )
     except ExecutionError as exc:
         click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
@@ -3234,6 +3250,169 @@ def manuscript_scaffold_cmd(
     click.echo(f"  figures:             {result.n_figures}")
     click.echo(f"  captions drafted:    {result.n_captions_drafted}")
     click.echo(f"  methods paragraphs:  {result.n_methods_paragraphs}")
+
+
+# ─────────────── E10 — manuscript group (scaffold + blueprint-import) ────────
+
+
+@main.group("manuscript")
+def manuscript_group() -> None:
+    """Manuscript scaffolding, blueprint-import, and collision handling."""
+
+
+@manuscript_group.command("scaffold")
+@click.argument(
+    "plan_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default="cell",
+)
+@click.option(
+    "--format", "fmt",
+    type=click.Choice(["latex", "markdown"]), default="latex",
+)
+@click.option("--output", type=click.Path(path_type=Path), default=None)
+@click.option("--overwrite", is_flag=True)
+def manuscript_scaffold_group_cmd(
+    plan_path: Path,
+    venue: str,
+    fmt: str,
+    output: Path | None,
+    overwrite: bool,
+) -> None:
+    """Scaffold manuscript/main.tex from a figures_plan.yaml.
+
+    This is an alias for the top-level ``figures manuscript-scaffold``
+    command — placed inside the new ``manuscript`` group for ergonomic
+    grouping with ``manuscript blueprint-import``.
+    """
+    from panelforge_figures.manifest.manuscript_scaffold import (
+        ManuscriptFormat,
+        ScaffoldError,
+        Venue,
+        scaffold_manuscript,
+    )
+    from panelforge_figures.manifest.scout import load_figure_plan_yaml
+
+    plan = load_figure_plan_yaml(plan_path)
+    try:
+        result = scaffold_manuscript(
+            plan,
+            project_root=plan.project_root,
+            venue=Venue(venue),
+            format=ManuscriptFormat(fmt),
+            output_path=output,
+            overwrite=overwrite,
+        )
+    except ScaffoldError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    click.echo(click.style(f"✓ wrote {result.manuscript_path}", fg="green"))
+    click.echo(click.style(f"✓ wrote {result.references_path}", fg="green"))
+    click.echo(f"  venue:               {result.venue.value}")
+    click.echo(f"  format:              {result.format.value}")
+    click.echo(f"  figures:             {result.n_figures}")
+    click.echo(f"  captions drafted:    {result.n_captions_drafted}")
+    click.echo(f"  methods paragraphs:  {result.n_methods_paragraphs}")
+
+
+@manuscript_group.command("blueprint-import")
+@click.argument(
+    "manuscript_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option(
+    "--out", "output_plan_path",
+    type=click.Path(path_type=Path),
+    default=Path("figures_plan.yaml"),
+    help="Where to write the emitted figures_plan.yaml.",
+)
+@click.option("--min-similarity", type=float, default=0.4)
+@click.option(
+    "--venue",
+    type=click.Choice(["plain", "nature", "cell", "nejm", "biorxiv", "science"]),
+    default=None,
+    help="Override venue (default: derive from manuscript hint, else cell).",
+)
+@click.option("--json", "as_json", is_flag=True)
+def blueprint_import_cmd(
+    manuscript_path: Path,
+    output_plan_path: Path,
+    min_similarity: float,
+    venue: str | None,
+    as_json: bool,
+) -> None:
+    """Inverse direction: manuscript → figures_plan.yaml.
+
+    Parses an existing manuscript, identifies figure captions, matches each
+    to a panelforge recipe via caption similarity, emits figures_plan.yaml.
+    Captions with no good-fit recipe are flagged as gaps for ``figures fill-gap``.
+    """
+    from panelforge_figures.manifest.manuscript_blueprint import (
+        BlueprintImportError,
+        import_blueprint_from_manuscript,
+    )
+
+    try:
+        result = import_blueprint_from_manuscript(
+            manuscript_path,
+            output_plan_path=output_plan_path,
+            min_similarity=min_similarity,
+            venue=venue,
+        )
+    except BlueprintImportError as exc:
+        click.echo(click.style(f"✗ {exc}", fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
+
+    if as_json:
+        import json as _json
+        payload = {
+            "manuscript_path": str(result.manuscript_path),
+            "n_figures_parsed": result.n_figures_parsed,
+            "n_figures_matched": result.n_figures_matched,
+            "n_figures_unmatched": result.n_figures_unmatched,
+            "figure_plan_path": (
+                str(result.figure_plan_path)
+                if result.figure_plan_path else None
+            ),
+            "matches": [
+                {
+                    "figure_id": m.figure_id,
+                    "caption_excerpt": m.caption_excerpt,
+                    "suggested_recipe_full_name": m.suggested_recipe_full_name,
+                    "similarity_score": m.similarity_score,
+                    "candidate_alternatives": list(m.candidate_alternatives),
+                }
+                for m in result.matches
+            ],
+            "notes": list(result.notes),
+        }
+        click.echo(_json.dumps(payload, indent=2, default=str))
+        return
+
+    if result.figure_plan_path:
+        click.echo(
+            click.style(f"✓ wrote {result.figure_plan_path}", fg="green")
+        )
+    click.echo(f"  manuscript:        {result.manuscript_path}")
+    click.echo(f"  figures parsed:    {result.n_figures_parsed}")
+    click.echo(f"  matched:           {result.n_figures_matched}")
+    click.echo(f"  unmatched (gaps):  {result.n_figures_unmatched}")
+    for m in result.matches:
+        marker = "·" if m.similarity_score >= min_similarity else "GAP"
+        recipe = m.suggested_recipe_full_name or "(no match)"
+        click.echo(
+            f"  {marker:4s} {m.figure_id:12s} "
+            f"sim={m.similarity_score:.2f}  →  {recipe}"
+        )
+    for note in result.notes:
+        click.echo(click.style(f"  note: {note}", fg="yellow"))
 
 
 if __name__ == "__main__":

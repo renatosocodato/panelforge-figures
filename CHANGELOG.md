@@ -119,7 +119,7 @@ the Wave-3 soak report + corrects the long-stale package version
 - "Privacy & data handling (Pass-3 LLM)" section in
   `CLAUDE_CODE_AUTONOMOUS.md` (~265 words; explicit list of what
   IS sent to Anthropic and what is NEVER sent).
-- E2e regression gate `test_e2e_project_scan_disc1_fixture`
+- E2e regression gate `test_e2e_project_scan_example_fixture`
   asserting `dynamics_needed != "live"` on the DISC1 fixture
   (the bug shipped because no e2e test grounded an assertion on
   this field).
@@ -342,7 +342,7 @@ touched. Tests **2218 → 2356** (+138). PRs **#44 → #47**
 
 ### Manuscript-panel coverage
 
-The pack closes the `example_factorial` manuscript's reviewer-proof
+The pack closes the anchor manuscript's reviewer-proof
 primitive gap. Manuscript figures **F1F + F2D + F2E + F2H + F2J +
 F3G + F4A + F4B + F4C + F4D + F4F + F4G + F4H + F4I + F4J + F5D +
 F5H + F5J + F5K + F5L + F6E + SF2G + SF4B + SF4D + Supp Table R1**
@@ -696,7 +696,7 @@ where possible:
 First wave of the `factorial_design_companion` beta expansion
 pack. Lands the 6 universal robustness + provenance primitives
 in `meta_and_diagnostic`, biology-agnostic and reusable beyond
-the example_factorial manuscript. Pioneers 2 new `core/` shims
+the anchor manuscript. Pioneers 2 new `core/` shims
 (`bayes_factor_utility`, `multiverse_specification_utility`).
 `meta_and_diagnostic` expands from 21 to 27 recipes; total
 catalog 423 → 429.
@@ -766,7 +766,7 @@ catalog 423 → 429.
 
 All 6 demos use seeded RNG (`np.random.default_rng(80X)`) and
 biology-agnostic synthetic data so the recipes are immediately
-reusable outside the cdc42 pack:
+reusable outside the factorial pack:
 
 - W1.1: 4 secondary descriptors with BFs spanning anecdotal
   → strong (one favouring alt with BF<1).

@@ -1,20 +1,20 @@
-# DISC1 Microglial Morphometry — Manuscript Companion
+# Example Microglial Morphometry — Manuscript Companion (test fixture)
 
-This repository accompanies a manuscript on **DISC1**-deficient microglia in
-a mouse model of **lissencephaly**. We characterise microglial branching,
-soma morphology, and process motility across cortical layers in
-*Disc1*-haploinsufficient cortex versus wild-type littermates.
+This is a test-fixture project used by the panelforge-figures test suite to
+exercise project-scan, intake, scoring, and rendering against a realistic
+manuscript-style repository layout. The biological framing is illustrative —
+the data are synthetic and the references are placeholders.
 
 ## Project overview
 
-DISC1 (Disrupted-in-Schizophrenia-1) loss-of-function disrupts cortical
-lamination. We use primary microglia isolated from P21 cortex of *Disc1*+/−
-mice and wild-type controls, image fixed and live preparations, and
-quantify morphometric features at the per-cell level.
+A representative anchor (gene-of-interest) loss-of-function reshapes
+cortical microglial morphology. The fixture uses primary microglia isolated
+from P21 cortex of an example mutant versus wild-type controls, with
+fixed-cell imaging and per-cell feature quantification.
 
 Key biological contrasts:
 
-- *Disc1*+/− vs WT microglia
+- Example mutant vs WT microglia
 - Cortical layer II/III vs V/VI
 - Resting vs LPS-stimulated cytoskeletal state
 
@@ -28,7 +28,7 @@ data/
   morphometry_per_cell.csv      # per-cell features (n=30 cells)
   effect_sizes.csv              # bootstrapped effect sizes per feature
   README.md                     # data-file documentation
-sample_refs.bib        # BibTeX (3 DISC1 references)
+sample_refs.bib       # BibTeX (3 placeholder references)
 panelforge.project.yaml   # explicit panelforge config (optional)
 ```
 
@@ -36,7 +36,7 @@ panelforge.project.yaml   # explicit panelforge config (optional)
 
 Fixed-cell **z-stack confocal** imaging on a Zeiss LSM 880 with **Airyscan**.
 Per-cell volumetric reconstruction at 0.04 µm lateral × 0.16 µm axial
-sampling. Live-cell experiments not yet completed (this manuscript is
+sampling. Live-cell experiments not yet completed (this fixture is
 fixed-cell only).
 
 ## Statistics
@@ -48,4 +48,5 @@ biological hypothesis is "no difference," we additionally report a
 
 ## Citation
 
-If you use this dataset, cite the three references in `sample_refs.bib`.
+If you use this dataset, cite the three placeholder references in
+`sample_refs.bib`.

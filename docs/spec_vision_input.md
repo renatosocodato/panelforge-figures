@@ -121,7 +121,7 @@ A vision result of `family=coef_forest, equivalence_bands=true, plausible_modali
 |---|---|---|
 | `factorial_design` | `false` (forest layout = single-coefficient comparison) | 0.78 |
 | `equivalence_claims` | `true` | 0.82 |
-| `manuscript_anchor` | `DISC1` | 0.74 |
+| `manuscript_anchor` | `EXAMPLE_ANCHOR` | 0.74 |
 | `dynamics_needed` | `static` (no time axis seen) | 0.85 |
 | `dimensionality` | `2D` | 0.99 |
 
@@ -136,7 +136,7 @@ A vision result of `family=coef_forest, equivalence_bands=true, plausible_modali
 ```bash
 figures refine <figure.pdf | recipe.py> "<natural-language edit>"
 figures refine fig.pdf "make y-axis log-scale and add CI bands"
-figures refine recipes/disc1/forest_v3.py "drop the bottom-3 markers by score"
+figures refine recipes/example_a/forest_v3.py "drop the bottom-3 markers by score"
 figures vision-explain fig.pdf       # describes the figure, no edit
 ```
 
@@ -166,7 +166,7 @@ Before re-render, `figures refine` always prints the proposed patch and waits fo
 ```bash
 $ figures profile scan --reference-figure nature_paper_figure_3.png
 [scan] reading manuscript.md ............................... 4 signals
-[scan] reading data/disc1_effects.csv headers .............. 12 columns
+[scan] reading data/example_effects.csv headers ............ 12 columns
 [vision] sending figure to Anthropic vision endpoint ....... 380 KB
 [vision] family=coef_forest (conf=0.92)
 [vision] markers: forest_dots, error_bars, equivalence_bands
@@ -190,7 +190,7 @@ Top-1 result: actin_mt.compartment_paired_delta_scatter (score=0.84)
 $ figures refine figures/forest_v3.pdf "make y-axis log-scale"
 [vision] reading figures/forest_v3.pdf (page 1, 1.2 MB rasterised)
 [vision] figure recognised as coef_forest with 8 markers
-[code] reading recipes/disc1/forest_v3.py (98 LOC)
+[code] reading recipes/example_a/forest_v3.py (98 LOC)
 [code] proposed contract patch:
    {"y_log_scale": true}
 
@@ -393,7 +393,7 @@ Test fixtures live in `tests/fixtures/vision/` and include three small reference
 
 A v2.0.0 release ships vision input only when **all** of the following hold:
 
-1. The DISC1 example image (committed at `tests/fixtures/vision/disc1_paired_delta.png`) produces a top-1 recipe drawn from the `cytoskeletal_morphometry_companion` pack with score ≥ 0.7.
+1. The example image (committed at `tests/fixtures/vision/example_paired_delta.png`) produces a top-1 recipe drawn from the `cytoskeletal_morphometry_companion` pack with score ≥ 0.7.
 2. Refinement of a rendered coef_forest with `"make y log-scale"` returns a contract patch `{"y_log_scale": true}` that passes contract validation and yields a re-rendered PDF differing from the original.
 3. The vision pipeline returns `{}` (no exceptions) when `ANTHROPIC_API_KEY` is unset; the rest of the flow continues to work.
 4. Calling `vision_scan_reference_figure` twice with the same image makes exactly **one** API call (cache hit on the second).

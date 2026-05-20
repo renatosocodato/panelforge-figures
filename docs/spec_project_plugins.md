@@ -26,7 +26,7 @@ Two discovery paths, both supported, both ending at the same `register_recipe(..
 ```toml
 # pyproject.toml of the plugin package
 [project.entry-points."panelforge.plugins"]
-my_example_a_extra = "panelforge_disc1_extra"
+my_example_extra = "panelforge_example_extra"
 ```
 
 At index-build time, panelforge calls `importlib.metadata.entry_points(group="panelforge.plugins")` and imports each named module. The module's `__init__.py` (or any submodule it imports) is responsible for invoking `@register_recipe(...)` exactly as catalog recipes do.
@@ -38,7 +38,7 @@ The scan is **opt-in by presence**. No `panelforge_plugins/` directory means zer
 A `panelforge.project.yaml` may override the directory name:
 
 ```yaml
-anchor: DISC1
+anchor: EXAMPLE_ANCHOR
 plugins_dir: panelforge_plugins/   # default; set to e.g. "figures/plugins/" to relocate
 plugins_disabled: []                # explicit opt-out by plugin name
 ```
@@ -48,7 +48,7 @@ plugins_disabled: []                # explicit opt-out by plugin name
 Minimum viable plugin, suitable for a one-off lab figure that should never escape this project:
 
 ```
-my_example_a_project/
+my_example_project/
 ├── panelforge.project.yaml
 └── panelforge_plugins/
     ├── __init__.py             # may be empty; presence triggers package-style import
@@ -62,8 +62,8 @@ my_example_a_project/
 ```yaml
 name: example_lab_extras
 version: 0.1.0
-description: DISC1 lab one-off recipes (line-scan kymograph variants).
-author: Renato Socodato <renato@example.org>
+description: Lab one-off recipes (line-scan kymograph variants).
+author: Plugin Author <author@example.org>
 panelforge_min_version: 2.0.0
 panelforge_max_version: 2.99.0
 ```
@@ -77,10 +77,10 @@ from panelforge_figures.core import (
 
 class MyKymographInput(RecipeContract):
     line_scan: list[list[float]]
-    title: str = "DISC1 line-scan"
+    title: str = "Example line-scan"
 
 _META = RecipeMetadata(
-    name="disc1_line_scan_kymograph",
+    name="example_line_scan_kymograph",
     modality="example_extras",                  # plugin-namespaced modality
     family=RecipeFamily.heatmap,
     answers_question="What is the spatiotemporal evolution of the line-scan?",
@@ -99,17 +99,17 @@ There is no panelforge-side modification. The plugin is "the same shape as a cat
 For a group sharing a plugin across labs (e.g. a clinical-cohort plugin used by three sites), packaging is preferable so `pip install` plus the entry-point is enough:
 
 ```
-panelforge-disc1-extra/
+panelforge-example-extra/
 ├── pyproject.toml
 ├── README.md
 ├── LICENSE
-└── src/panelforge_disc1_extra/
+└── src/panelforge_example_extra/
     ├── __init__.py             # imports each recipe submodule, triggering @register_recipe
     ├── recipes/
     │   ├── __init__.py
-    │   ├── disc1_genotype_panel.py
-    │   ├── disc1_cohort_violin.py
-    │   └── disc1_qc_strip.py
+    │   ├── example_genotype_panel.py
+    │   ├── example_cohort_violin.py
+    │   └── example_qc_strip.py
     └── plugin.yaml             # same shape as single-file plugins
 ```
 
@@ -117,15 +117,15 @@ panelforge-disc1-extra/
 
 ```toml
 [project]
-name = "panelforge-disc1-extra"
+name = "panelforge-example-extra"
 version = "0.1.0"
 dependencies = ["panelforge-figures>=2.0,<3.0"]
 
 [project.entry-points."panelforge.plugins"]
-disc1_extra = "panelforge_disc1_extra"
+example_extra = "panelforge_example_extra"
 ```
 
-`pip install panelforge-disc1-extra` makes the plugin discoverable in any project that has panelforge-figures, with no project-level configuration required.
+`pip install panelforge-example-extra` makes the plugin discoverable in any project that has panelforge-figures, with no project-level configuration required.
 
 ## 5. Plugin discovery in `figures index emit`
 
@@ -168,7 +168,7 @@ The two shapes are first-class equally; no "preferred" path in the docs. The imp
 The project-config YAML (already used by `manifest/project_scan.py`) gains three fields:
 
 ```yaml
-anchor: DISC1
+anchor: EXAMPLE_ANCHOR
 plugins_dir: panelforge_plugins/    # optional; default panelforge_plugins/
 plugins_disabled:                    # optional; explicit opt-out by plugin name
   - flaky_kymograph_v0
@@ -183,7 +183,7 @@ plugins_strict: true                 # optional; default true; fail-fast on plug
 
 ### Example A — single-file plugin
 
-A DISC1 lab has a one-off compound figure that overlays Ca²⁺ event amplitude on a per-genotype cohort plot. They drop one file into the project:
+A lab has a one-off compound figure that overlays Ca²⁺ event amplitude on a per-genotype cohort plot. They drop one file into the project:
 
 ```
 example_paper/
@@ -191,10 +191,10 @@ example_paper/
 ├── data/
 └── panelforge_plugins/
     ├── plugin.yaml
-    └── disc1_specific_compound.py
+    └── example_specific_compound.py
 ```
 
-`disc1_specific_compound.py` defines `DISC1CompoundInput`, instantiates `RecipeMetadata(name="disc1_compound_overlay", modality="example_extras", ...)`, decorates `render()` with `@register_recipe(...)`. The user runs:
+`example_specific_compound.py` defines `ExampleCompoundInput`, instantiates `RecipeMetadata(name="example_compound_overlay", modality="example_extras", ...)`, decorates `render()` with `@register_recipe(...)`. The user runs:
 
 ```bash
 $ figures index emit --include-tags
@@ -202,7 +202,7 @@ $ figures index emit --include-tags
 n_recipes=449  (448 catalog + 1 plugin)
 ```
 
-`recipes_index.json` now has a 21st modality (`example_extras`) with one recipe whose `tags_source` is `"plugin:example_extras"`. The intake scorer treats it identically to catalog recipes; an agent answering the 8-question intake may receive `example_extras.disc1_compound_overlay` as the top-ranked recipe for a DISC1-specific question.
+`recipes_index.json` now has a 21st modality (`example_extras`) with one recipe whose `tags_source` is `"plugin:example_extras"`. The intake scorer treats it identically to catalog recipes; an agent answering the 8-question intake may receive `example_extras.example_compound_overlay` as the top-ranked recipe for a question matching that domain.
 
 ### Example B — installable plugin
 
@@ -300,7 +300,7 @@ Sandboxing (subprocess isolation, restricted import set, capability filter) is d
 
 **Risk: a plugin breaks on panelforge upgrade.** Plugin imports `core.RecipeMetadata`; we change `RecipeMetadata` in v2.1; the plugin breaks. Mitigation: `plugin.yaml.panelforge_min_version` and `panelforge_max_version` are surfaced by `figures plugins doctor`; versions outside the range emit a warning. Plugin authors are encouraged to pin (`>=2.0,<3.0`) in `pyproject.toml` for installable plugins. We will treat the `core` namespace as semver-stable across minor releases of panelforge.
 
-**Risk: plugin name collision across two installed packages.** Two PyPI plugins both register `disc1_extra` as their entry-point key. Mitigation: `entry_points` keys are namespaced by Python distribution name; collisions are rare. When they do happen, `discover_plugins` raises with both distribution names so the user can `pip uninstall` one.
+**Risk: plugin name collision across two installed packages.** Two PyPI plugins both register `example_extra` as their entry-point key. Mitigation: `entry_points` keys are namespaced by Python distribution name; collisions are rare. When they do happen, `discover_plugins` raises with both distribution names so the user can `pip uninstall` one.
 
 **Risk: recipe full-name collision (catalog vs plugin, or plugin vs plugin).** Already covered in §6 — fail fast, name both sides. Plugin authors are encouraged to namespace their modality (`example_extras.recipe`, not `clinical_cohort.recipe`).
 

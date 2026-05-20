@@ -147,8 +147,8 @@ def test_partitioned_panel_spec_parses() -> None:
 # ─────────────────────────── compose_figure — fixtures ──────────────────
 
 
-def test_compose_figure_disc1_fixture_creates_pdf(tmp_path: Path) -> None:
-    """Composing the DISC1 fixture produces a non-empty PDF on disk."""
+def test_compose_figure_example_fixture_creates_pdf(tmp_path: Path) -> None:
+    """Composing the example fixture produces a non-empty PDF on disk."""
     out = render_figure_yaml(
         _FIXTURES / "example_figure_3.yaml",
         out_dir=tmp_path,
@@ -162,10 +162,10 @@ def test_compose_figure_disc1_fixture_creates_pdf(tmp_path: Path) -> None:
     assert out_path.suffix == ".pdf"
 
 
-def test_compose_figure_cdc42_fixture_creates_pdf(tmp_path: Path) -> None:
-    """The 2x2 cdc42 factorial fixture renders without error."""
+def test_compose_figure_factorial_fixture_creates_pdf(tmp_path: Path) -> None:
+    """The 2x2 factorial fixture renders without error."""
     out = render_figure_yaml(
-        _FIXTURES / "example_modality_b_2x2.yaml",
+        _FIXTURES / "example_factorial_2x2.yaml",
         out_dir=tmp_path,
     )
     out_path = Path(out)
@@ -401,7 +401,7 @@ def test_validate_figure_yaml_passes_for_valid_fixture() -> None:
     """A real fixture with real recipes returns an empty problems list."""
     problems = validate_figure_yaml(_FIXTURES / "example_figure_3.yaml")
     assert problems == [], (
-        f"DISC1 fixture should validate cleanly; got: {problems}"
+        f"example fixture should validate cleanly; got: {problems}"
     )
 
 

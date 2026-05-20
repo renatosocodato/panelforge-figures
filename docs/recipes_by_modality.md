@@ -7,9 +7,9 @@ v1.0.0 stable: 20 modalities, 137 recipes.
 
 **v1.3.0-beta-intravital_imaging — Wave 4 landed: 392 recipes** (intravital_imaging +42 cumulative across all 4 waves). Pack total: 42/42 recipes; 4/4 waves; pack tag candidate `v1.3.0-beta-intravital_imaging`. See `docs/intravital_imaging_beta_pack_tracker.md`.
 
-**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 4 landed: 423 recipes** (cumulative across all 4 waves: meta_and_diagnostic +6, actin_microtubule_morphometry +12, biophysics_scaling +10, spatial_statistics +1, intravital_imaging +1, grant_and_conceptual +1). Pack total: 31/31 recipes; 4/4 waves; pack tag candidate `v1.4.0-beta-cytoskeletal_morphometry_companion`. See `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
+**v1.4.0-beta-cytoskeletal_morphometry_companion — Wave 4 landed: 423 recipes** (cumulative across all 4 waves: meta_and_diagnostic +6, actin_microtubule_morphometry +12, biophysics_scaling +10, spatial_statistics +1, intravital_imaging +1, grant_and_conceptual +1). Pack total: 31/31 recipes; 4/4 waves; pack tag candidate `v1.4.0-beta-cytoskeletal_morphometry_companion`.
 
-**v1.5.0-beta-factorial_design_companion — Wave 2 landed: 435 recipes** (cumulative across W1+W2: meta_and_diagnostic +6, omics_differential +6). Pack total: 12/25 recipes; 2/4 waves. See `docs/factorial_design_companion_pack_tracker.md`.
+**v1.5.0-beta-factorial_design_companion — Wave 2 landed: 435 recipes** (cumulative across W1+W2: meta_and_diagnostic +6, omics_differential +6). Pack total: 12/25 recipes; 2/4 waves.
 
 ## v0.1.0-alpha (3 modalities, 18 recipes)
 
@@ -177,7 +177,7 @@ bridge, sign-concordance overlay. Pioneers
 First wave of the factorial_design_companion beta expansion pack.
 Lands the 6 universal robustness + provenance primitives in
 `meta_and_diagnostic`, biology-agnostic and reusable beyond the
-example_factorial manuscript. Pioneers 2 new `core/` shims
+anchor manuscript. Pioneers 2 new `core/` shims
 (`bayes_factor_utility`, `multiverse_specification_utility`).
 meta_and_diagnostic expands from 21 to 27 recipes; total catalog
 423 → 429.

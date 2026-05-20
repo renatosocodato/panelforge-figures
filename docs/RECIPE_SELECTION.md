@@ -138,7 +138,7 @@ When two recipes carry identical weighted scores, tie-break in this order:
 3. **Wave age** — older `tags.wave` wins (more battle-tested; v1.0 > v1.1 > v1.5.0-beta-*).
 4. **Alphabetical** — by full name `{modality}.{recipe}`.
 
-> **Spec note.** Wave-age ordering is "older first" by design — this prioritises recipes that have already absorbed gallery review, downstream usage, and CI churn. If the user has expressed a preference for newer / experimental variants (e.g. they explicitly say "show me the cdc42-companion recipes"), they are expected to use `--include` overrides (§6) rather than reverse the tie-breaker.
+> **Spec note.** Wave-age ordering is "older first" by design — this prioritises recipes that have already absorbed gallery review, downstream usage, and CI churn. If the user has expressed a preference for newer / experimental variants (e.g. they explicitly say "show me the latest companion-pack recipes"), they are expected to use `--include` overrides (§6) rather than reverse the tie-breaker.
 
 ### 3.7 Threshold
 
@@ -358,7 +358,5 @@ Overrides are saved to the manifest output under a `discovery_log` block so the 
 - [`AGENT_BOOTSTRAP.md`](../AGENT_BOOTSTRAP.md) — first-contact procedure (fetch + retrieve + sparse-checkout).
 - [`docs/RECIPE_SELECTION_OFFLINE.md`](RECIPE_SELECTION_OFFLINE.md) — frozen offline mirror of the intake script + scoring rules + a single worked example (this document's Example 1).
 - [`docs/recipes_index.schema.json`](recipes_index.schema.json) — machine-readable schema for the index (including `scoring_rubric` and `intake_questions` blocks).
-- [`docs/factorial_design_companion_pack_tracker.md`](factorial_design_companion_pack_tracker.md) — the CDC42 pack that supplies Example 2's top recipes.
-- [`docs/cytoskeletal_morphometry_companion_pack_tracker.md`](cytoskeletal_morphometry_companion_pack_tracker.md) — the DISC1 pack that supplies Example 1's top recipes.
 - [`docs/recipes_by_modality.md`](recipes_by_modality.md) — human-browsable catalog (alphabetical-by-modality).
 - [`docs/recipes_by_question.md`](recipes_by_question.md) — human-browsable catalog (grouped by `answers_question`).

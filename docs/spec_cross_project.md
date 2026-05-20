@@ -14,10 +14,10 @@
 
 Panelforge in v1.6.1 was designed under a single-project mental model: open one repo, run `figures profile scan`, work the 8-question intake, render the 12 recipes the scorer recommends, ship Figure 3. The model fits a graduate student writing one thesis chapter. It does not fit the working PI who has four windows open.
 
-Three concrete frictions surfaced from the disc1 and cdc42 companion packs and the early intravital / biophysics betas:
+Three concrete frictions surfaced from companion packs of example projects and the early intravital / biophysics betas:
 
 1. **Cold-start tax per project.** Every new repo runs `figures profile scan` from scratch, even when the user has already answered "yes" to "uses Bayesian priors?" in three other projects this month. There is no warm cache of "what kind of scientist is this?" across projects.
-2. **Recipe-overlap is invisible.** The disc1 manuscript picks `bayes_factor_arrow_plot` for Figure 4. Three weeks later the cdc42 manuscript picks the same recipe, and the user re-derives that decision (and writes the same caption boilerplate) from scratch, never knowing a sibling project converged on the identical choice. There is no portfolio view that would surface "you've used this recipe in 3 of 5 projects — extract it".
+2. **Recipe-overlap is invisible.** Example modality A picks `bayes_factor_arrow_plot` for Figure 4. Three weeks later example modality B picks the same recipe, and the user re-derives that decision (and writes the same caption boilerplate) from scratch, never knowing a sibling project converged on the identical choice. There is no portfolio view that would surface "you've used this recipe in 3 of 5 projects — extract it".
 3. **No "where am I" prompt.** When a Claude Code session resumes after a coffee break, there is no `figures projects current` to confirm the workspace, the active profile, and the last render status. The user must `cat panelforge_workspace/state.json` and pattern-match. This is fine once; it scales badly across 5 repos.
 
 The solution is small in surface area and zero-data-leakage in design: a YAML registry of `{project_id → metadata}` in the user's config dir, queryable through a new CLI subcommand group. Each per-project workspace continues to own its truth (`panelforge.project.yaml`, `panelforge_workspace/`); the registry is a **pointer index**, never a data store.
@@ -31,13 +31,13 @@ Canonical location follows the XDG Base Directory spec (with `$XDG_CONFIG_HOME` 
 ```yaml
 # ~/.config/panelforge/projects.yaml
 schema_version: 1
-default_project: example_modality_a_2026
+default_project: modality_a_example_2026
 
 projects:
-  example_modality_a_2026:
+  modality_a_example_2026:
     path: ~/manuscripts/example_modality_a
     last_used: 2026-05-04T15:32:00Z
-    active_profile: disc1
+    active_profile: example_a
     n_recipes_picked: 12
     last_render_status: 11/12 success
     tags:
@@ -45,10 +45,10 @@ projects:
       - microglia
       - bayesian
 
-  example_modality_b_2026:
+  modality_b_example_2026:
     path: ~/manuscripts/example_modality_b
     last_used: 2026-05-06T09:18:00Z
-    active_profile: example_modality_b
+    active_profile: example_b_factorial
     n_recipes_picked: 19
     last_render_status: 19/19 success
     tags:
@@ -73,7 +73,7 @@ projects:
     last_render_status: 4/4 success
     tags:
       - grant
-      - r01
+      - example_grant
 ```
 
 ### 2.1 Field semantics
@@ -87,7 +87,7 @@ projects:
 | `projects.<id>.active_profile` | string | Name of the active panelforge profile in that project's `panelforge_workspace/`. |
 | `projects.<id>.n_recipes_picked` | int | Count from the most recent `manifest.yaml`; cached for fast `list` rendering without I/O on every project. |
 | `projects.<id>.last_render_status` | string | `"<n_success>/<n_total> success"` — one-line summary; full status remains in the per-project workspace. |
-| `projects.<id>.tags` | list[string] | Free-form labels — the user's own taxonomy (`manuscript`, `grant`, `microglia`, `r01`). |
+| `projects.<id>.tags` | list[string] | Free-form labels — the user's own taxonomy (`manuscript`, `grant`, `microglia`, `example_grant`). |
 
 The `id` (top-level key under `projects`) is canonical and stable; defaults to the `project_id` declared in the project's own `panelforge.project.yaml`, with a `<basename>_<YYYY>` fallback for unnamed projects.
 
@@ -117,13 +117,13 @@ A new subcommand group on the existing `figures` Click app. All subcommands resp
 The diff command is the headline feature: it converts "I think these two papers reuse some methods" into a printed list. It loads the two target projects' `panelforge_workspace/manifest.yaml` files, extracts the set of recipe IDs each has rendered (or queued), and reports overlap.
 
 ```
-$ figures projects diff disc1 cdc42
+$ figures projects diff example_a example_b
 
-Project A (example_modality_a_2026): 12 recipes
-Project B (example_modality_b_2026): 19 recipes
+Project A (modality_a_example_2026): 12 recipes
+Project B (modality_b_example_2026): 19 recipes
 
 Shared (3):
-  - meta_and_diagnostic.bayes_factor_arrow_plot              [DISC1 + CDC42]
+  - meta_and_diagnostic.bayes_factor_arrow_plot              [A + B]
   - actin_microtubule_morphometry.compartment_paired_delta_scatter
   - biophysics_scaling.equivalence_forest_with_tost_bounds
 
@@ -137,7 +137,7 @@ B only (16):
 
 Suggestion: extract a `shared_methods.figure.yaml` using the 3 shared
 recipes — single source of truth for common methods across both papers.
-Run:  figures compose-from-shared disc1 cdc42 --out shared_methods.figure.yaml
+Run:  figures compose-from-shared example_a example_b --out shared_methods.figure.yaml
 ```
 
 The "Suggestion" line is heuristic: ≥ 3 shared recipes triggers the prompt; < 3 stays silent. The `compose-from-shared` follow-on is a dependency on the §spec_composition_layer composition CLI; if that spec is not yet implemented, the suggestion text is replaced with a passive `"3 recipes are candidates for shared-methods extraction"` line.
@@ -150,41 +150,41 @@ The "Suggestion" line is heuristic: ≥ 3 shared recipes triggers the prompt; < 
 
 ```
 $ figures projects register ~/manuscripts/example_modality_a
-✓ Registered as `example_modality_a_2026`. (default project)
+✓ Registered as `modality_a_example_2026`. (default project)
 
 $ figures projects register ~/manuscripts/example_modality_b
-✓ Registered as `example_modality_b_2026`.
+✓ Registered as `modality_b_example_2026`.
 
-$ figures projects register ~/manuscripts/panelforge_methods
+$ figures projects register ~/manuscripts/methods_paper
 ✓ Registered as `methods_paper_2026`.
 
 $ figures projects register ~/grants/example_grant
 ✓ Registered as `example_grant_2026`.
 
 $ figures projects list
-ID                       LAST USED          PROFILE            RECIPES   STATUS         TAGS
-* example_modality_a_2026     2026-05-04 15:32   disc1              12        11/12 success  manuscript, microglia
-  example_modality_b_2026     2026-05-06 09:18   example_modality_b    19        19/19 success  manuscript, actin
-  methods_paper_2026       2026-04-22 11:04   methods             6         6/6 success   methods-paper
-  example_grant_2026         2026-05-02 16:40   grant               4         4/4 success   grant, r01
+ID                          LAST USED          PROFILE              RECIPES   STATUS         TAGS
+* modality_a_example_2026     2026-05-04 15:32   example_a            12        11/12 success  manuscript, microglia
+  modality_b_example_2026     2026-05-06 09:18   example_b_factorial  19        19/19 success  manuscript, actin
+  methods_paper_2026          2026-04-22 11:04   methods               6         6/6 success   methods-paper
+  example_grant_2026          2026-05-02 16:40   grant                 4         4/4 success   grant, example_grant
 
 (* = default project; switch with `figures projects switch <id>`)
 
-$ figures projects switch example_modality_b_2026
-✓ Switched. Active profile: example_modality_b. 19 recipes in manifest.
+$ figures projects switch modality_b_example_2026
+✓ Switched. Active profile: example_b_factorial. 19 recipes in manifest.
   (warm-loaded panelforge_workspace/state.json — no scan re-run)
 ```
 
 ### 5.2 Example B — `diff` surfaces shared-methods candidate
 
 ```
-$ figures projects diff example_modality_a_2026 example_modality_b_2026
+$ figures projects diff modality_a_example_2026 modality_b_example_2026
 ```
 
 Output is the §4 listing verbatim. The user runs:
 
 ```
-$ figures compose-from-shared example_modality_a_2026 example_modality_b_2026 \
+$ figures compose-from-shared modality_a_example_2026 modality_b_example_2026 \
     --out shared_methods.figure.yaml
 ✓ Wrote shared_methods.figure.yaml (3 panels, ~150 lines)
   Place under each project's panelforge_workspace/figures/ to reuse.
@@ -207,7 +207,7 @@ Top 10 recipes (by project-count):
   …
 
 Recipe usage heatmap  (• = used, · = unused)
-                                              disc1 cdc42 meth grant intra
+                                              ex_a  ex_b  meth grant intra
   meta_and_diagnostic.run_provenance_card       •     •     •    •     •
   meta_and_diagnostic.bayes_factor_arrow_plot   •     •     ·    •     •
   actin_mt.compartment_paired_delta_scatter     •     •     •    ·     ·

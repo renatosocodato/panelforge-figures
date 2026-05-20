@@ -4,9 +4,9 @@
 **Version label (target):** `[2.0.0-statistical_contract]`
 **Owner stream:** v2.0.0 elevations (parallel-swarm spec W2)
 **Branch:** `roadmap-v2-specs` (this spec) → implementation in dedicated PR series
-**Anchor pattern:** `[1.5.0-beta-factorial_design_companion]` (PR #44–#48) — wave-gated, additive, zero-deps-by-default
-**Scope:** 1 new dataclass module, 1 new audit module (~12–15 rules), 1 new field on `RecipeMetadata`, 1 new CLI verb, contract-tagging of the 56 Tier-1 recipes (cdc42 + disc1 packs), full backwards-compatibility for the remaining 392 untagged recipes.
-**TL;DR.** Today, every recipe in the catalog declares only a *visualisation* contract: "I render a coef-forest given `rows: list[CoefRow]`." A user can hand `coef_forest` data with three samples per group, NaN-laden estimates, or six panels lacking any multiple-comparison correction, and the renderer will dutifully draw a figure that *lies*. This spec adds a **statistical contract** layer — a per-recipe declaration of the inferential preconditions the data must satisfy — together with a pre-render `figures audit` step that checks each precondition and either **refuses to render** (`StatisticalContractViolation`) or emits a warning that propagates to `RENDER_REPORT.md`. The render pipeline becomes `intake → score → bind → AUDIT (new) → render → report`. Tier-1 of 56 cdc42 + disc1 recipes ship with explicit contracts in this PR; the remaining 392 default to the all-permissive contract and continue to render unchanged.
+**Anchor pattern:** wave-gated companion-pack PR (e.g. PR #44–#48) — additive, zero-deps-by-default
+**Scope:** 1 new dataclass module, 1 new audit module (~12–15 rules), 1 new field on `RecipeMetadata`, 1 new CLI verb, contract-tagging of the 56 Tier-1 recipes (factorial + cytoskeletal companion packs), full backwards-compatibility for the remaining 392 untagged recipes.
+**TL;DR.** Today, every recipe in the catalog declares only a *visualisation* contract: "I render a coef-forest given `rows: list[CoefRow]`." A user can hand `coef_forest` data with three samples per group, NaN-laden estimates, or six panels lacking any multiple-comparison correction, and the renderer will dutifully draw a figure that *lies*. This spec adds a **statistical contract** layer — a per-recipe declaration of the inferential preconditions the data must satisfy — together with a pre-render `figures audit` step that checks each precondition and either **refuses to render** (`StatisticalContractViolation`) or emits a warning that propagates to `RENDER_REPORT.md`. The render pipeline becomes `intake → score → bind → AUDIT (new) → render → report`. Tier-1 of 56 companion-pack recipes ship with explicit contracts in this PR; the remaining 392 default to the all-permissive contract and continue to render unchanged.
 
 ## 1. Why now / problem statement
 
@@ -206,7 +206,7 @@ The existing 448 recipes have **no** `statistical_contract`. Strategy:
 
 - Default contract = `StatisticalContract()` — every field at its all-permissive sentinel. Every rule short-circuits at `if_applicable` and returns `pass`.
 - Migration is **incremental and recipe-author-driven**.
-- **Tier 1** (this PR series, 56 recipes): the cdc42 + disc1 packs (25 + 31 = 56). These two packs anchor in-flight peer-review-cycle manuscripts and are the highest-value targets. Each Tier-1 recipe gains an explicit `statistical_contract` argument in its `RecipeMetadata(...)` call.
+- **Tier 1** (this PR series, 56 recipes): the factorial + cytoskeletal companion packs (25 + 31 = 56). These two packs anchor in-flight peer-review-cycle manuscripts and are the highest-value targets. Each Tier-1 recipe gains an explicit `statistical_contract` argument in its `RecipeMetadata(...)` call.
 - **Tier 2** (deferred to follow-up PRs, ~392 recipes): the remaining catalog. Each future companion pack inherits the contract as a baseline part of the recipe author's checklist (added to `docs/adding_a_recipe.md`).
 
 A migration of all 392 untagged recipes in one PR is explicitly **out of scope** — it would either gold-plate (uniform `min_n_per_group=6` is wrong for many primitives) or cause a fan-out of false-positive refusals at v2.0.0 release. Incremental wins.
@@ -232,8 +232,8 @@ The implementation lives in `cli.py` with three new `@main.command()` functions,
 | `src/panelforge_figures/manifest/__init__.py` | edit | Export `audit_binding`, `StatisticalContractViolation`. |
 | `src/panelforge_figures/manifest/render_loop.py` | edit | Insert `audit_binding(b)` between bind and render; new `RenderOutcome` status `refused_audit`; new "Statistical warnings" section in `write_render_report`. |
 | `src/panelforge_figures/cli.py` | edit | New `audit`, `audit-shortlist`, `--skip-audit` flags. |
-| `src/panelforge_figures/recipes/{cdc42-pack-25}/...` | edit | 25 recipe modules add explicit contracts. |
-| `src/panelforge_figures/recipes/{disc1-pack-31}/...` | edit | 31 recipe modules add explicit contracts. |
+| `src/panelforge_figures/recipes/{factorial-pack-25}/...` | edit | 25 recipe modules add explicit contracts. |
+| `src/panelforge_figures/recipes/{cytoskeletal-pack-31}/...` | edit | 31 recipe modules add explicit contracts. |
 | `tests/test_statistical_contract.py` | **NEW** | `StatisticalContract` dataclass tests. |
 | `tests/test_statistical_audit.py` | **NEW** | ~300 LOC; ≥10 tests across the 13 rules; integration tests. |
 | `tests/fixtures/audit_data/` | **NEW** | One synthetic CSV per rule that exercises the trigger path: `n3_per_group.csv`, `heavy_tailed.csv`, `singular_design.csv`, `unpaired_when_paired.csv`, `negative_in_non_negative.csv`, etc. |
@@ -280,14 +280,14 @@ The PR series ships when **all five** acceptance tests pass:
 1. **3-cell-per-group input correctly refused.** `pytest tests/test_statistical_audit.py::test_underpowered_refused_at_n3` green; `figures audit` exits 2; the printed message names the offending cells and offers a `min_n_per_group ≤ 3` suggestion.
 2. **Non-Gaussian + parametric correctly warned.** `pytest tests/test_statistical_audit.py::test_non_normal_warns` green; `RENDER_REPORT.md` contains a "Statistical warnings" section with the KS p-value and the suggestion.
 3. **6-panel pipeline correctly flags missing MC correction.** `pytest tests/test_statistical_audit.py::test_uncorrected_mc_in_5_panel_pipeline` green; the audit-shortlist verdict for a 6-panel profile without `correction_label` is `refuse`.
-4. **All 56 cdc42 + disc1 Tier-1 recipes have explicit contracts.** A new test `tests/test_tier1_contracts.py::test_all_tier1_have_explicit_contract` enumerates the 56 expected `full_name`s and asserts `recipe.metadata.statistical_contract != StatisticalContract()` (i.e. *something* was set explicitly).
+4. **All 56 Tier-1 companion-pack recipes have explicit contracts.** A new test `tests/test_tier1_contracts.py::test_all_tier1_have_explicit_contract` enumerates the 56 expected `full_name`s and asserts `recipe.metadata.statistical_contract != StatisticalContract()` (i.e. *something* was set explicitly).
 5. **Existing 392 untagged recipes still render without breaking.** The full quality-gate suite (`tests/test_quality_gates.py`, `tests/test_render_loop_integration.py`) passes against a representative profile that exercises ≥ 100 untagged recipes; zero new refusals; zero new warnings.
 
 CI must additionally show:
 
 - `ruff check` clean,
 - `mypy --strict` clean on the two new modules,
-- a 1-step `figures audit-shortlist examples/example_factorial/manifest.yaml` smoke test that exits 0 on well-conditioned synthetic data and 2 on the included `n3_per_group.csv` fixture.
+- a 1-step `figures audit-shortlist examples/factorial_2x2/manifest.yaml` smoke test that exits 0 on well-conditioned synthetic data and 2 on the included `n3_per_group.csv` fixture.
 
 ## 12. Out of scope
 
@@ -307,22 +307,22 @@ For posterity, the implementation will land in three sub-PRs on a `v2.0.0-statis
 | Sub-PR | Scope | LOC | Wave-gate |
 |---|---|---|---|
 | W1 | Substrate: `StatisticalContract` dataclass + `audit_binding` + 13 rules + integration with `render_loop` + CLI verbs + 13 tests + fixtures | ~900 | merge after acceptance test 1–3 + 5 |
-| W2 | Tier-1 cdc42 pack — 25 recipes get explicit contracts | ~150 | merge after acceptance test 4 (cdc42 subset) |
-| W3 | Tier-1 disc1 pack — 31 recipes get explicit contracts; close pack with `v2.0.0-statistical_contract` tag | ~190 | merge after full acceptance gate |
+| W2 | Tier-1 factorial pack — 25 recipes get explicit contracts | ~150 | merge after acceptance test 4 (factorial subset) |
+| W3 | Tier-1 cytoskeletal pack — 31 recipes get explicit contracts; close pack with `v2.0.0-statistical_contract` tag | ~190 | merge after full acceptance gate |
 
 Each sub-PR follows the existing pack-tracker discipline: `docs/statistical_contract_pack_tracker.md` carries the per-wave status table, branch names, and commit hashes; visual-QA fit-ups apply to any rule whose suggestion text changes; CHANGELOG entries follow the established format.
 
 ## 14. References
 
 - Existing closed-enum pattern: PR #57 (`feat(t2-enum-validation): closed-taxonomy enum classes + YAML-parse-time typo detection`).
-- Existing wave-gated pack pattern: `docs/factorial_design_companion_pack_tracker.md`, `docs/cytoskeletal_morphometry_companion_pack_tracker.md`.
+- Existing wave-gated pack pattern: companion-pack tracker docs under `docs/`.
 - Existing render-loop architecture: `src/panelforge_figures/manifest/render_loop.py` §1–§3 (run_render_loop, RenderOutcome, EnvironmentalFailure).
 - Existing recipe-metadata pattern: `src/panelforge_figures/core/contract.py` (`RecipeMetadata`, `register_recipe`).
 - Statistical primitives consumed: `scipy.stats.kstest` (normality), `numpy.linalg.matrix_rank` (singular design), per-group `scipy.stats.bootstrap` for CI-aware suggestions (deferred to v2.1).
 
 ### Migration completed
 
-Sprint 1A (Build-C) migrated **45 of 57** Tier-1 recipes (cdc42 + disc1 manuscript companion packs) to declare explicit `StatisticalContract` blocks. The remaining 12 recipes are conceptual / narrative / raw-image primitives that do not render an inferential claim and therefore retain the all-permissive default contract by design (see spec §6 — descriptive families default to `StatisticalContract()` and are unaffected). All 448 recipes still render unchanged via their `_demo()` paths; the full pytest suite remains green at 2616 / 2616.
+Sprint 1A (Build-C) migrated **45 of 57** Tier-1 recipes (factorial + cytoskeletal manuscript companion packs) to declare explicit `StatisticalContract` blocks. The remaining 12 recipes are conceptual / narrative / raw-image primitives that do not render an inferential claim and therefore retain the all-permissive default contract by design (see spec §6 — descriptive families default to `StatisticalContract()` and are unaffected). All 448 recipes still render unchanged via their `_demo()` paths; the full pytest suite remains green at 2616 / 2616.
 
 The five contract templates used by this migration are:
 

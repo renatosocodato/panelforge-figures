@@ -1,11 +1,11 @@
-# DISC1 Figure 3 — six-panel grid using real recipes from the catalog.
+# Example six-panel grid using real recipes from the catalog.
 #
 # This fixture exercises the GridLayout path with a 3x2 layout and panel
 # A/B/C/D/E/F overlays.  The panels deliberately mix modalities to verify
 # the engine doesn't assume a uniform aesthetic.
 figure_id: example_figure_3
-title: "DISC1 perturbation panel"
-caption: "Six-panel summary of DISC1 morphometry, dynamics, and Bayesian evidence."
+title: "Perturbation panel"
+caption: "Six-panel summary of morphometry, dynamics, and Bayesian evidence."
 
 layout:
   type: grid

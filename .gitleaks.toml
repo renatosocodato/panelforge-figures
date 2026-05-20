@@ -1,0 +1,30 @@
+# gitleaks configuration
+# https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+#
+# We extend the default ruleset and allow-list known false-positive paths:
+#   - .secrets.baseline      — detect-secrets whitelist (contains SHA hashes by design)
+#   - recipes_index.json     — auto-generated registry with high-entropy recipe IDs
+#   - tests/**               — synthetic test fixtures (uuid4 strings, fake bibtex keys)
+#   - tests/fixtures/**      — test data with example identifiers
+#   - panelforge_workspace/** — per-project workspace artifacts (paths only, no secrets)
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlist false-positive paths"
+paths = [
+    '''\.secrets\.baseline''',
+    '''recipes_index\.json''',
+    '''tests/.*''',
+    '''docs/.*\.md''',
+    '''CHANGELOG\.md''',
+    '''SECURITY\.md''',
+    '''panelforge_workspace/.*''',
+]
+regexes = [
+    # Anthropic placeholder used in docs: sk-ant-… (with U+2026 ellipsis)
+    '''sk-ant-…''',
+    # Github-action SHA pins (always 40 chars, lowercase hex — known-safe by definition)
+    '''[a-f0-9]{40}\s*#\s*v[0-9]+\.[0-9]+\.[0-9]+''',
+]

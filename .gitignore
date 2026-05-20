@@ -23,3 +23,30 @@ env/
 *.swo
 figures/outputs/
 figures/cache/
+
+# ───────────────────────────────────────────────────────────
+# Security: secrets & credentials
+# ───────────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+*_rsa
+*_rsa.pub
+*.crt
+*.cer
+
+# ───────────────────────────────────────────────────────────
+# Per-project consumer artifacts (panelforge consumers create these)
+# ───────────────────────────────────────────────────────────
+panelforge_workspace/
+figures_plan.yaml
+data/
+manuscript/
+.consensus_cache/
+
+# ───────────────────────────────────────────────────────────
+# Test / dev caches
+# ───────────────────────────────────────────────────────────
+.hypothesis/
+.scratch/

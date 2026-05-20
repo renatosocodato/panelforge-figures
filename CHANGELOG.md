@@ -119,7 +119,7 @@ the Wave-3 soak report + corrects the long-stale package version
 - "Privacy & data handling (Pass-3 LLM)" section in
   `CLAUDE_CODE_AUTONOMOUS.md` (~265 words; explicit list of what
   IS sent to Anthropic and what is NEVER sent).
-- E2e regression gate `test_e2e_project_scan_disc1_fixture`
+- E2e regression gate `test_e2e_project_scan_example_fixture`
   asserting `dynamics_needed != "live"` on the DISC1 fixture
   (the bug shipped because no e2e test grounded an assertion on
   this field).
@@ -274,7 +274,7 @@ See [`docs/AGENT_RECIPES.md`](docs/AGENT_RECIPES.md) for the
 end-user tutorial and [`AGENT_BOOTSTRAP.md`](AGENT_BOOTSTRAP.md)
 for the CLI-agent first-contact guide.
 
-## [1.5.0-beta-cdc42_factorial_companion] — 2026-04-30 [PACK COMPLETE]
+## [1.5.0-beta-factorial_design_companion] — 2026-04-30 [PACK COMPLETE]
 
 **CDC42 factorial companion pack — COMPLETE.** 4 waves, 25 new
 recipes scattered across 5 existing modalities (no new modality),
@@ -287,7 +287,7 @@ across 1 newly-pioneered `_shared.py` module
 dependencies** (no `BayesFactor` R package / `multiverse-r` /
 `scikit-bio` / `networkx`). Catalog **423 → 448**; 5 modalities
 touched. Tests **2218 → 2356** (+138). PRs **#44 → #47**
-(+ #48 closeout). Tag **`v1.5.0-beta-cdc42_factorial_companion`**.
+(+ #48 closeout). Tag **`v1.5.0-beta-factorial_design_companion`**.
 
 ### Per-wave delta
 
@@ -342,19 +342,19 @@ touched. Tests **2218 → 2356** (+138). PRs **#44 → #47**
 
 ### Manuscript-panel coverage
 
-The pack closes the `cdc42_fxm` manuscript's reviewer-proof
+The pack closes the anchor manuscript's reviewer-proof
 primitive gap. Manuscript figures **F1F + F2D + F2E + F2H + F2J +
 F3G + F4A + F4B + F4C + F4D + F4F + F4G + F4H + F4I + F4J + F5D +
 F5H + F5J + F5K + F5L + F6E + SF2G + SF4B + SF4D + Supp Table R1**
 all renderable from the catalog as of pack close.
 
-See [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+See [`docs/factorial_design_companion_pack_tracker.md`](docs/factorial_design_companion_pack_tracker.md)
 for the full pack tracker including risks, demo conventions, and
 visual-QA fit-up logs per wave (12 fit-ups total: 2 + 4 + 3 + 3).
 
-## [1.5.0-beta-cdc42_factorial_companion-w4] — 2026-04-30
+## [1.5.0-beta-factorial_design_companion-w4] — 2026-04-30
 
-Fourth and final wave of the `cdc42_factorial_companion` beta
+Fourth and final wave of the `factorial_design_companion` beta
 expansion pack. Lands the 6-recipe energetic / thermodynamic +
 narrative-integration cluster — quartile stacked bar by factor,
 route-geometry compact screen, molecular resilience index bar,
@@ -454,13 +454,13 @@ manuscript-anchored values where available:
 
 - biophysics_scaling recipes: **47 → 51** (+4).
 - intravital_imaging recipes: **59 → 61** (+2).
-- cdc42_factorial_companion pack recipes landed: **19 → 25 (final)**.
+- factorial_design_companion pack recipes landed: **19 → 25 (final)**.
 - Pack closes at **25/25 recipes** (Wave 4 of 4).
-- Pack-closeout PR will tag `v1.5.0-beta-cdc42_factorial_companion`.
+- Pack-closeout PR will tag `v1.5.0-beta-factorial_design_companion`.
 
-## [1.5.0-beta-cdc42_factorial_companion-w3] — 2026-04-28
+## [1.5.0-beta-factorial_design_companion-w3] — 2026-04-28
 
-Third wave of the `cdc42_factorial_companion` beta expansion pack.
+Third wave of the `factorial_design_companion` beta expansion pack.
 Lands the 7-recipe factorial-statistics + sex-stratified-validation
 cluster — two-way ANOVA summary, sex-stratified ROC under LOOCV,
 mediation decomposition, pre/post slope by module, Sholl radial
@@ -584,15 +584,15 @@ where available:
 - mixed_effects_models recipes: **16 → 20** (+4).
 - actin_microtubule_morphometry recipes: **47 → 49** (+2).
 - intravital_imaging recipes: **58 → 59** (+1).
-- cdc42_factorial_companion pack recipes landed: **12 → 19**
+- factorial_design_companion pack recipes landed: **12 → 19**
   (Wave 3 of 4).
 - New `_shared.py` modules pioneered (cumulative): **2 → 3**
   (`mixed_effects_models` joins `meta_and_diagnostic` +
   `omics_differential`).
 
-## [1.5.0-beta-cdc42_factorial_companion-w2] — 2026-04-28
+## [1.5.0-beta-factorial_design_companion-w2] — 2026-04-28
 
-Second wave of the `cdc42_factorial_companion` beta expansion
+Second wave of the `factorial_design_companion` beta expansion
 pack. Lands the 6-recipe F4 multi-omic integration cluster —
 proteome × phospho concordance, GEF/GAP/Effector module
 concordance, GGE branch-selectivity permutation, pathway-space
@@ -686,17 +686,17 @@ where possible:
 ### Progress
 
 - omics_differential recipes: **16 → 22** (+6).
-- cdc42_factorial_companion pack recipes landed: **6 → 12**
+- factorial_design_companion pack recipes landed: **6 → 12**
   (Wave 2 of 4).
 - New `_shared.py` modules pioneered (cumulative): **1 → 2**
   (`omics_differential` joins `meta_and_diagnostic`).
 
-## [1.5.0-beta-cdc42_factorial_companion-w1] — 2026-04-28
+## [1.5.0-beta-factorial_design_companion-w1] — 2026-04-28
 
-First wave of the `cdc42_factorial_companion` beta expansion
+First wave of the `factorial_design_companion` beta expansion
 pack. Lands the 6 universal robustness + provenance primitives
 in `meta_and_diagnostic`, biology-agnostic and reusable beyond
-the cdc42_fxm manuscript. Pioneers 2 new `core/` shims
+the anchor manuscript. Pioneers 2 new `core/` shims
 (`bayes_factor_utility`, `multiverse_specification_utility`).
 `meta_and_diagnostic` expands from 21 to 27 recipes; total
 catalog 423 → 429.
@@ -766,7 +766,7 @@ catalog 423 → 429.
 
 All 6 demos use seeded RNG (`np.random.default_rng(80X)`) and
 biology-agnostic synthetic data so the recipes are immediately
-reusable outside the cdc42 pack:
+reusable outside the factorial pack:
 
 - W1.1: 4 secondary descriptors with BFs spanning anecdotal
   → strong (one favouring alt with BF<1).
@@ -797,7 +797,7 @@ reusable outside the cdc42 pack:
 ### Progress
 
 - meta_and_diagnostic recipes: **21 → 27** (+6).
-- cdc42_factorial_companion pack recipes landed: **0 → 6**
+- factorial_design_companion pack recipes landed: **0 → 6**
   (Wave 1 of 4).
 - New `core/` shims: **0 → 2** (`bayes_factor_utility`,
   `multiverse_specification_utility`).
@@ -805,7 +805,7 @@ reusable outside the cdc42 pack:
 ### Completed packs
 
 - **CDC42 factorial companion pack
-  `[1.5.0-beta-cdc42_factorial_companion]` — COMPLETE.** 4 waves,
+  `[1.5.0-beta-factorial_design_companion]` — COMPLETE.** 4 waves,
   25 new recipes scattered across 5 existing modalities (no new
   modality), 2 new `core/` inline shims (`bayes_factor_utility`,
   `multiverse_specification_utility`), 11 new nested sub-contracts
@@ -815,12 +815,12 @@ reusable outside the cdc42 pack:
   `BayesFactor` R / `multiverse-r` / `scikit-bio` / `networkx`).
   Catalog 423 → 448; 5 modalities touched. Tests 2218 → 2356.
   PRs #44 → #47 (+ #48 closeout). Tag
-  `v1.5.0-beta-cdc42_factorial_companion`. See
-  [`docs/cdc42_factorial_companion_pack_tracker.md`](docs/cdc42_factorial_companion_pack_tracker.md)
+  `v1.5.0-beta-factorial_design_companion`. See
+  [`docs/factorial_design_companion_pack_tracker.md`](docs/factorial_design_companion_pack_tracker.md)
   for the full pack tracker.
 
 - **DISC1 manuscript companion pack
-  `[1.4.0-beta-disc1_manuscript_companion]` — COMPLETE.** 4 waves,
+  `[1.4.0-beta-cytoskeletal_morphometry_companion]` — COMPLETE.** 4 waves,
   31 new recipes scattered across 6 existing modalities (no new
   modality), 1 new `core/` inline shim
   (`permanova_null_utility`), 14 new nested sub-contracts across
@@ -830,8 +830,8 @@ reusable outside the cdc42 pack:
   **Zero new heavy dependencies** (no `scikit-bio` /
   `networkx` / `pysankey`). Catalog 392 → 423; 6 modalities
   touched. Tests 2056 → 2218. PRs #39 → #42 (+ #43 closeout).
-  Tag `v1.4.0-beta-disc1_manuscript_companion`. See
-  [`docs/disc1_manuscript_companion_pack_tracker.md`](docs/disc1_manuscript_companion_pack_tracker.md)
+  Tag `v1.4.0-beta-cytoskeletal_morphometry_companion`. See
+  [`docs/cytoskeletal_morphometry_companion_pack_tracker.md`](docs/cytoskeletal_morphometry_companion_pack_tracker.md)
   for the full pack tracker.
 
 - **intravital_imaging beta expansion pack
@@ -847,9 +847,9 @@ reusable outside the cdc42 pack:
   [`docs/intravital_imaging_beta_pack_tracker.md`](docs/intravital_imaging_beta_pack_tracker.md)
   for the full pack tracker.
 
-## [1.4.0-beta-disc1_manuscript_companion-w4] — 2026-04-28
+## [1.4.0-beta-cytoskeletal_morphometry_companion-w4] — 2026-04-28
 
-Final wave of the `disc1_manuscript_companion` beta expansion
+Final wave of the `cytoskeletal_morphometry_companion` beta expansion
 pack. Lands the 9-recipe F5 / F6 narrative-integration cluster +
 FS1C / FS3D / FS5C / FS5D / FS6E-F / FS7B-D supplementary panels.
 Pioneers `grant_and_conceptual/_shared.py` for the headline
@@ -990,7 +990,7 @@ fit-ups are tracked separately in Commit 3.
 - actin_microtubule_morphometry recipes: **45 → 47** (+2).
 - biophysics_scaling recipes: **41 → 47** (+6).
 - grant_and_conceptual recipes: **15 → 16** (+1).
-- disc1_manuscript_companion pack recipes landed: **22 → 31**
+- cytoskeletal_morphometry_companion pack recipes landed: **22 → 31**
   (Wave 4 of 4 — **closes pack at 31/31**).
 - New `_shared.py` modules pioneered: **3 → 4**
   (`grant_and_conceptual` joins
@@ -998,9 +998,9 @@ fit-ups are tracked separately in Commit 3.
   `actin_microtubule_morphometry`, plus the existing
   `biophysics_scaling`).
 
-## [1.4.0-beta-disc1_manuscript_companion-w3] — 2026-04-28
+## [1.4.0-beta-cytoskeletal_morphometry_companion-w3] — 2026-04-28
 
-Third wave of the `disc1_manuscript_companion` beta expansion
+Third wave of the `cytoskeletal_morphometry_companion` beta expansion
 pack. Lands the 9-recipe cytoskeleton geometry + statistics
 cluster (F2D / F2E / F3 / F4 + supplementary FS2 / FS4 / FS5
 panels). Extends both `actin_microtubule_morphometry/_shared.py`
@@ -1133,12 +1133,12 @@ synthetic data:
 - actin_microtubule_morphometry recipes: **40 → 45** (+5).
 - biophysics_scaling recipes: **38 → 41** (+3).
 - spatial_statistics recipes: **15 → 16** (+1).
-- disc1_manuscript_companion pack recipes landed: **13 → 22**
+- cytoskeletal_morphometry_companion pack recipes landed: **13 → 22**
   (Wave 3 of 4).
 
-## [1.4.0-beta-disc1_manuscript_companion-w2] — 2026-04-27
+## [1.4.0-beta-cytoskeletal_morphometry_companion-w2] — 2026-04-27
 
-Second wave of the `disc1_manuscript_companion` beta expansion
+Second wave of the `cytoskeletal_morphometry_companion` beta expansion
 pack. Lands the 7-recipe F1 + F2 cluster — cell-level territory
 and scale-decomposition figures that open the manuscript narrative.
 Pioneers `actin_microtubule_morphometry/_shared.py` with 6 nested
@@ -1254,14 +1254,14 @@ synthetic data:
 - actin_microtubule_morphometry recipes: **35 → 40** (+5).
 - biophysics_scaling recipes: **37 → 38** (+1).
 - intravital_imaging recipes: **57 → 58** (+1).
-- disc1_manuscript_companion pack recipes landed: **6 → 13**
+- cytoskeletal_morphometry_companion pack recipes landed: **6 → 13**
   (Wave 2 of 4).
 - New `_shared.py` modules pioneered: **1 → 2**
   (`actin_microtubule_morphometry`).
 
-## [1.4.0-beta-disc1_manuscript_companion-w1] — 2026-04-27
+## [1.4.0-beta-cytoskeletal_morphometry_companion-w1] — 2026-04-27
 
-First wave of the `disc1_manuscript_companion` beta expansion
+First wave of the `cytoskeletal_morphometry_companion` beta expansion
 pack. Lands the 6 universal QA + diagnostic primitives in
 `meta_and_diagnostic`, biology-agnostic and reusable beyond the
 DISC1 manuscript. Pioneers `meta_and_diagnostic/_shared.py` with
@@ -1360,16 +1360,16 @@ outside the DISC1 pack:
 ### Progress
 
 - meta_and_diagnostic recipes: **15 → 21** (+6).
-- disc1_manuscript_companion pack recipes landed: **0 → 6**
+- cytoskeletal_morphometry_companion pack recipes landed: **0 → 6**
   (Wave 1 of 4).
 - New `_shared.py` modules pioneered: **0 → 1** (will reach
   2 after Wave 2 pioneers `actin_microtubule_morphometry/_shared.py`).
 
-### disc1_manuscript_companion beta expansion pack — COMPLETE
+### cytoskeletal_morphometry_companion beta expansion pack — COMPLETE
 
 The 4-wave pack closes at **31 new recipes** across 4 waves. Final
 catalog: **392 → 423** (across 6 modalities). Pack tag candidate:
-`v1.4.0-beta-disc1_manuscript_companion`.
+`v1.4.0-beta-cytoskeletal_morphometry_companion`.
 
 Cumulative summary across PRs #39, #40, #41, #42, and (this) closeout:
 

@@ -52,7 +52,7 @@ Apply the locked-weight scorer (§3) to every recipe in surviving modalities. Dr
 
 ### Stage 5 — Wave / build-order plan
 
-Group surviving recipes by `tags.wave`. Inside each wave bucket, order by score descending. The wave label tells the agent **how battle-tested** a recipe is: older waves (`v1.0`, `v1.1`) have years of CI, gallery review, and downstream consumption; newer waves (`v1.5.0-beta-cdc42_factorial_companion`) are weeks old and may need extra QA before publication.
+Group surviving recipes by `tags.wave`. Inside each wave bucket, order by score descending. The wave label tells the agent **how battle-tested** a recipe is: older waves (`v1.0`, `v1.1`) have years of CI, gallery review, and downstream consumption; newer waves (`v1.5.0-beta-factorial_design_companion`) are weeks old and may need extra QA before publication.
 
 ---
 
@@ -138,7 +138,7 @@ When two recipes carry identical weighted scores, tie-break in this order:
 3. **Wave age** — older `tags.wave` wins (more battle-tested; v1.0 > v1.1 > v1.5.0-beta-*).
 4. **Alphabetical** — by full name `{modality}.{recipe}`.
 
-> **Spec note.** Wave-age ordering is "older first" by design — this prioritises recipes that have already absorbed gallery review, downstream usage, and CI churn. If the user has expressed a preference for newer / experimental variants (e.g. they explicitly say "show me the cdc42-companion recipes"), they are expected to use `--include` overrides (§6) rather than reverse the tie-breaker.
+> **Spec note.** Wave-age ordering is "older first" by design — this prioritises recipes that have already absorbed gallery review, downstream usage, and CI churn. If the user has expressed a preference for newer / experimental variants (e.g. they explicitly say "show me the latest companion-pack recipes"), they are expected to use `--include` overrides (§6) rather than reverse the tie-breaker.
 
 ### 3.7 Threshold
 
@@ -184,7 +184,7 @@ Three recipes tie at score `0.565`:
 - `biophysics_scaling.hierarchical_effect_size_ladder` — polymer → network → territory → geometry → whole-cell effect-size cascade.
 - `biophysics_scaling.persistence_length_lp_with_equivalence_bounds` — TOST equivalence bounds on Lₚ across compartments.
 
-**Tie-break.** All three have anchor strength 1.0 (DISC1 exact). All three live in `biophysics_scaling`. All three carry `tags.wave = v1.4.0-beta-disc1_manuscript_companion` (same age). Alphabetical wins: the order printed above is the canonical surfacing order.
+**Tie-break.** All three have anchor strength 1.0 (DISC1 exact). All three live in `biophysics_scaling`. All three carry `tags.wave = v1.4.0-beta-cytoskeletal_morphometry_companion` (same age). Alphabetical wins: the order printed above is the canonical surfacing order.
 
 **What the agent should say:**
 
@@ -228,7 +228,7 @@ Top three by score:
 
 **Comparison to Example 1.** The top score in Example 2 (0.645) exceeds the top score in Example 1 (0.565) by exactly 0.080 — which is the gap between scoring 1.0 vs 0.7 on dimensionality (0.030) plus the presence of factorial credit at 0.300 minus the equivalence credit at 0.250 that Example 1 receives. This is the rubric working as intended: factorial designs out-rank equivalence designs by a 0.30 vs 0.25 weighting, propagating directly to shortlist ordering.
 
-**Tie-break.** All three score 0.645. `mixed_effects_models` has more matches (it owns 2 of the 3) → wins modality-locality. Inside `mixed_effects_models`: same anchor strength, same wave (`v1.5.0-beta-cdc42_factorial_companion`), so alphabetical: `sex_stratified_roc_loocv` < `two_way_anova_summary_plot`. **Final order: `sex_stratified_roc_loocv` → `two_way_anova_summary_plot` → `quartile_stacked_bar_by_factor`.**
+**Tie-break.** All three score 0.645. `mixed_effects_models` has more matches (it owns 2 of the 3) → wins modality-locality. Inside `mixed_effects_models`: same anchor strength, same wave (`v1.5.0-beta-factorial_design_companion`), so alphabetical: `sex_stratified_roc_loocv` < `two_way_anova_summary_plot`. **Final order: `sex_stratified_roc_loocv` → `two_way_anova_summary_plot` → `quartile_stacked_bar_by_factor`.**
 
 (The breakdown table above lists `two_way_anova_summary_plot` first for arithmetic readability; the actual canonical surfacing order applies tie-breakers.)
 
@@ -293,7 +293,7 @@ This failure mode is graceful: the user understands *why* there's no shortlist a
 
 When `≥ 80%` of shortlist entries share `tags.wave`, the agent flags:
 
-> 11 of 12 shortlist recipes ship in `v1.5.0-beta-cdc42_factorial_companion` (a 4-week-old companion pack). These are well-tested in CI but have not yet absorbed manuscript-level usage feedback. Consider asking for a wave-balanced shortlist via `--shortlist-size 24` to surface more battle-tested alternatives.
+> 11 of 12 shortlist recipes ship in `v1.5.0-beta-factorial_design_companion` (a 4-week-old companion pack). These are well-tested in CI but have not yet absorbed manuscript-level usage feedback. Consider asking for a wave-balanced shortlist via `--shortlist-size 24` to surface more battle-tested alternatives.
 
 ### 5.3 Identical scores, different visual approaches
 
@@ -338,7 +338,7 @@ Overrides are saved to the manifest output under a `discovery_log` block so the 
 | **Profile** | The dict produced by intake: `{anchor, factorial, equivalence, dynamics, dim, modalities, hard_filters, shortlist_size}`. |
 | **Hard filter** | A boolean tag (e.g. `compartment_aware`) applied as an absolute drop, before scoring. |
 | **Soft signal** | A scoring-rubric dimension (factorial, equivalence, anchor, dynamics, dim) whose contribution is weighted, not absolute. |
-| **Wave** | A named beta pack (e.g. `v1.4.0-beta-disc1_manuscript_companion`) that ships a coherent batch of recipes. |
+| **Wave** | A named beta pack (e.g. `v1.4.0-beta-cytoskeletal_morphometry_companion`) that ships a coherent batch of recipes. |
 | **Shortlist** | The post-threshold, post-tie-break, top-N recipe list returned to the user. |
 | **Modality locality** | The number of surviving (post-filter) recipes a given modality contributes to the pre-shortlist pool. |
 
@@ -358,7 +358,5 @@ Overrides are saved to the manifest output under a `discovery_log` block so the 
 - [`AGENT_BOOTSTRAP.md`](../AGENT_BOOTSTRAP.md) — first-contact procedure (fetch + retrieve + sparse-checkout).
 - [`docs/RECIPE_SELECTION_OFFLINE.md`](RECIPE_SELECTION_OFFLINE.md) — frozen offline mirror of the intake script + scoring rules + a single worked example (this document's Example 1).
 - [`docs/recipes_index.schema.json`](recipes_index.schema.json) — machine-readable schema for the index (including `scoring_rubric` and `intake_questions` blocks).
-- [`docs/cdc42_factorial_companion_pack_tracker.md`](cdc42_factorial_companion_pack_tracker.md) — the CDC42 pack that supplies Example 2's top recipes.
-- [`docs/disc1_manuscript_companion_pack_tracker.md`](disc1_manuscript_companion_pack_tracker.md) — the DISC1 pack that supplies Example 1's top recipes.
 - [`docs/recipes_by_modality.md`](recipes_by_modality.md) — human-browsable catalog (alphabetical-by-modality).
 - [`docs/recipes_by_question.md`](recipes_by_question.md) — human-browsable catalog (grouped by `answers_question`).

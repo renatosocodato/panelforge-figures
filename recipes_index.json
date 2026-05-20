@@ -458,7 +458,7 @@
     "git_commit": "committed",
     "n_modalities": 20,
     "n_recipes": 448,
-    "panelforge_version": "3.14.0",
+    "panelforge_version": "3.14.1",
     "schema_version": "1.0.0",
     "tags_enabled": true
   },
@@ -658,7 +658,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -767,7 +767,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -802,7 +802,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -1059,7 +1059,7 @@
             "equivalence": true,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1168,7 +1168,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1281,7 +1281,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1538,7 +1538,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1573,7 +1573,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1610,7 +1610,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1865,7 +1865,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -1940,7 +1940,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "merged"
         },
@@ -2129,7 +2129,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -2277,7 +2277,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -2388,7 +2388,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         }
@@ -2497,7 +2497,7 @@
             "equivalence": true,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -2576,7 +2576,7 @@
             "equivalence": true,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "merged"
         },
@@ -2652,7 +2652,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -2726,7 +2726,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -2801,7 +2801,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": true,
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -2837,7 +2837,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -3024,7 +3024,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -3410,7 +3410,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": true,
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -3526,7 +3526,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -3754,7 +3754,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": true,
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -3868,7 +3868,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": true,
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -4019,7 +4019,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -4094,7 +4094,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -4128,7 +4128,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -4360,7 +4360,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": true,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         }
@@ -9064,7 +9064,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "merged"
         },
@@ -10722,7 +10722,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -10993,7 +10993,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "merged"
         },
@@ -11216,7 +11216,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "merged"
         },
@@ -11402,7 +11402,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "merged"
         },
@@ -11617,7 +11617,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -11689,7 +11689,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -11724,7 +11724,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -11760,7 +11760,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -11990,7 +11990,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -12025,7 +12025,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -12062,7 +12062,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -12136,7 +12136,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -12171,7 +12171,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -12207,7 +12207,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -12315,7 +12315,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -12389,7 +12389,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -12871,7 +12871,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -13099,7 +13099,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -13293,7 +13293,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -13372,7 +13372,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         }
@@ -14223,7 +14223,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -14339,7 +14339,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -14533,7 +14533,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -14570,7 +14570,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -14607,7 +14607,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -14642,7 +14642,7 @@
             "equivalence": false,
             "factorial": true,
             "scale_aware": "unknown",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion"
+            "wave": "v1.5.0-beta-factorial_design_companion"
           },
           "tags_source": "override"
         },
@@ -17705,7 +17705,7 @@
             "equivalence": false,
             "factorial": false,
             "scale_aware": "unknown",
-            "wave": "v1.4.0-beta-disc1_manuscript_companion"
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
         },
@@ -18253,5 +18253,5 @@
     "merge_on",
     "pivot_wide"
   ],
-  "version": "3.14.0"
+  "version": "3.14.1"
 }

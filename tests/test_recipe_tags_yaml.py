@@ -32,8 +32,8 @@ VALID_WAVE = {
     "v1.1.0-beta-biophysics_scaling",
     "v1.2.0-beta-actin_microtubule_morphometry",
     "v1.3.0-beta-intravital_imaging",
-    "v1.4.0-beta-disc1_manuscript_companion",
-    "v1.5.0-beta-cdc42_factorial_companion",
+    "v1.4.0-beta-cytoskeletal_morphometry_companion",
+    "v1.5.0-beta-factorial_design_companion",
 }
 
 
@@ -117,7 +117,7 @@ def test_cdc42_pack_recipes_marked_factorial() -> None:
     data = _load_yaml()
     cdc42_keys = [
         k for k, v in data.items()
-        if isinstance(v, dict) and v.get("wave") == "v1.5.0-beta-cdc42_factorial_companion"
+        if isinstance(v, dict) and v.get("wave") == "v1.5.0-beta-factorial_design_companion"
     ]
     assert len(cdc42_keys) >= 20, (
         f"expected ≥20 cdc42-pack entries; got {len(cdc42_keys)}"
@@ -133,7 +133,7 @@ def test_disc1_pack_recipes_have_disc1_anchor() -> None:
     data = _load_yaml()
     disc1_keys = [
         k for k, v in data.items()
-        if isinstance(v, dict) and v.get("wave") == "v1.4.0-beta-disc1_manuscript_companion"
+        if isinstance(v, dict) and v.get("wave") == "v1.4.0-beta-cytoskeletal_morphometry_companion"
     ]
     assert len(disc1_keys) >= 20, (
         f"expected ≥20 disc1-pack entries; got {len(disc1_keys)}"

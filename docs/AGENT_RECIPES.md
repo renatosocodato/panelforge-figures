@@ -32,7 +32,7 @@ directory, more than 2 of 8 intake fields below confidence 0.7, user passes
 
 ## 2. Flow A — Generic CLI agent (`AGENT_BOOTSTRAP.md`)
 
-The user has asked: *"Can you find me a recipe for a DISC1 biophysics figure
+The user has asked: *"Can you find me a recipe for a biophysics figure
 that shows persistence-length equivalence bounds?"*
 
 **Step 1 — fetch the index.**
@@ -63,8 +63,8 @@ $ python -c "import json, jsonschema; jsonschema.validate(
     json.load(open('/tmp/index_schema.json')))"
 ```
 
-**Step 2 — locate candidate recipes.** The user mentioned *DISC1*,
-*biophysics*, and *equivalence bounds*, so filter by modality and the
+**Step 2 — locate candidate recipes.** The user mentioned
+*biophysics* and *equivalence bounds*, so filter by modality and the
 `tags.equivalence` boolean:
 
 ```bash
@@ -100,7 +100,7 @@ persistence length and equivalence zones in one sentence.
 explicit confirmation**:
 
 ```
-Shortlist for "DISC1 biophysics persistence-length equivalence":
+Shortlist for "biophysics persistence-length equivalence":
 
   [1] biophysics_scaling.persistence_length_lp_with_equivalence_bounds
       family: split_violin
@@ -138,12 +138,12 @@ off**. No side effects on the user's project until they confirm.
 
 ## 3. Flow B — Claude Code autonomous (`CLAUDE_CODE_AUTONOMOUS.md`)
 
-The user says: *"Render the figures for my DISC1 manuscript."*
+The user says: *"Render the figures for my manuscript."*
 
 Their project layout:
 
 ```
-my_disc1_paper/
+my_example_paper/
 ├── manuscript.tex
 ├── methods.md
 ├── README.md
@@ -160,7 +160,7 @@ my_disc1_paper/
 
 ```bash
 $ figures profile scan --project-root .
-[inferred]      manuscript_anchor    = "DISC1"     conf=1.00   (manuscript.tex \\title{}, README.md, methods.md ×3)
+[inferred]      manuscript_anchor    = "EXAMPLE_ANCHOR"    conf=1.00   (manuscript.tex \\title{}, README.md, methods.md ×3)
 [inferred]      factorial_design     = False       conf=1.00   (no 2x2 keywords across corpus)
 [inferred]      equivalence_claims   = True        conf=0.92   (TOST in methods.md, equivalence-zone in manuscript.tex)
 [inferred]      dynamics_needed      = "static"    conf=0.85   (no kymograph / live-imaging vocabulary)

@@ -10,7 +10,7 @@ figure that shows <X>" without naming a modality.
 > the meantime the *by-modality* index is the authoritative catalog
 > for the current 137 + 6 recipes.
 
-## CDC42-factorial-companion beta-pack Wave 4 additions (v1.5.0-beta-cdc42_factorial_companion-w4) [FINAL]
+## CDC42-factorial-companion beta-pack Wave 4 additions (v1.5.0-beta-factorial_design_companion-w4) [FINAL]
 
 - **Across sex × genotype conditions, what fraction of cells occupies each dissipation / energetic quartile, and where are the top/bottom-quartile shifts strongest?** → [`biophysics_scaling.quartile_stacked_bar_by_factor`](gallery/biophysics_scaling/quartile_stacked_bar_by_factor.png)
 - **Across multiple Cdc42-pathway perturbations and route geometries (PIP3 / Rho / Rac / Cdc42 / lipid), which perturbation × route cells fall below the manuscript disruption threshold?** → [`biophysics_scaling.route_geometry_compact_screen`](gallery/biophysics_scaling/route_geometry_compact_screen.png)
@@ -19,7 +19,7 @@ figure that shows <X>" without naming a modality.
 - **What are the per-step transition probabilities between decoded latent states, and which states are statistically sticky (large diagonal-vs-off-diagonal margin)?** → [`intravital_imaging.transition_matrix_diagonal_dominance_callout`](gallery/intravital_imaging/transition_matrix_diagonal_dominance_callout.png)
 - **Per decoded state, what does the Kaplan-Meier residence-time survival curve look like, and which states differ significantly from the reference state's residence-time distribution by KS test?** → [`intravital_imaging.residence_time_kaplan_meier_with_ks_overlay`](gallery/intravital_imaging/residence_time_kaplan_meier_with_ks_overlay.png)
 
-## CDC42-factorial-companion beta-pack Wave 3 additions (v1.5.0-beta-cdc42_factorial_companion-w3)
+## CDC42-factorial-companion beta-pack Wave 3 additions (v1.5.0-beta-factorial_design_companion-w3)
 
 - **In a 2 × 2 factorial design, which of {sex, genotype, sex × genotype interaction} is detectable, with what F, p, and partial η² effect size?** → [`mixed_effects_models.two_way_anova_summary_plot`](gallery/mixed_effects_models/two_way_anova_summary_plot.png)
 - **How well does a classifier separate phenotypes per sex stratum under leave-one-out cross-validation, and how does the AUC compare across strata?** → [`mixed_effects_models.sex_stratified_roc_loocv`](gallery/mixed_effects_models/sex_stratified_roc_loocv.png)
@@ -29,7 +29,7 @@ figure that shows <X>" without naming a modality.
 - **Per condition, what does the cell-behavior fingerprint look like across (i) representative velocity traces, (ii) summary violin distributions, and (iii) cv-velocity vs extension-fraction scatter?** → [`actin_microtubule_morphometry.behavioral_fingerprint_trio_composite`](gallery/actin_microtubule_morphometry/behavioral_fingerprint_trio_composite.png)
 - **Per cell, when do entries and exits between decoded states happen, and which cells stand out as high-switch-rate outliers above the 75th percentile?** → [`intravital_imaging.state_entry_exit_with_switch_callout`](gallery/intravital_imaging/state_entry_exit_with_switch_callout.png)
 
-## CDC42-factorial-companion beta-pack Wave 2 additions (v1.5.0-beta-cdc42_factorial_companion-w2)
+## CDC42-factorial-companion beta-pack Wave 2 additions (v1.5.0-beta-factorial_design_companion-w2)
 
 - **At pathway level, how concordant are proteome and phosphoproteome sex-effect scores, and is the relationship consistent with independent biological dimensions?** → [`omics_differential.proteome_phosphoproteome_pathway_scatter`](gallery/omics_differential/proteome_phosphoproteome_pathway_scatter.png)
 - **Across GEF / GAP / Effector modules and CKO conditions, which modules show sign-concordance between proteome and phosphoproteome layers?** → [`omics_differential.module_concordance_signed_heatmap`](gallery/omics_differential/module_concordance_signed_heatmap.png)
@@ -38,7 +38,7 @@ figure that shows <X>" without naming a modality.
 - **Across pathway branches, what fraction of GGE-enriched vs non-GGE pathways show male-biased phospho scores, and is the difference larger than the permutation null?** → [`omics_differential.gge_branch_selectivity_permutation_bar`](gallery/omics_differential/gge_branch_selectivity_permutation_bar.png)
 - **Across sex × genotype conditions and modules, where do CKO conditions show sign-concordant remodelling vs sex-asymmetric divergence?** → [`omics_differential.pathway_module_activity_with_sign_concordance`](gallery/omics_differential/pathway_module_activity_with_sign_concordance.png)
 
-## CDC42-factorial-companion beta-pack Wave 1 additions (v1.5.0-beta-cdc42_factorial_companion-w1)
+## CDC42-factorial-companion beta-pack Wave 1 additions (v1.5.0-beta-factorial_design_companion-w1)
 
 - **Per descriptor, how strong is the Bayes-factor evidence for the null hypothesis vs the alternative, and which Wagenmakers / Kass-Raftery threshold tier does it cross?** → [`meta_and_diagnostic.bayes_factor_arrow_plot`](gallery/meta_and_diagnostic/bayes_factor_arrow_plot.png)
 - **Per panel in a manuscript, what is the dataset layer, sample composition, and support-class verdict that documents the panel's epistemic role?** → [`meta_and_diagnostic.panel_provenance_ledger_table`](gallery/meta_and_diagnostic/panel_provenance_ledger_table.png)
@@ -47,7 +47,7 @@ figure that shows <X>" without naming a modality.
 - **Across analytical specifications, how does the per-spec effect-size estimate evolve when sorted by magnitude, and where does the curve cross the ROPE band?** → [`meta_and_diagnostic.multiverse_specification_curve`](gallery/meta_and_diagnostic/multiverse_specification_curve.png)
 - **Per proxy / readout, how does in-sample R² compare to leave-one-out cross-validated R², and which proxies show the strongest alignment vs the strongest overfit?** → [`meta_and_diagnostic.proxy_alignment_in_vs_loocv_forest`](gallery/meta_and_diagnostic/proxy_alignment_in_vs_loocv_forest.png)
 
-## DISC1-manuscript-companion beta-pack Wave 4 additions (v1.4.0-beta-disc1_manuscript_companion-w4)
+## DISC1-manuscript-companion beta-pack Wave 4 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w4)
 
 - **Along the pseudotime axis (resting → extended), how does cell morphology evolve, and where do WT vs LI stand-off trajectories diverge?** → [`actin_microtubule_morphometry.pseudotime_thumbnail_strip`](gallery/actin_microtubule_morphometry/pseudotime_thumbnail_strip.png)
 - **Across multi-stage manuscript narrative, how does each step connect to the next, with figure cross-references and inline statistics?** → [`grant_and_conceptual.narrative_cascade_river_with_xrefs`](gallery/grant_and_conceptual/narrative_cascade_river_with_xrefs.png)
@@ -59,7 +59,7 @@ figure that shows <X>" without naming a modality.
 - **Across three frontier-architecture readouts, how do per-condition estimates compare against the zero-effect reference?** → [`biophysics_scaling.splay_taper_polarity_displacement_compound`](gallery/biophysics_scaling/splay_taper_polarity_displacement_compound.png)
 - **Across three swept parameters (alpha / width / seed), does the WT-vs-LI separation persist across the local perturbation neighbourhood?** → [`biophysics_scaling.sensitivity_sweep_alpha_width_seed_compound`](gallery/biophysics_scaling/sensitivity_sweep_alpha_width_seed_compound.png)
 
-## DISC1-manuscript-companion beta-pack Wave 3 additions (v1.4.0-beta-disc1_manuscript_companion-w3)
+## DISC1-manuscript-companion beta-pack Wave 3 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w3)
 
 - **Per condition, how is the actin-to-microtubule angle distributed (parallel vs orthogonal), and how does nearest-neighbour inter-filament distance differ?** → [`actin_microtubule_morphometry.actin_mt_angle_rose_with_distance_inset`](gallery/actin_microtubule_morphometry/actin_mt_angle_rose_with_distance_inset.png)
 - **Per condition, how do representative protrusion outlines differ, and how do per-cell width / erosion-depth scalars distribute on a Cleveland strip plot?** → [`actin_microtubule_morphometry.protrusion_outline_with_cleveland_summary`](gallery/actin_microtubule_morphometry/protrusion_outline_with_cleveland_summary.png)
@@ -71,7 +71,7 @@ figure that shows <X>" without naming a modality.
 - **Per cell × compartment, how does microtubule mesh-density differ between whole-cell and protrusion-internal scales, and across genotypes?** → [`actin_microtubule_morphometry.mt_mesh_density_compartment_compare`](gallery/actin_microtubule_morphometry/mt_mesh_density_compartment_compare.png)
 - **Per cell, how does out-of-plane deflection (z-span) scale with protrusion width, and which cells exceed the Euler critical-length threshold (supercritical)?** → [`biophysics_scaling.z_span_vs_width_with_euler_threshold`](gallery/biophysics_scaling/z_span_vs_width_with_euler_threshold.png)
 
-## DISC1-manuscript-companion beta-pack Wave 2 additions (v1.4.0-beta-disc1_manuscript_companion-w2)
+## DISC1-manuscript-companion beta-pack Wave 2 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w2)
 
 - **Across multiple scales (whole-cell vs protrusion-internal) and tier-bands (polymer / network / territory), where do metrics sharpen significance?** → [`biophysics_scaling.dual_scale_significance_lollipop`](gallery/biophysics_scaling/dual_scale_significance_lollipop.png)
 - **On a PC1 / PC2 morphospace, do per-cell silhouette glyphs cluster by condition, and is the multivariate separation significant by PERMANOVA?** → [`actin_microtubule_morphometry.pca_silhouette_glyph_morphospace`](gallery/actin_microtubule_morphometry/pca_silhouette_glyph_morphospace.png)
@@ -81,7 +81,7 @@ figure that shows <X>" without naming a modality.
 - **Between two conditions, how does the territory zone-fraction composition redistribute (which zones grow vs shrink)?** → [`actin_microtubule_morphometry.zone_fraction_alluvial_sankey`](gallery/actin_microtubule_morphometry/zone_fraction_alluvial_sankey.png)
 - **Per colocalization metric (Manders M1, Pearson r, Spearman ρ), how does the per-cell distribution shift between conditions?** → [`actin_microtubule_morphometry.colocalization_raincloud_per_metric`](gallery/actin_microtubule_morphometry/colocalization_raincloud_per_metric.png)
 
-## DISC1-manuscript-companion beta-pack Wave 1 additions (v1.4.0-beta-disc1_manuscript_companion-w1)
+## DISC1-manuscript-companion beta-pack Wave 1 additions (v1.4.0-beta-cytoskeletal_morphometry_companion-w1)
 
 - **Which input features dominate each principal component, and how much variance does each PC explain?** → [`meta_and_diagnostic.pca_loadings_heatmap`](gallery/meta_and_diagnostic/pca_loadings_heatmap.png)
 - **Per cell, which measurements pass / fail QA, and what is the row-level verdict flag?** → [`meta_and_diagnostic.per_cell_audit_table_with_qa_flags`](gallery/meta_and_diagnostic/per_cell_audit_table_with_qa_flags.png)

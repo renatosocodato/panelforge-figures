@@ -12,10 +12,10 @@
 
 ## 1. Why now — the problem statement
 
-The recipe catalog has matured to **448 recipes** across 19 modalities (post-PR #59). Recipes are individually publication-grade, but the manuscript-companion packs (`disc1_manuscript_companion`, `cdc42_factorial_companion`) have surfaced three concrete pain points:
+The recipe catalog has matured to **448 recipes** across 19 modalities (post-PR #59). Recipes are individually publication-grade, but the manuscript-companion packs (`cytoskeletal_morphometry_companion`, `factorial_design_companion`) have surfaced three concrete pain points:
 
 1. **Multi-panel orchestration is manual.** A six-panel Figure 3 means: six manifest entries, six `figures generate` calls, six PDFs, then a hand-rolled `matplotlib.gridspec.GridSpec` notebook that re-imports the recipe modules and re-renders the panels into a shared `Figure`. The recipes themselves are reusable; the multi-panel assembly is not. Each manuscript reinvents the layout glue.
-2. **No grammar exists for "tile this recipe by tag".** The CDC42 paper has a 2 × 2 factorial (sex × genotype) where the same `coef_forest` recipe wants to render once per factorial cell. There is no first-class way to express _partition this contract by `tags.sex`, then by `tags.genotype`, and emit four panels into a 2 × 2 grid_.
+2. **No grammar exists for "tile this recipe by tag".** An example factorial paper has a 2 × 2 factorial (sex × genotype) where the same `coef_forest` recipe wants to render once per factorial cell. There is no first-class way to express _partition this contract by `tags.sex`, then by `tags.genotype`, and emit four panels into a 2 × 2 grid_.
 3. **Aesthetic and axis linking are ad-hoc.** When two scatter panels in the same figure should share a y-axis (so a reader's eye registers magnitude differences), the user must subclass the recipe or post-edit the saved PDF. Likewise, propagating a single palette / theme override across all panels of a figure currently requires editing each manifest entry.
 
 The composition layer makes the **figure** — not the panel — the named, versioned, reproducible artefact. Recipes remain unchanged.
@@ -82,7 +82,7 @@ panels:
   - id: A
     recipe: meta_and_diagnostic.bayes_factor_arrow_plot
     data:
-      source: data/disc1_bf_rows.csv
+      source: data/example_a_bf_rows.csv
       adapter: tabular
     caption: "Bayesian evidence per descriptor"
     options: {}                          # forwarded to recipe contract
@@ -116,7 +116,7 @@ For factorial figures, declare one recipe and partition by tag values. Each tag 
 partition_by:
   recipe: mixed_effects_models.two_way_anova_summary_plot
   data:
-    source: data/cdc42_anova_long.csv
+    source: data/example_b_anova_long.csv
   by:
     - tags.sex          # outer partition (rows)
     - tags.genotype     # inner partition (cols)
@@ -129,13 +129,13 @@ When `partition_by` is set, `panels` is populated synthetically at load time; th
 
 ## 3. Worked examples (3)
 
-### 3.1 Example A — DISC1 Figure 3 (3 × 2 grid)
+### 3.1 Example A — modality A Figure 3 (3 × 2 grid)
 
 ```yaml
-figure_id: disc1_figure_3
-title: "DISC1 perturbation panel"
-caption: "Six-panel figure summarising DISC1 morphometry, dynamics, and Bayesian evidence."
-output_path: figures/disc1_figure_3.pdf
+figure_id: example_figure_3
+title: "Perturbation panel"
+caption: "Six-panel figure summarising morphometry, dynamics, and Bayesian evidence."
+output_path: figures/example_figure_3.pdf
 
 layout:
   kind: grid
@@ -150,34 +150,34 @@ panel_label_style: {enabled: true, case: upper, position: top-left}
 panels:
   - id: A
     recipe: actin_microtubule_morphometry.sholl_intersections_radial_histogram
-    data: {source: tests/fixtures/data/disc1_sholl.csv}
+    data: {source: tests/fixtures/data/example_a_sholl.csv}
     caption: "Sholl profile by genotype"
   - id: B
     recipe: intravital_imaging.state_entry_exit_with_switch_callout
-    data: {source: tests/fixtures/data/disc1_state_raster.csv}
+    data: {source: tests/fixtures/data/example_a_state_raster.csv}
     caption: "State entry/exit raster"
     shared_axis_with: A
     shared_axis_kind: y
   - id: C
     recipe: omics_differential.proteome_phosphoproteome_pathway_scatter
-    data: {source: tests/fixtures/data/disc1_omics_concordance.csv}
+    data: {source: tests/fixtures/data/example_a_omics_concordance.csv}
   - id: D
     recipe: mixed_effects_models.two_way_anova_summary_plot
-    data: {source: tests/fixtures/data/disc1_anova.csv}
+    data: {source: tests/fixtures/data/example_a_anova.csv}
   - id: E
     recipe: meta_and_diagnostic.bayes_factor_arrow_plot
-    data: {source: tests/fixtures/data/disc1_bf.csv}
+    data: {source: tests/fixtures/data/example_a_bf.csv}
   - id: F
     recipe: biophysics_scaling.molecular_resilience_index_bar
-    data: {source: tests/fixtures/data/disc1_resilience.csv}
+    data: {source: tests/fixtures/data/example_a_resilience.csv}
 ```
 
-### 3.2 Example B — CDC42 Figure 4 (2 × 2 factorial via `partition_by`)
+### 3.2 Example B — modality B Figure 4 (2 × 2 factorial via `partition_by`)
 
 ```yaml
-figure_id: cdc42_figure_4_factorial
-title: "Sex × genotype factorial — Cdc42 CKO"
-output_path: figures/cdc42_figure_4_factorial.pdf
+figure_id: example_figure_4_factorial
+title: "Sex × genotype factorial — example CKO"
+output_path: figures/example_figure_4_factorial.pdf
 
 layout:
   kind: grid
@@ -192,7 +192,7 @@ panel_label_style: {enabled: true, case: upper, position: top-left}
 partition_by:
   recipe: mixed_effects_models.sex_stratified_roc_loocv
   data:
-    source: tests/fixtures/data/cdc42_roc_long.csv
+    source: tests/fixtures/data/example_b_roc_long.csv
   by:
     - tags.sex          # rows: F, M
     - tags.genotype     # cols: CTL, CKO
@@ -211,9 +211,9 @@ This expands to four panels:
 ### 3.3 Example C — graphical-abstract freeform (4 panels)
 
 ```yaml
-figure_id: graphical_abstract_disc1
-title: "Graphical abstract — DISC1 multi-modal summary"
-output_path: figures/graphical_abstract_disc1.pdf
+figure_id: graphical_abstract_example
+title: "Graphical abstract — multi-modal summary"
+output_path: figures/graphical_abstract_example.pdf
 
 layout:
   kind: freeform
@@ -225,19 +225,19 @@ panel_label_style: {enabled: false}
 panels:
   - id: hero
     recipe: meta_and_diagnostic.panel_provenance_ledger_table
-    data: {source: tests/fixtures/data/disc1_provenance.csv}
+    data: {source: tests/fixtures/data/example_a_provenance.csv}
     position: [0.04, 0.56, 0.55, 0.40]    # [left, bottom, width, height], figure-fraction
   - id: morpho
     recipe: actin_microtubule_morphometry.behavioral_fingerprint_trio_composite
-    data: {source: tests/fixtures/data/disc1_fingerprint.csv}
+    data: {source: tests/fixtures/data/example_a_fingerprint.csv}
     position: [0.62, 0.56, 0.34, 0.40]
   - id: omics
     recipe: omics_differential.module_concordance_signed_heatmap
-    data: {source: tests/fixtures/data/disc1_modules.csv}
+    data: {source: tests/fixtures/data/example_a_modules.csv}
     position: [0.04, 0.06, 0.45, 0.42]
   - id: bayes
     recipe: meta_and_diagnostic.bayes_factor_arrow_plot
-    data: {source: tests/fixtures/data/disc1_bf.csv}
+    data: {source: tests/fixtures/data/example_a_bf.csv}
     position: [0.54, 0.06, 0.42, 0.42]
 ```
 
@@ -426,7 +426,7 @@ All four commands honour the global `-v / --verbose` flag and emit one `INFO` li
 
 | File | Lines | Test count | Coverage |
 |---|---|---|---|
-| `tests/test_figure_composition.py` | ~250 | ~20 | Schema parse, gridspec layout, freeform layout, partition_by expansion, shared aesthetic propagation, shared-axis linking, panel-label drawing, end-to-end DISC1 fixture render. |
+| `tests/test_figure_composition.py` | ~250 | ~20 | Schema parse, gridspec layout, freeform layout, partition_by expansion, shared aesthetic propagation, shared-axis linking, panel-label drawing, end-to-end Example A fixture render. |
 | `tests/test_figure_schema.py` | ~120 | ~10 | Pydantic validators (recipe FQN, mutually-exclusive panels/partition_by, partition cardinality cap). |
 | `tests/test_compose_cli.py` | ~120 | ~8 | Click runner integration: `compose`, `compose-all`, `compose-validate` (success + the four failure modes). |
 
@@ -434,18 +434,18 @@ All four commands honour the global `-v / --verbose` flag and emit one `INFO` li
 
 ```
 tests/fixtures/figure_specs/
-├── disc1_figure_3.yaml          # Example A
-├── cdc42_figure_4_factorial.yaml  # Example B
-└── graphical_abstract_disc1.yaml  # Example C
+├── example_figure_3.yaml             # Example A
+├── example_factorial_2x2.yaml        # Example B
+└── graphical_abstract_example.yaml   # Example C
 ```
 
-Plus the panel data files under `tests/fixtures/data/` (some already exist from disc1/cdc42 packs; gaps to be filled by W1 implementation PR).
+Plus the panel data files under `tests/fixtures/data/` (some already exist from companion packs; gaps to be filled by W1 implementation PR).
 
 ### 6.3 End-to-end acceptance test (excerpt)
 
 ```python
-def test_disc1_figure_3_end_to_end(tmp_path: Path) -> None:
-    spec = load_figure_spec("tests/fixtures/figure_specs/disc1_figure_3.yaml")
+def test_example_figure_3_end_to_end(tmp_path: Path) -> None:
+    spec = load_figure_spec("tests/fixtures/figure_specs/example_figure_3.yaml")
     pdf_path = compose_figure(spec, registry=..., data_files=..., out_dir=tmp_path)
     assert pdf_path.exists()
     pdf = pikepdf.open(pdf_path)
@@ -476,9 +476,9 @@ def test_disc1_figure_3_end_to_end(tmp_path: Path) -> None:
 | `tests/test_figure_composition.py` | **NEW** | ~250 | ~20 tests (schema, layouts, partition, shared axes, end-to-end). |
 | `tests/test_figure_schema.py` | **NEW** | ~120 | ~10 tests (Pydantic validators). |
 | `tests/test_compose_cli.py` | **NEW** | ~120 | ~8 tests (Click runner). |
-| `tests/fixtures/figure_specs/disc1_figure_3.yaml` | **NEW** | ~40 | Example A fixture. |
-| `tests/fixtures/figure_specs/cdc42_figure_4_factorial.yaml` | **NEW** | ~25 | Example B fixture (partition_by). |
-| `tests/fixtures/figure_specs/graphical_abstract_disc1.yaml` | **NEW** | ~35 | Example C fixture (freeform). |
+| `tests/fixtures/figure_specs/example_figure_3.yaml` | **NEW** | ~40 | Example A fixture. |
+| `tests/fixtures/figure_specs/example_factorial_2x2.yaml` | **NEW** | ~25 | Example B fixture (partition_by). |
+| `tests/fixtures/figure_specs/graphical_abstract_example.yaml` | **NEW** | ~35 | Example C fixture (freeform). |
 | `docs/composition_layer.md` | **NEW** | ~200 | User-facing tutorial; cross-links from `docs/index.md`. |
 | `docs/manifest_schema.md` | edit | +20 | Cross-link composition layer; clarify it does NOT replace per-panel rendering. |
 
@@ -504,8 +504,8 @@ Total net new code: ~1,000 LOC + ~500 lines of tests + ~200 lines of fixtures + 
 
 A v1.7.0 release ships only when **all five** of the following pass on `main`:
 
-1. **DISC1 Figure 3 renders cleanly.** `figures compose tests/fixtures/figure_specs/disc1_figure_3.yaml` produces a single-page PDF with all six panels visible, panel labels A–F drawn, no matplotlib warnings, ≤ 5 s wall-clock.
-2. **CDC42 factorial example tiles correctly.** `figures compose tests/fixtures/figure_specs/cdc42_figure_4_factorial.yaml` produces a 2 × 2 grid where the four cells correspond to (F-CTL, F-CKO, M-CTL, M-CKO) in row-major order; panel labels follow `panel_label_template`.
+1. **Example Figure 3 renders cleanly.** `figures compose tests/fixtures/figure_specs/example_figure_3.yaml` produces a single-page PDF with all six panels visible, panel labels A–F drawn, no matplotlib warnings, ≤ 5 s wall-clock.
+2. **Factorial example tiles correctly.** `figures compose tests/fixtures/figure_specs/example_factorial_2x2.yaml` produces a 2 × 2 grid where the four cells correspond to (F-CTL, F-CKO, M-CTL, M-CKO) in row-major order; panel labels follow `panel_label_template`.
 3. **`figures compose-validate` catches missing recipes BEFORE render.** Pointing the validator at a YAML with `recipe: meta_and_diagnostic.this_recipe_does_not_exist` exits with code 1, prints a single-line diagnostic, and **does not** create a PDF.
 4. **Shared y-axis links work.** In Example A panels A and B, the y-axis limits are identical after composition; perturbing panel B's contract data changes both panels' y-limits in lockstep.
 5. **Composition adds < 0.5 s overhead vs N×single-recipe renders.** Benchmark: render the same six panels via six `figures generate` calls vs one `figures compose`; the composition path's overhead beyond the sum of per-panel render times is **< 0.5 s** (measured on the project's standard CI runner).

@@ -291,7 +291,7 @@ def test_wave_cdc42_pack_recipe() -> None:
         modality="meta_and_diagnostic",
         family="coef_forest",
     )
-    assert tags["wave"] == "v1.5.0-beta-cdc42_factorial_companion"
+    assert tags["wave"] == "v1.5.0-beta-factorial_design_companion"
 
 
 def test_wave_disc1_pack_recipe() -> None:
@@ -300,7 +300,7 @@ def test_wave_disc1_pack_recipe() -> None:
         modality="meta_and_diagnostic",
         family="matrix",
     )
-    assert tags["wave"] == "v1.4.0-beta-disc1_manuscript_companion"
+    assert tags["wave"] == "v1.4.0-beta-cytoskeletal_morphometry_companion"
 
 
 # ─────────────────────────── determinism check ──────────────────────────
@@ -362,7 +362,7 @@ _REPRESENTATIVE_CASES: list[dict[str, Any]] = [
         "expected": {
             "factorial": True,
             "anchor": UNKNOWN,
-            "wave": "v1.5.0-beta-cdc42_factorial_companion",
+            "wave": "v1.5.0-beta-factorial_design_companion",
         },
     },
     # (4) Cdc42 pack — explicit Cdc42 anchor in question.
@@ -384,7 +384,7 @@ _REPRESENTATIVE_CASES: list[dict[str, Any]] = [
         "answers_question": "How does MT mesh density differ by compartment?",
         "expected": {
             "compartment_aware": True,
-            "wave": "v1.4.0-beta-disc1_manuscript_companion",
+            "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion",
         },
     },
     # (6) Kymograph dynamics.
@@ -435,7 +435,7 @@ _REPRESENTATIVE_CASES: list[dict[str, Any]] = [
         "answers_question": "Residence-time KM curve with KS overlay.",
         "expected": {
             "dynamics": "live",
-            "wave": "v1.5.0-beta-cdc42_factorial_companion",
+            "wave": "v1.5.0-beta-factorial_design_companion",
         },
     },
 ]

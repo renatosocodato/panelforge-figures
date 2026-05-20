@@ -95,18 +95,18 @@ def parent_of_panelforge_plugins() -> Path:
 def test_directory_plugin_discovers_and_loads(
     _clean_plugin_state: None, parent_of_panelforge_plugins: Path,
 ) -> None:
-    """The fixture's `disc1_extras.py` should register one recipe."""
+    """The fixture's `example_extras.py` should register one recipe."""
     plugins_dir = parent_of_panelforge_plugins / "panelforge_plugins"
     loaded = discover_directory_plugins(plugins_dir)
 
     assert len(loaded) == 1
     info = loaded[0]
-    assert info.name == "disc1_extras"
+    assert info.name == "example_extras"
     assert info.source == "directory"
     assert info.version == "0.1.0"
     assert info.module_path is not None
-    assert info.module_path.name == "disc1_extras.py"
-    assert info.discovered_recipes == ("disc1_extras.cohort_violin",)
+    assert info.module_path.name == "example_extras.py"
+    assert info.discovered_recipes == ("example_extras.cohort_violin",)
 
 
 def test_directory_plugin_recipe_lands_in_registry(
@@ -118,7 +118,7 @@ def test_directory_plugin_recipe_lands_in_registry(
         f"{e.metadata.modality}.{e.metadata.name}"
         for e in core_contract.list_recipes()
     }
-    assert "disc1_extras.cohort_violin" in full_names
+    assert "example_extras.cohort_violin" in full_names
 
 
 def test_directory_plugin_underscore_files_skipped(
@@ -145,14 +145,14 @@ def test_directory_plugin_disabled_is_skipped(
     _clean_plugin_state: None, parent_of_panelforge_plugins: Path,
 ) -> None:
     plugins_dir = parent_of_panelforge_plugins / "panelforge_plugins"
-    loaded = discover_directory_plugins(plugins_dir, disabled=("disc1_extras",))
+    loaded = discover_directory_plugins(plugins_dir, disabled=("example_extras",))
     assert loaded == []
     # Nothing landed in the registry either.
     full_names = {
         f"{e.metadata.modality}.{e.metadata.name}"
         for e in core_contract.list_recipes()
     }
-    assert "disc1_extras.cohort_violin" not in full_names
+    assert "example_extras.cohort_violin" not in full_names
 
 
 def test_bad_syntax_plugin_raises_plugin_load_error(
@@ -186,7 +186,7 @@ class _FakeEntryPoint:
         import importlib.util
 
         spec = importlib.util.spec_from_file_location(
-            self._target, str(SAMPLE_FIXTURE_DIR / "disc1_extras.py"),
+            self._target, str(SAMPLE_FIXTURE_DIR / "example_extras.py"),
         )
         assert spec is not None and spec.loader is not None
         module = importlib.util.module_from_spec(spec)
@@ -200,8 +200,8 @@ def test_entry_points_plugin_loads_via_metadata(
 ) -> None:
     """A fake entry-point should be discoverable + register its recipe."""
     fake_ep = _FakeEntryPoint(
-        name="disc1_extras_ep",
-        target_module="panelforge_disc1_extras_ep_test",
+        name="example_extras_ep",
+        target_module="panelforge_example_extras_ep_test",
     )
 
     def _fake_entry_points(*, group: str = "") -> list[_FakeEntryPoint]:
@@ -216,12 +216,12 @@ def test_entry_points_plugin_loads_via_metadata(
         loaded = discover_entry_point_plugins()
         assert len(loaded) == 1
         info = loaded[0]
-        assert info.name == "disc1_extras_ep"
+        assert info.name == "example_extras_ep"
         assert info.source == "entry_points"
-        assert info.discovered_recipes == ("disc1_extras.cohort_violin",)
+        assert info.discovered_recipes == ("example_extras.cohort_violin",)
     finally:
         # Drop the fake module so subsequent tests aren't tainted.
-        sys.modules.pop("panelforge_disc1_extras_ep_test", None)
+        sys.modules.pop("panelforge_example_extras_ep_test", None)
 
 
 # ─────────────────────────── conflict resolution ────────────────────────
@@ -251,7 +251,7 @@ def test_duplicate_full_name_raises_conflict_error(
 
         _META = RecipeMetadata(
             name="cohort_violin",            # SAME as the fixture
-            modality="disc1_extras",          # SAME as the fixture
+            modality="example_extras",          # SAME as the fixture
             family=RecipeFamily.split_violin,
             answers_question="dup",
             required_fields=("x",),
@@ -295,7 +295,7 @@ def test_discover_all_combines_both_paths(
     monkeypatch.setattr("importlib.metadata.entry_points", _no_eps)
     loaded = discover_all_plugins(plugins_dir=plugins_dir)
     assert len(loaded) == 1
-    assert loaded[0].name == "disc1_extras"
+    assert loaded[0].name == "example_extras"
 
 
 def test_plugin_for_recipe_returns_owner(
@@ -304,7 +304,7 @@ def test_plugin_for_recipe_returns_owner(
     discover_directory_plugins(
         parent_of_panelforge_plugins / "panelforge_plugins",
     )
-    assert plugin_for_recipe("disc1_extras.cohort_violin") == "disc1_extras"
+    assert plugin_for_recipe("example_extras.cohort_violin") == "example_extras"
 
 
 def test_plugin_for_recipe_returns_none_for_catalog(
@@ -350,7 +350,7 @@ def test_cli_plugins_list_shows_directory_plugin(
     monkeypatch: pytest.MonkeyPatch, _clean_plugin_state: None,
     parent_of_panelforge_plugins: Path,
 ) -> None:
-    """Run from the fixture's parent so the dir scan finds disc1_extras."""
+    """Run from the fixture's parent so the dir scan finds example_extras."""
     monkeypatch.chdir(parent_of_panelforge_plugins)
     monkeypatch.setattr(
         "importlib.metadata.entry_points",
@@ -358,7 +358,7 @@ def test_cli_plugins_list_shows_directory_plugin(
     )
     r = CliRunner().invoke(cli_main, ["plugins", "list"])
     assert r.exit_code == 0, r.output
-    assert "disc1_extras" in r.output
+    assert "example_extras" in r.output
     assert "directory" in r.output
 
 
@@ -371,11 +371,11 @@ def test_cli_plugins_describe_known(
         "importlib.metadata.entry_points",
         lambda *, group="": [],
     )
-    r = CliRunner().invoke(cli_main, ["plugins", "describe", "disc1_extras"])
+    r = CliRunner().invoke(cli_main, ["plugins", "describe", "example_extras"])
     assert r.exit_code == 0, r.output
-    assert "disc1_extras" in r.output
+    assert "example_extras" in r.output
     assert "0.1.0" in r.output
-    assert "disc1_extras.cohort_violin" in r.output
+    assert "example_extras.cohort_violin" in r.output
 
 
 def test_cli_plugins_describe_unknown_exits_1(
@@ -415,9 +415,9 @@ def test_build_index_includes_plugin_field(
         for rec in mod["recipes"]:
             full = f"{mod['name']}.{rec['name']}"
             assert "plugin" in rec, f"missing `plugin` field on {full}"
-            if full == "disc1_extras.cohort_violin":
-                assert rec["plugin"] == "disc1_extras"
-                assert rec["tags_source"] == "plugin:disc1_extras"
+            if full == "example_extras.cohort_violin":
+                assert rec["plugin"] == "example_extras"
+                assert rec["tags_source"] == "plugin:example_extras"
                 found_plugin_recipe = True
             elif rec["plugin"] is None:
                 found_catalog_recipe = True

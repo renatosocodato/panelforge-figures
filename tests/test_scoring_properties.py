@@ -62,8 +62,8 @@ wave_st = st.sampled_from(
         "v1.1.0-beta-biophysics_scaling",
         "v1.2.0-beta-actin_microtubule_morphometry",
         "v1.3.0-beta-intravital_imaging",
-        "v1.4.0-beta-disc1_manuscript_companion",
-        "v1.5.0-beta-cdc42_factorial_companion",
+        "v1.4.0-beta-cytoskeletal_morphometry_companion",
+        "v1.5.0-beta-factorial_design_companion",
     ]
 )
 

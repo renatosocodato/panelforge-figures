@@ -47,8 +47,8 @@ class TagWave(StrEnum):
     V1_1_0_BIOPHYSICS = "v1.1.0-beta-biophysics_scaling"
     V1_2_0_ACTIN_MT = "v1.2.0-beta-actin_microtubule_morphometry"
     V1_3_0_INTRAVITAL = "v1.3.0-beta-intravital_imaging"
-    V1_4_0_DISC1 = "v1.4.0-beta-disc1_manuscript_companion"
-    V1_5_0_CDC42 = "v1.5.0-beta-cdc42_factorial_companion"
+    V1_4_0_CYTOSKELETAL = "v1.4.0-beta-cytoskeletal_morphometry_companion"
+    V1_5_0_FACTORIAL = "v1.5.0-beta-factorial_design_companion"
 
 
 # Map tag-name → enum class (for validation lookup).

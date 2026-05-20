@@ -11,7 +11,7 @@ rule-based tagger to label it along eight closed dimensions:
     equivalence         bool
     compartment_aware   bool
     scale_aware         bool
-    wave                "v1.0" / "v1.1.0-beta-..." / ... / "v1.5.0-beta-cdc42_factorial_companion"
+    wave                "v1.0" / "v1.1.0-beta-..." / ... / "v1.5.0-beta-factorial_design_companion"
 
 Rules are intentionally conservative: when no rule fires, the tag value is
 set to the sentinel ``"unknown"`` so a downstream YAML override layer can
@@ -65,8 +65,8 @@ _MODALITY_WAVE: dict[str, str] = {
     "intravital_imaging": "v1.3.0-beta-intravital_imaging",
 }
 
-# Recipes that shipped in `v1.5.0-beta-cdc42_factorial_companion` (PRs
-# #44–#47; tag `v1.5.0-beta-cdc42_factorial_companion`).  25 recipes
+# Recipes that shipped in `v1.5.0-beta-factorial_design_companion` (PRs
+# #44–#47; tag `v1.5.0-beta-factorial_design_companion`).  25 recipes
 # scattered across 6 pre-existing modalities, enumerated verbatim from
 # `docs/cdc42_factorial_companion_pack_tracker.md`.
 _CDC42_PACK_FULLNAMES: frozenset[str] = frozenset({
@@ -101,8 +101,8 @@ _CDC42_PACK_FULLNAMES: frozenset[str] = frozenset({
     "intravital_imaging.residence_time_kaplan_meier_with_ks_overlay",
 })
 
-# Recipes that shipped in `v1.4.0-beta-disc1_manuscript_companion` (PRs
-# #39–#43; tag `v1.4.0-beta-disc1_manuscript_companion`).  31 recipes
+# Recipes that shipped in `v1.4.0-beta-cytoskeletal_morphometry_companion` (PRs
+# #39–#43; tag `v1.4.0-beta-cytoskeletal_morphometry_companion`).  31 recipes
 # scattered across 4 modalities, enumerated verbatim from
 # `docs/disc1_manuscript_companion_pack_tracker.md`.
 _DISC1_PACK_FULLNAMES: frozenset[str] = frozenset({
@@ -213,9 +213,9 @@ def _wave_for(*, name: str, modality: str) -> str:
     """Return the wave label.  Falls back to ``_DEFAULT_WAVE`` (v1.0)."""
     full = f"{modality}.{name}"
     if full in _CDC42_PACK_FULLNAMES:
-        return "v1.5.0-beta-cdc42_factorial_companion"
+        return "v1.5.0-beta-factorial_design_companion"
     if full in _DISC1_PACK_FULLNAMES:
-        return "v1.4.0-beta-disc1_manuscript_companion"
+        return "v1.4.0-beta-cytoskeletal_morphometry_companion"
     if modality in _MODALITY_WAVE:
         return _MODALITY_WAVE[modality]
     return _DEFAULT_WAVE

@@ -102,7 +102,7 @@ otherwise                → 0.0
 2. `biophysics_scaling.hierarchical_effect_size_ladder`
 3. `biophysics_scaling.persistence_length_lp_with_equivalence_bounds`
 
-Tie-broken by anchor strength (all 1.0) → modality locality (all `biophysics_scaling`) → wave age (all `v1.4.0-beta-disc1_manuscript_companion`) → alphabetical (final order as printed).
+Tie-broken by anchor strength (all 1.0) → modality locality (all `biophysics_scaling`) → wave age (all `v1.4.0-beta-cytoskeletal_morphometry_companion`) → alphabetical (final order as printed).
 
 For two additional worked examples (CDC42 factorial, generic-no-anchor failure case), see the online [`RECIPE_SELECTION.md`](RECIPE_SELECTION.md) §4.2 and §4.3.
 

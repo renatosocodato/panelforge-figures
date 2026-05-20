@@ -1,6 +1,6 @@
 """Sample single-file plugin used by `tests/test_plugin_discovery.py`.
 
-Registers ONE recipe under modality ``disc1_extras`` to verify that the
+Registers ONE recipe under modality ``example_extras`` to verify that the
 discovery + loading machinery wires up plugin recipes identically to
 catalog recipes.  Render is intentionally minimal — the goal is to
 prove the contract / metadata flow end-to-end, not to exercise
@@ -31,13 +31,13 @@ class CohortViolinInput(RecipeContract):
     cohort_values: list[list[float]] = Field(
         ..., description="cohort_values[cohort] = list of measurements",
     )
-    title: str = "DISC1 cohort violin (plugin)"
+    title: str = "Example cohort violin (plugin)"
 
 
 def _demo() -> CohortViolinInput:
     rng = np.random.default_rng(11)
     return CohortViolinInput(
-        cohort_names=["Ctrl", "DISC1"],
+        cohort_names=["Ctrl", "Treated"],
         cohort_values=[
             rng.normal(0.0, 1.0, 50).tolist(),
             rng.normal(0.6, 1.2, 50).tolist(),
@@ -47,10 +47,10 @@ def _demo() -> CohortViolinInput:
 
 _META = RecipeMetadata(
     name="cohort_violin",
-    modality="disc1_extras",
+    modality="example_extras",
     family=RecipeFamily.split_violin,
     answers_question=(
-        "How does the DISC1 cohort distribution differ from control under "
+        "How does an example cohort distribution differ from control under "
         "the lab's local cohort definition?"
     ),
     required_fields=("cohort_names", "cohort_values"),

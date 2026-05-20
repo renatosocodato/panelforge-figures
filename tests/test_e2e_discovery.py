@@ -65,7 +65,7 @@ FIXTURE_ROOT = REPO_ROOT / "tests" / "fixtures" / "sample_project"
 INDEX_PATH = REPO_ROOT / "recipes_index.json"
 SCHEMA_PATH = REPO_ROOT / "docs" / "recipes_index.schema.json"
 
-DISC1_WAVE = "v1.4.0-beta-disc1_manuscript_companion"
+DISC1_WAVE = "v1.4.0-beta-cytoskeletal_morphometry_companion"
 
 
 # ────────────────────────── deterministic env ──────────────────────────

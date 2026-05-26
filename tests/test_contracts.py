@@ -21,9 +21,9 @@ def test_registry_has_at_least_18_recipes():
 def test_each_modality_has_its_recipes_registered():
     ensure_all_imported()
     counts = registry_counts()
-    assert counts["grant_and_conceptual"] == 16
-    assert counts["meta_and_diagnostic"] == 27
-    assert counts["sensitivity_analysis"] == 15
+    assert counts["grant_and_conceptual"] == 17
+    assert counts["meta_and_diagnostic"] == 35
+    assert counts["sensitivity_analysis"] == 16
 
 
 def test_every_registered_recipe_has_required_fields_and_question():

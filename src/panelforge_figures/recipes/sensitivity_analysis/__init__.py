@@ -21,6 +21,7 @@ register_modality(
 )
 
 from . import (  # noqa: E402,F401
+    bootstrap_validation_stability,
     convergence_diagnostic_sobol,
     dimensionless_pi_group_collapse,
     fast_sensitivity_spectrum,
@@ -40,6 +41,7 @@ from . import (  # noqa: E402,F401
 
 __all__ = [
     "AESTHETIC",
+    "bootstrap_validation_stability",
     "convergence_diagnostic_sobol",
     "dimensionless_pi_group_collapse",
     "fast_sensitivity_spectrum",

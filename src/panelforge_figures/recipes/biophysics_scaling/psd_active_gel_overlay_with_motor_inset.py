@@ -119,7 +119,7 @@ def render(contract: PSDActiveGelInput, ax=None, **_):
     # Per-group PSD + CI ribbon.
     motor_dev_by_group: dict[str, float] = {}
     for curve in contract.psds:
-        colour = _GROUP_COLOURS.get(curve.label, "#333333")
+        colour = curve.color or _GROUP_COLOURS.get(curve.label, "#333333")
         f = np.asarray(curve.freq_hz, float)
         p = np.asarray(curve.psd, float)
         ax.plot(f, p, color=colour, lw=1.2, zorder=5, label=curve.label)

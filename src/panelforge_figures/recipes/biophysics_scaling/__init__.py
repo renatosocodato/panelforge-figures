@@ -19,6 +19,7 @@ register_modality(
 )
 
 from . import (  # noqa: E402,F401
+    bivariate_scatter_with_threshold,
     buckling_critical_force_plot,
     censoring_mode_waterfall_cascade,
     characteristic_time_vs_control,
@@ -47,9 +48,11 @@ from . import (  # noqa: E402,F401
     molecular_resilience_index_bar,
     ordered_trajectory_checkpoint_divergence,
     per_cell_colocalization_parallel_coordinates,
+    per_cell_strip_summary,
     permanova_null_distribution,
     persistence_length_lp_with_equivalence_bounds,
     pi_group_sensitivity_bar,
+    polarity_displacement_panel,
     power_law_tail_diagnostic,
     pre_registered_censoring_mode_grid,
     psd_active_gel_overlay_with_motor_inset,
@@ -64,6 +67,7 @@ from . import (  # noqa: E402,F401
     shared_manifold_scatter_with_residuals,
     splay_taper_polarity_displacement_compound,
     split_mirror_measured_vs_simulated,
+    state_ratio_summary,
     stress_strain_regime_map,
     universality_class_comparison,
     width_alignment_buffered_unbuffered_interaction,
@@ -74,6 +78,10 @@ from . import (  # noqa: E402,F401
 
 __all__ = [
     "AESTHETIC",
+    "state_ratio_summary",
+    "polarity_displacement_panel",
+    "bivariate_scatter_with_threshold",
+    "per_cell_strip_summary",
     "buckling_critical_force_plot",
     "censoring_mode_waterfall_cascade",
     "characteristic_time_vs_control",

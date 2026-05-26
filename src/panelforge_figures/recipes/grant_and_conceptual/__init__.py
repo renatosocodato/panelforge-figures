@@ -24,6 +24,7 @@ register_modality(
 
 # Importing each recipe module triggers its @register_recipe decorator.
 from . import (  # noqa: E402,F401
+    causal_scaffold_diagram,
     conceptual_triptych,
     cost_by_work_package_bar,
     deliverables_timeline,
@@ -44,6 +45,7 @@ from . import (  # noqa: E402,F401
 
 __all__ = [
     "AESTHETIC",
+    "causal_scaffold_diagram",
     "conceptual_triptych",
     "cost_by_work_package_bar",
     "deliverables_timeline",

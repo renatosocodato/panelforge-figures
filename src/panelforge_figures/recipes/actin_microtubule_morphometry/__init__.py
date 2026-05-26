@@ -27,6 +27,8 @@ from . import (  # noqa: E402,F401
     actin_microtubule_crosstalk_quiver,
     actin_mt_angle_rose_with_distance_inset,
     actin_mt_ratio_spatial_map,
+    actin_protrusion_count_panel,
+    actin_viscoelastic_extent_panel,
     airyscan_segmentation_mosaic,
     airyscan_to_zone_territory_triptych,
     behavioral_fingerprint_trio_composite,
@@ -73,10 +75,14 @@ from . import (  # noqa: E402,F401
     tip_enrichment_vs_shaft_scatter,
     topology_ternary_simplex,
     zone_fraction_alluvial_sankey,
+    zone_redistribution_alluvial,
 )
 
 __all__ = [
     "AESTHETIC",
+    "zone_redistribution_alluvial",
+    "actin_protrusion_count_panel",
+    "actin_viscoelastic_extent_panel",
     "actin_microtubule_crosstalk_quiver",
     "actin_mt_angle_rose_with_distance_inset",
     "actin_mt_ratio_spatial_map",

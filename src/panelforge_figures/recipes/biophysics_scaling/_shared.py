@@ -179,6 +179,7 @@ class PSDCurve(RecipeContract):
     ci_lo: list[float] | None = None
     ci_hi: list[float] | None = None
     active_gel_band_hz: tuple[float, float] | None = None
+    color: str | None = None  # Optional override hex; recipe falls back to label-based palette
 
 
 # --- dual-scale significance row (Wave 2 of cytoskeletal_morphometry_companion) ----

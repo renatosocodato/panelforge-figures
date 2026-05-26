@@ -7,9 +7,12 @@
   ],
   "contracts": [
     "AEIncidenceInput",
+    "AICBICInput",
+    "ActinExtentInput",
     "ActinMTAngleRoseInput",
     "ActinMTCrosstalkInput",
     "ActinMTRatioMapInput",
+    "ActinProtrusionCountInput",
     "AimsPyramidInput",
     "AiryscanMosaicInput",
     "AiryscanTriptychInput",
@@ -30,8 +33,10 @@
     "BiosensorDoseResponseInput",
     "BistablePortraitInput",
     "BivariatePCFInput",
+    "BivariateScatterInput",
     "BlissLoeweInput",
     "BootstrapConvergenceInput",
+    "BootstrapValidationStabilityInput",
     "BranchAngleInput",
     "BranchDensityInput",
     "BranchOrderTopologyInput",
@@ -46,6 +51,7 @@
     "CalibrationBrierForestInput",
     "CalibrationInput",
     "CaterpillarInput",
+    "CausalScaffoldInput",
     "CellBodyAreaInput",
     "CellThumbnailGridInput",
     "CensoringModeGridInput",
@@ -81,9 +87,11 @@
     "ConsortInput",
     "ContactMapInput",
     "ContactMatrixInput",
+    "ContactPatchStatsInput",
     "CooccurrenceInput",
     "CorrelationFDRInput",
     "CorrelogramInput",
+    "CortexCompetenceInput",
     "CortexThicknessInput",
     "CortexZoneDescriptorsInput",
     "CostByWPInput",
@@ -121,6 +129,7 @@
     "DwellViolinInput",
     "EAvsTAInput",
     "EdgeCorrelationInput",
+    "EdgeGradientInput",
     "EdgeGradientProfileInput",
     "EdgeKymoInput",
     "EffectSigInput",
@@ -153,10 +162,12 @@
     "ForceBudgetInput",
     "ForceLengthInput",
     "ForestInput",
+    "ForwardSimSnapshotPairInput",
     "FractalDimensionInput",
     "FrontierTipRasterInput",
     "FunnelInput",
     "GCaMPStackInput",
+    "GFunctionCurvesInput",
     "GGEBranchPermutationInput",
     "GSEAInput",
     "GanttInput",
@@ -216,6 +227,7 @@
     "MediationDiagramInput",
     "MediationSlopeInput",
     "MethodsPipelineInput",
+    "MicrographTriptychInput",
     "MigrationRoseInput",
     "MilestoneRiskInput",
     "MissingPatternInput",
@@ -278,6 +290,8 @@
     "PathwaySpaceTriangulationInput",
     "PathwayStreamInput",
     "PerCellAuditTableInput",
+    "PerCellParameterizationInput",
+    "PerCellStripInput",
     "PermanovaNullInput",
     "PermutationNullInput",
     "PersistenceInput",
@@ -288,6 +302,7 @@
     "PiGroupInput",
     "PiGroupRankInput",
     "PitchforkInput",
+    "PolarityDisplacementInput",
     "PolarityVectorFieldInput",
     "PolypharmRadarInput",
     "PostPredInput",
@@ -316,6 +331,7 @@
     "QuadratInput",
     "QuartileStackedBarInput",
     "RConfVsTimeInput",
+    "RFImportanceBarInput",
     "RFImportanceByScaleInput",
     "RMSFInput",
     "RNAVelocityInput",
@@ -357,8 +373,10 @@
     "SampleCompositionInput",
     "SampleSizeLadderInput",
     "SankeyFluxInput",
+    "ScaleComparisonInput",
     "ScalingForestInput",
     "SchildInput",
+    "SeedStabilityInput",
     "SegmentPersistenceInput",
     "SelectivityTornadoInput",
     "SensByOutputInput",
@@ -372,6 +390,8 @@
     "SharedManifoldInput",
     "ShollHistogramInput",
     "ShrinkageScatterInput",
+    "SigNegligibleInput",
+    "SimVsMeasuredGridInput",
     "SingleCellTrajectoriesInput",
     "SkeletonComplexityRadarInput",
     "SkeletonKymoInput",
@@ -390,6 +410,7 @@
     "StateKinematicEmbeddingInput",
     "StateOccupancyStackedAreaInput",
     "StateRasterInput",
+    "StateRatioInput",
     "StateTransitionKernelInput",
     "StepSizeInput",
     "StimTriggeredHeatmapInput",
@@ -451,13 +472,15 @@
     "WorkPackageFlowInput",
     "XZBowingInput",
     "ZSpanWidthEulerInput",
-    "ZoneFractionAlluvialInput"
+    "ZoneFractionAlluvialInput",
+    "ZoneIntensityRatiosInput",
+    "ZoneRedistributionInput"
   ],
   "index_meta": {
     "built_at": "1970-01-01T00:00:00Z",
     "git_commit": "committed",
     "n_modalities": 20,
-    "n_recipes": 448,
+    "n_recipes": 471,
     "panelforge_version": "3.14.1",
     "schema_version": "1.0.0",
     "tags_enabled": true
@@ -582,7 +605,7 @@
         "spine_color": "#333333"
       },
       "description": "Per-cell morphometric distributions (raincloud / split-violin / bivariate shape scatter / sex \u00d7 genotype strata), skeleton and network topology (branch angles, ternary simplex, persistence by segment, complexity radar, branching sunburst), spatial and kinematic (edge-velocity autocorrelation / kymograph, mitochondrial alignment, actin \u00d7 MT quiver, multi-cell polarity vector field), per-cell thumbnail grids / exemplar mosaics / Airyscan raw+segmentation panels, dimensionality reduction of shape space (PCA morphospace, UMAP, morphospace trajectories, SPLOM), and colocalization / intensity / component-ratio panels (spatial ratio maps, radial profiles, tip-vs-shaft enrichment, coloc \u00d7 morphology correlation matrices, condition \u00d7 coefficient coloc matrices).",
-      "n_recipes": 49,
+      "n_recipes": 52,
       "name": "actin_microtubule_morphometry",
       "recipes": [
         {
@@ -699,6 +722,73 @@
             "wave": "v1.2.0-beta-actin_microtubule_morphometry"
           },
           "tags_source": "merged"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How does per-cell protrusion count distribute by group?",
+          "contract": "ActinProtrusionCountInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/actin_microtubule_morphometry/actin_protrusion_count_panel.png",
+          "n_points_typical": "",
+          "name": "actin_protrusion_count_panel",
+          "optional_fields": [
+            "breakdown_by_group",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.actin_microtubule_morphometry.actin_protrusion_count_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "counts_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How does per-cell actin viscoelastic extent distribute by group?",
+          "contract": "ActinExtentInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/actin_microtubule_morphometry/actin_viscoelastic_extent_panel.png",
+          "n_points_typical": "",
+          "name": "actin_viscoelastic_extent_panel",
+          "optional_fields": [
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.actin_microtubule_morphometry.actin_viscoelastic_extent_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "extent_um_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -2391,6 +2481,42 @@
             "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [
+            "territory_contact_network_overlay"
+          ],
+          "answers_question": "How do territory zone fractions redistribute across groups?",
+          "contract": "ZoneRedistributionInput",
+          "example_manifest": null,
+          "family": "conceptual",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/actin_microtubule_morphometry/zone_redistribution_alluvial.png",
+          "n_points_typical": "",
+          "name": "zone_redistribution_alluvial",
+          "optional_fields": [
+            "zone_order",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.actin_microtubule_morphometry.zone_redistribution_alluvial.render",
+          "plugin": null,
+          "required_fields": [
+            "fractions_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         }
       ]
     },
@@ -2423,9 +2549,53 @@
         "spine_color": "#333333"
       },
       "description": "Log-log scaling with slope boxes, master-curve collapses, force-length characteristics, power-law tail diagnostics, buckling critical-force plots, theory-overlay comparisons, universality-class selection, fractal-dimension box-counting, stress-strain regime maps, Kn \u00d7 Re regime diagrams, 1-D energy-landscape cartoons, scaling-exponent CI forests, characteristic-time divergence, \u03a0-group sensitivity bars, and crossover scaling diagnostics.",
-      "n_recipes": 51,
+      "n_recipes": 55,
       "name": "biophysics_scaling",
       "recipes": [
+        {
+          "alternatives_in_modality": [
+            "shared_manifold_scatter_with_residuals",
+            "z_span_vs_width_with_euler_threshold"
+          ],
+          "answers_question": "How do two per-cell measurements covary, stratified by group?",
+          "contract": "BivariateScatterInput",
+          "example_manifest": null,
+          "family": "scatter_collapse",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/biophysics_scaling/bivariate_scatter_with_threshold.png",
+          "n_points_typical": "",
+          "name": "bivariate_scatter_with_threshold",
+          "optional_fields": [
+            "x_label",
+            "y_label",
+            "title",
+            "threshold_y",
+            "threshold_label",
+            "show_correlation",
+            "show_fit"
+          ],
+          "path": "panelforge_figures.recipes.biophysics_scaling.bivariate_scatter_with_threshold.render",
+          "plugin": null,
+          "required_fields": [
+            "x_by_cell",
+            "y_by_cell",
+            "group_by_cell"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": true,
+            "wave": "v1.2.0-beta-biophysics_scaling"
+          },
+          "tags_source": "auto"
+        },
         {
           "alternatives_in_modality": [
             "force_length_characteristic"
@@ -3493,6 +3663,47 @@
         },
         {
           "alternatives_in_modality": [
+            "persistence_length_lp_with_equivalence_bounds",
+            "confinement_ratio_distribution_by_genotype",
+            "compartment_paired_delta_scatter"
+          ],
+          "answers_question": "How does a per-cell biophysical measurement distribute by group?",
+          "contract": "PerCellStripInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/biophysics_scaling/per_cell_strip_summary.png",
+          "n_points_typical": "",
+          "name": "per_cell_strip_summary",
+          "optional_fields": [
+            "y_label",
+            "title",
+            "show_welch_t",
+            "threshold",
+            "threshold_label"
+          ],
+          "path": "panelforge_figures.recipes.biophysics_scaling.per_cell_strip_summary.render",
+          "plugin": null,
+          "required_fields": [
+            "values_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": true,
+            "wave": "v1.2.0-beta-biophysics_scaling"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [
             "scale_stratified_permanova_r2"
           ],
           "answers_question": "Where does the observed PERMANOVA R\u00b2 sit relative to the permutation-shuffle null distribution, and what is the empirical p-value?",
@@ -3606,6 +3817,43 @@
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
           "tags_source": "merged"
+        },
+        {
+          "alternatives_in_modality": [
+            "splay_taper_polarity_displacement_compound"
+          ],
+          "answers_question": "How does polarity displacement distribute across groups?",
+          "contract": "PolarityDisplacementInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/biophysics_scaling/polarity_displacement_panel.png",
+          "n_points_typical": "",
+          "name": "polarity_displacement_panel",
+          "optional_fields": [
+            "angles_deg_by_group",
+            "y_label",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.biophysics_scaling.polarity_displacement_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "magnitudes_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": true,
+            "wave": "v1.2.0-beta-biophysics_scaling"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -4131,6 +4379,42 @@
             "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [
+            "splay_taper_polarity_displacement_compound"
+          ],
+          "answers_question": "How do categorical state fractions distribute across groups?",
+          "contract": "StateRatioInput",
+          "example_manifest": null,
+          "family": "sobol_bar",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/biophysics_scaling/state_ratio_summary.png",
+          "n_points_typical": "",
+          "name": "state_ratio_summary",
+          "optional_fields": [
+            "state_order",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.biophysics_scaling.state_ratio_summary.render",
+          "plugin": null,
+          "required_fields": [
+            "state_fractions_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": true,
+            "wave": "v1.2.0-beta-biophysics_scaling"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -8655,9 +8939,51 @@
         "spine_color": "#333333"
       },
       "description": "Executive summaries, Gantts, work-package flows, hypothesis diagrams, team matrices, conceptual triptychs, aims pyramids, linear methods pipelines, milestone \u00d7 risk matrices, innovation-positioning quadrants, cost-by-WP stacked bars, ethics & impact blocks, interdisciplinary spider plots, team network graphs, and deliverable-point timelines for grant proposals.",
-      "n_recipes": 16,
+      "n_recipes": 17,
       "name": "grant_and_conceptual",
       "recipes": [
+        {
+          "alternatives_in_modality": [
+            "hypothesis_diagram",
+            "methods_pipeline_flow",
+            "narrative_cascade_river_with_xrefs"
+          ],
+          "answers_question": "How are upstream factors, mediators, and phenotypes organized into a multi-stage scaffold?",
+          "contract": "CausalScaffoldInput",
+          "example_manifest": null,
+          "family": "flow",
+          "file_format_hints": [
+            "yaml",
+            "toml",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/grant_and_conceptual/causal_scaffold_diagram.png",
+          "n_points_typical": "",
+          "name": "causal_scaffold_diagram",
+          "optional_fields": [
+            "column_labels",
+            "title",
+            "footer",
+            "show_column_lanes"
+          ],
+          "path": "panelforge_figures.recipes.grant_and_conceptual.causal_scaffold_diagram.render",
+          "plugin": null,
+          "required_fields": [
+            "nodes",
+            "edges"
+          ],
+          "tags": {
+            "anchor": "generic",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
         {
           "alternatives_in_modality": [
             "hypothesis_diagram",
@@ -11582,9 +11908,46 @@
         "spine_color": "#333333"
       },
       "description": "Pre-analysis and pre-submission diagnostics \u2014 power curves, sample-size decision ladders, missing-data patterns, multi-metric QC radars, PRISMA flow diagrams, publication-bias funnel plots, heterogeneity forests, leave-one-out sensitivity, per-sample QC heatmaps, missingness UpSet, 2-D outlier detection, cohort retention Sankeys, study \u00d7 replication matrices, replicate correlograms, and batch-effect PCA.",
-      "n_recipes": 27,
+      "n_recipes": 35,
       "name": "meta_and_diagnostic",
       "recipes": [
+        {
+          "alternatives_in_modality": [
+            "competing_model_residual_panels"
+          ],
+          "answers_question": "Which model variant is preferred by AIC vs BIC?",
+          "contract": "AICBICInput",
+          "example_manifest": null,
+          "family": "sobol_bar",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/aic_bic_comparison_bar.png",
+          "n_points_typical": "",
+          "name": "aic_bic_comparison_bar",
+          "optional_fields": [
+            "title",
+            "best_color",
+            "other_color"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.aic_bic_comparison_bar.render",
+          "plugin": null,
+          "required_fields": [
+            "models"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
         {
           "alternatives_in_modality": [
             "replication_retrospective_matrix"
@@ -11839,6 +12202,45 @@
             "wave": "v1.0"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [
+            "simulated_vs_measured_overlay_grid"
+          ],
+          "answers_question": "What do the forward-simulation outputs look like per genotype?",
+          "contract": "ForwardSimSnapshotPairInput",
+          "example_manifest": null,
+          "family": "matrix",
+          "file_format_hints": [
+            "png",
+            "tiff"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/forward_simulation_snapshot_pair.png",
+          "n_points_typical": "",
+          "name": "forward_simulation_snapshot_pair",
+          "optional_fields": [
+            "wt_label",
+            "li_label",
+            "n_replicates_per_genotype",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.forward_simulation_snapshot_pair.render",
+          "plugin": null,
+          "required_fields": [
+            "wt_snapshot_path",
+            "li_snapshot_path"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -12213,6 +12615,46 @@
         },
         {
           "alternatives_in_modality": [
+            "pca_loadings_heatmap",
+            "data_quality_heatmap"
+          ],
+          "answers_question": "What are the per-cell input parameter values that feed a parameterized model?",
+          "contract": "PerCellParameterizationInput",
+          "example_manifest": null,
+          "family": "heatmap",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/per_cell_parameterization_heatmap.png",
+          "n_points_typical": "",
+          "name": "per_cell_parameterization_heatmap",
+          "optional_fields": [
+            "z_score_per_column",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.per_cell_parameterization_heatmap.render",
+          "plugin": null,
+          "required_fields": [
+            "cell_ids",
+            "parameter_names",
+            "values",
+            "group_per_cell"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [
             "sample_size_decision_ladder"
           ],
           "answers_question": "How much statistical power does each planned sample size buy for a range of effect sizes?",
@@ -12283,6 +12725,44 @@
             "wave": "v1.0"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "What do the raw, processed, and analytically-segmented images look like side-by-side?",
+          "contract": "MicrographTriptychInput",
+          "example_manifest": null,
+          "family": "heatmap",
+          "file_format_hints": [
+            "png",
+            "tiff"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/processed_micrograph_triptych.png",
+          "n_points_typical": "",
+          "name": "processed_micrograph_triptych",
+          "optional_fields": [
+            "panel_a_label",
+            "panel_b_label",
+            "panel_c_label",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.processed_micrograph_triptych.render",
+          "plugin": null,
+          "required_fields": [
+            "panel_a_path",
+            "panel_b_path",
+            "panel_c_path"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -12392,6 +12872,43 @@
             "wave": "v1.4.0-beta-cytoskeletal_morphometry_companion"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [
+            "random_forest_confusion_loocv"
+          ],
+          "answers_question": "Which features most discriminate the groups according to a random forest?",
+          "contract": "RFImportanceBarInput",
+          "example_manifest": null,
+          "family": "sobol_bar",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/random_forest_importance_bar.png",
+          "n_points_typical": "",
+          "name": "random_forest_importance_bar",
+          "optional_fields": [
+            "top_k",
+            "importance_label",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.random_forest_importance_bar.render",
+          "plugin": null,
+          "required_fields": [
+            "importances"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -12542,6 +13059,45 @@
         },
         {
           "alternatives_in_modality": [
+            "sensitivity_leave_one_out"
+          ],
+          "answers_question": "How stable are the model outputs across random seeds?",
+          "contract": "SeedStabilityInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/seed_stability_orthogonal_panel.png",
+          "n_points_typical": "",
+          "name": "seed_stability_orthogonal_panel",
+          "optional_fields": [
+            "target_cv",
+            "cv_ceiling",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.seed_stability_orthogonal_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "outputs",
+            "seeds",
+            "seed_values"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [
             "heterogeneity_forest"
           ],
           "answers_question": "Does any single study drive the pooled effect (leave-one-out sensitivity analysis)?",
@@ -12579,6 +13135,78 @@
             "wave": "v1.0"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [
+            "equivalence_forest_with_tost_bounds"
+          ],
+          "answers_question": "Which significant metrics carry effect sizes too small to matter biologically?",
+          "contract": "SigNegligibleInput",
+          "example_manifest": null,
+          "family": "sobol_bar",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/significant_negligible_classification_bar.png",
+          "n_points_typical": "",
+          "name": "significant_negligible_classification_bar",
+          "optional_fields": [
+            "negligible_threshold",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.significant_negligible_classification_bar.render",
+          "plugin": null,
+          "required_fields": [
+            "entries"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How do simulated and measured skeletons compare across genotypes?",
+          "contract": "SimVsMeasuredGridInput",
+          "example_manifest": null,
+          "family": "matrix",
+          "file_format_hints": [
+            "png",
+            "tiff"
+          ],
+          "gallery_png": "docs/gallery/meta_and_diagnostic/simulated_vs_measured_overlay_grid.png",
+          "n_points_typical": "",
+          "name": "simulated_vs_measured_overlay_grid",
+          "optional_fields": [
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.meta_and_diagnostic.simulated_vs_measured_overlay_grid.render",
+          "plugin": null,
+          "required_fields": [
+            "wt_measured_path",
+            "wt_simulated_path",
+            "li_measured_path",
+            "li_simulated_path"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         }
       ]
     },
@@ -16256,9 +16884,47 @@
         "spine_color": "#333333"
       },
       "description": "Global sensitivity (Sobol, Morris, FAST), LHS sampling-design coverage, OAT tornado, multi-output sensitivity matrices, bootstrap-CI convergence, interaction graphs, time-resolved sensitivity indices, 2-D parameter scans, dimensionless Pi-group collapses, active-subspace detection, and pairwise interaction matrices.",
-      "n_recipes": 15,
+      "n_recipes": 16,
       "name": "sensitivity_analysis",
       "recipes": [
+        {
+          "alternatives_in_modality": [
+            "sobol_bootstrap_convergence",
+            "sensitivity_leave_one_out"
+          ],
+          "answers_question": "How stable are the empirical medians underlying a validation contract under cohort resampling?",
+          "contract": "BootstrapValidationStabilityInput",
+          "example_manifest": null,
+          "family": "split_violin",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/sensitivity_analysis/bootstrap_validation_stability.png",
+          "n_points_typical": "",
+          "name": "bootstrap_validation_stability",
+          "optional_fields": [
+            "simulated_ci_by_metric_by_group",
+            "metric_order",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.sensitivity_analysis.bootstrap_validation_stability.render",
+          "plugin": null,
+          "required_fields": [
+            "bootstrap_medians"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
         {
           "alternatives_in_modality": [
             "sobol_first_total_pair"
@@ -17479,7 +18145,7 @@
         "spine_color": "#333333"
       },
       "description": "Ripley's L, pair correlation, nearest-neighbour distributions, Voronoi territories, 2D KDE heatmaps, Moran's I vs lag, Clark-Evans aggregation index, F function empty-space, spatial covariogram, LISA cluster maps, bivariate pair correlation, Voronoi area distributions, co-occurrence significance matrices, quadrat \u03c7\u00b2 tests, and spatial permutation null distributions.",
-      "n_recipes": 16,
+      "n_recipes": 22,
       "name": "spatial_statistics",
       "recipes": [
         {
@@ -17596,6 +18262,109 @@
           "tags_source": "override"
         },
         {
+          "alternatives_in_modality": [],
+          "answers_question": "How do per-cell contact patch counts and sizes distribute by group?",
+          "contract": "ContactPatchStatsInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/contact_patch_statistics_panel.png",
+          "n_points_typical": "",
+          "name": "contact_patch_statistics_panel",
+          "optional_fields": [
+            "fragmentation_by_group",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.contact_patch_statistics_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "n_patches_by_group",
+            "mean_patch_size_um2_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How do composite cortex-competence indices compare across groups?",
+          "contract": "CortexCompetenceInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/cortex_competence_composites_panel.png",
+          "n_points_typical": "",
+          "name": "cortex_competence_composites_panel",
+          "optional_fields": [
+            "index_order",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.cortex_competence_composites_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "indices_by_group_by_cell"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How does intensity vary with distance from the cell edge?",
+          "contract": "EdgeGradientInput",
+          "example_manifest": null,
+          "family": "diagnostic_curve",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/edge_enrichment_gradient_panel.png",
+          "n_points_typical": "",
+          "name": "edge_enrichment_gradient_panel",
+          "optional_fields": [
+            "title",
+            "enrichment_band"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.edge_enrichment_gradient_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "curves"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
           "alternatives_in_modality": [
             "nearest_neighbor_distance_distribution"
           ],
@@ -17632,6 +18401,39 @@
             "wave": "v1.0"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "What are the empirical nearest-neighbor distance CDFs per group?",
+          "contract": "GFunctionCurvesInput",
+          "example_manifest": null,
+          "family": "diagnostic_curve",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/g_function_curves_panel.png",
+          "n_points_typical": "",
+          "name": "g_function_curves_panel",
+          "optional_fields": [
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.g_function_curves_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "curves"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         },
         {
           "alternatives_in_modality": [
@@ -17936,6 +18738,40 @@
           "tags_source": "override"
         },
         {
+          "alternatives_in_modality": [],
+          "answers_question": "How does a measurement compare across length scales or measurement modalities?",
+          "contract": "ScaleComparisonInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/scale_comparison_panel.png",
+          "n_points_typical": "",
+          "name": "scale_comparison_panel",
+          "optional_fields": [
+            "y_label",
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.scale_comparison_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "measurements_by_scale_by_group"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": true,
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
+        },
+        {
           "alternatives_in_modality": [
             "moran_i_by_lag"
           ],
@@ -18077,6 +18913,39 @@
             "wave": "v1.0"
           },
           "tags_source": "override"
+        },
+        {
+          "alternatives_in_modality": [],
+          "answers_question": "How do actin/MT intensity ratios vary by zone across groups?",
+          "contract": "ZoneIntensityRatiosInput",
+          "example_manifest": null,
+          "family": "coef_forest",
+          "file_format_hints": [
+            "csv",
+            "json"
+          ],
+          "gallery_png": "docs/gallery/spatial_statistics/zone_intensity_ratios_panel.png",
+          "n_points_typical": "",
+          "name": "zone_intensity_ratios_panel",
+          "optional_fields": [
+            "title"
+          ],
+          "path": "panelforge_figures.recipes.spatial_statistics.zone_intensity_ratios_panel.render",
+          "plugin": null,
+          "required_fields": [
+            "intensity_ratios_by_zone"
+          ],
+          "tags": {
+            "anchor": "unknown",
+            "compartment_aware": "unknown",
+            "dimensionality": "2D",
+            "dynamics": "static",
+            "equivalence": "unknown",
+            "factorial": "unknown",
+            "scale_aware": "unknown",
+            "wave": "v1.0"
+          },
+          "tags_source": "auto"
         }
       ]
     }

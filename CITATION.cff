@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: panelforge-figures
+abstract: >-
+  Modality-first, publication-grade figure system for systems biology and
+  computational biophysics, with an embedded Claude Code skill for agentic
+  bootstrap inside any manuscript repository. Ships 471 statistically
+  contract-bound recipes across 20 modalities, an agent-discoverable recipe
+  index, provenance + reproducibility tooling, venue/bias/cross-reference
+  auditors, and a privacy-by-construction data-class safety layer.
+type: software
+authors:
+  - family-names: Socodato
+    given-names: Renato
+    email: renato.socodato@gmail.com
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+    # TODO: uncomment the line above and insert your real ORCID iD.
+    #       Format must be a full https://orcid.org/XXXX-XXXX-XXXX-XXXX URL.
+version: 3.14.1
+date-released: "2026-05-20"
+license: MIT
+repository-code: "https://github.com/renatosocodato/panelforge-figures"
+url: "https://github.com/renatosocodato/panelforge-figures"
+keywords:
+  - scientific-visualization
+  - systems-biology
+  - biophysics
+  - computational-biophysics
+  - matplotlib
+  - publication-figures
+  - reproducibility
+  - claude-code
+# ── Zenodo DOI ──────────────────────────────────────────────────────────────
+# After the first Zenodo archive is minted (see SETUP-ZENODO.md), uncomment the
+# identifiers block below and paste the CONCEPT DOI (the version-agnostic DOI
+# that always resolves to the latest archived release).
+#
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"
+#     description: "Concept DOI — resolves to the latest archived version on Zenodo."

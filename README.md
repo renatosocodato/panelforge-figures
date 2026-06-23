@@ -132,6 +132,21 @@ by v0.1.0:
 `spatial_statistics`, `clinical_cohort`, `cryoem_and_structure`,
 `intravital_imaging`, `actin_microtubule_morphometry`.
 
+## Citation
+
+If you use panelforge-figures in published work, please cite the archived
+software release. GitHub renders [`CITATION.cff`](CITATION.cff) as a
+**"Cite this repository"** button in the sidebar.
+
+Once the Zenodo archive is minted (see [`SETUP-ZENODO.md`](SETUP-ZENODO.md)),
+the citable form is:
+
+> Socodato, R. *panelforge-figures* (v3.14.1). Zenodo (2026).
+> doi:10.5281/zenodo.XXXXXXX
+
+Use the **version DOI** to cite v3.14.1 specifically, or the **concept DOI**
+to cite the software in general (it always resolves to the latest release).
+
 ## License
 
 MIT — see `LICENSE`.

@@ -1,0 +1,31 @@
+{
+  "title": "panelforge-figures: a modality-first publication-grade figure system for systems biology and computational biophysics",
+  "description": "<p>Modality-first, publication-grade figure system for systems biology and computational biophysics, with an embedded Claude Code skill for agentic bootstrap inside any manuscript repository.</p><p>Ships 471 statistically contract-bound recipes across 20 modalities, an agent-discoverable recipe index, provenance and reproducibility tooling (content-addressed figure hashes, environment lockfiles), pre-submission auditors (venue-fit, visualization-bias, figure-claim consistency, cross-reference linting), STAR Methods and reporting-checklist generators (ARRIVE / CONSORT / STARD / MIQE), and a privacy-by-construction data-class safety layer that gates all LLM, vision, and telemetry channels.</p>",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "version": "3.14.1",
+  "creators": [
+    {
+      "name": "Socodato, Renato"
+    }
+  ],
+  "keywords": [
+    "scientific-visualization",
+    "systems-biology",
+    "biophysics",
+    "computational-biophysics",
+    "matplotlib",
+    "publication-figures",
+    "reproducibility",
+    "claude-code"
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/renatosocodato/panelforge-figures",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ]
+}

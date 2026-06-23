@@ -2,6 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
 [![Python versions](https://img.shields.io/pypi/pyversions/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20811170.svg)](https://doi.org/10.5281/zenodo.20811170)
 
 A modality-first, publication-grade figure system for systems biology and
 computational biophysics, with an embedded Claude Code skill for agentic
@@ -138,14 +139,25 @@ If you use panelforge-figures in published work, please cite the archived
 software release. GitHub renders [`CITATION.cff`](CITATION.cff) as a
 **"Cite this repository"** button in the sidebar.
 
-Once the Zenodo archive is minted (see [`SETUP-ZENODO.md`](SETUP-ZENODO.md)),
-the citable form is:
+The software is permanently archived on Zenodo. The citable form is:
 
 > Socodato, R. *panelforge-figures* (v3.14.1). Zenodo (2026).
-> doi:10.5281/zenodo.XXXXXXX
+> doi:[10.5281/zenodo.20811171](https://doi.org/10.5281/zenodo.20811171)
 
-Use the **version DOI** to cite v3.14.1 specifically, or the **concept DOI**
-to cite the software in general (it always resolves to the latest release).
+- **Version DOI** (cite v3.14.1 specifically): [`10.5281/zenodo.20811171`](https://doi.org/10.5281/zenodo.20811171)
+- **Concept DOI** (always resolves to the latest release): [`10.5281/zenodo.20811170`](https://doi.org/10.5281/zenodo.20811170)
+
+```bibtex
+@software{socodato_panelforge_figures_2026,
+  author    = {Socodato, Renato},
+  title     = {panelforge-figures},
+  version   = {3.14.1},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.20811171},
+  url       = {https://doi.org/10.5281/zenodo.20811171}
+}
+```
 
 ## License
 

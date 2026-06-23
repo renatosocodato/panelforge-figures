@@ -31,11 +31,10 @@ keywords:
   - reproducibility
   - claude-code
 # ── Zenodo DOI ──────────────────────────────────────────────────────────────
-# After the first Zenodo archive is minted (see SETUP-ZENODO.md), uncomment the
-# identifiers block below and paste the CONCEPT DOI (the version-agnostic DOI
-# that always resolves to the latest archived release).
-#
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
-#     description: "Concept DOI — resolves to the latest archived version on Zenodo."
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20811170"
+    description: "Concept DOI — resolves to the latest archived version on Zenodo."
+  - type: doi
+    value: "10.5281/zenodo.20811171"
+    description: "Version DOI — this specific release (v3.14.1)."

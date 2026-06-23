@@ -1,5 +1,16 @@
 # Setup — mint a Zenodo DOI for panelforge-figures
 
+> **STATUS — v3.14.1 is already minted.** Published to Zenodo on 2026-06-23
+> via the REST API.
+> - Concept DOI (latest): [`10.5281/zenodo.20811170`](https://doi.org/10.5281/zenodo.20811170)
+> - Version DOI (v3.14.1): [`10.5281/zenodo.20811171`](https://doi.org/10.5281/zenodo.20811171)
+> - Record: https://zenodo.org/record/20811171
+>
+> The steps below remain the reference for (a) future releases and (b)
+> enabling the automatic GitHub-Release→Zenodo webhook so you don't have to
+> use the API path again. Two metadata polish items (ORCID, affiliation) are
+> still recommended — see the "Before you publish" section.
+
 This document covers the **one-time manual step** to mint a permanent,
 citable Zenodo DOI for a panelforge-figures release. After it's done, every
 future GitHub Release is automatically archived + DOI-minted by Zenodo.

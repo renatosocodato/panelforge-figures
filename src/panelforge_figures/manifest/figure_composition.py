@@ -67,9 +67,10 @@ def compose_figure(
         ``core.contract.get_recipe``.  Tests use this hook to inject a
         synthetic registry without touching the package singleton.
     data_files
-        Mapping of file-id → path for panels whose ``data`` field is a
-        symbolic id rather than a filesystem path.  When omitted, panels
-        with ``data=None`` fall back to the recipe's ``demo_contract()``.
+        Reserved for the future data adapter.  No panel currently consumes
+        ``data`` (supplying ``panel.data`` raises ``NotImplementedError``),
+        so this mapping is accepted but unused today.  Panels render from
+        the recipe's ``demo_contract()``.
 
     Returns
     -------
@@ -92,6 +93,21 @@ def compose_figure(
         resolver = get_recipe
     else:
         resolver = lambda name: registry[name]  # noqa: E731
+
+    # Reserved-but-not-consumed guard (figure scope).  ``shared_aesthetic``
+    # parses cleanly today but no aesthetic adapter consumes it yet; rather
+    # than silently render with the recipe's own palette (a lie — the author
+    # asked for a different aesthetic), fail loudly.  Mirrors the
+    # PartitionedPanelSpec deferral below.  See docs/architecture_deep_dive.md
+    # §7 item #6.
+    if spec.shared_aesthetic is not None:
+        raise NotImplementedError(
+            "FigureSpec.shared_aesthetic is accepted by the schema but not "
+            "yet consumed by the composition engine; supplying it would "
+            "silently render the recipe's own aesthetic instead. Remove it "
+            "until the aesthetic adapter lands (docs/spec_composition_layer.md "
+            "§3.1)."
+        )
 
     fig: Figure = plt.figure(figsize=spec.figsize, dpi=spec.dpi)
     axes_by_id: dict[str, Axes] = _build_axes(fig, spec)
@@ -301,13 +317,34 @@ def _render_panel(
 ) -> None:
     """Run the recipe's ``render(contract, ax=ax)`` on ``ax``.
 
-    Data resolution today: when ``panel.data`` is ``None`` the recipe's
-    ``demo_contract()`` is used.  When a path is supplied we currently
-    fall back to the demo contract too — full data-adapter wiring (the
-    spec's §2.3 ``DataSpec`` reuse) is the next iteration's work and is
-    intentionally deferred so this PR stays focused on the layout +
-    schema + engine surface.
+    Data resolution today: only ``panel.data is None`` is supported, in
+    which case the recipe's ``demo_contract()`` is rendered.  ``panel.data``
+    and ``panel.aesthetic_overrides`` are accepted by the schema but the
+    data-adapter / aesthetic-merge wiring (spec §2.3 ``DataSpec`` reuse and
+    §3.1 aesthetic merge) is NOT yet implemented.  Supplying either field
+    therefore raises ``NotImplementedError`` instead of silently rendering
+    demo data with the recipe's default aesthetic — putting DEMO data into a
+    published figure is the worst kind of silent-wrong-result.  Mirrors the
+    PartitionedPanelSpec deferral in :func:`compose_figure`.  See
+    docs/architecture_deep_dive.md §7 item #6.
     """
+    if panel.data is not None:
+        raise NotImplementedError(
+            f"Panel {panel.id!r}: PanelSpec.data is accepted by the schema "
+            "but not yet consumed by the composition engine; the recipe's "
+            "demo_contract() would be rendered instead, silently substituting "
+            "DEMO data for the file you supplied. Remove `data` until the "
+            "data adapter lands (docs/spec_composition_layer.md §2.3)."
+        )
+    if panel.aesthetic_overrides:
+        raise NotImplementedError(
+            f"Panel {panel.id!r}: PanelSpec.aesthetic_overrides is accepted by "
+            "the schema but not yet consumed by the composition engine; the "
+            "overrides would be silently ignored. Remove `aesthetic_overrides` "
+            "until the aesthetic-merge adapter lands "
+            "(docs/spec_composition_layer.md §3.1)."
+        )
+
     entry = resolver(panel.recipe)
     contract = entry.demo_contract()
     entry.render(contract, ax=ax)

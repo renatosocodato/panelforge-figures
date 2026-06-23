@@ -287,6 +287,7 @@ def test_check_staleness_fresh_when_all_match(tmp_path: Path) -> None:
     cache.upsert(_make_entry(
         panel_id="1A",
         recipe_sha="r", contract_sha="c", data_sha="d",
+        output_sha=hashlib.sha256(out.read_bytes()).hexdigest(),
         output_path=str(out),
     ))
     s = check_staleness(
@@ -355,6 +356,50 @@ def test_check_staleness_stale_output(tmp_path: Path) -> None:
         output_path=missing_out,
     )
     assert s == CacheStatus.stale_output
+
+
+def test_check_staleness_stale_output_on_mutation(tmp_path: Path) -> None:
+    """Output file still present but its bytes changed → stale_output.
+
+    Regression for the "cache blind to mutation" gap: an externally
+    edited / corrupted output PDF must invalidate the cache, not report
+    fresh.  We record a real render (so ``output_sha`` is a genuine
+    on-disk hash), confirm fresh, then append bytes to the file and
+    confirm the panel is now flagged for re-render.
+    """
+    cache = RenderCache.empty()
+    out = tmp_path / "out.pdf"
+    out.write_bytes(b"%PDF-1.4\n%rendered")
+    update_cache_entry(
+        cache,
+        panel_id="1A",
+        figure_id="Figure 1",
+        recipe_full_name="rna_seq.volcano",
+        recipe_sha="r",
+        contract_sha="c",
+        data_sha="d",
+        output_path=out,
+        panelforge_version=__version__,
+        notes=("rendered",),
+    )
+
+    # Sanity: nothing touched → fresh.
+    assert check_staleness(
+        cache, panel_id="1A",
+        current_recipe_sha="r", current_contract_sha="c", current_data_sha="d",
+        output_path=out,
+    ) == CacheStatus.fresh
+
+    # Mutate the output on disk (corruption / external edit).
+    with out.open("ab") as fh:
+        fh.write(b"\n%tampered")
+
+    # The on-disk bytes no longer match the recorded output_sha → stale.
+    assert check_staleness(
+        cache, panel_id="1A",
+        current_recipe_sha="r", current_contract_sha="c", current_data_sha="d",
+        output_path=out,
+    ) == CacheStatus.stale_output
 
 
 def test_check_staleness_order_recipe_wins_over_data() -> None:

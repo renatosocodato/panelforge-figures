@@ -394,6 +394,98 @@ def test_compose_figure_partitioned_panel_not_implemented(tmp_path: Path) -> Non
         compose_figure(spec)
 
 
+# ───────────────── reserved-but-not-consumed fields raise ────────────────
+#
+# Regression guard for the architecture deep-dive structural-debt register
+# (docs/architecture_deep_dive.md §7, item #6 — "silent demo-data
+# substitution").  ``panel.data``, ``panel.aesthetic_overrides`` and
+# ``FigureSpec.shared_aesthetic`` are accepted by the schema but NOT yet
+# consumed by the engine.  Until the data/aesthetic adapters land, a panel
+# that supplies one of these must FAIL LOUDLY rather than silently render
+# the recipe's demo contract (which would put DEMO data in a published
+# figure).
+
+
+def test_compose_figure_panel_data_raises_not_consumed(tmp_path: Path) -> None:
+    """A panel pointing at real ``data`` raises instead of rendering demo."""
+    spec = FigureCompositionSpec(
+        figure_id="paneldata",
+        layout=GridLayout(rows=1, cols=1),
+        output_path=tmp_path / "paneldata.pdf",
+        panels=[
+            CompositionPanelSpec(
+                id="A",
+                recipe="meta_and_diagnostic.bayes_factor_arrow_plot",
+                data="real_measurements.csv",
+            ),
+        ],
+    )
+    with pytest.raises(NotImplementedError, match="data.*not yet consumed"):
+        compose_figure(spec)
+
+
+def test_compose_figure_aesthetic_overrides_raises_not_consumed(
+    tmp_path: Path,
+) -> None:
+    """A panel with ``aesthetic_overrides`` raises instead of ignoring them."""
+    spec = FigureCompositionSpec(
+        figure_id="aesoverride",
+        layout=GridLayout(rows=1, cols=1),
+        output_path=tmp_path / "aes.pdf",
+        panels=[
+            CompositionPanelSpec(
+                id="A",
+                recipe="meta_and_diagnostic.bayes_factor_arrow_plot",
+                aesthetic_overrides={"palette": "red"},
+            ),
+        ],
+    )
+    with pytest.raises(NotImplementedError, match="aesthetic_overrides.*not yet consumed"):
+        compose_figure(spec)
+
+
+def test_compose_figure_shared_aesthetic_raises_not_consumed(
+    tmp_path: Path,
+) -> None:
+    """A figure with ``shared_aesthetic`` raises instead of ignoring it."""
+    spec = FigureCompositionSpec(
+        figure_id="sharedaes",
+        layout=GridLayout(rows=1, cols=1),
+        output_path=tmp_path / "shared.pdf",
+        shared_aesthetic="meta_and_diagnostic",
+        panels=[
+            CompositionPanelSpec(
+                id="A",
+                recipe="meta_and_diagnostic.bayes_factor_arrow_plot",
+            ),
+        ],
+    )
+    with pytest.raises(NotImplementedError, match="shared_aesthetic.*not yet consumed"):
+        compose_figure(spec)
+
+
+def test_compose_figure_without_reserved_fields_still_renders_demo(
+    tmp_path: Path,
+) -> None:
+    """A panel WITHOUT data/aesthetic fields still renders from demo as before."""
+    target = tmp_path / "plain.pdf"
+    spec = FigureCompositionSpec(
+        figure_id="plain",
+        layout=GridLayout(rows=1, cols=1),
+        output_path=target,
+        panels=[
+            CompositionPanelSpec(
+                id="A",
+                recipe="meta_and_diagnostic.bayes_factor_arrow_plot",
+            ),
+        ],
+    )
+    out = compose_figure(spec)
+    assert Path(out) == target
+    assert target.exists()
+    assert target.stat().st_size > 0
+
+
 # ─────────────────────────── validate_figure_yaml ───────────────────────
 
 

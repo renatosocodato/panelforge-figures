@@ -39,11 +39,17 @@ Public surface
 from __future__ import annotations
 
 import json
-import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from ._tfidf import clamp01 as _clamp01
+from ._tfidf import cosine as _cosine
+from ._tfidf import document_frequency as _doc_freq
+from ._tfidf import idf as _idf
+from ._tfidf import tfidf as _tfidf_vec
+from ._tfidf import tokenize as _tokenise
 
 __all__ = [
     "BibEntry",
@@ -465,57 +471,12 @@ def _extract_existing_cite_keys(bib_path: Path) -> set[str]:
 # --------------------------------------------------------------------------- #
 # TF-IDF similarity (lightweight, no external deps)                           #
 # --------------------------------------------------------------------------- #
-
-
-_WORD_RE = re.compile(r"\b[a-z][a-z]+\b")
-
-
-def _tokenise(text: str) -> list[str]:
-    """Lowercase alphabetic-only tokenizer (matches manuscript_alignment)."""
-    return _WORD_RE.findall(text.lower())
-
-
-def _term_freq(tokens: list[str]) -> dict[str, float]:
-    if not tokens:
-        return {}
-    counts: dict[str, int] = {}
-    for t in tokens:
-        counts[t] = counts.get(t, 0) + 1
-    n = len(tokens)
-    return {t: c / n for t, c in counts.items()}
-
-
-def _doc_freq(docs: list[list[str]]) -> dict[str, int]:
-    df: dict[str, int] = {}
-    for doc in docs:
-        for t in set(doc):
-            df[t] = df.get(t, 0) + 1
-    return df
-
-
-def _idf(df: dict[str, int], n_docs: int) -> dict[str, float]:
-    return {t: math.log((n_docs + 1) / (c + 1)) + 1.0 for t, c in df.items()}
-
-
-def _tfidf_vec(tokens: list[str], idf: dict[str, float]) -> dict[str, float]:
-    tf = _term_freq(tokens)
-    return {t: f * idf.get(t, 1.0) for t, f in tf.items()}
-
-
-def _cosine(a: dict[str, float], b: dict[str, float]) -> float:
-    common = set(a) & set(b)
-    if not common:
-        return 0.0
-    dot = sum(a[t] * b[t] for t in common)
-    na = math.sqrt(sum(v * v for v in a.values()))
-    nb = math.sqrt(sum(v * v for v in b.values()))
-    if na == 0.0 or nb == 0.0:
-        return 0.0
-    return dot / (na * nb)
-
-
-def _clamp01(x: float) -> float:
-    return min(1.0, max(0.0, x))
+#
+# The TF-IDF helpers (``_tokenise`` / ``_term_freq`` / ``_doc_freq`` /
+# ``_idf`` / ``_tfidf_vec`` / ``_cosine`` / ``_clamp01``) come from the shared
+# :mod:`._tfidf` module — the single source of truth also used by
+# ``manuscript_alignment`` and ``manuscript_blueprint``. They are imported
+# (aliased to this module's historical private names) at the top of the file.
 
 
 # --------------------------------------------------------------------------- #

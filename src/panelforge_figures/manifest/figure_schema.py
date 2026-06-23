@@ -71,7 +71,11 @@ class PanelSpec(BaseModel):
 
     id: str = Field(..., min_length=1, max_length=4)         # "A", "B", "F-CKO" …
     recipe: str = Field(..., min_length=1)                   # full_name e.g. "modality.recipe"
-    data: Path | None = None                                 # CSV/parquet/etc; None → demo
+    # RESERVED; not yet consumed by the composition engine. The data adapter
+    # is unimplemented, so supplying a non-None ``data`` raises
+    # NotImplementedError at compose time rather than silently rendering the
+    # recipe's demo_contract(). Leave as ``None`` (→ demo) until it lands.
+    data: Path | None = None
     caption: str = ""
 
     # Position (mutually exclusive depending on layout kind):
@@ -86,7 +90,10 @@ class PanelSpec(BaseModel):
     # A/B/C marker placement, in axes-fraction coords.
     label_position: tuple[float, float] = (0.02, 0.95)
 
-    # Per-panel aesthetic overrides; merged on top of figure-level ``shared_aesthetic``.
+    # RESERVED; not yet consumed by the composition engine. The aesthetic-merge
+    # adapter is unimplemented, so supplying a non-empty mapping raises
+    # NotImplementedError at compose time rather than silently ignoring it.
+    # Intended to merge on top of figure-level ``shared_aesthetic`` once wired.
     aesthetic_overrides: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -121,8 +128,11 @@ class FigureSpec(BaseModel):
     layout: Layout = Field(...)
     panels: list[PanelSpec | PartitionedPanelSpec] = Field(..., min_length=1)
 
-    # Modality name; recipes inside the figure inherit this aesthetic
-    # unless they override it locally via ``PanelSpec.aesthetic_overrides``.
+    # RESERVED; not yet consumed by the composition engine. Intended as a
+    # modality name whose aesthetic every panel inherits (unless overridden
+    # via ``PanelSpec.aesthetic_overrides``), but no aesthetic adapter exists
+    # yet, so supplying a non-None value raises NotImplementedError at compose
+    # time rather than silently rendering each recipe's own aesthetic.
     shared_aesthetic: str | None = None
 
     # Style hint for the A/B/C overlay; the engine maps named styles to

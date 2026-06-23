@@ -8,7 +8,9 @@ title: "Graphical abstract — DISC1 multi-modal summary"
 layout:
   type: freeform
 
-shared_aesthetic: meta_and_diagnostic
+# NOTE: `shared_aesthetic` is intentionally omitted — accepted by the schema
+# but not yet consumed by the engine; supplying it raises NotImplementedError
+# (docs/architecture_deep_dive.md §7 item #6).
 panel_label_style: none
 figsize: [9.0, 6.0]
 

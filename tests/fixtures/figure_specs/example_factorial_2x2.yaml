@@ -12,7 +12,9 @@ layout:
   hspace: 0.40
   wspace: 0.30
 
-shared_aesthetic: mixed_effects_models
+# NOTE: `shared_aesthetic` is intentionally omitted — accepted by the schema
+# but not yet consumed by the engine; supplying it raises NotImplementedError
+# (docs/architecture_deep_dive.md §7 item #6).
 panel_label_style: upper_left_bold
 figsize: [7.6, 6.0]
 

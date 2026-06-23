@@ -22,7 +22,13 @@ Each rule is a private function that returns ``AuditFinding | None``
 (``None`` when the rule does not apply). The ``contract.refuses_when``
 tuple lets per-recipe contracts **escalate** an otherwise-warn-class
 finding into a refusal — used e.g. for the ``underpowered`` rule in the
-``mixed_effects_models.two_way_anova_summary_plot`` worked example.
+``mixed_effects_models.two_way_anova_summary_plot`` worked example. Every
+name in ``refuses_when`` must be one of the 13 rule ids below; that is
+enforced at contract-construction time
+(:class:`~panelforge_figures.core.StatisticalContract.__post_init__`
+against :data:`~panelforge_figures.core.KNOWN_REFUSAL_RULES`), and this
+module asserts at import time that its own registry matches that taxonomy
+so the two cannot drift.
 
 Rule names (the keys for ``refuses_when``):
 
@@ -53,7 +59,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from ..core import StatisticalContract
+from ..core import KNOWN_REFUSAL_RULES, StatisticalContract
 
 __all__ = [
     "ALL_RULE_NAMES",
@@ -87,6 +93,17 @@ _DEFAULT_VERDICT: dict[str, Severity] = {
 }
 
 ALL_RULE_NAMES: tuple[str, ...] = tuple(_DEFAULT_VERDICT)
+
+# The contract layer (``core.statistical_contract``) validates every
+# ``refuses_when`` entry against its own copy of this taxonomy
+# (``KNOWN_REFUSAL_RULES``). Assert at import time that the two agree, so a
+# rule added here but not mirrored there (or vice versa) fails loudly rather
+# than letting contracts silently accept an id this module would never honour.
+assert set(ALL_RULE_NAMES) == set(KNOWN_REFUSAL_RULES), (
+    "statistical_audit rule registry has drifted from "
+    "core.KNOWN_REFUSAL_RULES: "
+    f"{set(ALL_RULE_NAMES) ^ set(KNOWN_REFUSAL_RULES)}"
+)
 
 # Tunable thresholds (centralised so tests can adjust if v2.1 makes them
 # contract fields, per the risks/mitigations table in the spec).

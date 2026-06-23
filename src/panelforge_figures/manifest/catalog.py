@@ -37,6 +37,16 @@ from ..transforms import list_transforms
 
 log = logging.getLogger(__name__)
 
+__all__ = [
+    "INDEX_SCHEMA_VERSION",
+    "build_catalog",
+    "catalog_fingerprint",
+    "write_catalog_json",
+    "list_palette_names",
+    "build_index",
+    "emit_index_json",
+]
+
 
 # Schema version of the agent-facing index (`recipes_index.json`).  Bumped on
 # breaking changes: field rename, type change, removal.  Additive changes

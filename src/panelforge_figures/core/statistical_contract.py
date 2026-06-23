@@ -16,8 +16,14 @@ Design notes
   argument continue to render unchanged — this is a backwards-compat
   guarantee for the 392 untagged recipes (see spec §6, Tier-2 deferral).
 * The literal types form a **closed taxonomy** (mirrors PR #57 enum
-  pattern); rule names in ``refuses_when`` are validated against the
-  audit module's rule registry at audit-time.
+  pattern).
+* ``refuses_when`` lists audit rule ids that this recipe escalates from
+  WARN to REFUSE. The audit driver treats it as an escalation-only
+  allow-list: a finding whose ``rule_id`` is listed is promoted to
+  REFUSE (``manifest.statistical_audit._escalated``). The names are
+  **not** validated against the rule registry, so a rule id that does
+  not match any audit rule is simply never triggered (it never escalates
+  anything) rather than raising.
 """
 
 from __future__ import annotations

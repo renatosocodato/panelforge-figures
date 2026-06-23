@@ -164,7 +164,6 @@ def modality_aesthetic(name: str) -> Any | None:
 
 def ensure_all_imported() -> None:
     """Import every modality subpackage so decorators run. Idempotent."""
-    from .. import recipes as _recipes_pkg  # noqa: F401
     pkg = importlib.import_module("panelforge_figures.recipes")
     if not hasattr(pkg, "__path__"):
         return

@@ -6,6 +6,15 @@ import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 
+__all__ = [
+    "Palette",
+    "register_palette",
+    "get_palette",
+    "list_palettes",
+    "palettes",
+    "semantic_color",
+]
+
 log = logging.getLogger(__name__)
 
 

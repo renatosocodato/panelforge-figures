@@ -38,6 +38,9 @@ Public API
   :func:`extract_bibliography_keys`.
 * :func:`parse_latex`, :func:`parse_markdown`,
   :func:`parse_manuscript` — top-level dispatchers.
+* :func:`enrich_with_pylatexenc` — optional best-effort caption
+  enrichment that lazily imports ``pylatexenc`` (returns the input
+  unchanged if the dependency is absent).
 
 See ``docs/spec_e10_manuscript_collision.md`` §2 for the full spec.
 """
@@ -69,6 +72,7 @@ __all__ = [
     "extract_claims",
     "extract_sections",
     "extract_bibliography_keys",
+    "enrich_with_pylatexenc",
 ]
 
 

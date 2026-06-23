@@ -15,6 +15,19 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Any
 
+__all__ = [
+    "UNKNOWN_SENTINEL",
+    "TAG_ENUMS",
+    "BOOL_TAGS",
+    "TagAnchor",
+    "TagDimensionality",
+    "TagDynamics",
+    "TagWave",
+    "TagValidationError",
+    "validate_tag",
+    "validate_tag_dict",
+]
+
 # Sentinel for tags the auto-tagger could not infer.
 UNKNOWN_SENTINEL: str = "unknown"
 

@@ -22,6 +22,18 @@ Discovery is **not** automatic at package import; callers must invoke
 ``figures plugins`` CLI both do this lazily).  Keeping it explicit means
 ``pytest`` runs that don't touch this module see deterministic behaviour
 and the global registry stays catalog-only.
+
+.. warning::
+
+   **Trust boundary.** Loading a plugin executes arbitrary Python at
+   import time — entry-point plugins run their module's import side
+   effects, and directory plugins (:func:`discover_directory_plugins`)
+   ``exec`` every ``*.py`` file found in the plugins directory, with no
+   sandbox.  Only point panelforge at plugin packages and directories
+   you trust, exactly as you would trust any dependency you ``pip
+   install`` or any script you run.  Discovery is opt-in and never
+   automatic, but once invoked the code runs with the full privileges of
+   the panelforge process.
 """
 
 from __future__ import annotations
@@ -35,6 +47,25 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 log = logging.getLogger(__name__)
+
+__all__ = [
+    # Discovery entry points
+    "discover_all_plugins",
+    "discover_entry_point_plugins",
+    "discover_directory_plugins",
+    # Introspection
+    "list_loaded_plugins",
+    "get_plugin",
+    "plugin_for_recipe",
+    "reset_plugin_state",
+    # Value type + errors
+    "PluginInfo",
+    "PluginConflictError",
+    "PluginLoadError",
+    # Module-level constants
+    "PLUGINS_ENTRY_POINT_GROUP",
+    "DEFAULT_PLUGINS_DIR",
+]
 
 PLUGINS_ENTRY_POINT_GROUP = "panelforge.plugins"
 DEFAULT_PLUGINS_DIR = "panelforge_plugins"
@@ -170,6 +201,18 @@ def discover_directory_plugins(
     The plugin name is the file stem (or directory name).  Names in
     ``disabled`` are silently skipped.  Duplicate-recipe conflicts raise
     :class:`PluginConflictError`.
+
+    .. warning::
+
+       **Trust boundary — this executes arbitrary code.** Each ``.py``
+       file in ``plugins_dir`` is imported via
+       :func:`importlib.util.spec_from_file_location` and
+       ``spec.loader.exec_module``, so any code at module scope runs with
+       no sandbox and the full privileges of the panelforge process.
+       Only point panelforge at a directory you trust.  Discovery is
+       opt-in (this function is never called automatically at import),
+       but a malicious or buggy plugin file can do anything the calling
+       user can do.
     """
     if plugins_dir is None:
         plugins_dir = Path(DEFAULT_PLUGINS_DIR)

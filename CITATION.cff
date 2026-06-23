@@ -13,9 +13,7 @@ authors:
   - family-names: Socodato
     given-names: Renato
     email: renato.socodato@gmail.com
-    # orcid: "https://orcid.org/0000-0000-0000-0000"
-    # TODO: uncomment the line above and insert your real ORCID iD.
-    #       Format must be a full https://orcid.org/XXXX-XXXX-XXXX-XXXX URL.
+    orcid: "https://orcid.org/0000-0002-6882-5020"
 version: 3.14.1
 date-released: "2026-05-20"
 license: MIT

@@ -2592,7 +2592,7 @@
             "equivalence": "unknown",
             "factorial": "unknown",
             "scale_aware": true,
-            "wave": "v1.2.0-beta-biophysics_scaling"
+            "wave": "v1.1.0-beta-biophysics_scaling"
           },
           "tags_source": "auto"
         },
@@ -2632,7 +2632,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -2708,7 +2708,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -2787,7 +2787,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -2862,7 +2862,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -2936,7 +2936,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3088,7 +3088,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3123,7 +3123,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3161,7 +3161,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3237,7 +3237,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3275,7 +3275,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3313,7 +3313,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3350,7 +3350,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3389,7 +3389,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3425,7 +3425,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3465,7 +3465,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3506,7 +3506,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3545,7 +3545,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3622,7 +3622,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3659,7 +3659,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3698,7 +3698,7 @@
             "equivalence": "unknown",
             "factorial": "unknown",
             "scale_aware": true,
-            "wave": "v1.2.0-beta-biophysics_scaling"
+            "wave": "v1.1.0-beta-biophysics_scaling"
           },
           "tags_source": "auto"
         },
@@ -3780,7 +3780,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3816,7 +3816,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3851,7 +3851,7 @@
             "equivalence": "unknown",
             "factorial": "unknown",
             "scale_aware": true,
-            "wave": "v1.2.0-beta-biophysics_scaling"
+            "wave": "v1.1.0-beta-biophysics_scaling"
           },
           "tags_source": "auto"
         },
@@ -3890,7 +3890,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3930,7 +3930,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -3968,7 +3968,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4044,7 +4044,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4082,7 +4082,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4156,7 +4156,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4196,7 +4196,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4235,7 +4235,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4309,7 +4309,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4412,7 +4412,7 @@
             "equivalence": "unknown",
             "factorial": "unknown",
             "scale_aware": true,
-            "wave": "v1.2.0-beta-biophysics_scaling"
+            "wave": "v1.1.0-beta-biophysics_scaling"
           },
           "tags_source": "auto"
         },
@@ -4452,7 +4452,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4493,7 +4493,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4534,7 +4534,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4572,7 +4572,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [
@@ -4611,7 +4611,7 @@
             "scale_aware": true,
             "wave": "v1.1.0-beta-biophysics_scaling"
           },
-          "tags_source": "merged"
+          "tags_source": "override"
         },
         {
           "alternatives_in_modality": [

@@ -165,6 +165,198 @@ def test_telemetry_double_gated():
         set_data_class(DataClass.RESEARCH)
 
 
+# ─────────── 5b. expose_* flags gate tool exposure (security surface) ───────────
+
+
+def test_group_enabled_honors_expose_flags():
+    """Pure filtering logic (no SDK needed): ``_group_enabled`` must
+    return ``False`` for a group whose ``expose_*`` flag is off.
+
+    Regression for ``mcp-expose-flags-noop``: the per-group flags were
+    never consulted, so ``expose_scorer=False`` still exposed
+    ``scorer.score`` / ``scorer.explain`` — a security-surface
+    mismatch.  This test reproduces the bug at the gating boundary
+    without requiring the optional ``mcp`` extra.
+    """
+    from panelforge_figures.mcp.tools import _group_enabled
+
+    cfg = MCPServerConfig(expose_scorer=False)
+    # The disabled group must be gated off ...
+    assert _group_enabled(cfg, "scorer") is False
+    # ... while the still-enabled groups stay on.
+    assert _group_enabled(cfg, "index") is True
+    assert _group_enabled(cfg, "provenance") is True
+    assert _group_enabled(cfg, "projects") is True
+
+
+def test_group_enabled_each_flag_independently():
+    """Disabling one group must not affect the others, and the default
+    (all-on) config exposes every group."""
+    from panelforge_figures.mcp.tools import _group_enabled
+
+    all_on = MCPServerConfig()
+    for grp in ("scorer", "index", "provenance", "projects"):
+        assert _group_enabled(all_on, grp) is True
+
+    pairs = {
+        "scorer": "expose_scorer",
+        "index": "expose_index",
+        "provenance": "expose_provenance",
+        "projects": "expose_projects",
+    }
+    for grp in pairs:
+        cfg = MCPServerConfig(**{pairs[grp]: False})
+        assert _group_enabled(cfg, grp) is False, grp
+        for other in pairs:
+            if other != grp:
+                assert _group_enabled(cfg, other) is True, (grp, other)
+
+
+def test_group_enabled_none_config_is_permissive():
+    """``config is None`` (no config supplied) keeps the historical
+    all-on baseline so flag-less callers are unchanged."""
+    from panelforge_figures.mcp.tools import _group_enabled
+
+    for grp in ("recipe", "scorer", "index", "provenance", "projects"):
+        assert _group_enabled(None, grp) is True
+
+
+def test_group_enabled_unknown_group_fails_closed():
+    """An unrecognized group prefix is not exposed without an explicit
+    flag (fail-closed)."""
+    from panelforge_figures.mcp.tools import _group_enabled
+
+    assert _group_enabled(MCPServerConfig(), "mystery") is False
+
+
+class _CaptureServer:
+    """Minimal stand-in for ``mcp.server.Server`` that captures the
+    handlers registered by ``register_recipe_tools`` so a test can
+    invoke ``list_tools`` directly without a live transport."""
+
+    def __init__(self):
+        self.list_tools_handler = None
+        self.call_tool_handler = None
+
+    def list_tools(self):
+        def _decorator(fn):
+            self.list_tools_handler = fn
+            return fn
+
+        return _decorator
+
+    def call_tool(self):
+        def _decorator(fn):
+            self.call_tool_handler = fn
+            return fn
+
+        return _decorator
+
+
+@_skip_without_mcp
+def test_list_tools_omits_scorer_when_disabled():
+    """End-to-end (needs the SDK for ``Tool`` construction): with
+    ``expose_scorer=False`` the scorer tools must be ABSENT from the
+    listed tools, and PRESENT when the default config is used."""
+    from panelforge_figures.mcp import tools as mcp_tools
+
+    # Enabled: scorer tools appear.
+    srv_on = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv_on, MCPServerConfig())
+    names_on = {t.name for t in asyncio.run(srv_on.list_tools_handler())}
+    assert "scorer.score" in names_on
+    assert "scorer.explain" in names_on
+
+    # Disabled: scorer tools vanish, but the rest of the surface stays.
+    srv_off = _CaptureServer()
+    mcp_tools.register_recipe_tools(
+        srv_off, MCPServerConfig(expose_scorer=False)
+    )
+    names_off = {t.name for t in asyncio.run(srv_off.list_tools_handler())}
+    assert "scorer.score" not in names_off
+    assert "scorer.explain" not in names_off
+    # Non-disabled groups remain exposed.
+    assert "index.list_recipes" in names_off
+    assert "provenance.build" in names_off
+    assert "projects.list" in names_off
+
+
+class _FakeTool:
+    """Stand-in for ``mcp.types.Tool`` carrying just ``.name`` so the
+    list-tools filtering can be exercised without the optional SDK."""
+
+    def __init__(self, name, description=None, inputSchema=None):  # noqa: N803
+        self.name = name
+        self.description = description
+        self.inputSchema = inputSchema
+
+
+def _install_fake_mcp_types(monkeypatch):
+    """Inject a minimal fake ``mcp.types`` so the SDK-dependent tool
+    builders run in environments without the real ``mcp`` extra.
+
+    Returns the ``mcp.tools`` module for the caller to drive.
+    """
+    import sys
+    import types as _pytypes
+
+    fake_types = _pytypes.ModuleType("mcp.types")
+    fake_types.Tool = _FakeTool
+    fake_root = sys.modules.get("mcp") or _pytypes.ModuleType("mcp")
+    monkeypatch.setitem(sys.modules, "mcp", fake_root)
+    monkeypatch.setitem(sys.modules, "mcp.types", fake_types)
+    from panelforge_figures.mcp import tools as mcp_tools
+
+    return mcp_tools
+
+
+def test_list_tools_filters_scorer_without_sdk(monkeypatch):
+    """Behavior-level regression that runs WITHOUT the real ``mcp`` SDK
+    (uses a fake ``mcp.types.Tool``): with ``expose_scorer=False`` the
+    scorer tools must not appear in the listing, but do when the flag
+    is left at its default.
+
+    This is the decisive reproduce-before-fix for
+    ``mcp-expose-flags-noop`` — on the unfixed code ``_list_tools``
+    unconditionally appended ``_scorer_tool_list()``, so the
+    ``not in`` assertions failed while the security surface leaked.
+    """
+    mcp_tools = _install_fake_mcp_types(monkeypatch)
+
+    srv_on = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv_on, MCPServerConfig())
+    names_on = {t.name for t in asyncio.run(srv_on.list_tools_handler())}
+    assert "scorer.score" in names_on
+    assert "scorer.explain" in names_on
+
+    srv_off = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv_off, MCPServerConfig(expose_scorer=False))
+    names_off = {t.name for t in asyncio.run(srv_off.list_tools_handler())}
+    assert "scorer.score" not in names_off
+    assert "scorer.explain" not in names_off
+    # Non-disabled groups stay exposed.
+    assert "index.list_recipes" in names_off
+    assert "provenance.build" in names_off
+    assert "projects.list" in names_off
+
+
+@_skip_without_mcp
+def test_call_tool_refuses_disabled_scorer():
+    """Dispatch is gated too: invoking ``scorer.score`` with
+    ``expose_scorer=False`` returns a structured 'disabled' error
+    rather than executing the scorer."""
+    import json
+
+    from panelforge_figures.mcp import tools as mcp_tools
+
+    srv = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv, MCPServerConfig(expose_scorer=False))
+    result = asyncio.run(srv.call_tool_handler("scorer.score", {}))
+    payload = json.loads(result[0].text)
+    assert payload["success"] is False
+    assert "disabled" in payload["error"].lower()
+
+
 # ─────────── 6. CLI smoke ───────────
 
 

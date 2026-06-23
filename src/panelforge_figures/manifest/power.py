@@ -126,15 +126,21 @@ class PowerEstimate:
         }
 
 
-# Family classifications: which recipe family uses which power method.
+# Family classifications: which *analysis* family uses which power method.
 #
-# These are *family* names (matching the ``family`` field on a
-# StatisticalContract or the values of ``RecipeFamily``), not recipe
-# names. The audit layer maps a concrete recipe to a family before
-# dispatching here. The classification is used by ``compute_required_n``
-# to decide between closed-form lookup and Monte Carlo simulation, and
-# to decide whether to attach the +/- 0.02 uncertainty caveat to the
-# returned PowerEstimate's ``notes`` tuple.
+# IMPORTANT: these are *analysis*-vocabulary names (``comparison``,
+# ``factorial``, ``correlation``, ``proportion``, ``equivalence`` …), which
+# name an inferential test — they are deliberately distinct from the
+# rendered ``RecipeFamily`` enum (``coef_forest``, ``split_violin``,
+# ``volcano`` …) that recipes carry as ``RecipeMetadata.family``. The two
+# vocabularies are reconciled in :mod:`.family_bridge`; callers holding a
+# rendered ``RecipeFamily`` (e.g. the ``figures power`` CLI) must translate
+# via ``family_bridge.analysis_family_for_recipe_family`` *before* calling
+# into this module. ``coef_forest`` is the single slug that appears in both
+# vocabularies. The classification is used by ``compute_required_n`` to
+# decide between closed-form lookup and Monte Carlo simulation, and to
+# decide whether to attach the +/- 0.02 uncertainty caveat to the returned
+# PowerEstimate's ``notes`` tuple.
 PARAMETRIC_FAMILIES: tuple[str, ...] = (
     "comparison",          # 2-group t-test family
     "factorial",           # 2x2 ANOVA family

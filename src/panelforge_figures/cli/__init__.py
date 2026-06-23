@@ -2286,8 +2286,26 @@ def power_cmd(
         click.get_current_context().exit(1)
         return
 
-    family = matched.metadata.family.value
+    from panelforge_figures.manifest.family_bridge import (
+        analysis_family_for_recipe_family,
+    )
+
+    recipe_family = matched.metadata.family.value
     full_name = f"{matched.metadata.modality}.{matched.metadata.name}"
+
+    # The recipe carries a *rendered* RecipeFamily; the power layer speaks the
+    # *analysis* vocabulary. Bridge between them. Decorative / conceptual
+    # geometries have no defined power analysis — report that cleanly instead
+    # of letting a raw PowerError stacktrace escape.
+    family = analysis_family_for_recipe_family(recipe_family)
+    if family is None:
+        click.echo(click.style(
+            f"✗ power analysis is not defined for family "
+            f"{recipe_family!r} (recipe {full_name!r}); "
+            f"this family has no inferential power method",
+            fg="red"), err=True)
+        click.get_current_context().exit(1)
+        return
 
     try:
         result = compute_required_n(
@@ -2313,7 +2331,8 @@ def power_cmd(
     # Human-friendly output
     click.echo(click.style(
         f"power analysis: {full_name}", fg="cyan"))
-    click.echo(f"  family:           {result.family}")
+    click.echo(f"  recipe_family:    {recipe_family}")
+    click.echo(f"  analysis_family:  {result.family}")
     click.echo(f"  method:           {result.method.value}")
     click.echo(f"  effect_size:      {result.effect_size}  ({result.effect_size_units})")
     click.echo(f"  alpha:            {result.alpha}")

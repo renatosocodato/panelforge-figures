@@ -219,6 +219,46 @@ def _tag_recipe_for_scorer(info: Any) -> dict[str, Any]:
     }
 
 
+# ───────────────────────── exposure gating ─────────────────────────────
+
+
+def _group_enabled(config: MCPServerConfig | None, group: str) -> bool:
+    """Return whether tool ``group`` should be exposed for ``config``.
+
+    The single source of truth for honoring the ``expose_*`` flags
+    inside :func:`register_recipe_tools`'s ``list_tools`` union *and*
+    its ``call_tool`` dispatcher.  Because ``register_recipe_tools`` is
+    the one real registration pass (the other ``register_*_tools`` are
+    no-ops), the per-group flags would otherwise never be consulted —
+    a security-surface mismatch where ``expose_scorer=False`` still
+    exposed ``scorer.score`` / ``scorer.explain``.
+
+    ``config is None`` means "no config supplied" — we default to the
+    permissive baseline (everything on) to preserve the historical
+    behavior of callers that registered tools without a config, and to
+    match :class:`MCPServerConfig`'s own ``expose_* = True`` defaults.
+    Telemetry is *not* handled here: it carries an extra runtime safety
+    gate and is resolved separately at its call sites.
+
+    Pure (no SDK import), so it is unit-testable without the optional
+    ``mcp`` extra installed.
+    """
+    if config is None:
+        return True
+    flag_attr = {
+        "recipe": "expose_recipes",
+        "scorer": "expose_scorer",
+        "index": "expose_index",
+        "provenance": "expose_provenance",
+        "projects": "expose_projects",
+    }.get(group)
+    if flag_attr is None:
+        # Unknown group — fail closed so an accidental new prefix is
+        # not exposed without an explicit flag.
+        return False
+    return bool(getattr(config, flag_attr))
+
+
 # ───────────────────────── tool list builders ──────────────────────────
 
 
@@ -1083,11 +1123,19 @@ def register_recipe_tools(server: Any, config: MCPServerConfig | None = None) ->
         # to enumerate) but the helper-tool lists are rebuilt because
         # they're a few entries each and they capture small SDK-typed
         # objects we'd rather not stash globally.
+        # Each non-telemetry group is gated by its ``expose_*`` flag —
+        # skipping a group's *tools* here keeps its surface off the
+        # listing (its dispatch branch in ``_call_tool`` is gated the
+        # same way, so a stale call returns a structured error).
         out: list[Tool] = list(recipe_tools)
-        out.extend(_scorer_tool_list())
-        out.extend(_index_tool_list())
-        out.extend(_provenance_tool_list())
-        out.extend(_project_tool_list())
+        if _group_enabled(config, "scorer"):
+            out.extend(_scorer_tool_list())
+        if _group_enabled(config, "index"):
+            out.extend(_index_tool_list())
+        if _group_enabled(config, "provenance"):
+            out.extend(_provenance_tool_list())
+        if _group_enabled(config, "projects"):
+            out.extend(_project_tool_list())
 
         # Telemetry tools are conditionally exposed: the server config
         # plus the runtime safety policy together decide visibility.
@@ -1109,15 +1157,31 @@ def register_recipe_tools(server: Any, config: MCPServerConfig | None = None) ->
         # session healthy and gives the agent something to act on.
         try:
             args = dict(arguments or {})
+            # Dispatch is gated by the same ``expose_*`` flags that gate
+            # the listing: a call into a disabled group returns a
+            # structured "not exposed" error rather than silently
+            # executing — closing the security-surface mismatch where a
+            # client could invoke ``scorer.score`` despite
+            # ``expose_scorer=False``.
             if name.startswith("recipe."):
+                if not _group_enabled(config, "recipe"):
+                    return _err(f"tool group disabled: {name}")
                 return await _handle_recipe_call(name, args, config)
             if name.startswith("scorer."):
+                if not _group_enabled(config, "scorer"):
+                    return _err(f"tool group disabled: {name}")
                 return await _handle_scorer_call(name, args)
             if name.startswith("index."):
+                if not _group_enabled(config, "index"):
+                    return _err(f"tool group disabled: {name}")
                 return await _handle_index_call(name, args)
             if name.startswith("provenance."):
+                if not _group_enabled(config, "provenance"):
+                    return _err(f"tool group disabled: {name}")
                 return await _handle_provenance_call(name, args)
             if name.startswith("projects."):
+                if not _group_enabled(config, "projects"):
+                    return _err(f"tool group disabled: {name}")
                 return await _handle_project_call(name, args, config)
             if name.startswith("telemetry."):
                 return await _handle_telemetry_call(name, args, config)

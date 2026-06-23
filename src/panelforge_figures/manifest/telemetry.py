@@ -267,6 +267,28 @@ def _atomic_append(log_path: Path, line: str) -> None:
     _atomic_write_text(log_path, existing + line, prefix=".usage.jsonl.")
 
 
+def _data_class_blocks_telemetry() -> bool:
+    """Return True iff the runtime data-class policy forbids telemetry.
+
+    The clinical class forces telemetry OFF by construction (policy
+    ``"off"``); the project-yaml opt-in must never be able to re-enable
+    it.  Research and public use the ``"opt_in"`` policy — the
+    project-yaml opt-in *is* their enable signal, so they are not
+    blocked here.
+
+    Lazy import mirrors ``vision_input._check_vision_gate`` so this
+    module's import surface stays small for callers that bypass the
+    safety module, and to avoid an import cycle.  Fail-open is *not*
+    safe for a privacy gate, so any unexpected error from the safety
+    module is treated as "blocked".
+    """
+    try:
+        from ..safety import get_policy
+        return get_policy().telemetry in ("off", "disabled")
+    except Exception:  # pragma: no cover — fail-closed if safety errors
+        return True
+
+
 def log_invocation(
     project_root: Path,
     *,
@@ -278,12 +300,16 @@ def log_invocation(
     """Append one row with ``user_picked=null`` to ``usage.jsonl``.
 
     Returns the new ``uuid.uuid4().hex`` ``session_id``.  No-op (returns
-    empty string) if :func:`is_telemetry_enabled` is False; never
-    creates the file in that case.  Errors inside the telemetry path
-    are swallowed (spec §9 — figure generation must keep going).
+    empty string) if EITHER gate is closed — the project-yaml opt-in
+    (:func:`is_telemetry_enabled`) *or* the data-class policy (clinical
+    forces telemetry OFF, mirroring ``safety.is_telemetry_allowed``);
+    the file is never created in that case.  Errors inside the telemetry
+    path are swallowed (spec §9 — figure generation must keep going).
     """
     project_root = Path(project_root)
     if not is_telemetry_enabled(project_root):
+        return ""
+    if _data_class_blocks_telemetry():
         return ""
 
     try:

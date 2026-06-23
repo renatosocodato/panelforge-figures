@@ -668,11 +668,13 @@ def find_matching_recipes(
 
     Match rules
     -----------
-    1. ``RecipeMetadata.family`` (string-equal) must equal ``family`` —
-       this also accepts the five author-recipe families (``comparison``,
-       ``equivalence``, ``factorial``) which are not present in the
-       registry's ``RecipeFamily`` enum but may live as recipe metadata
-       once the user scaffolds them.
+    1. ``RecipeMetadata.family`` (string-equal) must equal ``family`` **or**
+       one of the rendered ``RecipeFamily`` values that ``family`` resolves
+       to via :mod:`.family_bridge`. The recommender emits *analysis* family
+       names (``comparison``, ``correlation``, ``factorial``, …) that are not
+       present in the registry's ``RecipeFamily`` enum; the bridge maps each
+       to the rendered families that operationalise it so those analysis
+       families can match real recipes instead of always returning ``[]``.
     2. ``StatisticalContract.min_n_per_group`` must be satisfied if the
        profile has groups (``profile.n_groups`` ≥ 1) and per-group counts.
     3. ``max_missingness_fraction`` (if set) must be ≥ profile's missing
@@ -686,10 +688,17 @@ def find_matching_recipes(
     except Exception:  # pragma: no cover — circular-import safety
         return []
 
+    from .family_bridge import recipe_families_for_analysis_family
+
     try:
         ensure_all_imported()
     except Exception:  # pragma: no cover — missing optional modality
         pass
+
+    # Resolve the (possibly analysis-vocabulary) ``family`` into the set of
+    # rendered RecipeFamily slugs that recipes can actually carry. For a
+    # family already in the rendered vocabulary this is the identity.
+    target_families = set(recipe_families_for_analysis_family(family))
 
     matches: list[str] = []
     for entry in list_recipes():
@@ -697,7 +706,7 @@ def find_matching_recipes(
         meta_family = (
             meta.family.value if hasattr(meta.family, "value") else str(meta.family)
         )
-        if meta_family != family:
+        if meta_family not in target_families:
             continue
 
         # statistical contract gates

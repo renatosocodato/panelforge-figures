@@ -106,6 +106,10 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning:pkg_resources.*",
     "ignore::DeprecationWarning:matplotlib.*",
+    # hmmlearn assigns ndarray.shape directly; NumPy >=2.5 deprecates that and
+    # warns from inside hmmlearn (third-party, not our code). Scope the ignore
+    # to that exact message so our own shape-deprecation regressions still fail.
+    "ignore:Setting the shape on a NumPy array has been deprecated:DeprecationWarning",
 ]
 
 [tool.ruff]

@@ -12,7 +12,7 @@ def _overrides() -> dict:
     return {
         "axes.labelsize": 8.0,
         "axes.titlesize": 9.0,
-        "axes.titleweight": "semibold" if False else "bold",
+        "axes.titleweight": "bold",
         "xtick.labelsize": 7.0,
         "ytick.labelsize": 7.0,
         "legend.fontsize": 7.0,

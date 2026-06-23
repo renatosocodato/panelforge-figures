@@ -28,11 +28,13 @@ Public API
 
 Design notes
 ------------
-* The matcher reuses the TF-IDF infrastructure from
-  :mod:`manuscript_alignment` when available (no extra deps); on a
-  catastrophic failure (e.g. the alignment module is missing) it falls
-  back to a substring keyword overlap match so partial functionality
-  remains.
+* The matcher scores captions against the recipe corpus
+  (``metadata.answers_question`` for every registered recipe) with a
+  stdlib-only TF-IDF cosine similarity (its own local helpers —
+  ``_tokenize`` / ``_term_frequency`` / ``_idf`` / ``_tfidf`` /
+  ``_cosine`` — no extra deps and no import of
+  :mod:`manuscript_alignment`); if that computation raises it falls back
+  to a Jaccard keyword-overlap score so partial functionality remains.
 * Captions below ``min_similarity`` are flagged as ``is_gap=True`` with
   the original caption pasted into ``suggested_research_question`` so
   the user can scaffold a recipe via ``figures fill-gap`` afterwards.
@@ -278,10 +280,12 @@ def match_caption_to_recipe(
 ) -> CaptionMatch:
     """Match one caption string to the best-fitting registered recipe.
 
-    Uses TF-IDF cosine similarity over the recipe corpus
+    Uses a stdlib-only TF-IDF cosine similarity over the recipe corpus
     (``metadata.answers_question`` for every registered recipe).  If the
-    recipe registry can't be loaded, falls back to a substring keyword
-    overlap so the caller always gets a structured answer.
+    TF-IDF computation raises, falls back to a Jaccard keyword-overlap
+    score; if the recipe registry can't be loaded at all, returns an
+    empty (``similarity_score = 0.0``) match so the caller always gets a
+    structured answer.
 
     Parameters
     ----------

@@ -24,8 +24,9 @@ Cryptographic posture: sha256 throughout, deliberately chosen over sha1
 (broken collision resistance), sha512 (size, no security gain), and
 BLAKE3 (third-party dep).  See spec §5.1 for rationale.
 
-The schema_version is currently locked to ``"1.0.0"``; future bumps will
-ship a migration script as a separate elevation (spec §12).
+The schema_version is currently locked to ``"1.1.0"`` (see
+``PROVENANCE_SCHEMA_VERSION``); future bumps will ship a migration script
+as a separate elevation (spec §12).
 """
 
 from __future__ import annotations
@@ -55,7 +56,7 @@ class ProvenanceRecord:
     Mirrors the JSON-Schema in ``docs/provenance.schema.json``.
 
     Required fields:
-      * ``schema_version`` — semver of the sidecar format (currently 1.0.0).
+      * ``schema_version`` — semver of the sidecar format (currently 1.1.0).
       * ``figure_path`` — repo-relative path to the figure file.
       * ``figure_sha256`` — sha256 hex digest of the figure's bytes.
       * ``rendered_at`` — ISO-8601 UTC timestamp.

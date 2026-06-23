@@ -28,6 +28,26 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
 
+__all__ = [
+    # Locked rubric constants
+    "SCORING_RUBRIC_VERSION",
+    "WEIGHTS",
+    "WEIGHTS_HISTORY",
+    "MINIMUM_SCORE_FOR_SHORTLIST",
+    "DEFAULT_SHORTLIST_SIZE",
+    # Value types
+    "ProjectProfile",
+    "ScoredRecipe",
+    # Scoring API
+    "score_recipes",
+    "scoring_rubric_dict",
+    # Per-dimension match helpers
+    "match_bool",
+    "match_anchor",
+    "match_dynamics",
+    "match_dim",
+]
+
 # ---------------------------------------------------------------------------
 # Locked constants — spec amendments only.
 # ---------------------------------------------------------------------------

@@ -177,7 +177,13 @@ def _render_recipe_sha(full_name: str, contract_dict: dict) -> tuple[str, dict]:
     fig, ax = plt.subplots(figsize=(6, 4))
     try:
         entry.render(entry.contract(**cdict), ax=ax)
-        fig.savefig(out, format="pdf", bbox_inches="tight")
+        # Pin CreationDate (omit it) so the PDF is byte-deterministic and
+        # matches the re-render in _rerender_recipe_to_path; otherwise the
+        # wall-clock timestamp makes the two renders differ across a second
+        # boundary (passes locally, flakes on slower CI).
+        fig.savefig(
+            out, format="pdf", bbox_inches="tight", metadata={"CreationDate": None}
+        )
     finally:
         plt.close(fig)
     return hashlib.sha256(out.read_bytes()).hexdigest(), cdict

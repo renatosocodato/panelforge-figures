@@ -562,6 +562,13 @@ def _rerender_recipe_to_path(
     (``format="pdf"``, ``bbox_inches="tight"``) so the bytes are
     directly comparable to a figure hashed by :func:`build_lock`.
 
+    The PDF ``/CreationDate`` is pinned to ``None`` (omitted) so the
+    output is byte-deterministic across renders: matplotlib otherwise
+    stamps a wall-clock creation date, which would make two renders of
+    the *same* figure differ and the byte-identity check spuriously
+    report not-verified. Pinning it is what makes the determinism claim
+    in :func:`verify_byte_identical` actually hold.
+
     Raises whatever the registry lookup / contract construction / render
     raises — :func:`replay_lock` converts those into a *loud*
     not-verified result rather than swallowing them, so a recipe that
@@ -582,7 +589,14 @@ def _rerender_recipe_to_path(
     fig, ax = plt.subplots(figsize=(6, 4))
     try:
         entry.render(entry.contract(**cdict), ax=ax)
-        fig.savefig(out_path, format="pdf", bbox_inches="tight")
+        # metadata={"CreationDate": None} omits the volatile wall-clock
+        # timestamp so the PDF bytes are reproducible across renders.
+        fig.savefig(
+            out_path,
+            format="pdf",
+            bbox_inches="tight",
+            metadata={"CreationDate": None},
+        )
     finally:
         plt.close(fig)
 

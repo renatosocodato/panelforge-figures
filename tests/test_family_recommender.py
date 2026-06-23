@@ -279,6 +279,58 @@ def test_find_matching_recipes_respects_min_n(two_group_csv: Path) -> None:
             assert smallest >= contract.min_n_per_group
 
 
+def test_find_matching_recipes_resolves_analysis_family_via_bridge(
+    two_group_csv: Path,
+) -> None:
+    """``comparison`` is an analysis family, not a rendered RecipeFamily.
+
+    Before the family-bridge fix, ``find_matching_recipes("comparison", …)``
+    always returned ``[]`` because it string-matched the rendered
+    ``RecipeFamily``. The bridge maps ``comparison`` to ``split_violin`` /
+    ``ridge_by_group`` / ``timecourse_hierarchical_ci``, so it must now find
+    at least one real recipe.
+    """
+    profile = profile_data(two_group_csv)
+    matches = find_matching_recipes("comparison", profile)
+    assert len(matches) >= 1, "comparison must resolve to ≥1 rendered recipe"
+
+
+@pytest.mark.parametrize(
+    "data_fixture",
+    ["two_group_csv", "two_by_two_csv", "correlation_csv", "binary_csv"],
+)
+def test_recommend_families_all_outputs_resolve_or_are_gap_only(
+    data_fixture: str, request: pytest.FixtureRequest
+) -> None:
+    """Every recommended family must resolve to ≥1 recipe or be gap-only.
+
+    Regression for the recommender-phantom-families bug: ``recommend_families``
+    used to emit analysis-family strings (``comparison``, ``correlation``,
+    ``factorial``, ``equivalence``) that ``find_matching_recipes`` could never
+    match, so they were silently flagged as phantom gaps. With the family
+    bridge, each emitted family either resolves to a real recipe or is an
+    explicitly documented gap-only family (empty tuple in the bridge).
+    """
+    from panelforge_figures.manifest.family_bridge import (
+        ANALYSIS_TO_RECIPE_FAMILIES,
+    )
+
+    data_path: Path = request.getfixturevalue(data_fixture)
+    profile = profile_data(data_path)
+    recs = recommend_families(profile)
+    assert recs, "expected at least one recommendation"
+
+    for rec in recs:
+        matches = find_matching_recipes(rec.family, profile)
+        explicitly_gap_only = (
+            ANALYSIS_TO_RECIPE_FAMILIES.get(rec.family) == ()
+        )
+        assert matches or explicitly_gap_only, (
+            f"family {rec.family!r} resolved to no recipes and is not an "
+            f"explicitly documented gap-only family"
+        )
+
+
 # ─────────────────────────── detect_recipe_gaps ──────────────────────────
 
 

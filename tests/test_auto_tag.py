@@ -13,10 +13,17 @@ from typing import Any
 import pytest
 
 from panelforge_figures.manifest.auto_tag import (
+    _DEFAULT_WAVE,
+    _MODALITY_WAVE,
     TAG_KEYS,
     UNKNOWN,
+    _wave_for,
     auto_tag_all,
     auto_tag_recipe,
+)
+from panelforge_figures.manifest.tag_taxonomy import (
+    TagValidationError,
+    validate_tag,
 )
 
 # ─────────────────────────── unit fixtures ──────────────────────────────
@@ -274,7 +281,10 @@ def test_wave_biophysics_scaling_pack() -> None:
         name="energy_landscape_1d_cartoon",
         modality="biophysics_scaling",
     )
-    assert tags["wave"] == "v1.2.0-beta-biophysics_scaling"
+    # Canonical closed-taxonomy value (TagWave.V1_1_0_BIOPHYSICS); the pack
+    # tracker's v1.2.0 candidate tag is *not* the validated wave string.
+    assert tags["wave"] == "v1.1.0-beta-biophysics_scaling"
+    validate_tag("wave", tags["wave"])  # producer/validator must agree
 
 
 def test_wave_intravital_imaging_pack() -> None:
@@ -350,7 +360,7 @@ _REPRESENTATIVE_CASES: list[dict[str, Any]] = [
         "expected": {
             "equivalence": True,
             "scale_aware": True,
-            "wave": "v1.2.0-beta-biophysics_scaling",
+            "wave": "v1.1.0-beta-biophysics_scaling",
         },
     },
     # (3) Cdc42 pack — factorial + scale_aware + cdc42 wave.
@@ -472,3 +482,57 @@ def test_auto_tag_all_smoke() -> None:
             assert isinstance(v, str | bool), (
                 f"{full_name}.{k}: unexpected value type {type(v).__name__}"
             )
+
+
+# ──────────────────── producer/validator wave reconciliation ─────────────
+#
+# Regression guard for the auto-tag-wave-mismatch drift: every wave string
+# the auto-tagger can *emit* must validate against the closed `TagWave`
+# taxonomy via `validate_tag('wave', ...)`.  The producer (`_MODALITY_WAVE`
+# / `_wave_for`) and the validator (`TagWave`) must never drift apart.
+
+
+def _all_emittable_wave_strings() -> set[str]:
+    """Collect every wave label the auto-tagger can possibly produce.
+
+    This is the union of the default wave, the per-modality map, and the
+    two explicit pack constants returned by `_wave_for`.  By construction
+    `_wave_for` only ever returns one of these strings.
+    """
+    waves: set[str] = {_DEFAULT_WAVE}
+    waves.update(_MODALITY_WAVE.values())
+    # The two explicit pack-tag constants `_wave_for` can return.
+    waves.add(_wave_for(
+        name="quartile_stacked_bar_by_factor", modality="biophysics_scaling"
+    ))
+    waves.add(_wave_for(
+        name="pca_loadings_heatmap", modality="meta_and_diagnostic"
+    ))
+    return waves
+
+
+def test_biophysics_scaling_wave_validates() -> None:
+    """The biophysics_scaling modality wave must be in the taxonomy.
+
+    Reproduces the producer/validator drift: the auto-tagger emitted a
+    wave label for `biophysics_scaling` that `TagWave` did not contain,
+    so `validate_tag('wave', ...)` raised `TagValidationError`.
+    """
+    wave = _wave_for(name="buckling_critical_force_plot", modality="biophysics_scaling")
+    validate_tag("wave", wave)  # must not raise
+
+
+@pytest.mark.parametrize("wave", sorted(_all_emittable_wave_strings()))
+def test_every_emittable_wave_validates(wave: str) -> None:
+    """Every wave string `auto_tag_recipe` can emit validates against TagWave."""
+    validate_tag("wave", wave)  # raises TagValidationError on drift
+
+
+def test_live_registry_waves_all_validate() -> None:
+    """Every wave actually emitted across the live registry validates."""
+    out = auto_tag_all()
+    for full_name, tags in out.items():
+        try:
+            validate_tag("wave", tags["wave"], full_name=full_name)
+        except TagValidationError as exc:  # pragma: no cover - failure path
+            pytest.fail(str(exc))

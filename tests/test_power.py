@@ -210,22 +210,146 @@ def test_cli_power_unknown_recipe(tmp_path):
 
 
 def test_cli_power_known_recipe_emits_json():
+    """End-to-end: a recipe in a SUPPORTED family must size, exit 0, emit JSON.
+
+    Regression for the power-family-bridge bug: the CLI passes a *rendered*
+    ``RecipeFamily`` (here ``coef_forest``) into the power layer, which only
+    understands *analysis* families. Without the bridge this raised
+    ``PowerError`` for every family except ``coef_forest``; here we assert a
+    concrete success on a real registry recipe with a hard ``exit_code == 0``
+    (no ``if exit_code == 0`` escape hatch). ``coef_forest`` at ``n_groups=2``
+    reduces to a t-test, which has a closed-form fallback that does not need
+    statsmodels, so this runs in every environment.
+    """
     from click.testing import CliRunner
 
     from panelforge_figures.cli import main
-    pytest.importorskip("statsmodels")
     runner = CliRunner()
     result = runner.invoke(main, [
         "power", "two_way_anova_summary_plot",
         "-e", "0.4", "-a", "0.05", "-p", "0.8",
-        "--n-groups", "4",
+        "--n-groups", "2",
         "--json",
     ])
-    if result.exit_code == 0:
-        # Some recipes may not be in the registry under this exact name in CI;
-        # only assert on the success path.
-        data = json.loads(result.output)
-        assert "required_n_per_group" in data
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert "required_n_per_group" in data
+    assert data["required_n_per_group"] > 0
+    # coef_forest is the rare family that is BOTH a rendered RecipeFamily and
+    # an analysis family, so the bridge is the identity here.
+    assert data["family"] == "coef_forest"
+
+
+def test_cli_power_rendered_family_resolves_via_bridge():
+    """A recipe whose rendered family ≠ analysis family must still size.
+
+    ``split_violin`` is a rendered ``RecipeFamily`` that is NOT a power
+    analysis family; the bridge must map it to ``comparison``. Before the
+    fix this emitted ``"family 'split_violin' not in PARAMETRIC_FAMILIES …"``
+    and exit_code 1.
+    """
+    from click.testing import CliRunner
+
+    from panelforge_figures.cli import main
+    from panelforge_figures.core.contract import (
+        ensure_all_imported,
+        list_recipes,
+    )
+
+    ensure_all_imported()
+    recipe_name = None
+    for info in list_recipes():
+        if info.metadata.family.value == "split_violin":
+            recipe_name = info.metadata.name
+            break
+    assert recipe_name is not None, "expected at least one split_violin recipe"
+
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "power", recipe_name,
+        "-e", "0.5", "-a", "0.05", "-p", "0.8",
+        "--n-groups", "2",
+        "--json",
+    ])
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    # The power estimate records the *analysis* family the bridge resolved to.
+    assert data["family"] == "comparison"
+    assert data["required_n_per_group"] > 0
+
+
+def test_cli_power_unsupported_family_is_clean_not_a_stacktrace():
+    """A conceptual/decorative family must report cleanly, not crash.
+
+    Rendered families with no defined power analysis (e.g. ``conceptual``,
+    ``flow``, ``matrix``) must produce a clear message and a non-zero exit
+    *without* a raw ``PowerError`` traceback bubbling up through Click.
+    """
+    from click.testing import CliRunner
+
+    from panelforge_figures.cli import main
+    from panelforge_figures.core.contract import (
+        ensure_all_imported,
+        list_recipes,
+    )
+
+    ensure_all_imported()
+    recipe_name = None
+    for info in list_recipes():
+        if info.metadata.family.value in {
+            "conceptual", "flow", "matrix", "gantt", "radar", "contour",
+        }:
+            recipe_name = info.metadata.name
+            break
+    assert recipe_name is not None, "expected a conceptual/decorative recipe"
+
+    runner = CliRunner()
+    result = runner.invoke(main, [
+        "power", recipe_name, "-e", "0.5",
+    ])
+    # Non-zero exit, but no unhandled exception escaping Click.
+    assert result.exit_code != 0
+    assert result.exception is None or isinstance(
+        result.exception, SystemExit
+    ), result.exception
+    assert "power analysis is not defined for family" in result.output
+
+
+@pytest.mark.parametrize(
+    "analysis_family",
+    [
+        "comparison",
+        "coef_forest",
+        "correlation",
+        "distribution",
+        "equivalence",
+        "concordance",
+        "permutation",
+        "factorial",
+        "proportion",
+    ],
+)
+def test_compute_required_n_one_per_supported_analysis_family(analysis_family):
+    """Each analysis family with a registered power method must size.
+
+    Closed-form ANOVA / chi-square families (``factorial``, ``proportion``)
+    hard-require statsmodels; if it is absent the formula raises a clear
+    ``RuntimeError`` and we skip rather than fail.
+    """
+    try:
+        est = compute_required_n(
+            recipe_full_name="x.y",
+            family=analysis_family,
+            effect_size=0.5,
+            alpha=0.05,
+            power_target=0.8,
+            n_groups=2,
+            montecarlo_iterations=150,
+        )
+    except RuntimeError as exc:  # statsmodels missing for ANOVA/chi-square
+        pytest.skip(f"optional dependency missing for {analysis_family}: {exc}")
+    assert est.required_n_per_group > 0
+    assert est.family == analysis_family
 
 
 def test_cli_power_requires_effect_size():
@@ -237,6 +361,51 @@ def test_cli_power_requires_effect_size():
     result = runner.invoke(main, ["power", "x.y"])
     # Click exits with code 2 on missing required option.
     assert result.exit_code != 0
+
+
+# Cluster 7b — family bridge integrity
+def test_family_bridge_slugs_are_real_recipe_families():
+    """Every rendered slug in the bridge must be a real RecipeFamily member."""
+    from panelforge_figures.core.contract import RecipeFamily
+    from panelforge_figures.manifest.family_bridge import (
+        ANALYSIS_TO_RECIPE_FAMILIES,
+        RECIPE_FAMILY_TO_ANALYSIS,
+    )
+
+    valid = {f.value for f in RecipeFamily}
+    for slugs in ANALYSIS_TO_RECIPE_FAMILIES.values():
+        for slug in slugs:
+            assert slug in valid, f"{slug!r} is not a RecipeFamily"
+    for slug in RECIPE_FAMILY_TO_ANALYSIS:
+        assert slug in valid, f"{slug!r} is not a RecipeFamily"
+
+
+def test_family_bridge_round_trips_consistently():
+    """Each RECIPE_FAMILY_TO_ANALYSIS entry round-trips back to its slug."""
+    from panelforge_figures.manifest.family_bridge import (
+        ANALYSIS_TO_RECIPE_FAMILIES,
+        RECIPE_FAMILY_TO_ANALYSIS,
+    )
+
+    for recipe_family, analysis_family in RECIPE_FAMILY_TO_ANALYSIS.items():
+        rendered = ANALYSIS_TO_RECIPE_FAMILIES.get(analysis_family, ())
+        assert recipe_family in rendered, (
+            f"{recipe_family!r} → {analysis_family!r} but reverse map "
+            f"{rendered!r} does not include it"
+        )
+
+
+def test_family_bridge_analysis_families_have_power_methods():
+    """Every analysis family with a non-empty render set has a power method."""
+    from panelforge_figures.manifest.family_bridge import (
+        ANALYSIS_TO_RECIPE_FAMILIES,
+    )
+    from panelforge_figures.manifest.power_families import FAMILY_TO_FORMULA
+
+    for analysis_family in ANALYSIS_TO_RECIPE_FAMILIES:
+        assert analysis_family in FAMILY_TO_FORMULA, (
+            f"{analysis_family!r} has no power formula registered"
+        )
 
 
 # Cluster 8 — Version bump

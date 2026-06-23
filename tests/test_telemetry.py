@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
@@ -478,3 +479,107 @@ def test_cli_telemetry_export_writes_jsonl(tmp_path: Path) -> None:
     ]
     assert len(rows) == 1
     assert rows[0]["session_id"] != sid
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# Cluster 6 — data-class second gate (privacy-by-construction)
+# ──────────────────────────────────────────────────────────────────────────
+#
+# ``log_invocation`` must bridge BOTH gates: the project-yaml opt-in
+# (``is_telemetry_enabled``) *and* the data-class policy
+# (``safety.is_telemetry_allowed`` / the resolved policy).  A clinical
+# project forces telemetry OFF regardless of ``telemetry: opt-in``, so no
+# ``usage.jsonl`` may be written.  Research/public keep the opt-in path.
+
+
+@pytest.fixture
+def _restore_data_class() -> Iterator[None]:
+    """Reset the module-level data class to RESEARCH after the test so
+    clinical state cannot leak into adjacent test modules."""
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    try:
+        yield
+    finally:
+        set_data_class(DataClass.RESEARCH)
+
+
+def test_clinical_data_class_blocks_opt_in_telemetry(
+    tmp_path: Path, _restore_data_class: object
+) -> None:
+    """``data_class=clinical`` + ``telemetry: opt-in`` → NO ``usage.jsonl``.
+
+    The clinical policy forces telemetry OFF by construction; the
+    project-yaml opt-in must not be able to re-enable it.
+    """
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    (tmp_path / "panelforge.project.yaml").write_text("telemetry: opt-in\n")
+    # YAML gate is open …
+    assert is_telemetry_enabled(tmp_path) is True
+    # … but the data-class gate is closed.
+    set_data_class(DataClass.CLINICAL)
+
+    sid = log_invocation(
+        tmp_path,
+        profile={"modality": "live_imaging_2d"},
+        scored_top_5=[{"full_name": "x", "score": 0.5, "tags": {}}],
+        panelforge_version="1.13.0",
+        scoring_rubric_version="1.0.0",
+    )
+
+    assert sid == ""
+    assert not telemetry_log_path(tmp_path).exists()
+
+
+def test_research_data_class_still_writes_opt_in_telemetry(
+    tmp_path: Path, _restore_data_class: object
+) -> None:
+    """``data_class=research`` + ``telemetry: opt-in`` → row is written.
+
+    The data-class second gate must not regress the opt-in path for
+    non-clinical classes: research keeps recording when the project
+    explicitly opts in.
+    """
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    (tmp_path / "panelforge.project.yaml").write_text("telemetry: opt-in\n")
+    set_data_class(DataClass.RESEARCH)
+
+    sid = log_invocation(
+        tmp_path,
+        profile={"modality": "live_imaging_2d"},
+        scored_top_5=[{"full_name": "x", "score": 0.5, "tags": {}}],
+        panelforge_version="1.13.0",
+        scoring_rubric_version="1.0.0",
+    )
+
+    assert sid != ""
+    assert telemetry_log_path(tmp_path).exists()
+    rows = [
+        json.loads(line)
+        for line in telemetry_log_path(tmp_path).read_text().splitlines()
+        if line.strip()
+    ]
+    assert len(rows) == 1
+
+
+def test_public_data_class_still_writes_opt_in_telemetry(
+    tmp_path: Path, _restore_data_class: object
+) -> None:
+    """``data_class=public`` + ``telemetry: opt-in`` → row is written."""
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    (tmp_path / "panelforge.project.yaml").write_text("telemetry: opt-in\n")
+    set_data_class(DataClass.PUBLIC)
+
+    sid = log_invocation(
+        tmp_path,
+        profile={"modality": "live_imaging_2d"},
+        scored_top_5=[],
+        panelforge_version="1.13.0",
+        scoring_rubric_version="1.0.0",
+    )
+
+    assert sid != ""
+    assert telemetry_log_path(tmp_path).exists()

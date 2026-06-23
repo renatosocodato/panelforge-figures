@@ -61,7 +61,11 @@ _DEFAULT_WAVE: str = "v1.0"
 # across pre-existing modalities (the cdc42 pack) are handled by an
 # explicit name list further below.
 _MODALITY_WAVE: dict[str, str] = {
-    "biophysics_scaling": "v1.2.0-beta-biophysics_scaling",
+    # Canonical closed-taxonomy value is the `v1.1.0` label (see
+    # `TagWave.V1_1_0_BIOPHYSICS` and the curated `docs/recipe_tags.yaml`);
+    # the pack *tracker* uses a `v1.2.0`-prefixed candidate tag, but the
+    # validated wave enum is `v1.1.0-beta-biophysics_scaling`.
+    "biophysics_scaling": "v1.1.0-beta-biophysics_scaling",
     "intravital_imaging": "v1.3.0-beta-intravital_imaging",
 }
 

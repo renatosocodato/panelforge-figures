@@ -15,6 +15,7 @@ import pytest
 
 from panelforge_figures.core import (
     DEFAULT_CONTRACT,
+    KNOWN_REFUSAL_RULES,
     RecipeMetadata,
     StatisticalContract,
 )
@@ -453,3 +454,79 @@ def test_audit_finding_is_frozen():
     finding = AuditFinding(rule_id="x", severity="pass", message="ok")
     with pytest.raises((AttributeError, Exception)):
         finding.severity = "refuse"  # type: ignore[misc]
+
+
+# ---------------------------------------------------------------------------
+# refuses_when validation (structural-debt register item #3)
+# ---------------------------------------------------------------------------
+
+
+def test_refuses_when_rejects_unknown_rule_id():
+    """A typo'd refusal rule must raise at construction, not silently no-op.
+
+    Before this fix, ``refuses_when=("underpowred",)`` (typo) constructed
+    fine and simply never escalated anything — a quietly-broken refusal
+    policy. The contract now validates every name against the closed
+    taxonomy and raises a ValueError that names the offending id.
+    """
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(
+            min_n_per_group=10,
+            refuses_when=("underpowred",),  # typo for "underpowered"
+        )
+    msg = str(excinfo.value)
+    assert "underpowred" in msg  # the bad rule is named
+    # the message lists the valid taxonomy so the author can self-correct
+    assert "underpowered" in msg
+
+
+def test_refuses_when_typo_no_longer_silently_ignored():
+    """Reproduce-before-fix: a typo'd escalation must not silently warn.
+
+    With the typo accepted, n=3 against min_n_per_group=10 would escalate
+    to ``refuse`` only if the real ``underpowered`` rule were named. The
+    typo must therefore be impossible to construct rather than producing a
+    weaker (warn) verdict than the author intended.
+    """
+    df = pd.DataFrame(
+        {
+            "group": ["A"] * 3 + ["B"] * 3,
+            "value": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+        }
+    )
+    with pytest.raises(ValueError):
+        StatisticalContract(min_n_per_group=10, refuses_when=("underpowred",))
+
+    # The correctly-spelled rule still works end-to-end: it escalates the
+    # warn-class finding to refuse. (Here underpowered is already a default
+    # refuse, but listing it must remain accepted.)
+    good = StatisticalContract(min_n_per_group=10, refuses_when=("underpowered",))
+    report = _audit(good, df, group_column="group")
+    assert report.overall == "refuse"
+
+
+def test_refuses_when_accepts_every_known_rule():
+    """Every id in the closed taxonomy is a valid refuses_when entry."""
+    contract = StatisticalContract(refuses_when=tuple(sorted(KNOWN_REFUSAL_RULES)))
+    assert set(contract.refuses_when) == set(ALL_RULE_NAMES)
+
+
+def test_refuses_when_reports_all_unknown_ids():
+    """Multiple typos are all surfaced, not just the first."""
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(refuses_when=("nope_one", "underpowered", "nope_two"))
+    msg = str(excinfo.value)
+    assert "nope_one" in msg
+    assert "nope_two" in msg
+
+
+def test_known_refusal_rules_matches_audit_registry():
+    """The core taxonomy and the audit registry cannot drift."""
+    assert set(KNOWN_REFUSAL_RULES) == set(ALL_RULE_NAMES)
+    assert set(KNOWN_REFUSAL_RULES) == set(_DEFAULT_VERDICT)
+
+
+def test_default_and_empty_refuses_when_still_construct():
+    """Backwards-compat: the all-permissive default contract is unaffected."""
+    assert StatisticalContract().refuses_when == ()
+    assert StatisticalContract(refuses_when=()).refuses_when == ()

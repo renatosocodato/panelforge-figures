@@ -2185,8 +2185,13 @@ def lock_cmd(
 @click.option("--recipe", type=str, required=False,
               help="Recipe full_name to re-render (defaults to the lock's recipe if known).")
 def replay_cmd(lock_path: Path, workdir: Path, recipe: str | None) -> None:
-    """Replay a panelforge.lock.json — verify env match + (in v2.2.0)
-    report drift diagnostics. Full uv-sync re-render is post-v2.2.
+    """Replay a panelforge.lock.json — check the env against the lock and,
+    when the lock records a figure sha, re-render the recipe in the
+    current environment and verify the bytes match.
+
+    Scope: this verifies a byte-identical re-render in the CURRENT
+    environment; it does NOT rebuild the locked venv. A green check means
+    "reproduced here", not "the locked venv was reconstituted".
     """
     from panelforge_figures.manifest.reproducibility import (
         ReproducibilityError,
@@ -2214,15 +2219,38 @@ def replay_cmd(lock_path: Path, workdir: Path, recipe: str | None) -> None:
         contract_dict={},
     )
 
-    if result.success:
-        click.echo(click.style("✓ env matches lock", fg="green"))
-        for msg in result.log_messages:
-            click.echo(f"  {msg}")
-    else:
-        click.echo(click.style("✗ env drift detected", fg="red"))
+    for msg in result.log_messages:
+        click.echo(f"  {msg}")
+
+    if not result.success:
+        # Env drift, or a re-render that failed / produced different bytes.
+        if result.verified is False:
+            click.echo(
+                click.style("✗ reproduction NOT verified", fg="red"), err=True
+            )
+        else:
+            click.echo(click.style("✗ env drift detected", fg="red"), err=True)
         for field, diff in result.drift_diagnostics.items():
-            click.echo(f"  {field}: expected {diff['expected']!r}, actual {diff['actual']!r}")
+            click.echo(
+                f"  {field}: expected {diff['expected']!r}, "
+                f"actual {diff['actual']!r}"
+            )
         click.get_current_context().exit(1)
+
+    if result.verified is True:
+        click.echo(
+            click.style(
+                "✓ byte-identical re-render verified (current env)", fg="green"
+            )
+        )
+    else:
+        # success but verified is None: env matched, nothing re-rendered.
+        click.echo(
+            click.style(
+                "✓ env matches lock (no figure locked; nothing re-rendered)",
+                fg="yellow",
+            )
+        )
 
 
 # ─────────────────── adaptive power analysis (E4 — v2.3.0) ──────────────

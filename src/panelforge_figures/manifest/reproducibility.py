@@ -34,8 +34,12 @@ Public API consumed by the CLI layer
 * :func:`build_lock` — capture the current env + recipe + data into a
   :class:`ReproducibilityLock`.
 * :func:`save_lock` / :func:`load_lock` — round-trip the lock JSON.
-* :func:`replay_lock` — reconstitute the env (or detect drift) and
-  re-render; return a :class:`ReplayResult`.
+* :func:`replay_lock` — check the env against the lock and, when a
+  figure sha is recorded, re-render the recipe **in the current
+  environment** and compare bytes; return a :class:`ReplayResult` whose
+  ``verified`` field distinguishes "reproduction confirmed" from "env
+  ok, nothing re-rendered".  It does *not* rebuild the locked venv — see
+  the function docstring for scope.
 * :func:`verify_byte_identical` — compare a fresh render's sha256
   against the lock's recorded ``figure_sha256``.
 
@@ -194,32 +198,61 @@ class ReproducibilityLock:
 class ReplayResult:
     """Outcome of :func:`replay_lock`.
 
+    Honesty contract (register #9): ``success`` and ``verified`` make a
+    deliberate distinction so the result never overstates what replay
+    actually did.
+
+    * ``success`` is an *operational* flag — ``True`` iff replay ran to
+      completion without an env mismatch and without a re-render
+      failure.  It does **not**, on its own, mean "reproduction
+      confirmed".
+    * ``verified`` is the *reproduction* flag — the only field that
+      claims a byte-identical re-render was confirmed.
+
     Fields
     ------
     success
-        ``True`` iff the env matched the lock (or was reconstituted) and
-        any rendered figure matched ``lock.figure_sha256``.
+        ``True`` iff replay completed cleanly: the env matched the lock
+        *and* — when ``lock.figure_sha256`` was set — the in-process
+        re-render produced byte-identical output.  ``False`` on env
+        drift, on a re-render that failed, or on a byte mismatch.
+    verified
+        Tri-state reproduction verdict scoped to the *current*
+        environment:
+
+        * ``True``  — a figure sha was locked and a fresh in-process
+          re-render reproduced it byte-for-byte.  This verifies
+          determinism in the current interpreter; it does **not**
+          rebuild the locked venv (full ``uv sync`` replay is a
+          follow-up elevation).
+        * ``False`` — a figure sha was locked but reproduction was NOT
+          confirmed (the re-render failed, or the bytes differed).
+        * ``None``  — nothing to verify (``lock.figure_sha256`` was
+          ``None``), so no reproduction claim is made.
     replayed_figure_path
         Path to the freshly-rendered figure, when replay performed a
-        render.  ``None`` when replay only verified the env (the
-        v2.2.0 simplified replay path).
+        render.  ``None`` when no re-render was attempted (no locked
+        figure sha) or when the render failed before writing a file.
     figure_sha256_match
-        ``True`` iff the lock recorded a figure sha256 *and* a render
-        was performed *and* the bytes matched.  ``False`` when any of
-        those is not the case — interpret in conjunction with
-        ``replayed_figure_path``.
+        ``True`` iff a figure sha was locked, a render was performed,
+        *and* the bytes matched.  Equivalent to ``verified is True``;
+        retained for callers that key off the boolean.
     drift_diagnostics
-        Per-dimension diff describing what differed between the lock's
-        env snapshot and the current env.  Empty dict on a clean match.
+        Per-dimension diff describing what differed between the lock and
+        the current state.  Carries env-snapshot deltas, plus a
+        ``figure_sha256`` entry on a re-render byte mismatch and a
+        ``render_failed`` entry when the recipe could not be re-rendered.
+        Empty dict on a clean, fully-verified replay.
     venv_path
         Path to the sidecar venv that ``uv sync --locked`` built.
-        ``None`` when the simplified replay did not build a venv.
+        ``None`` — the simplified replay never builds a venv.
     log_messages
         Tuple of human-readable progress / advisory lines suitable for
         direct printing in the CLI.
     """
 
     success: bool
+    verified: bool | None
     replayed_figure_path: Path | None
     figure_sha256_match: bool
     drift_diagnostics: dict[str, Any]
@@ -518,6 +551,56 @@ def load_lock(lock_path: Path) -> ReproducibilityLock:
 # ─────────────────────────── replay ─────────────────────────────────────
 
 
+def _rerender_recipe_to_path(
+    recipe_full_name: str,
+    contract_dict: dict[str, Any],
+    out_path: Path,
+) -> None:
+    """Re-render ``recipe_full_name`` to ``out_path`` (PDF) in-process.
+
+    Mirrors the savefig conventions of the render loop
+    (``format="pdf"``, ``bbox_inches="tight"``) so the bytes are
+    directly comparable to a figure hashed by :func:`build_lock`.
+
+    The PDF ``/CreationDate`` is pinned to ``None`` (omitted) so the
+    output is byte-deterministic across renders: matplotlib otherwise
+    stamps a wall-clock creation date, which would make two renders of
+    the *same* figure differ and the byte-identity check spuriously
+    report not-verified. Pinning it is what makes the determinism claim
+    in :func:`verify_byte_identical` actually hold.
+
+    Raises whatever the registry lookup / contract construction / render
+    raises — :func:`replay_lock` converts those into a *loud*
+    not-verified result rather than swallowing them, so a recipe that
+    cannot be re-rendered never masquerades as a confirmed reproduction.
+    """
+    from ..core.contract import ensure_all_imported, get_recipe
+
+    ensure_all_imported()
+    entry = get_recipe(recipe_full_name)
+    cdict = contract_dict or entry.demo_contract().model_dump()
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(6, 4))
+    try:
+        entry.render(entry.contract(**cdict), ax=ax)
+        # metadata={"CreationDate": None} omits the volatile wall-clock
+        # timestamp so the PDF bytes are reproducible across renders.
+        fig.savefig(
+            out_path,
+            format="pdf",
+            bbox_inches="tight",
+            metadata={"CreationDate": None},
+        )
+    finally:
+        plt.close(fig)
+
+
 def replay_lock(
     lock: ReproducibilityLock,
     *,
@@ -526,54 +609,44 @@ def replay_lock(
     contract_dict: dict[str, Any],
     panelforge_version_hint: str | None = None,
 ) -> ReplayResult:
-    """Reconstitute the env via ``uv sync --locked`` and re-render.
+    """Verify a lock by re-rendering its recipe in the current env.
 
-    v2.2.0 ships a *simplified* replay path: rather than building a
-    fresh sidecar venv on every invocation (which is many seconds of
-    network IO and an unbounded disk-space ask), we verify that the
-    current env still matches the lock's snapshot and let the caller
-    re-render in-place.  Full ``uv sync`` -based replay is wired in a
-    follow-up elevation; the CLI surfaces this in the user-facing
-    advisory message.
+    Scope (register #9 honesty fix): this **verifies a byte-identical
+    re-render in the current environment**; it does **not** rebuild the
+    locked venv.  Full ``uv sync --locked`` sidecar replay remains a
+    follow-up elevation.  In-process re-rendering is still a legitimate
+    determinism check: it confirms that the recipe + contract produce
+    the locked bytes under the interpreter you are running now.
 
-    Steps performed today:
+    Steps:
 
-    1. Compute ``venv_path = workdir / f".replay-{short_sha}" / "venv"``
-       (reserved location; not yet populated).
-    2. Diff :func:`_capture_environment` against ``lock.environment`` —
-       Python version, BLAS info, locale, machine.
-    3. If a ``uv.lock`` is present in ``workdir``, hash it and compare
-       against ``lock.uv_lock_sha256``.
-    4. If any drift is detected, return ``success=False`` with a
-       structured ``drift_diagnostics`` payload and stop — the caller
-       must reconcile before re-rendering.
-    5. Otherwise log "env matches lock" plus the advisory about the
-       full uv-sync path and return ``success=True``.
+    1. Diff :func:`_capture_environment` against ``lock.environment``
+       (Python version, machine, numpy/BLAS) and, when a ``uv.lock`` is
+       present in ``workdir``, its sha256.  Any drift returns
+       ``success=False`` with structured ``drift_diagnostics`` and
+       stops *before* any render — reconcile the env first.
+    2. When the env matches **and** ``lock.figure_sha256`` is set,
+       re-render ``recipe_full_name`` (with ``contract_dict``) to a temp
+       PDF and compare its sha256 against the locked value via
+       :func:`verify_byte_identical`.  Byte match → ``verified=True``;
+       mismatch or render failure → ``verified=False`` (loud, with a
+       ``figure_sha256`` / ``render_failed`` diagnostic).
+    3. When the env matches but no figure sha was locked, there is
+       nothing to reproduce: ``verified=None`` (``success`` stays
+       ``True`` because nothing went wrong, but no reproduction claim is
+       made).
 
-    The ``recipe_full_name`` and ``contract_dict`` parameters are
-    accepted today but reserved for the full-replay path (they will
-    drive subprocess-level recipe re-rendering once the venv build
-    lands); they are unused in the simplified path so callers can wire
-    them up now without breaking when the full path arrives.
+    Unlike the pre-fix path, ``success``/``figure_sha256_match`` are
+    never asserted from "a lockfile exists" — they reflect an actual
+    re-render.
     """
     log: list[str] = []
-    short_sha = (
-        lock.panelforge_git_commit[:8]
-        if lock.panelforge_git_commit and lock.panelforge_git_commit != "uncommitted"
-        else "uncommitted"
-    )
-    venv_path = workdir / f".replay-{short_sha}" / "venv"
-    venv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if panelforge_version_hint and panelforge_version_hint != lock.panelforge_version:
         log.append(
             f"panelforge version hint {panelforge_version_hint!r} "
             f"differs from lock {lock.panelforge_version!r}"
         )
-
-    # Reserved for the full-replay path; reference today so static
-    # analysers don't flag the parameters as unused.
-    _ = (recipe_full_name, contract_dict)
 
     drift: dict[str, Any] = {}
     current_env = _capture_environment()
@@ -620,6 +693,7 @@ def replay_lock(
         )
         return ReplayResult(
             success=False,
+            verified=None,
             replayed_figure_path=None,
             figure_sha256_match=False,
             drift_diagnostics=drift,
@@ -628,15 +702,89 @@ def replay_lock(
         )
 
     log.append("env matches lock (no drift detected)")
+
+    # ── Nothing to reproduce: no locked figure sha ──────────────────
+    if lock.figure_sha256 is None:
+        log.append(
+            "no figure_sha256 in lock: env verified, but no byte-identical "
+            "re-render was performed (nothing to reproduce)"
+        )
+        return ReplayResult(
+            success=True,
+            verified=None,
+            replayed_figure_path=None,
+            figure_sha256_match=False,
+            drift_diagnostics={},
+            venv_path=None,
+            log_messages=tuple(log),
+        )
+
+    # ── Reproduction check: re-render in-process and compare bytes ──
+    short_sha = (
+        lock.panelforge_git_commit[:8]
+        if lock.panelforge_git_commit
+        and lock.panelforge_git_commit != "uncommitted"
+        else "uncommitted"
+    )
+    render_dir = workdir / f".replay-{short_sha}"
+    figure_path = render_dir / "replayed.pdf"
+
+    try:
+        _rerender_recipe_to_path(recipe_full_name, contract_dict, figure_path)
+    except Exception as exc:  # noqa: BLE001 - surfaced as a loud result
+        drift["render_failed"] = {
+            "expected": f"re-render of {recipe_full_name!r}",
+            "actual": f"{type(exc).__name__}: {exc}",
+        }
+        log.append(
+            f"re-render failed for {recipe_full_name!r}: "
+            f"{type(exc).__name__}: {exc}"
+        )
+        log.append(
+            "reproduction NOT verified — the locked figure could not be "
+            "re-rendered in the current environment"
+        )
+        return ReplayResult(
+            success=False,
+            verified=False,
+            replayed_figure_path=None,
+            figure_sha256_match=False,
+            drift_diagnostics=drift,
+            venv_path=None,
+            log_messages=tuple(log),
+        )
+
+    matched = verify_byte_identical(figure_path, lock.figure_sha256)
+    if matched:
+        log.append(
+            "byte-identical re-render verified in the current environment "
+            "(locked venv not rebuilt; full uv-sync replay is a follow-up)"
+        )
+        return ReplayResult(
+            success=True,
+            verified=True,
+            replayed_figure_path=figure_path,
+            figure_sha256_match=True,
+            drift_diagnostics={},
+            venv_path=None,
+            log_messages=tuple(log),
+        )
+
+    actual_sha = hashlib.sha256(figure_path.read_bytes()).hexdigest()
+    drift["figure_sha256"] = {
+        "expected": lock.figure_sha256[:16] + "...",
+        "actual": actual_sha[:16] + "...",
+    }
     log.append(
-        "note: full uv-sync replay not implemented in v2.2.0; verify "
-        "manually with `uv sync --locked` if you need the sidecar venv"
+        "re-render produced DIFFERENT bytes than the lock: reproduction "
+        "NOT verified in the current environment"
     )
     return ReplayResult(
-        success=True,
-        replayed_figure_path=None,
-        figure_sha256_match=lock.figure_sha256 is not None,
-        drift_diagnostics={},
+        success=False,
+        verified=False,
+        replayed_figure_path=figure_path,
+        figure_sha256_match=False,
+        drift_diagnostics=drift,
         venv_path=None,
         log_messages=tuple(log),
     )

@@ -45,6 +45,7 @@ from .qa import (
 from .spectral_embedding_utility import embed_2d
 from .statistical_contract import (
     DEFAULT_CONTRACT,
+    KNOWN_REFUSAL_RULES,
     DistributionAssumption,
     IndependenceStructure,
     MultipleComparisonsPolicy,
@@ -70,6 +71,7 @@ __all__ = [
     "FIGSIZE_PRESETS",
     "FigureIntegrityIssue",
     "FigureIntegrityReport",
+    "KNOWN_REFUSAL_RULES",
     "MULTIVERSE_OUTCOME_CLASSES",
     "PF_FONT_SIZES",
     "PF_FONT_STACK",

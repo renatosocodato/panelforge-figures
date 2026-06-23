@@ -30,11 +30,13 @@ Design notes
 ------------
 * The matcher scores captions against the recipe corpus
   (``metadata.answers_question`` for every registered recipe) with a
-  stdlib-only TF-IDF cosine similarity (its own local helpers —
-  ``_tokenize`` / ``_term_frequency`` / ``_idf`` / ``_tfidf`` /
-  ``_cosine`` — no extra deps and no import of
-  :mod:`manuscript_alignment`); if that computation raises it falls back
-  to a Jaccard keyword-overlap score so partial functionality remains.
+  stdlib-only TF-IDF cosine similarity drawn from the shared
+  :mod:`._tfidf` module (``tokenize`` / ``term_frequency`` /
+  ``document_frequency`` / ``idf`` / ``tfidf`` / ``cosine``) — the same
+  single-source-of-truth helpers used by :mod:`manuscript_alignment` and
+  :mod:`citation_inserter`, with no extra deps; if that computation
+  raises it falls back to a local Jaccard keyword-overlap score
+  (``_keyword_overlap_score``) so partial functionality remains.
 * Captions below ``min_similarity`` are flagged as ``is_gap=True`` with
   the original caption pasted into ``suggested_research_question`` so
   the user can scaffold a recipe via ``figures fill-gap`` afterwards.
@@ -46,12 +48,17 @@ See ``docs/spec_manuscript_collision.md`` §4 for the spec.
 
 from __future__ import annotations
 
-import math
 import re
 import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+
+from ._tfidf import cosine as _cosine
+from ._tfidf import document_frequency as _document_frequency
+from ._tfidf import idf as _idf
+from ._tfidf import tfidf as _tfidf
+from ._tfidf import tokenize as _tokenize
 
 __all__ = [
     "BlueprintImportError",
@@ -205,54 +212,14 @@ def _recipe_answers_question(recipe: Any) -> str:
     return ""
 
 
-# ─────────────────────────── TF-IDF fallback ─────────────────────────────
-
-
-_WORD_RE = re.compile(r"\b[a-z][a-z]+\b")
-
-
-def _tokenize(text: str) -> list[str]:
-    """Lowercase + alphabetic-only word tokenizer."""
-    return _WORD_RE.findall(text.lower())
-
-
-def _term_frequency(tokens: list[str]) -> dict[str, float]:
-    if not tokens:
-        return {}
-    counts: dict[str, int] = {}
-    for t in tokens:
-        counts[t] = counts.get(t, 0) + 1
-    n = len(tokens)
-    return {t: c / n for t, c in counts.items()}
-
-
-def _document_frequency(docs: list[list[str]]) -> dict[str, int]:
-    df: dict[str, int] = {}
-    for doc in docs:
-        for t in set(doc):
-            df[t] = df.get(t, 0) + 1
-    return df
-
-
-def _idf(df: dict[str, int], n_docs: int) -> dict[str, float]:
-    return {t: math.log((n_docs + 1) / (c + 1)) + 1.0 for t, c in df.items()}
-
-
-def _tfidf(tokens: list[str], idf: dict[str, float]) -> dict[str, float]:
-    tf = _term_frequency(tokens)
-    return {t: f * idf.get(t, 1.0) for t, f in tf.items()}
-
-
-def _cosine(a: dict[str, float], b: dict[str, float]) -> float:
-    common = set(a) & set(b)
-    if not common:
-        return 0.0
-    dot = sum(a[t] * b[t] for t in common)
-    na = math.sqrt(sum(v * v for v in a.values()))
-    nb = math.sqrt(sum(v * v for v in b.values()))
-    if na == 0 or nb == 0:
-        return 0.0
-    return dot / (na * nb)
+# ─────────────────────────── TF-IDF + Jaccard fallback ───────────────────
+#
+# The TF-IDF helpers (``_tokenize`` / ``_term_frequency`` /
+# ``_document_frequency`` / ``_idf`` / ``_tfidf`` / ``_cosine``) come from the
+# shared :mod:`._tfidf` module — the single source of truth also used by
+# ``manuscript_alignment`` and ``citation_inserter``. They are imported under
+# their original private names at the top of this module. Only the
+# blueprint-specific Jaccard fallback below is defined locally.
 
 
 def _keyword_overlap_score(caption_tokens: list[str], recipe_tokens: list[str]) -> float:

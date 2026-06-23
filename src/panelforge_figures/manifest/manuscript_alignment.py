@@ -16,12 +16,18 @@ gated behind the ``[embeddings]`` extra.
 """
 from __future__ import annotations
 
-import math
 import re
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
+
+from ._tfidf import clamp01 as _clamp01
+from ._tfidf import cosine as _cosine
+from ._tfidf import document_frequency as _document_frequency
+from ._tfidf import idf as _idf
+from ._tfidf import tfidf as _tfidf
+from ._tfidf import tokenize as _tokenize
 
 __all__ = [
     "ManuscriptAlignmentError",
@@ -70,59 +76,13 @@ class AlignmentScore:
     backend: AlignmentBackend
 
 
-# ─────────── TF-IDF backend (no extra deps; pure Python) ───────────
-
-
-_WORD_RE = re.compile(r"\b[a-z][a-z]+\b")
-
-
-def _tokenize(text: str) -> list[str]:
-    """Lowercase + alphabetic-only word tokenizer.
-
-    Numerics and single-letter tokens are dropped — keeps the vocabulary
-    aligned with what TF-IDF can usefully discriminate.
-    """
-    return _WORD_RE.findall(text.lower())
-
-
-def _term_frequency(tokens: list[str]) -> dict[str, float]:
-    if not tokens:
-        return {}
-    counts: dict[str, int] = {}
-    for t in tokens:
-        counts[t] = counts.get(t, 0) + 1
-    n = len(tokens)
-    return {t: c / n for t, c in counts.items()}
-
-
-def _document_frequency(docs: list[list[str]]) -> dict[str, int]:
-    df: dict[str, int] = {}
-    for doc in docs:
-        for t in set(doc):
-            df[t] = df.get(t, 0) + 1
-    return df
-
-
-def _idf(df: dict[str, int], n_docs: int) -> dict[str, float]:
-    """Smoothed IDF (sklearn-style): log((N+1)/(df+1)) + 1."""
-    return {t: math.log((n_docs + 1) / (c + 1)) + 1.0 for t, c in df.items()}
-
-
-def _tfidf(tokens: list[str], idf: dict[str, float]) -> dict[str, float]:
-    tf = _term_frequency(tokens)
-    return {t: f * idf.get(t, 1.0) for t, f in tf.items()}
-
-
-def _cosine(a: dict[str, float], b: dict[str, float]) -> float:
-    common = set(a) & set(b)
-    if not common:
-        return 0.0
-    dot = sum(a[t] * b[t] for t in common)
-    na = math.sqrt(sum(v * v for v in a.values()))
-    nb = math.sqrt(sum(v * v for v in b.values()))
-    if na == 0 or nb == 0:
-        return 0.0
-    return dot / (na * nb)
+# ─────────── TF-IDF backend ───────────
+#
+# The pure-Python TF-IDF helpers (``_tokenize`` / ``_term_frequency`` /
+# ``_document_frequency`` / ``_idf`` / ``_tfidf`` / ``_cosine`` / ``_clamp01``)
+# live in :mod:`._tfidf` — the single source of truth shared with
+# ``manuscript_blueprint`` and ``citation_inserter``. They are imported at
+# the top of this module under their original private names.
 
 
 _MD_HEADER_RE = re.compile(r"^#{1,3}\s+(.+?)\s*$", re.MULTILINE)
@@ -157,10 +117,6 @@ def _split_manuscript_sections(text: str) -> dict[str, str]:
             end = splits[i + 1].start() if i + 1 < len(splits) else len(text)
             sections[heading] = text[start:end].strip()
     return sections
-
-
-def _clamp01(x: float) -> float:
-    return min(max(x, 0.0), 1.0)
 
 
 def compute_tfidf_alignment(

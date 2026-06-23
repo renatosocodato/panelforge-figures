@@ -432,11 +432,24 @@ def check_staleness(
     4. Data SHA differs → :attr:`CacheStatus.stale_data`.
     5. ``output_path`` was provided but the file is gone →
        :attr:`CacheStatus.stale_output`.
-    6. All match → :attr:`CacheStatus.fresh`.
+    6. ``output_path`` exists but its on-disk bytes no longer match the
+       recorded ``output_sha`` (external edit / corruption) →
+       :attr:`CacheStatus.stale_output`.
+    7. All match → :attr:`CacheStatus.fresh`.
 
     The order is chosen so the most "user-explainable" cause wins: a
     recipe edit is more notable than a downstream data refresh, and
-    both win over a vanished output file.
+    both win over a vanished or tampered output file.
+
+    Check 6 closes the "cache blind to mutation" gap: detecting only
+    deletion (check 5) let an externally-edited or corrupted output
+    file masquerade as fresh, silently surviving the re-render gate.
+    The on-disk SHA is recomputed with :func:`_sha256_file` — the same
+    helper :func:`update_cache_entry` uses to populate ``output_sha`` —
+    so the two hashes are directly comparable.  The comparison is
+    skipped when the recorded ``output_sha`` is empty (the documented
+    "output missing at update time" defensive case), since there is no
+    baseline to compare against.
     """
     entry = cache.get(panel_id)
     if entry is None:
@@ -447,8 +460,11 @@ def check_staleness(
         return CacheStatus.stale_contract
     if entry.data_sha != current_data_sha:
         return CacheStatus.stale_data
-    if output_path is not None and not output_path.exists():
-        return CacheStatus.stale_output
+    if output_path is not None:
+        if not output_path.exists():
+            return CacheStatus.stale_output
+        if entry.output_sha and _sha256_file(output_path) != entry.output_sha:
+            return CacheStatus.stale_output
     return CacheStatus.fresh
 
 

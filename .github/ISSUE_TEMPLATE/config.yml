@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Question / usage help
+    url: https://github.com/renatosocodato/panelforge-figures/blob/main/SUPPORT.md
+    about: How to get help. GitHub Discussions is disabled — usage questions are welcome as issues. See SUPPORT.md and the docs/ quickstart.
   - name: Security / sensitive disclosure
     url: https://github.com/renatosocodato/panelforge-figures/security/advisories/new
     about: Report a security or data-privacy issue privately via a GitHub Security Advisory rather than a public issue.

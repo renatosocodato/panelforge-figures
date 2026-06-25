@@ -5,7 +5,19 @@ development loop. **Every command here is exactly what CI runs** — if it passe
 locally, it passes on GitHub.
 
 By participating you agree to abide by our
-[Code of Conduct](CODE_OF_CONDUCT.md).
+[Code of Conduct](CODE_OF_CONDUCT.md). For usage questions (not contributions),
+see [SUPPORT.md](SUPPORT.md).
+
+**Contents:**
+[1. Dev environment](#1-development-environment) ·
+[2. Invariants / CI gates](#2-project-invariants-what-ci-enforces) ·
+[3. Code style](#3-code-style) ·
+[4. Adding a recipe](#4-the-recipe-contract--adding-a-recipe) ·
+[5. Index & gallery](#5-the-recipe-index-and-gallery) ·
+[6. Tests](#6-tests) ·
+[7. Security & privacy](#7-security--privacy) ·
+[8. Commits & PRs](#8-commits--pull-requests) ·
+[9. Releases](#9-releases-maintainers)
 
 ---
 

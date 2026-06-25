@@ -14,4 +14,7 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
-      - id: ruff-format
+      # NOTE: ruff-format is intentionally NOT enabled. The project gate is the
+      # linter (`ruff check`) only; CI does not run `ruff format`, and the tree
+      # is not format-normalized, so a format hook would create noisy diffs.
+      # See CONTRIBUTING.md section 3.

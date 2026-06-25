@@ -1127,7 +1127,10 @@ def register_recipe_tools(server: Any, config: MCPServerConfig | None = None) ->
         # skipping a group's *tools* here keeps its surface off the
         # listing (its dispatch branch in ``_call_tool`` is gated the
         # same way, so a stale call returns a structured error).
-        out: list[Tool] = list(recipe_tools)
+        # The recipe group is gated too, matching its dispatch branch in
+        # ``_call_tool`` (``expose_recipes``): otherwise the server would
+        # LIST 471 recipe tools while refusing to invoke any of them.
+        out: list[Tool] = list(recipe_tools) if _group_enabled(config, "recipe") else []
         if _group_enabled(config, "scorer"):
             out.extend(_scorer_tool_list())
         if _group_enabled(config, "index"):

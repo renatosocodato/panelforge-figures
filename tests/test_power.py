@@ -414,3 +414,51 @@ def test_version_is_at_least_v2():
     from panelforge_figures import __version__
     parts = __version__.split(".")
     assert int(parts[0]) >= 2, f"expected ≥ 2.x.y, got {__version__!r}"
+
+
+# ── re-audit #1 — missing optional-dep RuntimeError → PowerError ───────────
+#
+# The formula layer raises a bare RuntimeError when statsmodels/scipy (the
+# [power] extra) is absent. compute_required_n must translate that into the
+# documented PowerError so the CLI (which only catches PowerError) reports a
+# clean message instead of an uncaught stacktrace with empty stderr.
+
+
+def test_missing_power_dependency_raises_powererror(monkeypatch) -> None:
+    """A formula that raises RuntimeError (missing optional dep) must surface
+    as PowerError with an actionable install hint, not a raw RuntimeError."""
+    from panelforge_figures.manifest import power_families
+
+    class _BoomFormula:
+        def required_n(self, **_kwargs):
+            raise RuntimeError("statsmodels required for chi-square power")
+
+    # compute_required_n lazily does `from .power_families import
+    # resolve_family_method`, so patch the attribute on that module.
+    monkeypatch.setattr(
+        power_families,
+        "resolve_family_method",
+        lambda family, *, n_groups=2: ("chi_square", _BoomFormula()),
+    )
+    with pytest.raises(PowerError) as excinfo:
+        compute_required_n(
+            recipe_full_name="x.y",
+            family="proportion",
+            effect_size=0.3,
+        )
+    msg = str(excinfo.value)
+    assert "power" in msg.lower()
+    assert "panelforge-figures[power]" in msg  # actionable install hint
+
+
+def test_stats_families_resolve_to_a_formula_without_statsmodels() -> None:
+    """Re-audit guard: the family->power mapping for the statsmodels-backed
+    families (proportion/factorial) must RESOLVE even when statsmodels is
+    absent — only the actual required_n computation needs the optional dep.
+    This keeps the #1 bridge mapping guarded in statsmodels-free CI."""
+    from panelforge_figures.manifest.power_families import resolve_family_method
+
+    for fam in ("proportion", "factorial"):
+        method, formula = resolve_family_method(fam)
+        assert formula is not None, fam
+        assert method  # a method label is returned

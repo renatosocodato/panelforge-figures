@@ -442,6 +442,15 @@ def set_user_pick(
     atomically via ``os.replace``.
     """
     project_root = Path(project_root)
+    if _data_class_blocks_telemetry():
+        # Privacy-by-construction: clinical forces telemetry off. Refuse to
+        # touch usage.jsonl even if rows were written under a prior data
+        # class — no read, no write, the file stays byte-identical. (The
+        # row-creation path log_invocation no-ops for the same reason.)
+        raise TelemetryError(
+            "telemetry is disabled by the current data-class policy "
+            "(clinical forces telemetry off); refusing to modify usage.jsonl"
+        )
     log_path = telemetry_log_path(project_root)
     rows = _read_all_rows(log_path)
     if not rows:
@@ -534,6 +543,13 @@ def export_telemetry(
     """
     project_root = Path(project_root)
     output_path = Path(output_path)
+    if _data_class_blocks_telemetry():
+        # Clinical forces telemetry off — do not read usage.jsonl or write a
+        # derived export artifact, regardless of pre-existing rows.
+        raise TelemetryError(
+            "telemetry is disabled by the current data-class policy "
+            "(clinical forces telemetry off); refusing to read/export usage.jsonl"
+        )
     rows = _read_all_rows(telemetry_log_path(project_root))
 
     selected: list[dict[str, Any]] = []

@@ -686,18 +686,3 @@ def to_render_data_files(files: list[DataFile]) -> list[Any]:
     return [
         RenderDataFile(file_id=str(f.path), path=f.path) for f in files
     ]
-
-
-__all__ = [
-    "DataFile",
-    "FieldBinding",
-    "RecipeBinding",
-    "bind_recipe_to_data",
-    "bind_shortlist_to_data",
-    "compute_fully_bound",
-    "discover_data_files",
-    "load_bindings_cache",
-    "to_render_binding",
-    "to_render_data_files",
-    "write_bindings_cache",
-]

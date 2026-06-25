@@ -148,8 +148,11 @@ def register_modality(
     :class:`TypeError` rather than being silently stored and surfacing later as
     an :class:`AttributeError` deep inside a recipe's ``apply_to_ax`` call.
     ``None`` is accepted (a modality may register without an aesthetic).
+
+    Registration is **atomic**: the aesthetic is type-checked *before* any
+    registry dict is mutated, so a rejected call leaves no partial state
+    (neither the description nor the aesthetic is recorded).
     """
-    _MODALITY_DESCRIPTIONS[name] = description
     if aesthetic is not None:
         # Imported lazily: ``aesthetic_base`` is a sibling in this inward
         # ``core`` layer, but keeping the import inside the function avoids any
@@ -160,6 +163,8 @@ def register_modality(
                 f"register_modality({name!r}): aesthetic must be a "
                 f"ModalityAesthetic or None, got {type(aesthetic).__name__}."
             )
+    _MODALITY_DESCRIPTIONS[name] = description
+    if aesthetic is not None:
         _MODALITY_AESTHETICS[name] = aesthetic
 
 

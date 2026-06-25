@@ -40,6 +40,24 @@ from panelforge_figures.manifest.render_loop import (
 # ─────────────────────────── test fixtures ──────────────────────────────
 
 
+@pytest.fixture(autouse=True)
+def _scrub_render_loop_recipes_after_test():
+    """Remove every ``test_render_loop.*`` registration after each test.
+
+    ``_make_test_recipe`` injects synthetic recipes into the global
+    ``_REGISTRY``; without this cleanup they leak and inflate
+    ``list_recipes()``, tripping the index-drift / count assertions in
+    ``test_cli_index`` and ``figures index validate`` depending on test
+    ordering. Scoping the cleanup to this module's prefix keeps the
+    synthetic entries out of every other test's view.
+    """
+    yield
+    from panelforge_figures.core.contract import _REGISTRY
+    stale = [k for k in _REGISTRY if k.startswith("test_render_loop.")]
+    for k in stale:
+        del _REGISTRY[k]
+
+
 class _FixtureContract(RecipeContract):
     """Minimal contract for synthetic test recipes."""
 

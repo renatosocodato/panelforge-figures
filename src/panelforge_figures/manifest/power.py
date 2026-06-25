@@ -343,15 +343,30 @@ def compute_required_n(
 
     method, formula = resolve_family_method(family, n_groups=n_groups)
 
-    n = formula.required_n(
-        effect_size=effect_size,
-        alpha=alpha,
-        power_target=power_target,
-        df_num=df_num,
-        df_den=df_den,
-        n_groups=n_groups,
-        montecarlo_iterations=montecarlo_iterations,
-    )
+    # The formula layer raises a bare RuntimeError when an optional
+    # dependency (statsmodels/scipy, the `[power]` extra) is missing —
+    # e.g. closed-form ANOVA / chi-square power. Translate it into the
+    # documented PowerError so callers that follow the contract (the CLI
+    # `power` command, library consumers) get a clean, catchable error
+    # with an actionable install hint instead of an uncaught stacktrace.
+    try:
+        n = formula.required_n(
+            effect_size=effect_size,
+            alpha=alpha,
+            power_target=power_target,
+            df_num=df_num,
+            df_den=df_den,
+            n_groups=n_groups,
+            montecarlo_iterations=montecarlo_iterations,
+        )
+    except PowerError:
+        raise
+    except RuntimeError as exc:
+        raise PowerError(
+            f"power analysis for family {family!r} is unavailable: {exc}. "
+            f"Install the optional dependencies with: "
+            f"pip install panelforge-figures[power]"
+        ) from exc
 
     if not math.isfinite(n) or n <= 0:
         raise PowerError(

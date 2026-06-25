@@ -19,6 +19,8 @@ from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 
+from ._figure_id import normalise_figure_id
+
 __all__ = [
     "Claim",
     "ClaimAssertion",
@@ -236,8 +238,16 @@ def extract_claims(text: str) -> list[Claim]:
 
 
 def _figure_id_to_stem(figure_id: str) -> str | None:
-    """Convert ``"Figure 3a"`` → ``"figure_3a"``; return None if not parseable."""
-    m = re.search(r"\d+[a-z]?", figure_id.lower())
+    """Convert any figure-id surface form → its ``figure_<token>`` disk stem.
+
+    Routes the id through :func:`._figure_id.normalise_figure_id` first so
+    the lookup is case- and format-insensitive: ``"Figure 3A"``,
+    ``"fig:3a"`` and ``"figure_3a"`` all resolve to the same
+    ``"figure_3a"`` stem. Returns ``None`` when the id carries no
+    figure number/subletter token to key on.
+    """
+    canonical = normalise_figure_id(figure_id)
+    m = re.search(r"\d+[a-z]?", canonical)
     return f"figure_{m.group(0)}" if m else None
 
 
@@ -309,7 +319,7 @@ def verify_claim(
     evidence: FigureEvidence | None,
     *,
     alpha: float = 0.05,
-    correlation_threshold: float = 0.1,
+    correlation_threshold: float = 0.3,
 ) -> VerifiedClaim:
     """Compare a single :class:`Claim` against its :class:`FigureEvidence`.
 
@@ -331,7 +341,12 @@ def verify_claim(
         Significance threshold for p-value comparisons (default 0.05).
     correlation_threshold
         Minimum ``|r|`` for a correlation to be considered present
-        (default 0.1).
+        (default 0.3). The default is the conventional "moderate" effect
+        floor (Cohen): ``|r| = 0.3`` explains ~9% of the variance
+        (:math:`r^2 \\approx 0.09`). The previous default of ``0.1`` only
+        explains ~1% of the variance, so it marked near-noise correlations
+        as SUPPORTED — far too lax for a consistency screen. Override this
+        for domains with a different effect-size convention.
     """
     if evidence is None or evidence.audit_findings is None:
         return VerifiedClaim(
@@ -449,7 +464,7 @@ def verify_manuscript(
     figures_dir: Path,
     *,
     alpha: float = 0.05,
-    correlation_threshold: float = 0.1,
+    correlation_threshold: float = 0.3,
 ) -> ClaimReport:
     """End-to-end pipeline: extract claims from ``manuscript_path``, load
     each figure's evidence from ``figures_dir``, verify each claim, and
@@ -462,7 +477,9 @@ def verify_manuscript(
     figures_dir
         Directory containing rendered figures + provenance sidecars.
     alpha, correlation_threshold
-        Forwarded to :func:`verify_claim`.
+        Forwarded to :func:`verify_claim`. ``correlation_threshold``
+        defaults to ``0.3`` — the conventional "moderate" effect floor
+        (~9% of variance); see :func:`verify_claim` for the rationale.
 
     Returns
     -------

@@ -54,6 +54,8 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
+from ._figure_id import normalise_figure_id
+
 __all__ = [
     "FindingKind",
     "FindingSeverity",
@@ -305,16 +307,21 @@ def lint_xrefs(
         raise LintError(f"cannot parse manuscript {manuscript_path}: {exc}") from exc
 
     findings: list[LintFinding] = []
-    ref_ids = {r.figure_id for r in existing.figure_refs}
-    block_ids = {b.figure_id for b in existing.figure_blocks}
+    # Cross-reference matching is keyed on the canonical figure-id form
+    # (see ._figure_id.normalise_figure_id) so a \ref{fig:1} matches a
+    # \label{Fig:1} / \label{figure_1} regardless of case or separator
+    # style. Findings still report the author's original id text.
+    ref_ids = {normalise_figure_id(r.figure_id) for r in existing.figure_refs}
+    block_ids = {normalise_figure_id(b.figure_id) for b in existing.figure_blocks}
 
     # ---- Check 1: \ref{fig:N} with no figure block defined --------------
     seen_ref_ids: set[str] = set()
     for ref in existing.figure_refs:
-        if ref.figure_id in seen_ref_ids:
+        ref_key = normalise_figure_id(ref.figure_id)
+        if ref_key in seen_ref_ids:
             continue
-        seen_ref_ids.add(ref.figure_id)
-        if ref.figure_id not in block_ids:
+        seen_ref_ids.add(ref_key)
+        if ref_key not in block_ids:
             findings.append(
                 LintFinding(
                     kind=FindingKind.ref_without_block,
@@ -348,7 +355,7 @@ def lint_xrefs(
                 )
             )
             continue
-        if block.figure_id not in ref_ids:
+        if normalise_figure_id(block.figure_id) not in ref_ids:
             findings.append(
                 LintFinding(
                     kind=FindingKind.block_without_ref,
@@ -363,17 +370,22 @@ def lint_xrefs(
             )
 
     # ---- Check 3: duplicate figure block labels --------------------------
+    # Keyed on the canonical figure-id form so two blocks labelled
+    # \label{fig:1} and \label{Fig:1} are caught as duplicates despite
+    # the case difference; the author's first-seen id text is reported.
     block_id_counts: dict[str, int] = {}
     block_id_first_line: dict[str, int] = {}
+    block_id_display: dict[str, str] = {}
     for block in existing.figure_blocks:
         if not block.figure_id:
             continue
-        block_id_counts[block.figure_id] = (
-            block_id_counts.get(block.figure_id, 0) + 1
-        )
-        block_id_first_line.setdefault(block.figure_id, block.start_line)
-    for fig_id, count in block_id_counts.items():
+        key = normalise_figure_id(block.figure_id)
+        block_id_counts[key] = block_id_counts.get(key, 0) + 1
+        block_id_first_line.setdefault(key, block.start_line)
+        block_id_display.setdefault(key, block.figure_id)
+    for key, count in block_id_counts.items():
         if count > 1:
+            fig_id = block_id_display[key]
             findings.append(
                 LintFinding(
                     kind=FindingKind.duplicate_block,
@@ -381,10 +393,10 @@ def lint_xrefs(
                     figure_id=fig_id,
                     message=(
                         f"Figure block {fig_id} defined {count} times "
-                        f"(only the first at line {block_id_first_line[fig_id]} "
+                        f"(only the first at line {block_id_first_line[key]} "
                         f"will be linked by LaTeX)"
                     ),
-                    line_number=block_id_first_line[fig_id],
+                    line_number=block_id_first_line[key],
                 )
             )
 
@@ -462,7 +474,11 @@ def lint_xrefs(
             # OR block.  We check both: a figure that's only embedded
             # (block but no ref) is still surfaced by check 2, but the
             # filesystem file itself is "linked" so we don't double-flag.
-            if any(i in ref_ids or i in block_ids for i in inferred_ids):
+            # ref_ids / block_ids are canonical, so normalise the
+            # filename-inferred candidates before testing membership —
+            # a fig2.pdf file matches a \label{Fig:2} regardless of case.
+            inferred_keys = {normalise_figure_id(i) for i in inferred_ids}
+            if inferred_keys & (ref_ids | block_ids):
                 continue
             # Also exempt files actually used by an \includegraphics path
             # (the includegraphics check covers them already if missing).

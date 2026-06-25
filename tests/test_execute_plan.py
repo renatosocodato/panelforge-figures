@@ -314,3 +314,43 @@ def test_cli_execute_plan_with_all_phases_off(
     # The CLI should at least parse and run; exit 0 on success or 1 if
     # the executor surfaced a soft import error.
     assert r.exit_code in (0, 1), r.output
+
+
+# ─────────────────────────── status byte-stability ──────────────────────
+
+
+def test_panel_execution_status_is_byte_stable() -> None:
+    """``PanelExecutionStatus`` members must behave as plain string codes.
+
+    Pins the contract that survives the ``str`` subclass → ``StrEnum``
+    conversion (deep-dive item #20a): each member equals its literal,
+    ``str()`` / f-strings yield the bare value (no ``PanelExecutionStatus.``
+    prefix), the member works as a dict key against the literal, and
+    ``json.dumps`` emits the plain string.  Any of these breaking would
+    change the executor's JSON / CLI output bytes.
+    """
+    import json
+
+    expected = {
+        PanelExecutionStatus.rendered: "rendered",
+        PanelExecutionStatus.scaffolded_then_rendered: "scaffolded_then_rendered",
+        PanelExecutionStatus.skipped_gap: "skipped_gap",
+        PanelExecutionStatus.cached: "cached",
+        PanelExecutionStatus.failed: "failed",
+    }
+    for member, literal in expected.items():
+        assert isinstance(member, str)
+        assert member == literal
+        assert literal == member
+        assert str(member) == literal
+        assert f"{member}" == literal
+        # member usable as a key against a literal-keyed dict and vice-versa
+        assert {literal: 1}.get(member) == 1
+        assert {member: 1}.get(literal) == 1
+        # JSON serialises to the bare quoted value
+        assert json.dumps(member) == f'"{literal}"'
+    # default=str path used by CLI/report serialisers stays byte-stable
+    assert (
+        json.dumps([(PanelExecutionStatus.rendered, "msg")], default=str)
+        == '[["rendered", "msg"]]'
+    )

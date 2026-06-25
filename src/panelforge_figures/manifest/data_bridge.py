@@ -34,6 +34,20 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+__all__ = [
+    "DataFile",
+    "FieldBinding",
+    "RecipeBinding",
+    "bind_recipe_to_data",
+    "bind_shortlist_to_data",
+    "compute_fully_bound",
+    "discover_data_files",
+    "load_bindings_cache",
+    "to_render_binding",
+    "to_render_data_files",
+    "write_bindings_cache",
+]
+
 # ---------------------------------------------------------------------------
 # Public dataclasses
 # ---------------------------------------------------------------------------
@@ -495,14 +509,39 @@ def bind_recipe_to_data(
     )
 
 
-def compute_fully_bound(bindings: Iterable[FieldBinding]) -> bool:
-    """Return ``True`` iff every required field has a non-None data source.
+def compute_fully_bound(
+    bindings: Iterable[FieldBinding],
+    *,
+    min_confidence: float = 0.0,
+) -> bool:
+    """Return ``True`` iff every required field is bound with enough confidence.
 
     Single source of truth for the ``fully_bound`` predicate — both
     :func:`bind_recipe_to_data` and CLI consumers reading from the
     on-disk cache call into this helper so they cannot diverge.
+
+    A required field counts as bound when it has a non-None
+    ``data_source`` *and* its ``confidence`` is at least ``min_confidence``.
+    The confidence floor only ever applies to required fields; optional
+    fields never block fully-bound status regardless of confidence.
+
+    Args:
+        bindings: The per-field binding decisions for a recipe.
+        min_confidence: Minimum acceptable :attr:`FieldBinding.confidence`
+            for a required field, in ``[0.0, 1.0]``. The default of ``0.0``
+            accepts any bound source and is fully backward-compatible with
+            the original presence-only check; raise it to reject
+            low-confidence (e.g. LLM-guessed) bindings so they are not
+            rendered without review.
+
+    Returns:
+        ``True`` iff every required field is bound at or above the floor.
     """
-    return all(b.data_source is not None for b in bindings if b.is_required)
+    return all(
+        b.data_source is not None and b.confidence >= min_confidence
+        for b in bindings
+        if b.is_required
+    )
 
 
 def bind_shortlist_to_data(

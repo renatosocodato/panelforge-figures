@@ -107,6 +107,7 @@ class BiasFindingKind(StrEnum):
     non_monotonic_categorical = "non_monotonic_categorical"
     p_value_threshold_only = "p_value_threshold_only"
     color_blind_unsafe = "color_blind_unsafe"
+    internal_error = "internal_error"
 
 
 # --------------------------------------------------------------------------- #
@@ -1205,7 +1206,7 @@ def audit_bias_for_figure(provenance_path: Path) -> tuple[BiasFinding, ...]:
         except Exception as exc:  # noqa: BLE001 — never abort the run
             out.append(
                 BiasFinding(
-                    kind=BiasFindingKind.truncated_y_axis,  # generic
+                    kind=BiasFindingKind.internal_error,
                     severity=BiasSeverity.info,
                     figure_id=figure_id,
                     panel_id=None,

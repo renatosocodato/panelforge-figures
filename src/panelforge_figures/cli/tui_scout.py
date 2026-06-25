@@ -619,13 +619,12 @@ def _rescore_single_panel(
     """
     try:
         from ..manifest.novelty_scout import (
-            MockConsensusClient,
             PanelCandidate,
             PanelRole,
             TargetNovelty,
             assess_panel_novelty,
         )
-        from ..manifest.scout import _resolve_consensus_client  # type: ignore[attr-defined]
+        from ..manifest.scout import resolve_consensus_client
     except Exception:  # pragma: no cover — defensive
         return None
 
@@ -644,10 +643,9 @@ def _rescore_single_panel(
         research_question=edited_q,
         role=role,
     )
-    try:
-        client = _resolve_consensus_client(None, True)  # mock by default for safety
-    except Exception:
-        client = MockConsensusClient()
+    # use_mock_novelty=True → always returns MockConsensusClient (no network,
+    # cannot raise), so no defensive fallback is needed here.
+    client = resolve_consensus_client(None, True)
     try:
         target = TargetNovelty(session.target_novelty)
     except ValueError:

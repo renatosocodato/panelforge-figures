@@ -40,6 +40,7 @@ Public surface
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -67,13 +68,15 @@ __all__ = [
 # ─────────────────────────── status codes ────────────────────────────────
 
 
-class PanelExecutionStatus(str):
+class PanelExecutionStatus(StrEnum):
     """One per panel — string codes for stable JSON output.
 
-    Subclassing :class:`str` (rather than :class:`enum.StrEnum`) keeps
-    the values JSON-stable without forcing the consumer to import the
-    enum: a downstream tool can compare ``status == "rendered"`` and the
-    test would pass against either the literal or our class attribute.
+    A :class:`enum.StrEnum`: each member *is* a :class:`str` equal to its
+    value, so the values stay JSON-stable and downstream tools can still
+    compare ``status == "rendered"`` (or use the member as a dict key /
+    f-string substitution) without importing this enum.  ``str(member)``
+    and :func:`json.dumps` (via ``default=str``) both yield the plain
+    string value, preserving byte-for-byte output.
     """
 
     rendered = "rendered"
@@ -642,6 +645,19 @@ def execute_plan(
       inserts new figure blocks, appends new figures, etc.).
     * ``"propose"`` — same as ``update`` but the modified text is
       written to ``<manuscript>.suggested.<ext>`` instead of in place.
+
+    .. note::
+       The executor's ``"preserve"`` is a Phase-4 *sentinel* meaning
+       "skip the collision machinery; leave any existing manuscript
+       untouched".  It is NOT the same as
+       :attr:`manuscript_collision.ManuscriptPolicy.preserve` (which
+       means "ignore the existing file and emit a fresh
+       ``main.fresh.tex``").  When ``manuscript_policy == "preserve"``
+       the executor short-circuits *before* mapping the string onto a
+       :class:`~manuscript_collision.ManuscriptPolicy`, so the two
+       same-named values never collide at runtime.  The non-preserve
+       values (``detect`` / ``update`` / ``propose``) ARE forwarded
+       verbatim to :class:`~manuscript_collision.ManuscriptPolicy`.
 
     ``force`` (E11) bypasses the render cache.  When ``True`` every
     panel re-renders regardless of cache freshness; the cache is still

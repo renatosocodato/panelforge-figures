@@ -592,3 +592,69 @@ def test_compute_fully_bound_helper_matches_bind_recipe_to_data(
         for b in rb.bindings
     )
     assert db.compute_fully_bound(partial) is False
+
+
+# ---------------------------------------------------------------------------
+# Test 13 — compute_fully_bound confidence floor (ITEM #8)
+# ---------------------------------------------------------------------------
+
+
+def test_compute_fully_bound_min_confidence_floor() -> None:
+    """A required binding below ``min_confidence`` must not count as bound.
+
+    Every required field has a non-None ``data_source``, so the default
+    (``min_confidence=0.0``) keeps the recipe fully-bound. Raising the floor
+    above the weakest binding's confidence demotes it to *not* fully-bound.
+    """
+    bindings = (
+        db.FieldBinding(
+            contract_field="estimates", field_type="list[float]",
+            is_required=True, data_source=Path("d.csv"),
+            column_name="estimates", pass_used="exact", confidence=1.0,
+        ),
+        db.FieldBinding(
+            contract_field="counts", field_type="list[int]",
+            is_required=True, data_source=Path("d.csv"),
+            column_name="counts", pass_used="llm", confidence=0.5,
+        ),
+    )
+
+    # Default behaviour: every required field has a source -> fully bound.
+    assert db.compute_fully_bound(bindings) is True
+    assert db.compute_fully_bound(bindings, min_confidence=0.0) is True
+
+    # Floor above the weakest binding's confidence -> not fully bound.
+    assert db.compute_fully_bound(bindings, min_confidence=0.8) is False
+
+    # Floor at exactly the binding's confidence is still acceptable (>=).
+    assert db.compute_fully_bound(bindings, min_confidence=0.5) is True
+
+
+def test_compute_fully_bound_min_confidence_ignores_optional() -> None:
+    """A low-confidence *optional* field never blocks fully-bound status."""
+    bindings = (
+        db.FieldBinding(
+            contract_field="estimates", field_type="list[float]",
+            is_required=True, data_source=Path("d.csv"),
+            column_name="estimates", pass_used="exact", confidence=1.0,
+        ),
+        db.FieldBinding(
+            contract_field="title", field_type="str",
+            is_required=False, data_source=Path("d.csv"),
+            column_name="title", pass_used="llm", confidence=0.1,
+        ),
+    )
+    assert db.compute_fully_bound(bindings, min_confidence=0.9) is True
+
+
+# ---------------------------------------------------------------------------
+# Test 14 — RecipeBinding is a first-class public export (ITEM #14a)
+# ---------------------------------------------------------------------------
+
+
+def test_recipe_binding_is_public_export() -> None:
+    """`RecipeBinding` must be a normal public name on ``data_bridge``."""
+    assert hasattr(db, "__all__")
+    assert "RecipeBinding" in db.__all__
+    assert "FieldBinding" in db.__all__
+    assert "compute_fully_bound" in db.__all__

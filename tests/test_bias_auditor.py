@@ -584,6 +584,37 @@ def test_audit_bias_for_figure_bad_json_raises(tmp_path: Path) -> None:
         audit_bias_for_figure(bad)
 
 
+def test_audit_bias_for_figure_internal_check_error_is_internal_error_kind(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A check raising internally must surface as ``internal_error``.
+
+    The exception-swallowing path in ``audit_bias_for_figure`` must not
+    masquerade an internal auditor failure as a genuine
+    ``truncated_y_axis`` finding — doing so would silently corrupt that
+    real category.
+    """
+
+    def _boom(_provenance: dict[str, Any], _figure_id: str) -> list[BiasFinding]:
+        raise RuntimeError("simulated internal auditor failure")
+
+    import panelforge_figures.manifest.bias_auditor as ba
+
+    monkeypatch.setattr(ba, "_CHECKS", (_boom,))
+
+    prov = _make_provenance(family="comparison")
+    path = _write_provenance(tmp_path, prov)
+    findings = audit_bias_for_figure(path)
+
+    assert len(findings) == 1
+    f = findings[0]
+    assert f.kind == BiasFindingKind.internal_error
+    assert f.kind != BiasFindingKind.truncated_y_axis
+    assert f.severity == BiasSeverity.info
+    assert "RuntimeError" in f.message
+    assert f.evidence["check"] == "_boom"
+
+
 # --------------------------------------------------------------------------- #
 # 12. audit_bias_across_directory                                              #
 # --------------------------------------------------------------------------- #

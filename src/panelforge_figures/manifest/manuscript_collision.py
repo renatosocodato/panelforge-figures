@@ -637,9 +637,13 @@ def _verify_one_claim(
     findings: dict[str, Any] | None,
     *,
     alpha: float = 0.05,
-    correlation_threshold: float = 0.1,
+    correlation_threshold: float = 0.3,
 ) -> tuple[ClaimVerdict, str]:
     """Mirror of ``claim_check.verify_claim``, restricted to dict-shape findings.
+
+    ``correlation_threshold`` defaults to 0.3 to match
+    ``claim_check.verify_claim`` (Cohen's "moderate" floor, ~9% of
+    variance); the two must stay in sync.
 
     Returns ``(verdict, rationale)``. Unknown / missing inputs → unverifiable.
     """

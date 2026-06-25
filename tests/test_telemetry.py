@@ -583,3 +583,62 @@ def test_public_data_class_still_writes_opt_in_telemetry(
 
     assert sid != ""
     assert telemetry_log_path(tmp_path).exists()
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# Cluster 7 — clinical gate covers the WRITE/READ paths too (re-audit #2)
+# ──────────────────────────────────────────────────────────────────────────
+#
+# log_invocation no-ops under clinical, but the gate must also cover
+# set_user_pick (writes usage.jsonl) and export_telemetry (reads it +
+# writes a derived artifact) — otherwise a project written under research
+# and later reclassified clinical could still mutate/leak telemetry.
+
+
+def test_clinical_blocks_set_user_pick_on_existing_rows(
+    tmp_path: Path, _restore_data_class: object
+) -> None:
+    """A row written under research must NOT be mutable once reclassified
+    clinical: set_user_pick refuses and usage.jsonl stays byte-identical."""
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    (tmp_path / "panelforge.project.yaml").write_text("telemetry: opt-in\n")
+    sid = log_invocation(
+        tmp_path,
+        profile={"modality": "live_imaging_2d"},
+        scored_top_5=[{"full_name": "a", "score": 0.5, "tags": {}}],
+        panelforge_version="1.0.0",
+        scoring_rubric_version="1.0.0",
+    )
+    assert sid != ""
+    log_path = telemetry_log_path(tmp_path)
+    before = log_path.read_bytes()
+
+    set_data_class(DataClass.CLINICAL)
+    with pytest.raises(TelemetryError):
+        set_user_pick(tmp_path, "a", session_id=sid)
+    # No write occurred — the file is unchanged.
+    assert log_path.read_bytes() == before
+
+
+def test_clinical_blocks_export_telemetry(
+    tmp_path: Path, _restore_data_class: object
+) -> None:
+    """export_telemetry must refuse under clinical — no read, no artifact."""
+    from panelforge_figures.safety import DataClass, set_data_class
+
+    (tmp_path / "panelforge.project.yaml").write_text("telemetry: opt-in\n")
+    sid = log_invocation(
+        tmp_path,
+        profile={"modality": "live_imaging_2d"},
+        scored_top_5=[{"full_name": "a", "score": 0.5, "tags": {}}],
+        panelforge_version="1.0.0",
+        scoring_rubric_version="1.0.0",
+    )
+    set_user_pick(tmp_path, "a", session_id=sid)  # legitimate, still research
+    out = tmp_path / "export.jsonl"
+
+    set_data_class(DataClass.CLINICAL)
+    with pytest.raises(TelemetryError):
+        export_telemetry(tmp_path, out, anonymize=True, drop_unpicked=True)
+    assert not out.exists()

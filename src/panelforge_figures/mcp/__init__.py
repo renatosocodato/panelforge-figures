@@ -5,6 +5,7 @@ from .server import (
     MCPUnavailableError,
     create_server,
     serve_stdio,
+    serve_stdio_sync,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "MCPUnavailableError",
     "create_server",
     "serve_stdio",
+    "serve_stdio_sync",
 ]

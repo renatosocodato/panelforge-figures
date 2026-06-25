@@ -406,3 +406,17 @@ def test_render_collision_report_markdown_has_per_figure_table(
             "figure", "action", "manuscript",
         )
     )
+
+
+def test_verify_one_claim_correlation_threshold_default_is_moderate() -> None:
+    """Re-audit guard: manuscript_collision carries its own copy of the
+    correlation threshold (mirror of claim_check). Pin its default to 0.3 so it
+    cannot silently drift back to the old over-lax 0.1 unnoticed."""
+    import inspect
+
+    from panelforge_figures.manifest.manuscript_collision import _verify_one_claim
+
+    default = inspect.signature(_verify_one_claim).parameters[
+        "correlation_threshold"
+    ].default
+    assert default == 0.3

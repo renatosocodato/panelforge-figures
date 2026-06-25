@@ -81,6 +81,10 @@ def test_register_modality_rejects_non_aesthetic_object():
     assert "ModalityAesthetic" in str(excinfo.value)
     # The rejected modality must not have leaked into the aesthetic registry.
     assert modality_aesthetic("__bogus_aesthetic_modality__") is None
+    # ...nor into the description registry: registration is atomic, so a
+    # rejected call leaves NO partial state (the type check runs before any
+    # registry mutation).
+    assert modality_description("__bogus_aesthetic_modality__") == ""
 
 
 def test_register_modality_rejects_dict_lookalike():

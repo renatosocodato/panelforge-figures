@@ -247,7 +247,11 @@ def _figure_id_to_stem(figure_id: str) -> str | None:
     figure number/subletter token to key on.
     """
     canonical = normalise_figure_id(figure_id)
-    m = re.search(r"\d+[a-z]?", canonical)
+    # ``[a-z]*`` (not ``[a-z]?``) so multi-letter sub-panels survive: the
+    # canonical form of "Figure 3ab" is "3ab", and the disk stem must be
+    # "figure_3ab" to match — a single-letter pattern would truncate to
+    # "figure_3a" and silently look up the wrong file.
+    m = re.search(r"\d+[a-z]*", canonical)
     return f"figure_{m.group(0)}" if m else None
 
 

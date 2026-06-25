@@ -955,6 +955,17 @@ cluster. It is a maintainability issue, not a correctness bug.
 
 ## 7. Known structural debt
 
+> **Status (2026-06): this register is the ORIGINAL pre-remediation snapshot.**
+> The HIGH items (#1–#5) were resolved in PRs #96–#97; the MEDIUM/LOW tail
+> (#6–#22) in PRs #97–#98; and a follow-up adversarial re-audit closed the
+> residual edge cases it surfaced (telemetry write/read gate, power
+> optional-dependency error translation, multi-letter figure-id stems, atomic
+> modality registration, MCP list/dispatch symmetry). Item #17
+> (`add_halo_label`) is an intentional, documented compatibility shim, not a
+> defect. The entries below are kept verbatim as the historical findings and are
+> each now covered by a regression test — read their present-tense wording as
+> "as originally found", not "as currently shipped".
+
 An honest inventory of the thin, weak, and over-promising areas, so the author is not
 blindsided. Ordered roughly by severity.
 

@@ -193,6 +193,24 @@ def test_claim_check_resolves_uppercase_subletter(tmp_path: Path) -> None:
     assert _figure_id_to_stem("fig:3A") == "figure_3a"
     assert _figure_id_to_stem("FIGURE 3A") == "figure_3a"
 
+
+def test_claim_check_stem_preserves_multiletter_subletter() -> None:
+    """A multi-letter sub-panel must resolve to the correct stem.
+
+    Regression: the stem extractor used ``\\d+[a-z]?`` which truncated
+    "Figure 3ab" to "figure_3a" — disagreeing with the canonical
+    normaliser ("3ab") and silently looking up the WRONG rendered file.
+    Both must now agree on "figure_3ab".
+    """
+    from panelforge_figures.manifest._figure_id import normalise_figure_id
+    from panelforge_figures.manifest.claim_check import _figure_id_to_stem
+
+    assert normalise_figure_id("Figure 3ab") == "3ab"
+    assert _figure_id_to_stem("Figure 3ab") == "figure_3ab"
+    assert _figure_id_to_stem("fig:10c") == "figure_10c"
+
+
+def test_claim_check_resolves_uppercase_subletter_disk(tmp_path: Path) -> None:
     figs = tmp_path / "figures"
     figs.mkdir()
     _write_provenance(figs, "figure_3a", {"p_value": 0.001})

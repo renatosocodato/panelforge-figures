@@ -58,6 +58,10 @@ class TagDynamics(StrEnum):
 class TagWave(StrEnum):
     V1_0 = "v1.0"
     V1_1_0_BIOPHYSICS = "v1.1.0-beta-biophysics_scaling"
+    # Reserved / forward-compat: this value is a valid wave tag but is not
+    # currently emitted by the auto-tagger (actin_microtubule_morphometry
+    # recipes fall through to V1_0). Kept so a hand-curated override in
+    # docs/recipe_tags.yaml can still validate against the taxonomy.
     V1_2_0_ACTIN_MT = "v1.2.0-beta-actin_microtubule_morphometry"
     V1_3_0_INTRAVITAL = "v1.3.0-beta-intravital_imaging"
     V1_4_0_CYTOSKELETAL = "v1.4.0-beta-cytoskeletal_morphometry_companion"

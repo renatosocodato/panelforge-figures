@@ -291,6 +291,15 @@ class _FakeTool:
         self.inputSchema = inputSchema
 
 
+class _FakeTextContent:
+    """Stand-in for ``mcp.types.TextContent`` so ``_err``/``_ok`` (which
+    build TextContent envelopes) run without the optional SDK."""
+
+    def __init__(self, type="text", text=""):  # noqa: A002 — match SDK kwarg
+        self.type = type
+        self.text = text
+
+
 def _install_fake_mcp_types(monkeypatch):
     """Inject a minimal fake ``mcp.types`` so the SDK-dependent tool
     builders run in environments without the real ``mcp`` extra.
@@ -302,6 +311,7 @@ def _install_fake_mcp_types(monkeypatch):
 
     fake_types = _pytypes.ModuleType("mcp.types")
     fake_types.Tool = _FakeTool
+    fake_types.TextContent = _FakeTextContent
     fake_root = sys.modules.get("mcp") or _pytypes.ModuleType("mcp")
     monkeypatch.setitem(sys.modules, "mcp", fake_root)
     monkeypatch.setitem(sys.modules, "mcp.types", fake_types)
@@ -355,6 +365,34 @@ def test_call_tool_refuses_disabled_scorer():
     payload = json.loads(result[0].text)
     assert payload["success"] is False
     assert "disabled" in payload["error"].lower()
+
+
+def test_call_tool_refuses_disabled_scorer_without_sdk(monkeypatch):
+    """SDK-free dispatch-gating guard (re-audit): the #5 security fix gates
+    BOTH listing AND dispatch, but the only dispatch test was @_skip_without_mcp
+    and never ran in CI. This exercises the dispatch gate via the fake
+    ``mcp.types`` (Tool + TextContent), so the gate is guarded SDK-free."""
+    import json
+
+    mcp_tools = _install_fake_mcp_types(monkeypatch)
+
+    srv = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv, MCPServerConfig(expose_scorer=False))
+    result = asyncio.run(srv.call_tool_handler("scorer.score", {}))
+    payload = json.loads(result[0].text)
+    assert payload["success"] is False
+    assert "disabled" in payload["error"].lower()
+
+    # And with the group enabled, dispatch is NOT refused for that reason.
+    srv_on = _CaptureServer()
+    mcp_tools.register_recipe_tools(srv_on, MCPServerConfig())
+    res_on = asyncio.run(srv_on.call_tool_handler("scorer.score", {}))
+    payload_on = json.loads(res_on[0].text)
+    # It may fail for other reasons (bad args) but NOT with a "disabled" group error.
+    assert not (
+        payload_on.get("success") is False
+        and "disabled" in str(payload_on.get("error", "")).lower()
+    )
 
 
 # ─────────── 6. CLI smoke ───────────

@@ -93,6 +93,7 @@ panelforge_figures = [
     "templates/*.yaml",
     "templates/*.toml",
     "templates/*.yml",
+    "templates/*.gitignore",
 ]
 
 [tool.pytest.ini_options]

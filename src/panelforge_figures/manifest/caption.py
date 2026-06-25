@@ -68,7 +68,11 @@ class CaptionDraft:
     ------
     figure_id
         Stable identifier — typically the figure's filename stem
-        (e.g. ``"panel_a"``, ``"figure_1"``).
+        (e.g. ``"panel_a"``, ``"figure_1"``). Captions are *rendered*
+        from this id verbatim (it never participates in a cross-reference
+        comparison here), so it is intentionally not run through
+        :func:`._figure_id.normalise_figure_id`; the auditors that *match*
+        ids (``xref_linter`` / ``claim_check``) use that canonical form.
     style
         Resolved :class:`CaptionStyle` used to render the title line.
     title_line

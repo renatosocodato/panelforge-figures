@@ -48,15 +48,21 @@ def add_halo_label(
     zorder: float = 10,
     **kwargs,
 ):
-    """Place a plain text annotation. No stroke, no background by default.
+    """Place a plain text annotation. NO halo is ever drawn.
 
-    The name (and the `halo_color`/`halo_width` kwargs) are kept for API
-    compatibility with older recipes. They are now ignored — the function
-    produces a plain `ax.text` artist. Callers that truly need a readable
-    label over a busy background should add their own bbox via
-    `ax.text(..., bbox=dict(fc='white', ec='none', alpha=0.9))`.
+    Despite the name, this function draws no halo, stroke, outline, or
+    background — it produces a plain ``ax.text`` artist and nothing else.
+    The ``halo_color`` and ``halo_width`` kwargs are accepted but completely
+    ignored; they exist only so the ~390 existing callers that still pass them
+    keep working unchanged (changing the rendering would break the
+    figure-hash / gallery determinism the test suite pins). They are not
+    "off by default" and there is no flag to turn a halo on.
+
+    Callers that truly need a readable label over a busy background should add
+    their own bbox via
+    ``ax.text(..., bbox=dict(fc='white', ec='none', alpha=0.9))``.
     """
-    del halo_color, halo_width  # Kept for API compatibility, intentionally unused.
+    del halo_color, halo_width  # Accepted-but-ignored: kept only for caller compat.
     return ax.text(
         x,
         y,

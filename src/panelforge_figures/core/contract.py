@@ -18,11 +18,14 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel
 
 from .statistical_contract import StatisticalContract
+
+if TYPE_CHECKING:
+    from .aesthetic_base import ModalityAesthetic
 
 log = logging.getLogger(__name__)
 
@@ -133,10 +136,30 @@ def register_recipe(
     return _decorator
 
 
-def register_modality(name: str, description: str, aesthetic: Any | None = None) -> None:
-    """Modality registry — populated at import time by each modality's __init__."""
+def register_modality(
+    name: str,
+    description: str,
+    aesthetic: ModalityAesthetic | None = None,
+) -> None:
+    """Modality registry — populated at import time by each modality's __init__.
+
+    ``aesthetic`` (when supplied) must be a :class:`ModalityAesthetic` — the one
+    invariant this boundary exists to enforce. A non-aesthetic object raises
+    :class:`TypeError` rather than being silently stored and surfacing later as
+    an :class:`AttributeError` deep inside a recipe's ``apply_to_ax`` call.
+    ``None`` is accepted (a modality may register without an aesthetic).
+    """
     _MODALITY_DESCRIPTIONS[name] = description
     if aesthetic is not None:
+        # Imported lazily: ``aesthetic_base`` is a sibling in this inward
+        # ``core`` layer, but keeping the import inside the function avoids any
+        # import-order coupling at module load.
+        from .aesthetic_base import ModalityAesthetic
+        if not isinstance(aesthetic, ModalityAesthetic):
+            raise TypeError(
+                f"register_modality({name!r}): aesthetic must be a "
+                f"ModalityAesthetic or None, got {type(aesthetic).__name__}."
+            )
         _MODALITY_AESTHETICS[name] = aesthetic
 
 
@@ -158,7 +181,7 @@ def modality_description(name: str) -> str:
     return _MODALITY_DESCRIPTIONS.get(name, "")
 
 
-def modality_aesthetic(name: str) -> Any | None:
+def modality_aesthetic(name: str) -> ModalityAesthetic | None:
     return _MODALITY_AESTHETICS.get(name)
 
 

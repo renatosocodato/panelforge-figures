@@ -34,7 +34,7 @@ Design notes
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import Literal, get_args
 
 __all__ = [
     "DEFAULT_CONTRACT",
@@ -121,6 +121,27 @@ class StatisticalContract:
     ``docs/spec_figure_bias_auditor.md`` §4.2."""
 
     def __post_init__(self) -> None:
+        # The three Literal-typed taxonomy fields are static-check-only: a bad
+        # value (e.g. a typo, or a stale string from an old spec) passes
+        # silently at runtime and only misbehaves later in the audit. Validate
+        # each against the *exact* set of its Literal members, derived via
+        # ``typing.get_args`` so the allowed values cannot drift from the
+        # annotation. Each raises a ``ValueError`` naming the field, the bad
+        # value, and the valid set.
+        for field_name, literal_type in (
+            ("distribution_assumption", DistributionAssumption),
+            ("multiple_comparisons", MultipleComparisonsPolicy),
+            ("independence", IndependenceStructure),
+        ):
+            allowed = get_args(literal_type)
+            value = getattr(self, field_name)
+            if value not in allowed:
+                valid = ", ".join(repr(v) for v in allowed)
+                raise ValueError(
+                    f"StatisticalContract.{field_name} got invalid value "
+                    f"{value!r}; valid values are: {valid}."
+                )
+
         # ``refuses_when`` is an escalation allow-list keyed by audit rule
         # id. An id that matches no rule never escalates anything, so a typo
         # would silently disable a refusal policy. Reject it loudly: an

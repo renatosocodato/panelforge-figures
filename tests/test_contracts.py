@@ -2,13 +2,16 @@
 
 import pytest
 
+from panelforge_figures.core.aesthetic_base import ModalityAesthetic
 from panelforge_figures.core.contract import (
     RecipeFamily,
     ensure_all_imported,
     get_recipe,
     list_modalities,
     list_recipes,
+    modality_aesthetic,
     modality_description,
+    register_modality,
     registry_counts,
 )
 
@@ -54,3 +57,67 @@ def test_modality_description_populated():
     ensure_all_imported()
     for name in list_modalities():
         assert modality_description(name), f"modality {name} missing description"
+
+
+# ---------------------------------------------------------------------------
+# register_modality aesthetic type enforcement (structural-debt item #15)
+# ---------------------------------------------------------------------------
+
+def test_register_modality_rejects_non_aesthetic_object():
+    """A bogus aesthetic must raise TypeError at registration, not surface
+    later as an AttributeError deep inside a recipe's ``apply_to_ax`` call.
+
+    Before this fix the untyped boundary stored any object silently.
+    """
+    class NotAnAesthetic:
+        pass
+
+    with pytest.raises(TypeError) as excinfo:
+        register_modality(
+            "__bogus_aesthetic_modality__",
+            "should never register",
+            aesthetic=NotAnAesthetic(),
+        )
+    assert "ModalityAesthetic" in str(excinfo.value)
+    # The rejected modality must not have leaked into the aesthetic registry.
+    assert modality_aesthetic("__bogus_aesthetic_modality__") is None
+
+
+def test_register_modality_rejects_dict_lookalike():
+    """A dict that quacks like an aesthetic config is still rejected — the
+    boundary enforces the actual ModalityAesthetic type, not duck-typing.
+    """
+    with pytest.raises(TypeError):
+        register_modality(
+            "__bogus_dict_modality__",
+            "should never register",
+            aesthetic={"modality_name": "x", "primary_palette": "y"},
+        )
+
+
+def test_register_modality_accepts_valid_aesthetic_and_none():
+    """A real ModalityAesthetic registers; None is accepted (no aesthetic)."""
+    aesthetic = ModalityAesthetic(
+        modality_name="__valid_aesthetic_modality__",
+        primary_palette="journal_neutral",
+    )
+    register_modality(
+        "__valid_aesthetic_modality__",
+        "valid aesthetic",
+        aesthetic=aesthetic,
+    )
+    assert modality_aesthetic("__valid_aesthetic_modality__") is aesthetic
+
+    # None is the no-aesthetic path and must not raise.
+    register_modality("__no_aesthetic_modality__", "no aesthetic")
+    assert modality_aesthetic("__no_aesthetic_modality__") is None
+
+
+def test_all_real_modalities_register_a_valid_aesthetic():
+    """Every shipped modality that declares an aesthetic passes a real
+    ModalityAesthetic, so the new type gate does not reject any of them.
+    """
+    ensure_all_imported()
+    for name in list_modalities():
+        aes = modality_aesthetic(name)
+        assert aes is None or isinstance(aes, ModalityAesthetic)

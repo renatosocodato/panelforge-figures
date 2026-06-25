@@ -739,6 +739,7 @@ def generate_cmd(
 ) -> None:
     """Render bound recipes; write figures + RENDER_REPORT.md."""
     from ..manifest import (
+        RecipeBinding,
         compute_fully_bound,
         discover_data_files,
         load_bindings_cache,
@@ -756,11 +757,10 @@ def generate_cmd(
     # Reconstruct RecipeBindings (canonical data_bridge shape).
     # `fully_bound` MUST be derived via `compute_fully_bound` so the CLI
     # cannot diverge from `bind_recipe_to_data`'s definition (DEFECT-A7).
-    from ..manifest.data_bridge import RecipeBinding as _RB
     rbs = []
     for fn, fbs in by_recipe.items():
         all_bound = compute_fully_bound(fbs)
-        rbs.append(_RB(
+        rbs.append(RecipeBinding(
             full_name=fn,
             bindings=tuple(fbs),
             fully_bound=all_bound,
@@ -2464,8 +2464,9 @@ def mcp_serve_cmd(
 @click.option(
     "--correlation-threshold",
     type=float,
-    default=0.1,
-    help="Minimum |r| for a correlation to be considered present.",
+    default=0.3,
+    help="Minimum |r| for a correlation to be considered present "
+    "(default 0.3 ≈ Cohen's 'moderate' floor; matches the library default).",
 )
 @click.option("--json", "as_json", is_flag=True, help="Emit JSON instead of Markdown.")
 @click.option(

@@ -40,7 +40,6 @@ the plan via PyYAML safe_load/dump (schema_version 1).
 
 from __future__ import annotations
 
-import json
 import warnings
 from dataclasses import dataclass
 from enum import StrEnum
@@ -60,6 +59,7 @@ __all__ = [
     "ScoutError",
     "load_figure_plan_yaml",
     "render_scout_report_markdown",
+    "resolve_consensus_client",
     "save_figure_plan_yaml",
     "scout_project",
     "synthesize_figure_plan",
@@ -602,7 +602,17 @@ _PREFERRED_FACTORIAL_RECIPES: tuple[str, ...] = (
 )
 
 
-# Substring keywords that mark a recipe (or panel) as supporting / methodology.
+# Substring keywords used at *plan-synthesis* time to assign a panel's
+# narrative ``role`` ("supporting" vs "primary") in :func:`_classify_role`.
+#
+# This is a DIFFERENT concern from novelty_scout's
+# ``_SUPPORTING_RECIPE_KEYWORDS`` / :func:`novelty_scout.is_supporting_panel`,
+# which run later at *novelty-scoring* time and return a boolean deciding
+# whether a panel is protected from literature-driven demotion.  The two
+# keyword sets overlap but are deliberately maintained independently: this
+# one shapes the proposed plan's role labels; the other shapes scoring
+# verdicts.  Keep them separate so a change to scoring protection cannot
+# silently alter how plans are laid out (and vice-versa).
 _SUPPORTING_KEYWORDS: tuple[str, ...] = (
     "control", "baseline", "calibration", "qc", "diagnostic",
     "provenance", "audit",
@@ -1101,11 +1111,24 @@ def synthesize_figure_plan(
 # ───────────────────────── end-to-end pipeline ───────────────────────────
 
 
-def _resolve_consensus_client(
+def resolve_consensus_client(
     consensus_client: Any | None,
     use_mock_novelty: bool,
 ) -> Any:
-    """Resolve the Consensus client to use; warn if falling back to mock."""
+    """Resolve the Consensus client to use; warn if falling back to mock.
+
+    Public API (exported in :data:`__all__`) so callers such as the
+    interactive scout TUI can reuse the exact client-routing policy used
+    by :func:`scout_project` without reaching into a private name.
+
+    Routing
+    -------
+    * Explicit ``consensus_client`` → returned as-is.
+    * ``use_mock_novelty`` True → :class:`MockConsensusClient`.
+    * ``CONSENSUS_API_KEY`` env var set → :class:`ConsensusProClient`
+      (falls back to mock with a ``RuntimeWarning`` if unavailable).
+    * Otherwise → :class:`MockConsensusClient` (with a ``RuntimeWarning``).
+    """
     # Lazy import — keeps novelty_scout off the hot import path.
     from .novelty_scout import (
         ConsensusProClient,
@@ -1135,6 +1158,10 @@ def _resolve_consensus_client(
         stacklevel=2,
     )
     return MockConsensusClient()
+
+
+# Backwards-compatible private alias for existing internal callers.
+_resolve_consensus_client = resolve_consensus_client
 
 
 def _profile_data_files_in_place(
@@ -1664,11 +1691,3 @@ def load_figure_plan_yaml(path: Path) -> FigurePlan:
             stacklevel=2,
         )
     return FigurePlan.from_dict(data)
-
-
-# ──────────────────────────── helpers (export) ───────────────────────────
-
-
-def _scout_report_to_json(report: ProjectScoutReport, *, indent: int = 2) -> str:
-    """Convenience: serialise a :class:`ProjectScoutReport` as JSON."""
-    return json.dumps(report.to_dict(), indent=indent, default=str)

@@ -29,7 +29,6 @@ Module structure
 
 from __future__ import annotations
 
-import json
 import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -397,6 +396,15 @@ _SUPPORTING_FAMILY_HINTS: frozenset[str] = frozenset({
     "diagnostic",            # diagnostic-only families
 })
 
+# Substring keywords used at *novelty-scoring* time by
+# :func:`is_supporting_panel` to decide whether a panel is PROTECTED from
+# literature-driven demotion (returns a boolean).
+#
+# This is a DIFFERENT concern from scout's ``_SUPPORTING_KEYWORDS`` /
+# ``scout._classify_role``, which run earlier at *plan-synthesis* time and
+# assign a panel's narrative ``role`` label.  The keyword sets overlap but
+# are intentionally kept separate: changing demotion-protection here must
+# not silently alter how scout lays out / labels the proposed plan.
 _SUPPORTING_RECIPE_KEYWORDS: tuple[str, ...] = (
     "provenance",
     "audit",
@@ -857,15 +865,3 @@ def render_markdown_report(report: FigurePlanNoveltyReport) -> str:
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
-
-
-# ─────────────────────── module-level convenience ───────────────────────
-
-
-def report_to_json(report: FigurePlanNoveltyReport, *, indent: int = 2) -> str:
-    """Convenience: round-trip a report through ``json.dumps``.
-
-    Equivalent to ``json.dumps(report.to_dict(), indent=indent)`` but kept
-    here so callers don't need to import ``json`` themselves.
-    """
-    return json.dumps(report.to_dict(), indent=indent)

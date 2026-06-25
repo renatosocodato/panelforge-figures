@@ -61,12 +61,32 @@ from ._tfidf import tfidf as _tfidf
 from ._tfidf import tokenize as _tokenize
 
 __all__ = [
+    "DEFAULT_MIN_SIMILARITY",
     "BlueprintImportError",
     "BlueprintImportResult",
     "CaptionMatch",
     "import_blueprint_from_manuscript",
     "match_caption_to_recipe",
 ]
+
+
+#: Default cosine-similarity floor for accepting a caption→recipe match.
+#:
+#: Captions scoring below this are flagged as gaps (``is_gap=True``) so the
+#: user scaffolds a recipe via ``figures fill-gap`` rather than getting a
+#: spurious match. The value is calibrated for the short documents involved
+#: here: a one-line caption matched against a one-line recipe
+#: ``answers_question`` string, scored with the smoothed-IDF TF-IDF cosine
+#: in :mod:`._tfidf`. On such short, high-vocabulary-overlap pairs, scores
+#: are bimodal — a genuine topical match typically lands well above ``0.4``
+#: (shared content terms dominate the short vectors) while an unrelated
+#: caption falls near ``0.0``. ``0.4`` sits in that empirical gap: high
+#: enough to reject incidental single-word overlaps, low enough not to
+#: reject true matches that differ in phrasing. It is intentionally
+#: conservative — a missed match degrades to a user-reviewed gap, whereas a
+#: false match silently mis-assigns a recipe. Override per call when the
+#: caption/recipe corpus has a different length or vocabulary profile.
+DEFAULT_MIN_SIMILARITY: float = 0.4
 
 
 # ─────────────────────────── exceptions ──────────────────────────────────
@@ -242,7 +262,7 @@ def match_caption_to_recipe(
     caption_text: str,
     *,
     candidate_recipes: list[Any] | None = None,
-    min_similarity: float = 0.4,
+    min_similarity: float = DEFAULT_MIN_SIMILARITY,
     figure_id: str = "?",
 ) -> CaptionMatch:
     """Match one caption string to the best-fitting registered recipe.
@@ -266,6 +286,8 @@ def match_caption_to_recipe(
         Below this threshold the caller treats the match as a gap; this
         function still returns the best-scoring candidate (a downstream
         consumer may choose to display it as "would have been …").
+        Defaults to :data:`DEFAULT_MIN_SIMILARITY` (``0.4``); see that
+        constant's docstring for the calibration rationale.
     figure_id
         Figure identifier passed through to :class:`CaptionMatch`.
 
@@ -504,7 +526,7 @@ def import_blueprint_from_manuscript(
     manuscript_path: Path,
     *,
     output_plan_path: Path | None = None,
-    min_similarity: float = 0.4,
+    min_similarity: float = DEFAULT_MIN_SIMILARITY,
     venue: str | None = None,
 ) -> BlueprintImportResult:
     """Parse a manuscript → emit a ``figures_plan.yaml``.
@@ -535,7 +557,9 @@ def import_blueprint_from_manuscript(
         Where to write the emitted ``figures_plan.yaml``.  ``None`` →
         don't write; just return the matches.
     min_similarity
-        Threshold below which a caption is treated as a gap.
+        Threshold below which a caption is treated as a gap. Defaults to
+        :data:`DEFAULT_MIN_SIMILARITY` (``0.4``); see that constant's
+        docstring for the calibration rationale.
     venue
         Venue string for the plan.  ``None`` → use the manuscript hint
         if any, else ``"cell"``.

@@ -9,6 +9,8 @@ The fixtures use a fixed RNG seed so KS-test verdicts are stable.
 
 from __future__ import annotations
 
+from typing import get_args
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -16,6 +18,9 @@ import pytest
 from panelforge_figures.core import (
     DEFAULT_CONTRACT,
     KNOWN_REFUSAL_RULES,
+    DistributionAssumption,
+    IndependenceStructure,
+    MultipleComparisonsPolicy,
     RecipeMetadata,
     StatisticalContract,
 )
@@ -530,3 +535,54 @@ def test_default_and_empty_refuses_when_still_construct():
     """Backwards-compat: the all-permissive default contract is unaffected."""
     assert StatisticalContract().refuses_when == ()
     assert StatisticalContract(refuses_when=()).refuses_when == ()
+
+
+# ---------------------------------------------------------------------------
+# Literal-taxonomy field validation (structural-debt item #16)
+#
+# The three Literal-typed fields are static-check-only; before this fix a bad
+# value passed silently at runtime. __post_init__ now validates them against
+# the exact Literal members (derived via typing.get_args so they cannot drift).
+# ---------------------------------------------------------------------------
+
+def test_invalid_distribution_assumption_rejected():
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(distribution_assumption="gaussian")  # not a member
+    msg = str(excinfo.value)
+    assert "distribution_assumption" in msg
+    assert "gaussian" in msg
+
+
+def test_invalid_multiple_comparisons_rejected():
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(multiple_comparisons="holm")  # not a member
+    msg = str(excinfo.value)
+    assert "multiple_comparisons" in msg
+    assert "holm" in msg
+
+
+def test_invalid_independence_rejected():
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(independence="repeated_measures")  # not a member
+    msg = str(excinfo.value)
+    assert "independence" in msg
+    assert "repeated_measures" in msg
+
+
+def test_valid_taxonomy_values_all_construct():
+    """Every declared Literal member is accepted for each field."""
+    for dist in get_args(DistributionAssumption):
+        assert StatisticalContract(distribution_assumption=dist)
+    for pol in get_args(MultipleComparisonsPolicy):
+        assert StatisticalContract(multiple_comparisons=pol)
+    for indep in get_args(IndependenceStructure):
+        assert StatisticalContract(independence=indep)
+
+
+def test_taxonomy_error_lists_valid_values():
+    """The error message names the valid set so the typo is self-correcting."""
+    with pytest.raises(ValueError) as excinfo:
+        StatisticalContract(distribution_assumption="nope")
+    msg = str(excinfo.value)
+    for member in get_args(DistributionAssumption):
+        assert repr(member) in msg

@@ -19,9 +19,16 @@ issue flagged via the disclosure channel below.
 ## Reporting a vulnerability
 
 If you find a security issue in panelforge-figures, **please do not
-file a public GitHub issue**. Instead, e-mail the maintainer at:
+file a public GitHub issue**. Use one of these private channels:
 
-> renato.socodato@gmail.com
+- **Preferred — GitHub private vulnerability report:** open a
+  [Security Advisory](https://github.com/renatosocodato/panelforge-figures/security/advisories/new).
+  This keeps the report private, threaded, and CVE-capable.
+- **Alternative — e-mail the maintainer** (Renato Socodato) at
+  **renato.socodato@gmail.com**.
+
+(The "Security / sensitive disclosure" link in the issue chooser routes
+to the same Security Advisory form.)
 
 Include:
 
@@ -46,7 +53,11 @@ three checks on every commit:
    (API keys, private keys, etc.).
 2. **gitleaks** — secondary scan with a different ruleset; complements
    detect-secrets.
-3. **ruff** + **ruff-format** — code-style + lint.
+3. **ruff** (`--fix`) — lint + import-sort, matching the CI gate.
+
+(The repo deliberately does **not** run `ruff format` as a hook or a CI
+gate; the project's only style gate is the linter. See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) §3.)
 
 To opt in (one-time setup):
 
@@ -64,9 +75,9 @@ this):
 SKIP=detect-secrets,gitleaks git commit ...
 ```
 
-`SECURITY.md` and the CI workflow `.github/workflows/secret-scan.yml`
-also run gitleaks on every push and pull request to `main`, providing
-a server-side backstop independent of the local pre-commit hook.
+The CI workflow `.github/workflows/secret-scan.yml` also runs gitleaks
+on every push and pull request to `main`, providing a server-side
+backstop independent of the local pre-commit hook.
 
 ## History rewrite (OPTIONAL — destructive)
 
@@ -86,15 +97,15 @@ pip install git-filter-repo
 git clone --mirror https://github.com/<owner>/panelforge-figures.git
 cd panelforge-figures.git
 
-# 3. Prepare a replacements file with the patterns to scrub.
+# 3. Prepare a replacements file. Each line is  LEAKED==>REPLACEMENT:
+#    put YOUR real leaked tokens (old home paths, unpublished project or
+#    grant names) on the LEFT and a safe public placeholder on the RIGHT.
+#    The entries below are illustrative placeholders — replace them.
 cat > /tmp/replacements.txt <<'EOF'
-<home>==>~
-<home>==>~
-example_modality_a==>example_modality_a
-example_modality_b==>example_modality_b
-example_grant==>example_grant
-example_factorial_manuscript==>example_factorial_manuscript
-morphometry_biophysics_workspace==>morphometry_biophysics_workspace
+/Users/your-name==>~
+old_unpublished_project_name==>public_project_name
+internal_grant_id==>grant
+working_dir_name==>workspace
 EOF
 
 # 4. Dry-run first to inspect what would change.
@@ -144,6 +155,18 @@ The primary security concerns for this library are therefore:
    reproducibility bundle that includes the user's Python+OS+package
    manifest. Treat the bundle as PII-equivalent; do not commit it to
    a public repo without review.
+
+**Primary built-in control — privacy-by-construction data classes.**
+panelforge gates every off-host capability behind a three-tier data
+class (`clinical` / `research` / `public`). The `clinical` class forces
+**all** LLM, vision, telemetry, and network-plugin channels **off** by
+construction and cannot be overridden by configuration or environment;
+`research` (the default) keeps off-host capabilities opt-in; `public`
+is default-on. The class is set only via the API (`set_data_class`),
+never from an environment variable, so a hostile environment cannot
+silently relax it. See
+[`docs/spec_data_class_safety.md`](docs/spec_data_class_safety.md) and
+[`src/panelforge_figures/safety/README.md`](src/panelforge_figures/safety/README.md).
 
 Out of scope:
 

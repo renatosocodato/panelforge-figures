@@ -17,15 +17,14 @@ bootstrap inside any manuscript repository.
 
 ## Status
 
-**`v2.0.0` — eight-elevation release**: 20 modalities, **448 recipes**,
-CI-enforced typography + figure-integrity contract, **2895 passing
-tests**. v2.0.0 turns the v1.6.1 recipe-discovery system into an
-elite Claude-Code-dependent platform via 8 architectural elevations:
-statistical contract → provenance → composition → plugins →
+**`v3.14.1` — security-hardened baseline**: 20 modalities, **471 recipes**,
+CI-enforced typography + figure-integrity contract, **3,888 passing
+tests** (Python 3.11 + 3.12). The platform is built on 8 architectural
+elevations: statistical contract → provenance → composition → plugins →
 data-class safety → vision input → cross-project orchestration →
 active-learning loop. Privacy-by-construction throughout (telemetry
 off by default, never auto-uploaded; clinical data class blocks all
-LLM/vision/telemetry channels). The 448-recipe catalog is
+LLM/vision/telemetry channels). The 471-recipe catalog is
 agent-discoverable via
 [`recipes_index.json`](https://github.com/renatosocodato/panelforge-figures/blob/main/recipes_index.json)
 + [`AGENT_BOOTSTRAP.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/AGENT_BOOTSTRAP.md)
@@ -38,15 +37,15 @@ New to the system? Start with the
 [`docs/AGENT_RECIPES.md`](https://github.com/renatosocodato/panelforge-figures/blob/main/docs/AGENT_RECIPES.md)
 tutorial.
 
-| | 0.1.0a0 | 0.1.0b1 | 0.1.0b2 | 0.1.0b3 | v1.0.0 | v1.5.0 | v1.6.0 | **v2.0.0** |
-|---|---|---|---|---|---|---|---|---|
-| Modalities | 3 | 7 | 11 | 15 | 20 | 20 | 20 | **20** |
-| Recipes | 18 | 49 | 80 | 107 | 137 | 448 | 448 | **448** |
-| Gallery PNGs | 18 | 49 | 80 | 107 | 137 | 448 | 448 | **448** |
-| Themes | 12 | 12 | 12 | 12 | 12 | 12 | 12 | **12** |
-| Tests | 113 | 237 | 361 | 469 | 736 | 2356 | ~2600 | **2895** |
-| Agent-discoverable | — | — | — | — | — | — | yes ✓ | yes ✓ |
-| 8 elevations | — | — | — | — | — | — | — | **yes** ✓ |
+| | 0.1.0b3 | v1.0.0 | v1.5.0 | v1.6.0 | v2.0.0 | **v3.14.1** |
+|---|---|---|---|---|---|---|
+| Modalities | 15 | 20 | 20 | 20 | 20 | **20** |
+| Recipes | 107 | 137 | 448 | 448 | 448 | **471** |
+| Gallery PNGs | 107 | 137 | 448 | 448 | 448 | **471** |
+| Themes | 12 | 12 | 12 | 12 | 12 | **12** |
+| Tests | 469 | 736 | 2356 | ~2600 | 2895 | **3888** |
+| Agent-discoverable | — | — | — | yes ✓ | yes ✓ | **yes ✓** |
+| 8 elevations | — | — | — | — | yes | **yes ✓** |
 
 ## Install
 
@@ -158,6 +157,19 @@ The software is permanently archived on Zenodo. The citable form is:
   url       = {https://doi.org/10.5281/zenodo.20811171}
 }
 ```
+
+## Contributing, support & community
+
+- **Contributing:** [`CONTRIBUTING.md`](CONTRIBUTING.md) — the local dev loop
+  (it mirrors the CI gates exactly).
+- **Code of Conduct:** [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) (Contributor
+  Covenant 2.1).
+- **Getting help:** [`SUPPORT.md`](SUPPORT.md). GitHub Discussions is not
+  enabled, so usage questions are welcome as
+  [issues](https://github.com/renatosocodato/panelforge-figures/issues/new/choose).
+- **Reporting bugs / requesting features:** use the
+  [issue templates](https://github.com/renatosocodato/panelforge-figures/issues/new/choose).
+- **Security / privacy:** report privately — see [`SECURITY.md`](SECURITY.md).
 
 ## License
 

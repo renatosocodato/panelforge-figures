@@ -11,7 +11,7 @@ For development (editable install with test / lint extras):
 ```bash
 git clone https://github.com/renatosocodato/panelforge-figures.git
 cd panelforge-figures
-pip install -e .[dev]
+pip install -e ".[dev]"   # quotes required on zsh / macOS
 ```
 
 Verify:

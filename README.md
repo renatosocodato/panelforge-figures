@@ -1,7 +1,8 @@
 # panelforge-figures
 
-[![PyPI version](https://img.shields.io/pypi/v/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
-[![Python versions](https://img.shields.io/pypi/pyversions/panelforge-figures.svg)](https://pypi.org/project/panelforge-figures/)
+[![CI](https://github.com/renatosocodato/panelforge-figures/actions/workflows/ci.yml/badge.svg)](https://github.com/renatosocodato/panelforge-figures/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20811170.svg)](https://doi.org/10.5281/zenodo.20811170)
 
 A modality-first, publication-grade figure system for systems biology and
@@ -49,19 +50,28 @@ tutorial.
 
 ## Install
 
+> **Not yet on PyPI.** Install from source (or directly from GitHub) for now —
+> `pip install panelforge-figures` will work once the PyPI release is published.
+
 ```bash
-# Standard install
-pip install panelforge-figures
+# From source (recommended for development)
+git clone https://github.com/renatosocodato/panelforge-figures
+cd panelforge-figures
+pip install -e ".[dev]"        # quotes required on zsh / macOS
 
-# With seaborn for split-violin recipes
-pip install panelforge-figures[seaborn]
-
-# With autonomous Claude Code flow (Anthropic SDK)
-pip install panelforge-figures[claude-autonomous]
-
-# Development install (from source)
-pip install -e .[dev]
+# …or install the latest directly from GitHub
+pip install "git+https://github.com/renatosocodato/panelforge-figures"
 ```
+
+Optional extras (combine as needed, e.g. `".[dev,seaborn,power]"`):
+
+| Extra | Adds |
+|---|---|
+| `seaborn` | split-violin recipes |
+| `power` | power analysis (statsmodels + scipy) |
+| `recommender` | data-driven recipe recommendation (pandas + pyarrow) |
+| `mcp` | Model Context Protocol server |
+| `claude-autonomous` | autonomous Claude Code flow (Anthropic SDK) |
 
 ## Quick start (end-user workflow)
 
